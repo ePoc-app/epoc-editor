@@ -4,6 +4,7 @@
     "name": "Inria Learning Lab",
     "email": "ill-ePoc-contact@inria.fr"
   },
+  "icon": "favicon.png",
   "private": true,
   "version": "0.0.0",
   "main": "electron/electron.js",
@@ -25,6 +26,7 @@
   "dependencies": {
     "@vue-flow/additional-components": "^1.3.3",
     "@vue-flow/core": "^1.6.0",
+    "sass": "^1.56.2",
     "vue": "^3.2.45"
   },
   "devDependencies": {
