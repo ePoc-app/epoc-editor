@@ -1,0 +1,43 @@
+$inria-red : #e63312;
+$inria-blue : #384257;
+$inria-grey : #6477A0;
+$inria-spe : #2EC6FA;
+$inria-light : #F4F7FB;
+$inria-dark : #23232C;
+$inria-correct: #85CE70;
+$inria-correct-shade: #5EA51F;
+$inria-correct-tint: #EBF4E8;
+$inria-incorrect: #EB7575;
+$inria-certificate: #FFA029;
+$inria-lightgrey: #D3D7E0;
+$inria-darkgrey: #384156;
+$inria-black: #17191A;
+$inria-lightblue: #A6B1C9;
+
+$editor-light: #E6E9EE;
+$editor-lightgrey: #CDD3E0;
+$editor-shadow-hover: #E1E5EC;
+$editor-light-border: #DCE4F0;
+
+[color-scheme="light"] {
+    --background: #{$editor-light};
+    --content: white;
+    --text: #{$inria-blue};
+    --text-secondary: #8C9AB9;
+    --border: #{$editor-light-border};
+    --shadow: #{$editor-shadow-hover};
+    --list-background: #F7F8F9;
+    --list-border: #E6EAF4
+}
+
+// Dark theme not implemented yet
+[color-scheme="dark"] {
+    --background: #{$inria-black};
+    --content: #{$inria-dark};
+    --text: #{$inria-light};
+    --border: #{$inria-darkgrey};
+}
+
+:root {
+    --inria-red: #{$inria-red};
+}

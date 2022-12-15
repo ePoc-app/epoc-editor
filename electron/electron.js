@@ -15,8 +15,11 @@ ipcMain.on('msg', (event, data) => {
 function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
+        icon: 'favicon.png',
         width: 800,
-        height: 600,
+        height: 800,
+        'minHeight': 800,
+        'minWidth': 800,
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
@@ -48,6 +51,18 @@ function createWindow() {
                     }
                 }
             ]
+        },
+        {
+            label: 'Developer',
+            submenu: [
+                {
+                    label: 'Open DevTools',
+                    accelerator: 'CmdOrCtrl+Shift+I',
+                    click() {
+                        mainWindow.webContents.openDevTools();
+                    }
+                }
+            ],
         }
     ];
 

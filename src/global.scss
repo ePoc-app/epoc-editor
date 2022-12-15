@@ -1,0 +1,119 @@
+/* these are necessary styles for vue flow */
+@import '@vue-flow/core/dist/style.css';
+
+/* this contains the default theme, these are optional styles */
+@import '@vue-flow/core/dist/theme-default.css';
+
+@import '_colors';
+@import '_fonts';
+@import '_icon';
+
+html,
+body,
+#app {
+  margin: 0;
+  height: 100%;
+  color: var(--text);
+  background-color: var(--background);
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+}
+
+.vue-flow__minimap {
+  transform: scale(75%);
+  transform-origin: bottom right;
+}
+
+.btn {
+  cursor: pointer;
+  display: flex;
+  color: var(--text);
+  border-radius: 6px;
+  i {
+    margin-right: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+  &-outline {
+    border: 2px solid var(--border);
+    background-color: var(--content);
+    padding: 5px;
+    align-items: center;
+    justify-content: center;
+    transition: box-shadow 0.2s ease-in-out;
+    &:hover {
+      box-shadow:0 1px 8px 0  var(--shadow);
+    }
+  }
+  &-large {
+    font-weight: bold;
+    padding: 0.8rem;
+    width: 100%;
+    &:first-child {
+        margin-right: 1rem;;
+    }
+  }
+}
+
+
+hr {
+  border: 0;
+  &.separator {
+    border-top: 2px solid var(--border);
+    margin-bottom: 1.7rem;
+  }
+  &.vertical-separator {
+    border-left: 2px solid var(--border);
+    height: 1.3rem;
+    margin-right: 1rem;;                          
+  }
+}
+
+.card-icon {
+  border-radius: 6px;
+  background-color: white;
+  border: 1px solid var(--list-border);
+  box-shadow: 0 1px 8px var(--shadow);
+  margin-right: 1rem;
+  margin-left: 1rem;
+  padding: .2rem .5rem;
+  font-size: 1.2rem;
+}
+
+.card {
+  background-color: var(--content);
+  border-radius: 12px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  &-large {
+    padding: 3rem;
+    width: 50%;
+    box-shadow: 0 1px 8px 0 var(--shadow);
+    max-width: 800px;
+    min-width: 500px;
+  }
+}
+
+.card-list-item {
+  display: flex;
+  width: 100%;
+  background-color: var(--list-background);
+  border: 2px solid var(--list-border);
+  border-radius: 6px;
+  margin-bottom: .6rem;
+  align-items: center;
+  p {
+      flex-grow: 1;
+  }
+  small {
+      margin-right: 1rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+  }
+}
