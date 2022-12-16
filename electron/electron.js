@@ -15,6 +15,7 @@ ipcMain.on('msg', (event, data) => {
 function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
+        show: false,
         icon: 'favicon.png',
         width: 800,
         height: 800,
@@ -73,6 +74,25 @@ function createWindow() {
 // This method will be called when Electron has finished initialization and is ready to create browser windows.
 app.whenReady().then(() => {
     createWindow();
+
+    splashWindow = new BrowserWindow({
+        width: 630,
+        height: 400,
+        frame: false,
+        alwaysOnTop: true,
+        resizable: false,
+        transparent: true
+    });
+
+    //! Only work in dev mode
+    splashWindow.loadFile('dist/splashScreen.html');
+    splashWindow.center();
+
+    //TODO Replace this with a when app is ready to be launched
+    setTimeout(() => {
+        splashWindow.destroy();
+        mainWindow.show();
+    }, 5000);
 
     app.on('activate', function () {
         // On macOS it's common to re-create a window in the app when the dock icon is clicked and there are no other windows open.
