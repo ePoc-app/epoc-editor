@@ -18,6 +18,7 @@ $editor-light: #E6E9EE;
 $editor-lightgrey: #CDD3E0;
 $editor-shadow-hover: #E1E5EC;
 $editor-light-border: #DCE4F0;
+$editor-lightblue: #E8EDF3;
 
 [color-scheme="light"] {
     --background: #{$editor-light};
@@ -27,7 +28,8 @@ $editor-light-border: #DCE4F0;
     --border: #{$editor-light-border};
     --shadow: #{$editor-shadow-hover};
     --list-background: #F7F8F9;
-    --list-border: #E6EAF4
+    --list-border: #E6EAF4;
+    --button-blue: #{$editor-lightblue};
 }
 
 // Dark theme not implemented yet
