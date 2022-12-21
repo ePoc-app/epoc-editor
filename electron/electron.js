@@ -36,9 +36,9 @@ function createWindow() {
     );
 
     // Open the DevTools.
-    if (isDev) {
-        mainWindow.webContents.openDevTools();
-    }
+    // if (isDev) {
+    //     mainWindow.webContents.openDevTools();
+    // }
 
     const template = [
         {
@@ -116,11 +116,38 @@ function openFile() {
 
     const file = files[0];
     const fileContent = fs.readFileSync(file).toString();
-    console.log(fileContent);
 
     mainWindow.webContents.send('fromMain', fileContent);
 }
 
+function openEPOC() {
+    const files = dialog.showOpenDialogSync(mainWindow, {
+        properties: ['openFile'],
+        filters: [{ name: 'ePoc', extensions: ['epoc', 'json']}]
+    });
+    if(!files) return;
+
+    const file = files[0];
+    const fileContent = fs.readFileSync(file).toString();
+
+    mainWindow.webContents.send('sendEPOC', fileContent);
+}
+
+function getRecentFiles() {
+    //TODO: This solution surely won't work anymore with real data
+    //! Only work in dev mode
+    const fileContent = fs.readFileSync('dist/epocs.json').toString();
+    return fileContent;
+}
+
 ipcMain.on('toMain', (event, data) => {
     console.log(data);
+});
+
+ipcMain.on('getRecentProjects', () => {
+    mainWindow.webContents.send('getRecentProjects', getRecentFiles());
+});
+
+ipcMain.on('openEPOC', () => {
+    openEPOC();
 });
