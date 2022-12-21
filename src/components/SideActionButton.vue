@@ -1,43 +1,67 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { SideAction } from '../shared/interfaces';
+import { useEditorStore } from '../shared/stores';
+import ContentButton from './ContentButton.vue';
 
-defineProps<{
-    icon: string;
-    //TODO: Find a way to manage different actions within the same component
-    //action: string;
+const props = defineProps<{
+    sideAction: SideAction;
 }>();
 
-const showMenu = ref(false);
+const emit = defineEmits<{
+    (e: 'showMenu'): void;
+}>();
+
+function showMenu(event) {
+    if(props.sideAction.type !== 'question') return;
+    //TODO: Verify if the behavior of modal dismiss is correct
+    event.stopPropagation();
+    emit('showMenu');
+    console.log('showMenu', editorStore.subSideActions);
+}
 
 </script>
 
 <template>
-    <button class="btn" :class="{ active : showMenu }" @click="showMenu = !showMenu">
-        <i :class="icon" />
-    </button>
+    <div class="container">
+        <ContentButton
+            :icon="sideAction.icon"
+            :class-list="classList"
+            :is-active="sideAction.type === 'question' && editorStore.floatingMenu"
+            :is-draggable="sideAction.type !== 'question'"
+            @dragstart="startDrag($event, sideAction.icon)"
+            @click="showMenu($event)"
+        />
+        <div v-if="editorStore.floatingMenu && sideAction.type === 'question'" class="floating-menu" @click.stop>
+            <ContentButton
+                v-for="item of editorStore.subSideActions"
+                :key="item.icon"
+                :icon="item.icon"
+                :class-list="{ 'btn-content-blue' : false }"
+                :is-draggable="true"
+                :is-active="false"
+                @dragstart="startDrag($event, item.icon)"
+            />
+        </div>
+    </div>
 </template>
 
 <style scoped lang="scss">
 button {
-    background-color: var(--button-blue);
-    width: 60px;
-    height: 60px;
     margin-bottom: .7rem;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    i {
-        margin: auto;
-        font-size: 1.5rem;
-        font-weight: 500;
-    }
-    &:active {
-        background-color: var(--content);
-        box-shadow: 0 1px 8px 0 var(--shadow);
-    }
+}
 
-    &.active {
-        background-color: var(--content);
-        box-shadow: 0 1px 8px 0 var(--shadow);
-    }
+.floating-menu {
+    background-color: white;
+    padding: 1rem;
+    position: absolute;
+    left: 6rem;
+    //? Not sure if this is the best way to do it
+    transform: translateY(-59%);
+    z-index: 1;
+    border-radius: 10px;
+}
+
+.container {
+    position: relative;
 }
 </style>
