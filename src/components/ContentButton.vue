@@ -8,11 +8,11 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-    (e: 'click'): void;
+    (e: 'click', event): void;
 }>();
 
-function click() {
-    emit('click');
+function click(event) {
+    emit('click', event);
 }
 </script>
 
@@ -20,13 +20,15 @@ function click() {
     <button
         class="btn btn-content"
         :draggable="isDraggable"
-        :class="[classList, { active: props.isActive }]"
-        @click="click"
+        :class="[classList, { active: props.isActive }, { 'draggable': isDraggable }]"
+        @click="click($event)"
     >
         <i :class="icon" />
     </button>
 </template>
 
-<style>
-
+<style scoped lang="scss">
+.draggable {
+    cursor: grab;
+}
 </style>
