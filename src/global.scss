@@ -59,6 +59,29 @@ body,
         margin-right: 1rem;;
     }
   }
+  &-content {
+    transform: translate(0, 0);
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background-color: var(--content);
+    box-shadow: 0 1px 8px 0 var(--shadow);
+    i {
+      margin: auto;
+      font-size: 1.5rem;
+    }
+    &-blue {
+      background-color: var(--button-blue);
+      box-shadow: none;
+      &-question {
+        &:active, &.active {
+          background-color: var(--content);
+          box-shadow: 0 1px 8px 0 var(--shadow);
+        }
+      }
+    }
+  }
 }
 
 

@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import ChartFlow from '../../src/components/ChartFlow.vue';
+import ChartFlow from '../../src/components/ePocFlow.vue';
 import { test, expect } from 'vitest';
 
 test('sum() should do basic addition', () => {

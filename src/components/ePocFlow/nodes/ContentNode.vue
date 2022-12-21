@@ -43,19 +43,17 @@ const { nodes } = useVueFlow();
 </script>
 
 <template>
-    <div class="container" @dragover="dragOver" @dragleave="dragLeave">
-        <Handle type="target" position="left" />
-        <div :id="'node'+props.id">
-            <ContentButton
-                v-for="icon of props.data.icons"
-                :key="icon"
-                :icon="icon"
-                :is-draggable="false"
-                :class-list="{ 'btn-content-blue' : false }"
-            />
-        </div>
-        <Handle type="source" position="right" />
+    <Handle type="target" position="left" />
+    <div :id="'node'+props.id" @dragover="dragOver" @dragleave="dragLeave">
+        <ContentButton
+            v-for="icon of props.data.icons"
+            :key="icon"
+            :icon="icon"
+            :is-draggable="false"
+            :class-list="{ 'btn-content-blue' : false }"
+        />
     </div>
+    <Handle type="source" position="right" />
 </template>
 
 <style scoped lang="scss">
@@ -84,9 +82,5 @@ const { nodes } = useVueFlow();
     &-right {
         right: -6px;
     }
-}
-
-.container {
-    margin: 1rem;
 }
 </style>
