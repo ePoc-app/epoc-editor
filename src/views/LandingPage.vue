@@ -1,27 +1,16 @@
 <script setup lang="ts">
+import { router } from '../router';
+import { useEditorStore, useProjectStore } from '../shared/stores';
 
-const epocs = [
-    {
-        name: 'epoc sans titre 1.epoc',
-        modified: '2021-05-12'
-    }, 
-    {
-        name: 'epoc sans titre 2.epoc',
-        modified: '2021-05-12'
-    }, 
-    {
-        name: 'epoc sans titre 3.epoc',
-        modified: '2021-05-12'
-    },
-    {
-        name:'epoc sans titre 4.epoc',
-        modified: '2021-05-12'
-    },
-    {
-        name: 'epoc sans titre 5.epoc',
-        modified: '2021-05-12'
-    }
-];
+
+const editorStore = useEditorStore();
+editorStore.fetchRecentProjects();
+
+const projectStore = useProjectStore();
+
+function createProject() {
+    router.push('/editor');
+}
 
 </script>
 
@@ -32,11 +21,11 @@ const epocs = [
             <img src="../assets/img/inria.svg" />
         </div>
         <div class="buttons">
-            <button class="btn btn-outline btn-large">
+            <button class="btn btn-outline btn-large" @click="projectStore.openEPOC">
                 <i class="icon-ouvrir" />
                 Ouvrir un projet existant
             </button>
-            <button class="btn btn-outline btn-large">
+            <button class="btn btn-outline btn-large" @click="createProject">
                 <i class="icon-creer" />
                 Créer un nouveau projet
             </button>
@@ -44,12 +33,12 @@ const epocs = [
         <div>
             <h3>Fichiers récents</h3>
             <hr class="separator" />
-            <div v-for="epoc of epocs" :key="epoc.name" class="card-list-item">
+            <div v-for="epoc of editorStore.recentProjects" :key="epoc.name" class="card-list-item">
                 <div class="card-icon">
                     <i class="icon-fichier" />
                 </div>
                 <p>{{ epoc.name }}</p>
-                <small>Modifié le {{ epoc.modified }}</small>
+                <small>{{ epoc.modified }}</small>
                 <hr class="vertical-separator" />
                 <div class="btn-open">
                     Ouvrir
