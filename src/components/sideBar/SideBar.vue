@@ -1,40 +1,35 @@
 <script setup lang="ts">
 import SideActionButton from './SideActionButton.vue';
+import { useEditorStore } from '../../shared/stores';
 
-const actions = [
-    {
-        icon: 'icon-texte'
-    },
-    {
-        icon: 'icon-video'
-    },
-    {
-        icon: 'icon-audio'
-    },
-    {
-        icon: 'icon-question'
-    },
-    {
-        icon: 'icon-condition'
-    },
-    {
-        icon: 'icon-javascript'
-    },
-];
+const editorStore = useEditorStore();
+
+function showFloatingMenu() {
+    editorStore.floatingMenu = !editorStore.floatingMenu;
+}
+
+function showModelMenu() {
+    // editorStore.modelMenu = true;
+}
+
 </script>
 
 <template>
     <div class="side-bar">
-        <img src="../assets/img/epoc.svg" alt="logo ePoc">
+        <img src="../../assets/img/epoc.svg" alt="logo ePoc">
         <div class="side-bar-actions">
             <SideActionButton
-                v-for="(action) in actions"
-                :key="action.icon"
-                :icon="action.icon"
+                v-for="item of editorStore.getSideActionsFirstPart"
+                :key="item.icon"
+                :side-action="item"
+                @show-menu="showFloatingMenu"
             />
             <hr class="separator">
             <SideActionButton
-                icon="icon-modele"
+                v-for="item of editorStore.getSideActionsLastPart"
+                :key="item.icon"
+                :side-action="item"
+                @show-menu="showModelMenu"
             />
         </div>
     </div>

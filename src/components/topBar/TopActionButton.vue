@@ -5,7 +5,6 @@ defineProps<{
     text?: string;
     textBefore?: string;
      //TODO: Find a way to manage different actions within the same component
-    //action: string;
 }>();
 
 </script>

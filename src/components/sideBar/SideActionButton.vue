@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { SideAction } from '../shared/interfaces';
-import { useEditorStore } from '../shared/stores';
-import ContentButton from './ContentButton.vue';
+import { SideAction } from '../../shared/interfaces';
+import { useEditorStore } from '../../shared/stores';
+import ContentButton from '../ContentButton.vue';
 
 const props = defineProps<{
     sideAction: SideAction;
@@ -16,8 +16,19 @@ function showMenu(event) {
     //TODO: Verify if the behavior of modal dismiss is correct
     event.stopPropagation();
     emit('showMenu');
-    console.log('showMenu', editorStore.subSideActions);
 }
+
+const editorStore = useEditorStore();
+
+
+//TODO: Using this remove the indicator of the drop zone when dragging, find a way to keep it
+function startDrag(event, icon) {
+    event.dataTransfer.dropEffect = 'move';
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('icon', icon);
+}
+
+const classList = props.sideAction.type === 'question' || props.sideAction.type === 'model' ? { 'btn-content-blue-question' : true, 'btn-content-blue' : true } : { 'btn-content-blue' : true };
 
 </script>
 
@@ -27,7 +38,7 @@ function showMenu(event) {
             :icon="sideAction.icon"
             :class-list="classList"
             :is-active="sideAction.type === 'question' && editorStore.floatingMenu"
-            :is-draggable="sideAction.type !== 'question'"
+            :is-draggable="sideAction.type !== 'question' && sideAction.type !== 'model'"
             @dragstart="startDrag($event, sideAction.icon)"
             @click="showMenu($event)"
         />
