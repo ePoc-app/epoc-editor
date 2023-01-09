@@ -31,11 +31,20 @@ function dragOver() {
     }
 }
 
-//! The behavior of the event dragleave is not consistent & causes bugs
+//? This counter is used to avoid triggering dragLeave when not necessary
+let counter = 0;
+
 function dragLeave() {
+    counter --;
+    if (counter > 0) return;
     nodes.value.find(element => element.id === props.id).data.readyToDrop = false;
     document.querySelector('#node'+props.id).classList.remove('node-animate');
     dragOverCount = 0;
+}
+
+function dragEnter(event) {
+    event.preventDefault();
+    counter ++;
 }
 
 const { nodes } = useVueFlow();
@@ -44,11 +53,17 @@ const { nodes } = useVueFlow();
 
 <template>
     <Handle type="target" position="left" />
-    <div :id="'node'+props.id" @dragover="dragOver" @dragleave="dragLeave">
+    <div
+        :id="'node'+props.id"
+        @dragover="dragOver"
+        @dragleave="dragLeave"
+        @dragenter="dragEnter"
+    >
         <ContentButton
             v-for="icon of props.data.icons"
             :key="icon"
             :icon="icon"
+            :is-active="false"
             :is-draggable="false"
             :class-list="{ 'btn-content-blue' : false }"
         />

@@ -3,7 +3,7 @@
 const props = defineProps<{
     icon: string;
     classList: object;
-    isActive?: boolean;
+    isActive: boolean;
     isDraggable: boolean;
 }>();
 
