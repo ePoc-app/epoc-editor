@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SideActionButton from './SideActionButton.vue';
+import SideActionButton from './components/SideActionButton.vue';
 import { useEditorStore } from '../../shared/stores';
 
 const editorStore = useEditorStore();
@@ -9,7 +9,7 @@ function showFloatingMenu() {
 }
 
 function showModelMenu() {
-    // editorStore.modelMenu = true;
+    editorStore.modelMenu = !editorStore.modelMenu;
 }
 
 </script>

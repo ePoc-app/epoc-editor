@@ -16,18 +16,24 @@ const props = defineProps<{
 
 //? This add an animation when the node is added to the flow
 onMounted(() => {
-    document.querySelector('#node'+props.id).classList.add('node');
+    const node = document.querySelector('#node' + props.id);
+    node.classList.add('node');
+    if(props.data.animated) node.classList.add('node-creation-animation');
 });
 
 //TODO: Seriously think about refactoring this
 let dragOverCount = 0;
 
-function dragOver() {
+function dragOver(event) {
+    if(event.dataTransfer.types.length > 1) return;
     dragOverCount ++;
     if(dragOverCount > 25) {
         dragOverCount = 0;
         nodes.value.find(element => element.id === props.id).data.readyToDrop = true;
         document.querySelector('#node'+props.id).classList.add('node-animate');
+
+        //? To be sure the counter is set to 1 when ready to drop
+        counter = 1;
     }
 }
 
@@ -72,21 +78,6 @@ const { nodes } = useVueFlow();
 </template>
 
 <style scoped lang="scss">
-.node {
-    padding: .7rem;
-    background-color: var(--node);
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    transition: all .15s ease-in-out;
-    :not(:first-child) {
-        margin-top: .5rem;
-    }
-
-    &-animate {
-        padding: 1rem;
-        transition: all .15s ease-in-out;
-    }
-}
 
 .vue-flow__handle {
     width: 12px;

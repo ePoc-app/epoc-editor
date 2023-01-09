@@ -19,6 +19,8 @@ $editor-lightgrey: #CDD3E0;
 $editor-shadow-hover: #E1E5EC;
 $editor-light-border: #DCE4F0;
 $editor-lightblue: #E8EDF3;
+$editor-shadow-outer: #ADBCD5;
+$editor-grayblue: #7789A6;
 
 [color-scheme="light"] {
     --background: #{$editor-light};
@@ -27,6 +29,7 @@ $editor-lightblue: #E8EDF3;
     --text-secondary: #8C9AB9;
     --border: #{$editor-light-border};
     --shadow: #{$editor-shadow-hover};
+    --shadow-outer: #{$editor-shadow-outer};
     --list-background: #F7F8F9;
     --list-border: #E6EAF4;
     --button-blue: #{$editor-lightblue};
@@ -43,4 +46,5 @@ $editor-lightblue: #E8EDF3;
 
 :root {
     --inria-red: #{$inria-red};
+    --editor-grayblue: #{$editor-grayblue};
 }

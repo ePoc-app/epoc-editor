@@ -7,6 +7,7 @@ import { SideAction } from '../interfaces';
 interface EditorState {
     recentProjects: ePocProject[];
     floatingMenu: boolean;
+    modelMenu: boolean;
     sideActions: SideAction[];
     subSideActions: SideAction[];
 }
@@ -15,6 +16,7 @@ export const useEditorStore = defineStore('editor', {
     state: (): EditorState => ({
         recentProjects: [],
         floatingMenu: false,
+        modelMenu: false,
         sideActions: actionItems,
         subSideActions: subActions
     }),
@@ -38,6 +40,7 @@ export const useEditorStore = defineStore('editor', {
         },
         dismissModals() {
             this.floatingMenu = false;
+            this.modelMenu = false;
         }
     }
 });
@@ -74,7 +77,7 @@ const actionItems: SideAction[] = [
     }
 ];
 
-const subActions = [
+const subActions: SideAction[] = [
     {
         icon: 'icon-qcm',
     },

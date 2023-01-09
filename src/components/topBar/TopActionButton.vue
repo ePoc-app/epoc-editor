@@ -22,6 +22,9 @@ defineProps<{
     padding: .7rem 1rem;
     margin-right: 1rem;
     background-color: var(--button-blue);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    transition: all .2s ease-in-out;
     i {
         margin: auto;
         font-size: 1rem;
@@ -35,6 +38,13 @@ defineProps<{
     .zoom-span {
         margin-right: .5rem;
         margin-left: 0;
+    }
+    &:hover {
+      background-color: var(--content);  
+      box-shadow: 0 1px 8px 0 var(--shadow);
+    }
+    &:active {
+        opacity: .7;
     }
 }
 .btn-squared {

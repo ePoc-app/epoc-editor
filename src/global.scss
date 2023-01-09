@@ -67,6 +67,7 @@ body,
     border: 1px solid var(--border);
     background-color: var(--content);
     box-shadow: 0 1px 8px 0 var(--shadow);
+    transition: all 0.2s ease-in-out;
     i {
       margin: auto;
       font-size: 1.5rem;
@@ -79,6 +80,10 @@ body,
           background-color: var(--content);
           box-shadow: 0 1px 8px 0 var(--shadow);
         }
+      }
+      &:hover {
+        background-color: var(--content);
+        box-shadow: 0 2px 5px 0 var(--shadow-outer);
       }
     }
   }
@@ -140,5 +145,25 @@ hr {
       color: var(--text-secondary);
       font-weight: 400;
       min-width: fit-content;
+  }
+}
+
+.node {
+  padding: 1rem;
+  background-color: var(--node);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  
+  :not(:first-child) {
+      margin-top: .5rem;
+  }
+
+  &-animate {
+      padding: 1.5rem;
+      transition: all .15s ease-in-out;
+  }
+
+  &-creation-animation {
+    transition: all .15s ease-in-out;
   }
 }
