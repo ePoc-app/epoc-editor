@@ -14,11 +14,12 @@ const props = defineProps<{
     }
 }>();
 
-//? This add an animation when the node is added to the flow
+// This add an animation when the node is added to the flow
 onMounted(() => {
     const node = document.querySelector('#node' + props.id);
     node.classList.add('node');
     if(props.data.animated) node.classList.add('node-creation-animation');
+
 });
 
 //TODO: Seriously think about refactoring this
@@ -32,12 +33,12 @@ function dragOver(event) {
         nodes.value.find(element => element.id === props.id).data.readyToDrop = true;
         document.querySelector('#node'+props.id).classList.add('node-animate');
 
-        //? To be sure the counter is set to 1 when ready to drop
+        // To be sure the counter is set to 1 when ready to drop
         counter = 1;
     }
 }
 
-//? This counter is used to avoid triggering dragLeave when not necessary
+// This counter is used to avoid triggering dragLeave when not necessary
 let counter = 0;
 
 function dragLeave() {

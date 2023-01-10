@@ -38,5 +38,6 @@ function dragStart(event) {
     display: flex;
     flex-direction: column;
     margin-bottom: 1.5rem;
+    transform: translate(0, 0);
 }
 </style>

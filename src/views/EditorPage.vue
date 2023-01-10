@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import SideBar from '../components/sideBar/SideBar.vue';
 import TopBar from '../components/topBar/TopBar.vue';
 import ePocFlow from '../components/ePocFlow/ePocFlow.vue';
 import { useEditorStore } from '../shared/stores';
+import SideBarV0 from '../components/sideBar/SideBarV0.vue';
 
 const editorStore = useEditorStore();
 
@@ -14,7 +14,7 @@ function dismissModals() {
 
 <template>
     <div class="editor-container" @click="dismissModals">
-        <SideBar class="side-bar" />
+        <SideBarV0 class="side-bar" />
         <TopBar class="top-bar" />
         <ePocFlow class="editor-content" />
     </div>
@@ -33,7 +33,9 @@ function dismissModals() {
     }
 
     .top-bar {
-        grid-column: 2;
+        grid-column: 1/3;
+        //for v2: 
+        //grid-column: 2;
         grid-row: 1;
     }
 
