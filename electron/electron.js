@@ -17,8 +17,8 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         show: false,
         icon: 'favicon.png',
-        width: 800,
-        height: 800,
+        width: 1500,
+        height: 1200,
         'minHeight': 800,
         'minWidth': 800,
         webPreferences: {

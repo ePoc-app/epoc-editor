@@ -66,6 +66,7 @@ function openForm(element: NodeElement) {
 </script>
 
 <template>
+    <p class="node-title">{{ data.title }}</p>
     <Handle type="target" position="left" />
     <div
         :id="'node'+props.id"
@@ -97,5 +98,8 @@ function openForm(element: NodeElement) {
     &-right {
         right: -6px;
     }
+}
+.node-title {
+    margin: .2rem;
 }
 </style>

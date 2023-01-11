@@ -8,7 +8,7 @@ import { useEditorStore } from '../../shared/stores';
 
 const { nodes, addNodes, addEdges, onConnect, vueFlowRef, project, findNode }  = useVueFlow();
 
-onConnect((params) => addEdges([{...params, updatable: true, style: { strokeWidth: 2.5 }}]));
+onConnect((params) => addEdges([{...params, updatable: true, style: { stroke: '#384257', strokeWidth: 2.5 }}]));
 
 const editorStore = useEditorStore();
 
@@ -65,7 +65,7 @@ function addNode(position, actions: SideAction[]) {
         id: (nodes.value.length + 1).toString(),
         type: 'content',
         // Put animated: nodeIcons.length === 1 when implementing v2
-        data: { elements: elements, readyToDrop: false, animated: false },
+        data: { elements: elements, readyToDrop: false, animated: false, title: 'Screen' },
         position,
     };
        
@@ -104,6 +104,11 @@ function addToExistingScreen(action : SideAction):boolean {
 <template>
     <VueFlow
         v-model="elements"
+        auto-connect
+        fit-view-on-init
+        :max-zoom="1.5"
+        :min-zoom=".7"
+        :node-extent="[[0, 0], [1300, 1300]]"
         :node-types="nodeTypes"
         @drop="onDrop"
         @dragover.prevent
@@ -113,16 +118,15 @@ function addToExistingScreen(action : SideAction):boolean {
         <template #node-custom="{ id, data }">
             <ContentNode :id="id" :data="data" />
         </template>
-        <template #connection-line="{ sourceX, sourceY, targetX, targetY }">
+        <template #connection-line="{ sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition }">
             <CustomConnectContent 
                 :source-x="sourceX"
                 :source-y="sourceY"
                 :targetX="targetX"
                 :targetY="targetY"
+                :source-position="sourcePosition"
+                :target-position="targetPosition"
             />
-        </template>
-        <template #edge-custom="props">
-            <ContentEdge :props="props" />
         </template>
     </VueFlow>
 </template>
