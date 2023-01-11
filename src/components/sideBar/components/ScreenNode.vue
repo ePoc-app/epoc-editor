@@ -39,5 +39,6 @@ function dragStart(event) {
     flex-direction: column;
     margin-bottom: 1.5rem;
     transform: translate(0, 0);
+    cursor: grab !important;
 }
 </style>

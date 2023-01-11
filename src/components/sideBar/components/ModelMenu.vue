@@ -69,7 +69,7 @@ function switchSelection() {
 
     top: 0;
     left: 100px;
-    height: 100vh;
+    height: 100%;
     position: fixed;
 
     width: fit-content;
@@ -90,7 +90,7 @@ function switchSelection() {
     }
 
     .tab {
-        background-color: var(--list-background);
+        background-color: var(--item-background);
         padding: 1rem 1.6rem;
         border-top: 1px solid var(--border);
         border-bottom: 1px solid var(--border);

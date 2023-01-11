@@ -5,6 +5,10 @@
 import { Handle, useVueFlow } from '@vue-flow/core';
 import ContentButton from '../../ContentButton.vue';
 import { onMounted } from 'vue';
+import { useEditorStore } from '../../../shared/stores';
+import { NodeElement } from '../../../shared/interfaces';
+
+const editorStore = useEditorStore();
 
 const props = defineProps<{
     id: string;
@@ -19,10 +23,9 @@ onMounted(() => {
     const node = document.querySelector('#node' + props.id);
     node.classList.add('node');
     if(props.data.animated) node.classList.add('node-creation-animation');
-
 });
 
-//TODO: Seriously think about refactoring this
+//TODO: Think about refactoring this
 let dragOverCount = 0;
 
 function dragOver(event) {
@@ -56,6 +59,10 @@ function dragEnter(event) {
 
 const { nodes } = useVueFlow();
 
+function openForm(element: NodeElement) {
+    editorStore.openFormPanel(element);
+}
+
 </script>
 
 <template>
@@ -67,12 +74,13 @@ const { nodes } = useVueFlow();
         @dragenter="dragEnter"
     >
         <ContentButton
-            v-for="icon of props.data.icons"
-            :key="icon"
-            :icon="icon"
+            v-for="element of props.data.elements"
+            :key="element.action.icon"
+            :icon="element.action.icon"
             :is-active="false"
             :is-draggable="false"
-            :class-list="{ 'btn-content-blue' : false }"
+            :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true }"
+            @click="openForm(element)"
         />
     </div>
     <Handle type="source" position="right" />

@@ -1,15 +1,20 @@
 import { defineStore } from 'pinia';
-import { ePocProject } from '../interfaces';
 import { fetchRecentProjects } from '../services';
-import { SideAction } from '../interfaces';
-
+import { SideAction, Screen, ePocProject, NodeElement, Form } from '../interfaces';
+import { toRaw } from 'vue';
 
 interface EditorState {
     recentProjects: ePocProject[];
     floatingMenu: boolean;
     modelMenu: boolean;
+    formPanel: {
+        isOpen: boolean;
+        form: Form;
+    };
     sideActions: SideAction[];
     subSideActions: SideAction[];
+    standardScreens: Screen[];
+    forms: Form[];
 }
 
 export const useEditorStore = defineStore('editor', {
@@ -17,8 +22,14 @@ export const useEditorStore = defineStore('editor', {
         recentProjects: [],
         floatingMenu: false,
         modelMenu: false,
+        formPanel: {
+            isOpen: false,
+            form: null
+        },
         sideActions: actionItems,
-        subSideActions: subActions
+        subSideActions: subActions,
+        standardScreens: standardScreen,
+        forms: forms
     }),
     
     getters: {
@@ -28,7 +39,11 @@ export const useEditorStore = defineStore('editor', {
         },
         getSideActionsLastPart() {
             return this.sideActions.slice(-1);
-        }
+        },
+        //This function is a part of the one used in ePocStore
+        getSelectedScreens() {
+            return this.standardScreens;
+        },
     },
     
     actions: {
@@ -41,15 +56,58 @@ export const useEditorStore = defineStore('editor', {
         dismissModals() {
             this.floatingMenu = false;
             this.modelMenu = false;
-        }
+        },
+        openFormPanel(element: NodeElement) {
+            this.formPanel.isOpen = true;
+            this.formPanel.form = element.form;
+        },
+        //generate id of format 'aaaaaaaa'-'aaaa'-'aaaa'-'aaaa'-'aaaaaaaaaaaa'
+        generateId() {
+            const s4 = () => {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            };
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+        },
+        //return a copy of the form linked to the type
+        getForm(type: string) {
+            return structuredClone(toRaw(this.forms.find(form => form.type === type)));
+        },
     }
 });
+
+const standardScreen: Screen[] = [
+    {
+        title: 'Ecran texte',
+        actions: [
+            {
+                icon: 'icon-texte',
+                type: 'text'
+            }
+        ]
+    },
+    {
+        title: 'Ecran video',
+        actions: [
+            {
+                icon: 'icon-video',
+                type: 'video'
+            },
+            {
+                icon: 'icon-texte',
+                type: 'text'
+            }
+        ]
+    },
+];
 
 
 const actionItems: SideAction[] = [
     {
         icon: 'icon-texte',
         type: 'text'
+        
     },
     {
         icon: 'icon-video',
@@ -80,17 +138,74 @@ const actionItems: SideAction[] = [
 const subActions: SideAction[] = [
     {
         icon: 'icon-qcm',
+        type: 'qcm'
     },
     {
         icon: 'icon-dragdrop',
+        type: 'dragdrop'
     },
     {
         icon: 'icon-reorder',
+        type: 'reorder'
     },
     {
-        icon: 'icon-swipe'
+        icon: 'icon-swipe',
+        type: 'swipe'
     },
     {
-        icon: 'icon-liste'
+        icon: 'icon-liste',
+        type: 'list'
+    }
+];
+
+const forms: Form[] = [
+    {
+        type: 'text',
+        name: 'Contenu',
+        icon: 'icon-texte',
+        inputs: [
+            {
+                type: 'text',
+                label: 'Titre',
+                value: '',
+                placeholder: 'Saisissez...'
+            },
+            {
+                type: 'textarea',
+                label: 'Résumé',
+                value: '',
+                placeholder: 'Saisissez un résumé...'
+            },
+            {
+                type: 'file',
+                label: 'Vignette',
+                value: '',
+                accept: 'image/*'
+            }
+        ]
+    },
+    {
+        type: 'video',
+        name: 'Vidéo',
+        icon: 'icon-video',
+        inputs: [
+            {
+                type: 'text',
+                label: 'Titre',
+                value: '',
+                placeholder: 'Saisissez...'
+            },
+            {
+                type: 'file',
+                label: 'Vidéo',
+                value: '',
+                accept: 'video/*'
+            },
+            {
+                type: 'textarea',
+                label: 'Résumé',
+                value: '',
+            }
+        ]
     }
 ];

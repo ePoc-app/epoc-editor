@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import ScreenNode from './ScreenNode.vue';
-import { useEpocStore } from '../../../shared/stores';
+import { useEditorStore } from '../../../shared/stores';
 import { ref } from 'vue';
 
-const epocStore = useEpocStore();
+const editorStore = useEditorStore();
 
 const emit = defineEmits<{
     (e: 'dragStart', { event , sideAction }): void;
@@ -12,7 +12,7 @@ const emit = defineEmits<{
 const rightCol = ref([]);
 const leftCol = ref([]);
 
-epocStore.getSelectedScreens.forEach((screen, index) => {
+editorStore.getSelectedScreens.forEach((screen, index) => {
     index % 2 === 0 ? leftCol.value.push(screen) : rightCol.value.push(screen); 
 });
 
@@ -32,7 +32,7 @@ function dragStart(event, screen) {
                 <ScreenNode 
                     v-for="(screen, index) of leftCol"
                     :key="index"
-                    :title="'Titre écran'"
+                    :title="screen.title"
                     :side-actions="screen.actions"
                     @drag-start="dragStart($event, screen)"
                 />
@@ -41,7 +41,7 @@ function dragStart(event, screen) {
                 <ScreenNode 
                     v-for="(screen, index) of rightCol"
                     :key="index"
-                    :title="'Titre écran'"
+                    :title="screen.title"
                     :side-actions="screen.actions"
                     @drag-start="dragStart($event, screen)"
                 />

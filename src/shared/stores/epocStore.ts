@@ -3,7 +3,6 @@ import { Screen } from '../interfaces';
 
 interface EpocState {
     screensModel: {
-        standard: Screen[],
         personnal: Screen[],
         personnalSelected: boolean
     },
@@ -11,10 +10,10 @@ interface EpocState {
 
 export const useEpocStore = defineStore('epoc', {
     state: (): EpocState => ({
+        //? will the personnal screens be linked to the editor or the ePoc
         screensModel: {
-            standard: standardScreens,
-            personnal: [],
-            personnalSelected: false
+            personnalSelected: false,
+            personnal: []
         },
     }),
 
@@ -24,104 +23,3 @@ export const useEpocStore = defineStore('epoc', {
         },
     },
 });
-
-const standardScreens: Screen[] = [
-    {
-        title: 'titre écran',
-        actions: [
-            {
-                icon: 'icon-texte',
-                type: 'text'
-            },
-            {
-                icon: 'icon-video',
-                type: 'video'
-            },
-            {
-                icon: 'icon-qcm'
-            },
-        ]
-    },
-    {
-        title: 'titre écran',
-        actions: [
-            {
-                icon: 'icon-texte',
-                type: 'text'
-            },
-            {
-                icon: 'icon-condition',
-                type: 'condition'
-            },
-        ]
-    },
-    {
-        title: 'titre écran',
-        actions: [
-            {
-                icon: 'icon-texte',
-                type: 'text'
-            },
-            {
-                icon: 'icon-video',
-                type: 'video'
-            },
-        ]
-    },
-    {
-        title: 'titre écran',
-        actions: [
-            {
-                icon: 'icon-texte',
-                type: 'text'
-            },
-            {
-                icon: 'icon-video',
-                type: 'video'
-            },
-            {
-                icon: 'icon-qcm'
-            },
-        ]
-    },
-    {
-        title: 'titre écran',
-        actions: [
-            {
-                icon: 'icon-texte',
-                type: 'text'
-            },
-            {
-                icon: 'icon-video',
-                type: 'video'
-            },
-        ]
-    },
-    {
-        title: 'titre écran',
-        actions: [
-            {
-                icon: 'icon-texte',
-                type: 'text'
-            },
-            {
-                icon: 'icon-video',
-                type: 'video'
-            },
-        ]
-    },
-    {
-        title: 'titre écran',
-        actions: [
-            {
-                icon: 'icon-texte',
-                type: 'text'
-            },
-            {
-                icon: 'icon-video',
-                type: 'video'
-            },
-        ]
-    },
-    
-];

@@ -1,4 +1,4 @@
 export interface SideAction {
     icon: string;
-    type?: string;
+    type: string;
 }

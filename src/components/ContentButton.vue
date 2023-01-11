@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-const props = defineProps<{
+defineProps<{
     icon: string;
     classList: object;
     isActive: boolean;
@@ -20,7 +20,7 @@ function click(event) {
     <button
         class="btn btn-content"
         :draggable="isDraggable"
-        :class="[classList, { active: props.isActive }, { 'draggable': isDraggable }]"
+        :class="[classList, { active: isActive }, { 'draggable': isDraggable }]"
         @click="click($event)"
     >
         <i :class="icon" />
@@ -30,5 +30,9 @@ function click(event) {
 <style scoped lang="scss">
 .draggable {
     cursor: grab;
+}
+
+.clickable {
+    cursor: pointer;
 }
 </style>

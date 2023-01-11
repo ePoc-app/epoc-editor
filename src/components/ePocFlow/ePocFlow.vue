@@ -3,11 +3,14 @@ import { VueFlow, useVueFlow } from '@vue-flow/core';
 import { markRaw, nextTick, watch } from 'vue';
 import ContentNode from './nodes/ContentNode.vue';
 import CustomConnectContent from './edges/CustomConnectContent.vue';
-import { SideAction } from '../../shared/interfaces';
+import { SideAction, NodeElement } from '../../shared/interfaces';
+import { useEditorStore } from '../../shared/stores';
 
 const { nodes, addNodes, addEdges, onConnect, vueFlowRef, project, findNode }  = useVueFlow();
 
 onConnect((params) => addEdges([{...params, updatable: true, style: { strokeWidth: 2.5 }}]));
+
+const editorStore = useEditorStore();
 
 const nodeTypes = {
     content: markRaw(ContentNode)
@@ -36,7 +39,6 @@ const onDrop = (event) => {
 
     const actions = JSON.parse(data);
 
-
     if(actions.length > 1) {
         addNode(position, actions);
     } else {
@@ -47,15 +49,23 @@ const onDrop = (event) => {
 
 };
 
-function addNode(position, actions) {
-   
-    // nodeIcons contains all the icons of actions
-    const nodeIcons = actions.length > 1 ? actions.map((action) => { return action.icon; }) : [actions.icon];
+function addNode(position, actions: SideAction[]) {
 
+    let elements: NodeElement[] = [];
+
+    actions.forEach((action) => {
+        elements.push({
+            id: editorStore.generateId(),
+            action: action,
+            form: editorStore.getForm(action.type)
+        });
+    });
+   
     const newNode = {
         id: (nodes.value.length + 1).toString(),
         type: 'content',
-        data: { icons: nodeIcons, readyToDrop: false, animated: nodeIcons.length === 1 },
+        // Put animated: nodeIcons.length === 1 when implementing v2
+        data: { elements: elements, readyToDrop: false, animated: false },
         position,
     };
        

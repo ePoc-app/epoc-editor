@@ -3,6 +3,7 @@ import TopBar from '../components/topBar/TopBar.vue';
 import ePocFlow from '../components/ePocFlow/ePocFlow.vue';
 import { useEditorStore } from '../shared/stores';
 import SideBarV0 from '../components/sideBar/SideBarV0.vue';
+import FormPanel from '../components/forms/FormPanel.vue';
 
 const editorStore = useEditorStore();
 
@@ -17,6 +18,7 @@ function dismissModals() {
         <SideBarV0 class="side-bar" />
         <TopBar class="top-bar" />
         <ePocFlow class="editor-content" />
+        <FormPanel v-if="editorStore.formPanel.isOpen" class="formPanel" />
     </div>
 </template>
 
