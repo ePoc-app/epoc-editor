@@ -4,4 +4,5 @@ export interface NodeElement {
     id: string;
     action: SideAction
     form: Form;
+    parentId: string;
 }

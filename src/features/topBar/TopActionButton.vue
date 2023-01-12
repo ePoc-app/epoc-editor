@@ -24,7 +24,7 @@ defineProps<{
     background-color: var(--button-blue);
     border-radius: 8px;
     border: 1px solid var(--border);
-    transition: all .2s ease-in-out;
+    transition: box-shadow .2s ease-in-out;
     i {
         margin: auto;
         font-size: 1rem;

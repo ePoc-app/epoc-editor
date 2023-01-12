@@ -1,3 +1,4 @@
+import { FormButton } from './formButton.interface';
 import { Input } from './input.interface';
 
 export interface Form {
@@ -5,4 +6,5 @@ export interface Form {
     name: string;
     icon: string;
     inputs: Input[];
+    buttons?: FormButton[];
 }

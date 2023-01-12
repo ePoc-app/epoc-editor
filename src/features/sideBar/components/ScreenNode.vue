@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { SideAction } from '../../../shared/interfaces';
-import ContentButton from '../../ContentButton.vue';
+import ContentButton from '../../../components/ContentButton.vue';
 
 defineProps<{
     title: string;
@@ -19,8 +19,8 @@ function dragStart(event) {
 
 <template>
     <div class="screen">
-        <small>{{ title }}</small>
-        <div class="node" draggable="true" @dragstart="dragStart($event)">
+        <small editable="true">{{ title }}</small>
+        <div class="node screen-node" draggable="true" @dragstart="dragStart($event)">
             <ContentButton
                 v-for="action of sideActions"
                 :key="action.type"

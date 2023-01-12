@@ -53,20 +53,29 @@ function addNode(position, actions: SideAction[]) {
 
     let elements: NodeElement[] = [];
 
+    
+    const id= (nodes.value.length + 1).toString();
+    
     actions.forEach((action) => {
         elements.push({
             id: editorStore.generateId(),
             action: action,
-            form: editorStore.getForm(action.type)
+            form: editorStore.getForm(action.type),
+            parentId: id
         });
     });
-   
+
     const newNode = {
-        id: (nodes.value.length + 1).toString(),
+        id: id,
         type: 'content',
         // Put animated: nodeIcons.length === 1 when implementing v2
         data: { elements: elements, readyToDrop: false, animated: false, title: 'Screen' },
         position,
+        events: {
+            click: () => {
+                console.log('node' + id + ' clicked');
+            }
+        }
     };
        
     addNodes([newNode]);
@@ -98,7 +107,6 @@ function addToExistingScreen(action : SideAction):boolean {
     }
     return false;
 }
-
 </script>
 
 <template>

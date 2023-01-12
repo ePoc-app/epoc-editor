@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import TopBar from '../components/topBar/TopBar.vue';
-import ePocFlow from '../components/ePocFlow/ePocFlow.vue';
+import TopBar from '../features/topBar/TopBar.vue';
+import ePocFlow from '../features/ePocFlow/ePocFlow.vue';
 import { useEditorStore } from '../shared/stores';
-import SideBarV0 from '../components/sideBar/SideBarV0.vue';
-import FormPanel from '../components/forms/FormPanel.vue';
+import SideBarV0 from '../features/sideBar/SideBarV0.vue';
+import FormPanel from '../features/forms/FormPanel.vue';
 
 const editorStore = useEditorStore();
 

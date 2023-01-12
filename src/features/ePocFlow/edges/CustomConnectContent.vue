@@ -41,7 +41,7 @@ const canSnap = ref(false);
 
 const HIGHLIGHT_COLOR = '#f59e0b';
 
-const SNAP_HIGHLIGHT_COLOR = '#10b981';
+const SNAP_HIGHLIGHT_COLOR = '#00B3B9';
 
 const MIN_DISTANCE = 75;
 

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import ScreenNode from './ScreenNode.vue';
 import { useEditorStore } from '../../../shared/stores';
-import { ref } from 'vue';
+import { Ref, ref } from 'vue';
+import { Screen } from '../../../shared/interfaces';
 
 const editorStore = useEditorStore();
 
@@ -9,10 +10,10 @@ const emit = defineEmits<{
     (e: 'dragStart', { event , sideAction }): void;
 }>();
 
-const rightCol = ref([]);
-const leftCol = ref([]);
+const rightCol: Ref<Screen[]> = ref([]);
+const leftCol: Ref<Screen[]> = ref([]);
 
-editorStore.getSelectedScreens.forEach((screen, index) => {
+editorStore.getSelectedScreens.forEach((screen: Screen, index) => {
     index % 2 === 0 ? leftCol.value.push(screen) : rightCol.value.push(screen); 
 });
 
@@ -56,12 +57,13 @@ function dragStart(event, screen) {
     z-index: 100;
 
     top: 80px;
-    height: 100%;
+    height: calc(100% - 80px);
     position: absolute;
 
     width: fit-content;
     background-color: white;
     border-right: 1px solid var(--border);
+    overflow-y: auto;
     .screens {
         margin: 1.5rem;
         display: flex;

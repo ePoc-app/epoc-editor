@@ -5,4 +5,5 @@ export interface Input {
 
     placeholder?: string;
     accept?: string;
+    icon?: string;
 }

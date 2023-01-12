@@ -3,10 +3,10 @@
 <script setup lang="ts">
 //@ts-nocheck
 import { Handle, useVueFlow } from '@vue-flow/core';
-import ContentButton from '../../ContentButton.vue';
+import ContentButton from '../../../components/ContentButton.vue';
 import { onMounted } from 'vue';
 import { useEditorStore } from '../../../shared/stores';
-import { NodeElement } from '../../../shared/interfaces';
+import { NodeElement } from '../../..//shared/interfaces';
 
 const editorStore = useEditorStore();
 
@@ -66,7 +66,7 @@ function openForm(element: NodeElement) {
 </script>
 
 <template>
-    <p class="node-title">{{ data.title }}</p>
+    <p contenteditable="true" class="node-title">{{ data.title }}</p>
     <Handle type="target" position="left" />
     <div
         :id="'node'+props.id"
@@ -78,7 +78,7 @@ function openForm(element: NodeElement) {
             v-for="element of props.data.elements"
             :key="element.action.icon"
             :icon="element.action.icon"
-            :is-active="false"
+            :is-active="editorStore.formPanel.openedElement ? editorStore.formPanel.openedElement.id === element.id : false"
             :is-draggable="false"
             :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true }"
             @click="openForm(element)"
@@ -101,5 +101,10 @@ function openForm(element: NodeElement) {
 }
 .node-title {
     margin: .2rem;
+    padding: .2rem;
+    &:focus-visible {
+        outline: 1px solid var(--editor-blue);
+        border-radius: 4px;
+    }
 }
 </style>

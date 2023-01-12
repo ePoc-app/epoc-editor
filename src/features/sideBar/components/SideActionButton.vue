@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { SideAction } from '../../../shared/interfaces';
 import { useEditorStore } from '../../../shared/stores';
-import ContentButton from '../../ContentButton.vue';
+import ContentButton from '../../../components/ContentButton.vue';
 import ModelMenu from './ModelMenu.vue';
 
 const props = defineProps<{

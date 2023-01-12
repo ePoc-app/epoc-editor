@@ -2,13 +2,15 @@
 import TextInput from './TextInput.vue';
 import TextAreaInput from './TextAreaInput.vue';
 import FileInput from './FileInput.vue';
+import AddInput from './AddInput.vue';
 
 defineProps<{
     type: string;
     label: string;
+    inputValue: string;
     placeholder?: string;
     accept?: string;
-    inputValue: string;
+    icon?: string;
 }>();
 
 const emit = defineEmits<{
@@ -38,5 +40,10 @@ const emit = defineEmits<{
         :label="label"
         :accept="accept"
         @input="emit('update:modelValue', $event)"
+    />
+    <AddInput
+        v-if="type === 'add'"
+        :placeholder="placeholder"
+        :label="label"
     />
 </template>

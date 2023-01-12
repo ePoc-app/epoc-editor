@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { fetchRecentProjects } from '../services';
 import { SideAction, Screen, ePocProject, NodeElement, Form } from '../interfaces';
 import { toRaw } from 'vue';
+import { GraphNode, NodeChange, applyNodeChanges, useVueFlow } from '@vue-flow/core';
 
 interface EditorState {
     recentProjects: ePocProject[];
@@ -10,6 +11,8 @@ interface EditorState {
     formPanel: {
         isOpen: boolean;
         form: Form;
+        openedElement: NodeElement;
+        openedScreen: Screen;
     };
     sideActions: SideAction[];
     subSideActions: SideAction[];
@@ -24,12 +27,14 @@ export const useEditorStore = defineStore('editor', {
         modelMenu: false,
         formPanel: {
             isOpen: false,
-            form: null
+            form: null,
+            openedElement: null,
+            openedScreen: null
         },
         sideActions: actionItems,
         subSideActions: subActions,
         standardScreens: standardScreen,
-        forms: forms
+        forms: forms,
     }),
     
     getters: {
@@ -60,6 +65,12 @@ export const useEditorStore = defineStore('editor', {
         openFormPanel(element: NodeElement) {
             this.formPanel.isOpen = true;
             this.formPanel.form = element.form;
+            this.formPanel.openedElement = element;
+        },
+        closeFormPanel() {
+            this.formPanel.isOpen = false;
+            this.formPanel.form = null;
+            this.formPanel.openedElement = null;
         },
         //generate id of format 'aaaaaaaa'-'aaaa'-'aaaa'-'aaaa'-'aaaaaaaaaaaa'
         generateId() {
@@ -74,6 +85,12 @@ export const useEditorStore = defineStore('editor', {
         getForm(type: string) {
             return structuredClone(toRaw(this.forms.find(form => form.type === type)));
         },
+        deleteCurrentElement() {
+            const { nodes } = useVueFlow();
+            const node = nodes[this.formPanel.openedElement.id - 1];
+            const changes: NodeChange[] = [{ id: node.id, type: 'remove' }];
+            applyNodeChanges(changes, nodes.value);
+        }
     }
 });
 
@@ -182,6 +199,18 @@ const forms: Form[] = [
                 value: '',
                 accept: 'image/*'
             }
+        ],
+        buttons: [
+            {
+                label: 'Supprimer',
+                icon: 'icon-supprimer',
+                action: 'delete'
+            },
+            {
+                label: 'Copier le lien',
+                icon: 'icon-copie',
+                action: 'copy'
+            },
         ]
     },
     {
@@ -205,6 +234,37 @@ const forms: Form[] = [
                 type: 'textarea',
                 label: 'Résumé',
                 value: '',
+                placeholder: 'Saisissez un résumé...'
+            },
+            {
+                type: 'add',
+                label: 'Transcription',
+                value: '',
+                placeholder: 'Ajouter une transcription'
+            },
+            {
+                type: 'add',
+                label: 'Vignette',
+                value: '',
+                placeholder: 'Ajouter une vignette'
+            },
+            {
+                type: 'add',
+                label: 'Sous-titres',
+                value: '',
+                placeholder: 'Ajouter des sous-titres'
+            },
+        ],
+        buttons: [
+            {
+                label: 'Supprimer',
+                icon: 'icon-supprimer',
+                action: 'delete'
+            },
+            {
+                label: 'Copier le lien',
+                icon: 'icon-copie',
+                action: 'delete'
             }
         ]
     }
