@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { fetchRecentProjects } from '../services';
 import { SideAction, Screen, ePocProject, NodeElement, Form } from '../interfaces';
 import { toRaw } from 'vue';
-import { GraphNode, NodeChange, applyNodeChanges, useVueFlow } from '@vue-flow/core';
+import { NodeChange, applyNodeChanges, useVueFlow } from '@vue-flow/core';
 
 interface EditorState {
     recentProjects: ePocProject[];
@@ -15,7 +15,7 @@ interface EditorState {
         openedScreen: Screen;
     };
     sideActions: SideAction[];
-    subSideActions: SideAction[];
+    questions: SideAction[];
     standardScreens: Screen[];
     forms: Form[];
 }
@@ -32,7 +32,7 @@ export const useEditorStore = defineStore('editor', {
             openedScreen: null
         },
         sideActions: actionItems,
-        subSideActions: subActions,
+        questions: questions,
         standardScreens: standardScreen,
         forms: forms,
     }),
@@ -152,7 +152,7 @@ const actionItems: SideAction[] = [
     }
 ];
 
-const subActions: SideAction[] = [
+const questions: SideAction[] = [
     {
         icon: 'icon-qcm',
         type: 'qcm'

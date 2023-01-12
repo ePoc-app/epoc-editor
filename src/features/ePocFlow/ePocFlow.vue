@@ -37,13 +37,15 @@ const onDrop = (event) => {
 
     const data = event.dataTransfer.getData('sideAction');
 
+    console.log(data);
+
     const actions = JSON.parse(data);
 
     if(actions.length > 1) {
         addNode(position, actions);
     } else {
         if(!addToExistingScreen(actions)) {
-            addNode(position, actions);
+            addNode(position, [actions]);
         }
     }
 
@@ -99,7 +101,12 @@ function addNode(position, actions: SideAction[]) {
 function addToExistingScreen(action : SideAction):boolean {
     for(let node of nodes.value) {
         if(node.data.readyToDrop) {
-            node.data.icons.push(action.icon);
+            node.data.elements.push({
+                id: editorStore.generateId(),
+                action: action,
+                form: editorStore.getForm(action.type),
+                parentId: node.id
+            });
             node.data.readyToDrop = false;
             document.querySelector('#node'+node.id).classList.remove('node-animate');
             return true;
