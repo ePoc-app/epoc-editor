@@ -2,7 +2,6 @@ import { defineStore } from 'pinia';
 import { fetchRecentProjects } from '../services';
 import { SideAction, Screen, ePocProject, NodeElement, Form } from '../interfaces';
 import { toRaw } from 'vue';
-import { NodeChange, applyNodeChanges, useVueFlow } from '@vue-flow/core';
 
 interface EditorState {
     recentProjects: ePocProject[];
@@ -86,10 +85,14 @@ export const useEditorStore = defineStore('editor', {
             return structuredClone(toRaw(this.forms.find(form => form.type === type)));
         },
         deleteCurrentElement() {
-            const { nodes } = useVueFlow();
-            const node = nodes[this.formPanel.openedElement.id - 1];
-            const changes: NodeChange[] = [{ id: node.id, type: 'remove' }];
-            applyNodeChanges(changes, nodes.value);
+            // const { applyNodeChanges } = useVueFlow();
+            // applyNodeChanges([
+            //     {
+            //         id: this.formPanel.openedElement.parentId,
+            //         type: 'remove',
+            //     }
+            // ]);
+            console.log(this.formPanel.openedElement.parentId);
         }
     }
 });
@@ -265,6 +268,173 @@ const forms: Form[] = [
                 label: 'Copier le lien',
                 icon: 'icon-copie',
                 action: 'delete'
+            }
+        ]
+    },
+    {
+        type: 'qcm',
+        name: 'QCM',
+        icon: 'icon-qcm',
+        inputs: [
+            {
+                type: 'text',
+                label: 'Titre',
+                value: '',
+                placeholder: 'Saisissez...'
+            },
+            {
+                type: 'textarea',
+                label: 'Enoncé',
+                value: '',
+                placeholder: 'Saisissez...'
+            },
+            {
+                type: 'textarea',
+                label: '',
+                value: '',
+                placeholder: 'Saisissez l\'intitulé de la question...'
+            },
+            {
+                type: 'response',
+                label: '',
+                value: '',
+                placeholder: 'Saisissez une réponse...',
+                question: {
+                    pos: 1,
+                }
+            },
+            {
+                type: 'response',
+                label: '',
+                value: '',
+                placeholder: 'Saisissez une réponse...',
+                question: {
+                    pos: 2,
+                    isLast: true,
+                }
+            },
+            {
+                type: 'add',
+                label: '',
+                value: '',
+                placeholder: 'Ajouter une autre réponse'
+            },
+            {
+                type: 'textarea',
+                label: '',
+                value: '',
+                placeholder: 'Saisissez une explication...'
+            },
+        ],
+        buttons: [
+            {
+                label: 'Supprimer',
+                icon: 'icon-supprimer',
+                action: 'delete'
+            },
+            {
+                label: 'Copier le lien',
+                icon: 'icon-copie',
+                action: 'copy'
+            },
+        ]
+    },
+    {
+        type: 'chapter',
+        name: 'Chapitre',
+        icon: 'icon-chapitre',
+        inputs: [
+            {
+                type: 'text',
+                label: 'Titre',
+                value: '',
+                placeholder: 'Saisissez...'
+            },
+            {
+                type: 'response',
+                label: '',
+                value: '',
+                placeholder: 'Saisissez un objectif...',
+                question: {
+                    pos: 1,
+                    isLast: false
+                }
+            },
+            {
+                type: 'response',
+                label: '',
+                value: '',
+                placeholder: 'Saisissez un objectif...',
+                question: {
+                    pos: 2,
+                    isLast: true
+                }
+            },
+            {
+                type: 'add',
+                label: '',
+                value: '',
+                placeholder: 'Ajouter un autre objectif'
+            }
+        ],
+        buttons: [
+            {
+                label: 'Supprimer',
+                icon: 'icon-supprimer',
+                action: 'delete'
+            },
+            {
+                label: 'Copier le lien',
+                icon: 'icon-copie',
+                action: 'copy'
+            },
+        ]
+    },
+    {
+        type: 'epoc',
+        name: 'Paramètre de l\'ePoc',
+        icon: 'icon-epoc',
+        inputs :[
+            {
+                type: 'text',
+                label: 'Titre',
+                value: '',
+                placeholder: 'Saisissez...'
+            },
+            {
+                type: 'file',
+                label: 'Image de couverture',
+                value: '',
+                accept: 'image/*'
+            },
+            {
+                type: 'add',
+                label: 'Vignette',
+                value: '',
+                placeholder: 'Ajouter une vignette'
+            },
+            {
+                type: 'add',
+                label: 'Teaser',
+                value: '',
+                placeholder: 'Ajouter un teaser'
+            },
+            {
+                type: 'textarea',
+                label: 'Présentation',
+                value: '',
+                placeholder: 'Saisissez une présentation de l\'ePoc...'
+            },
+            {
+                type: 'text',
+                label: 'ID de l\'ePoc',
+                value: 'id234567890',
+
+            },
+            {
+                type: 'text',
+                label: 'Version',
+                value: '1.0',
             }
         ]
     }

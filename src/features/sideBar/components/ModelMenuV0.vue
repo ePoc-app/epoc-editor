@@ -8,8 +8,7 @@ import SideActionButtonV0 from './SideActionButtonV0.vue';
 const editorStore = useEditorStore();
 
 const emit = defineEmits<{
-    (e: 'dragStart', { event , sideAction }): void;
-    (e: 'dragStartQuestion', { event, sideAction }): void;
+    (e: 'dragStart', { event , sideAction, isScreen }): void;
 }>();
 
 const rightCol: Ref<Screen[]> = ref([]);
@@ -27,7 +26,7 @@ editorStore.questions.forEach((sideAction: SideAction, index) => {
 });
 
 function dragStart(event, screen) {
-    emit('dragStart',{ event: event, sideAction: screen.actions});
+    emit('dragStart',{ event: event, sideAction: screen.actions, isScreen: true });
 }
 
 const displayScreen = ref(false);

@@ -68,9 +68,23 @@ body,
     box-shadow: 0 1px 8px 0 var(--shadow);
     transition: all 0.2s ease-in-out;
     cursor: inherit;
+    display: flex;
+    flex-direction: column;
     i {
       margin: auto;
       font-size: 1.5rem;
+    }
+    &-large {
+      width: calc(60px + 2rem);
+      height: calc(60px + 2rem);
+      margin: 0;
+      span {
+        margin-top: 0;
+        margin: .5rem auto auto auto;
+      }
+      i {
+        margin-bottom: 0;
+      }
     }
     &-node {
       &:hover {
@@ -223,8 +237,19 @@ hr {
   font-size: 1.1rem;
   color: var(--text);
   outline: none;
+  
+  &::placeholder {
+    color: var(--editor-grayblue);
+  }
 
-  width: 24rem;
+  &:not(.input-card) {
+    width: 24rem;
+  }
+  
+  &-card {
+    width: calc(100% - 1.4rem);
+    margin: 0;
+  }
 
   &-file {
     font-size: 1.1rem;
@@ -238,6 +263,9 @@ hr {
   &-textarea {
     resize: none;
     min-height: 10rem;
+    &.input-card {
+      min-height: 5rem;
+    }
   }
   &:focus {
     outline: 1px solid var(--editor-blue);

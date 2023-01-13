@@ -1,22 +1,57 @@
 <script setup lang="ts">
-import { VueFlow, useVueFlow } from '@vue-flow/core';
+import { VueFlow, useVueFlow, Panel, PanelPosition } from '@vue-flow/core';
 import { markRaw, nextTick, watch } from 'vue';
 import ContentNode from './nodes/ContentNode.vue';
 import CustomConnectContent from './edges/CustomConnectContent.vue';
 import { SideAction, NodeElement } from '../../shared/interfaces';
 import { useEditorStore } from '../../shared/stores';
+import ChapterNode from './nodes/ChapterNode.vue';
+import ePocNode from './nodes/ePocNode.vue';
+import AddChapterNode from './nodes/AddChapterNode.vue';
 
-const { nodes, addNodes, addEdges, onConnect, vueFlowRef, project, findNode }  = useVueFlow();
+const { nodes, addNodes, addEdges, onConnect, vueFlowRef, project, findNode, setNodes, setEdges }  = useVueFlow();
 
 onConnect((params) => addEdges([{...params, updatable: true, style: { stroke: '#384257', strokeWidth: 2.5 }}]));
 
 const editorStore = useEditorStore();
 
 const nodeTypes = {
-    content: markRaw(ContentNode)
+    content: markRaw(ContentNode),
+    chapter: markRaw(ChapterNode),
+    epoc: markRaw(ePocNode),
+    add: markRaw(AddChapterNode), 
 };
 
-const elements = [];
+const epoc = {
+    id: 1,
+    type: 'epoc',
+    position: { x: 0, y: 0 },
+    draggable: false,
+};
+
+const chapter =  {
+    id: 3,
+    type: 'chapter',
+    position: { x: 0, y: 200 },
+    draggable: false,
+};
+
+const add = {
+    id: 2,
+    type: 'add',
+    position: { x: 33, y: 325 },
+    draggable: false
+};
+
+const mainEdge = {
+    id: 'mainEdge',
+    source: '1',
+    target: '2',
+    style: { stroke: '#CDD3E0', strokeWidth: 2.5 }
+};
+
+
+const elements = [epoc, chapter, add, mainEdge];
 
 //? Use this to detect interesctions(for creating screen);
 // onNodeDrag(({ intersections }) => {
@@ -36,12 +71,12 @@ const onDrop = (event) => {
     });
 
     const data = event.dataTransfer.getData('sideAction');
-
-    console.log(data);
+    const isScreen = event.dataTransfer.getData('isScreen');
 
     const actions = JSON.parse(data);
 
-    if(actions.length > 1) {
+    // not sure if this is better than transfer the isScreen in all the case and use it as a boolean here
+    if(isScreen === 'true') {
         addNode(position, actions);
     } else {
         if(!addToExistingScreen(actions)) {
@@ -56,7 +91,7 @@ function addNode(position, actions: SideAction[]) {
     let elements: NodeElement[] = [];
 
     
-    const id= (nodes.value.length + 1).toString();
+    const id = (nodes.value.length + 1).toString();
     
     actions.forEach((action) => {
         elements.push({
@@ -114,6 +149,13 @@ function addToExistingScreen(action : SideAction):boolean {
     }
     return false;
 }
+
+//Temporary function
+function onDelete() {
+    setNodes([epoc, chapter, add]);
+    setEdges([mainEdge]);
+}
+
 </script>
 
 <template>
@@ -129,9 +171,20 @@ function addToExistingScreen(action : SideAction):boolean {
         @dragover.prevent
         @dragenter.prevent
     >
-        <MiniMap />
+        <Panel :position="PanelPosition.TopRight" class="save-restore-controls">
+            <button style="background-color: #ff0000; padding: 1rem; border-radius: 8px; border: none; cursor: pointer; font-size: 1.2rem;" @click="onDelete">Delete all</button>
+        </Panel>
         <template #node-custom="{ id, data }">
             <ContentNode :id="id" :data="data" />
+        </template>
+        <template #node-chapter="{ id, data }">
+            <ChapterNode :id="id" :data="data" />
+        </template>
+        <template #node-epoc="{ id, data }">
+            <ePocNode :id="id" :data="data" />
+        </template>
+        <template #node-add="{ id, data }">
+            <ePocNode :id="id" :data="data" />
         </template>
         <template #connection-line="{ sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition }">
             <CustomConnectContent 

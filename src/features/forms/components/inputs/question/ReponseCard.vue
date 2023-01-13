@@ -1,0 +1,83 @@
+
+<script setup lang="ts">
+import TextAreaInput from '../TextAreaInput.vue';
+import CheckBoxInput from '../CheckBoxInput.vue';
+
+defineProps<{
+    inputValue: string;
+    pos: number;
+    isLast: boolean;
+}>();
+
+const emit = defineEmits<{
+    (e: 'input', value: string): void;
+}>();
+
+</script>
+<template>
+    <div class="card">
+        <div class="card-header">
+            <h3>Réponse {{ pos }}</h3>
+            <div class="card-header-icon">
+                <i class="icon-supprimer"></i>
+                <hr class="vertical-separator">
+                <i v-if="!isLast" class="icon-bas"></i>
+                <i v-if="pos !== 1" class="icon-haut"></i>
+                <hr class="vertical-separator">
+                <i class="icon-glisser"></i>
+            </div>
+        </div>
+        <div class="card-content">
+            <TextAreaInput
+                label=""
+                :inside-card="true"
+                placeholder="Saisissez une réponse..."
+                :input-value="inputValue"
+                @input="emit('input', $event)"
+            />
+        </div>
+        <CheckBoxInput />
+    </div>
+</template>
+
+<style scoped lang="scss">
+.card {
+    border: 1px solid var(--border);
+    width: 25rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    &-header {
+        padding: 0 .7rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        flex-direction: row;
+        
+        h3 {
+            font-weight: bold;
+            font-size: 1rem;
+            margin: .7rem 0;
+            flex-grow: 1;
+        }
+        &-icon {
+            display: flex;
+            flex-direction: row;
+            width: fit-content;
+            text-align: end;
+            margin: auto;
+            hr {
+                margin-right: .5rem;
+            }
+            i {
+                color: var(--editor-grayblue);
+                margin: auto;
+                &:not(:last-child) {
+                    margin-right: .5rem;
+                }
+            }
+        }
+    }
+    &-content {
+        padding: .7rem;
+    }
+}
+</style>

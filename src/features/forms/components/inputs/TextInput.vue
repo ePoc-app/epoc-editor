@@ -13,7 +13,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-    <label class="input-label" :for="label">{{ label }}</label>
+    <label v-if="label !== ''" class="input-label" :for="label">{{ label }}</label>
     <input
         :id="label"
         class="input"

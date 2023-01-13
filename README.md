@@ -6,6 +6,9 @@
 npm install
 
 # run in dev mode
+npm run electron:dev
+
+#electron build
 npm run app:build
 
 # vite dev mode

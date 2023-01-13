@@ -5,6 +5,7 @@ defineProps<{
     classList: object;
     isActive: boolean;
     isDraggable: boolean;
+    subtitle?: string;
 }>();
 
 const emit = defineEmits<{
@@ -17,14 +18,23 @@ function click(event) {
 </script>
 
 <template>
-    <button
+    <div
+        class="btn btn-content"
+        :class="[classList, { active: isActive }, { 'draggable': isDraggable }]"
+        :draggable="isDraggable"
+        @click="click($event)"
+    >
+        <i :class="icon" />
+        <span v-if="subtitle" class="subtitle">{{ subtitle }}</span>
+    </div>
+    <!-- <button
         class="btn btn-content"
         :draggable="isDraggable"
         :class="[classList, { active: isActive }, { 'draggable': isDraggable }]"
         @click="click($event)"
     >
         <i :class="icon" />
-    </button>
+    </button> -->
 </template>
 
 <style scoped lang="scss">

@@ -4,6 +4,7 @@ defineProps<{
     label: string;
     placeholder: string;
     inputValue: string;
+    insideCard?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -17,6 +18,7 @@ const emit = defineEmits<{
     <textarea
         :id="label"
         class="input input-textarea"
+        :class="{ 'input-card' : insideCard }"
         :placeholder="placeholder"
         :value="inputValue"
         @input="emit('input', ($event.target as HTMLInputElement).value)"

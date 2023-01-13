@@ -3,6 +3,7 @@ import TextInput from './TextInput.vue';
 import TextAreaInput from './TextAreaInput.vue';
 import FileInput from './FileInput.vue';
 import AddInput from './AddInput.vue';
+import ResponseCard from './question/ReponseCard.vue';
 
 defineProps<{
     type: string;
@@ -11,9 +12,14 @@ defineProps<{
     placeholder?: string;
     accept?: string;
     icon?: string;
+    question?: {
+        isLast?: boolean;
+        pos: number;
+    }
 }>();
 
 const emit = defineEmits<{
+    //! This will surely be replaced by input event
     (e: 'update:modelValue', value: string): void;
     (e: 'input', value: string): void;
 }>();
@@ -45,5 +51,12 @@ const emit = defineEmits<{
         v-if="type === 'add'"
         :placeholder="placeholder"
         :label="label"
+    />
+    <ResponseCard
+        v-if="type === 'response'"
+        :pos="question.pos"
+        :is-last="question.isLast"
+        :input-value="inputValue"
+        @input="emit('input', $event)"
     />
 </template>

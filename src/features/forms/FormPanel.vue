@@ -38,6 +38,7 @@ function actionOnForm(action: string) {
             :label="input.label"
             :placeholder="input.placeholder"
             :accept="input.accept"
+            :question="input.question"
             :input-value="input.value"
             @input="input.value = $event"
         />
