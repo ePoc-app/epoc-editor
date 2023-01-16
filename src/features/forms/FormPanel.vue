@@ -14,8 +14,26 @@ function actionOnForm(action: string) {
     }
 }
 
-function addCard(type: string, index: number) {
+function addCard(type: string, index: number): void {
     editorStore.addInput(type, index);
+}
+
+function deleteCard(cardIndex: number, fieldIndex: number): void {
+    editorStore.formPanel.form.fields[fieldIndex].inputs.splice(cardIndex ,1);
+}
+
+function moveUpCard(cardIndex, fieldIndex) {
+    const inputs = editorStore.formPanel.form.fields[fieldIndex].inputs;
+    let temp = inputs[cardIndex];
+    inputs[cardIndex] = inputs[cardIndex-1];
+    inputs[cardIndex-1] = temp;
+}
+
+function moveDownCard(cardIndex, fieldIndex) {
+    const inputs = editorStore.formPanel.form.fields[fieldIndex].inputs;
+    let temp = inputs[cardIndex];
+    inputs[cardIndex] = inputs[cardIndex+1];
+    inputs[cardIndex+1] = temp;
 }
 
 </script>
@@ -48,6 +66,9 @@ function addCard(type: string, index: number) {
                 :field-index="field.index"
                 :type="field.inputType"
                 @add-card="addCard(field.inputType, index)"
+                @delete-card="deleteCard($event, index)"
+                @move-up-card="moveUpCard($event, index)"
+                @move-down-card="moveDownCard($event, index)"
             />
             <GenericField 
                 v-else

@@ -177,7 +177,7 @@ const chapterForm: Form = {
         {
             name: 'Objectifs',
             type: 'cardGroup',
-            inputType: 'obective',
+            inputType: 'objective',
             inputs: []
         }
     ],

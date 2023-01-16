@@ -8,22 +8,28 @@ defineProps<{
     pos: number;
     type?: string;
     isLast: boolean;
+    placeholder: string;
+    title: string;
 }>();
 
 const emit = defineEmits<{
     (e: 'input', value: string): void;
+    (e: 'deleteCard'): void;
+    (e: 'moveUpCard'): void;
+    (e: 'moveDownCard'): void;
 }>();
 
 </script>
+
 <template>
     <div class="card">
         <div class="card-header">
-            <h3>Réponse {{ pos }}</h3>
+            <h3>{{ title }} {{ pos }}</h3>
             <div class="card-header-icon">
-                <i class="icon-supprimer"></i>
+                <i class="icon-supprimer" @click="emit('deleteCard')"></i>
                 <hr v-if="!(isLast && pos === 1)" class="vertical-separator">
-                <i v-if="!isLast" class="icon-bas"></i>
-                <i v-if="pos !== 1" class="icon-haut"></i>
+                <i v-if="!isLast" class="icon-bas" @click="emit('moveDownCard')"></i>
+                <i v-if="pos !== 1" class="icon-haut" @click="emit('moveUpCard')"></i>
                 <hr class="vertical-separator">
                 <i class="icon-glisser"></i> 
             </div>
@@ -32,7 +38,7 @@ const emit = defineEmits<{
             <TextAreaInput
                 label=""
                 :inside-card="true"
-                placeholder="Saisissez une réponse..."
+                :placeholder="placeholder"
                 :input-value="inputValue"
                 @input="emit('input', $event)"
             />
@@ -69,6 +75,7 @@ const emit = defineEmits<{
                 margin-right: .5rem;
             }
             i {
+                cursor: pointer;
                 color: var(--editor-grayblue);
                 margin: auto;
                 &:not(:last-child) {

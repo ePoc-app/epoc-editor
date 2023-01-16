@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { fetchRecentProjects } from '../services';
-import { SideAction, Screen, ePocProject, NodeElement, Form, Input } from '../interfaces';
+import { SideAction, Screen, ePocProject, NodeElement, Form, Input, Field } from '../interfaces';
 import { toRaw } from 'vue';
 
 import { formsModel } from '../data/form.data';
@@ -100,7 +100,7 @@ export const useEditorStore = defineStore('editor', {
             const newInput: Input = {
                 type: type,
                 label: '',
-                placeholder: 'Saisissez une réponse...',
+                placeholder: '',
                 value: ''
             };
             this.formPanel.form.fields[fieldIndex].inputs.push(newInput);

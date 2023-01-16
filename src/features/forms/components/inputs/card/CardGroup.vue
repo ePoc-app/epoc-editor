@@ -12,7 +12,19 @@ defineProps<{
 
 const emit = defineEmits<{
     (e: 'addCard'): void;
+    (e: 'deleteCard', index: number): void;
+    (e: 'moveUpCard', index: number): void;
+    (e: 'moveDownCard', index: number): void;
 }>();
+
+//? Use this to get the text for the differents card
+//? This way doesn't seem to be optimal
+const cardMap = new Map([
+    ['check-placeholder', 'une réponse'],
+    ['check', 'Réponse'],
+    ['objective-placeholder', 'un objectif'],
+    ['objective', 'Objectif']
+]);
 
 </script>
 
@@ -26,10 +38,15 @@ const emit = defineEmits<{
         :type="type"
         :is-last="index === inputs.length - 1"
         :input-value="input.value"
+        :placeholder="'Saisissez ' + cardMap.get(type+'-placeholder')"
+        :title="cardMap.get(type)"
         @input="input.value = $event"
+        @delete-card="emit('deleteCard', index)"
+        @move-up-card="emit('moveUpCard', index)"
+        @move-down-card="emit('moveDownCard', index)"
     />
     <AddCard 
-        :placeholder="'Ajouter une autre réponse'"
+        :placeholder="'Ajouter ' + cardMap.get(type+'-placeholder')"
         @click="emit('addCard')"
     />
 </template>

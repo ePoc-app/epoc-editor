@@ -93,6 +93,7 @@ body,
       &:active, &.active {
         color: var(--editor-blue);
         border: 1px solid var(--editor-blue);
+        box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);
       }
     }
     &-blue {
@@ -101,7 +102,7 @@ body,
       &-question {
         &:active, &.active {
           background-color: var(--content);
-          box-shadow: 0 1px 8px 0 var(--shadow);
+          box-shadow: 0 2px 5px 0 var(--shadow);
         }
       }
       &:hover {
@@ -270,6 +271,7 @@ hr {
   }
   &:focus {
     outline: 1px solid var(--editor-blue);
+    box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);
   }
 }
 
