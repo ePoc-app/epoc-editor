@@ -153,7 +153,8 @@ body,
 hr {
   border: 0;
   &.separator {
-    border-top: 2px solid var(--border);
+    border-top: 1px solid var(--border);
+    width: 100%;
     margin-bottom: 1.7rem;
   }
   &.vertical-separator {
@@ -298,4 +299,13 @@ textarea {
   &:hover {
     box-shadow: 0 2px 5px 0 var(--shadow-outer);
 }
+}
+
+.field {
+  &-index {
+    color: var(--inria-red);
+  }
+  &-title {
+    margin-bottom: .5rem;
+  }
 }

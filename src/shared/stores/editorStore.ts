@@ -17,6 +17,7 @@ interface EditorState {
     questions: SideAction[];
     standardScreens: Screen[];
     forms: Form[];
+    chapters: NodeElement[];
 }
 
 export const useEditorStore = defineStore('editor', {
@@ -34,6 +35,7 @@ export const useEditorStore = defineStore('editor', {
         questions: questions,
         standardScreens: standardScreen,
         forms: forms,
+        chapters: []
     }),
     
     getters: {
@@ -183,24 +185,28 @@ const forms: Form[] = [
         type: 'text',
         name: 'Contenu',
         icon: 'icon-texte',
-        inputs: [
+        fields: [
             {
-                type: 'text',
-                label: 'Titre',
-                value: '',
-                placeholder: 'Saisissez...'
-            },
-            {
-                type: 'textarea',
-                label: 'Résumé',
-                value: '',
-                placeholder: 'Saisissez un résumé...'
-            },
-            {
-                type: 'file',
-                label: 'Vignette',
-                value: '',
-                accept: 'image/*'
+                inputs: [
+                    {
+                        type: 'text',
+                        label: 'Titre',
+                        value: '',
+                        placeholder: 'Saisissez...'
+                    },
+                    {
+                        type: 'textarea',
+                        label: 'Résumé',
+                        value: '',
+                        placeholder: 'Saisissez un résumé...'
+                    },
+                    {
+                        type: 'file',
+                        label: 'Vignette',
+                        value: '',
+                        accept: 'image/*'
+                    }
+                ],
             }
         ],
         buttons: [
@@ -220,43 +226,47 @@ const forms: Form[] = [
         type: 'video',
         name: 'Vidéo',
         icon: 'icon-video',
-        inputs: [
+        fields: [
             {
-                type: 'text',
-                label: 'Titre',
-                value: '',
-                placeholder: 'Saisissez...'
-            },
-            {
-                type: 'file',
-                label: 'Vidéo',
-                value: '',
-                accept: 'video/*'
-            },
-            {
-                type: 'textarea',
-                label: 'Résumé',
-                value: '',
-                placeholder: 'Saisissez un résumé...'
-            },
-            {
-                type: 'add',
-                label: 'Transcription',
-                value: '',
-                placeholder: 'Ajouter une transcription'
-            },
-            {
-                type: 'add',
-                label: 'Vignette',
-                value: '',
-                placeholder: 'Ajouter une vignette'
-            },
-            {
-                type: 'add',
-                label: 'Sous-titres',
-                value: '',
-                placeholder: 'Ajouter des sous-titres'
-            },
+                inputs: [
+                    {
+                        type: 'text',
+                        label: 'Titre',
+                        value: '',
+                        placeholder: 'Saisissez...'
+                    },
+                    {
+                        type: 'file',
+                        label: 'Vidéo',
+                        value: '',
+                        accept: 'video/*'
+                    },
+                    {
+                        type: 'textarea',
+                        label: 'Résumé',
+                        value: '',
+                        placeholder: 'Saisissez un résumé...'
+                    },
+                    {
+                        type: 'add',
+                        label: 'Transcription',
+                        value: '',
+                        placeholder: 'Ajouter une transcription'
+                    },
+                    {
+                        type: 'add',
+                        label: 'Vignette',
+                        value: '',
+                        placeholder: 'Ajouter une vignette'
+                    },
+                    {
+                        type: 'add',
+                        label: 'Sous-titres',
+                        value: '',
+                        placeholder: 'Ajouter des sous-titres'
+                    },
+                ]
+            }
         ],
         buttons: [
             {
@@ -275,106 +285,129 @@ const forms: Form[] = [
         type: 'qcm',
         name: 'QCM',
         icon: 'icon-qcm',
-        inputs: [
+        fields: [
             {
-                type: 'text',
-                label: 'Titre',
-                value: '',
-                placeholder: 'Saisissez...'
+                name: 'Configuration de l\'activité',
+                index: 1,
+                inputs: [
+                    {
+                        type: 'text',
+                        label: 'Titre',
+                        value: '',
+                        placeholder: 'Saisissez...'
+                    },
+                    {
+                        type: 'textarea',
+                        label: 'Énoncé',
+                        value: '',
+                        placeholder: 'Saisissez'
+                    }
+                ]
             },
             {
-                type: 'textarea',
-                label: 'Enoncé',
-                value: '',
-                placeholder: 'Saisissez...'
+                name: 'Question',
+                index: 2,
+                inputs: [
+                    {
+                        type: 'textarea',
+                        label: '',
+                        value: '',
+                        placeholder: 'Saisissez l\'intitulé de la question...'
+                    }
+                ]
             },
             {
-                type: 'textarea',
-                label: '',
-                value: '',
-                placeholder: 'Saisissez l\'intitulé de la question...'
+                name: 'Réponses',
+                index: 3,
+                inputs: [
+                    {
+                        type: 'response',
+                        label: '',
+                        value: '',
+                        placeholder: 'Saisissez une réponse...',
+                        question: {
+                            pos: 1,
+                            type: 'check'
+                        }
+                    },
+                    {
+                        type: 'response',
+                        label: '',
+                        value: '',
+                        placeholder: 'Saisissez une réponse...',
+                        question: {
+                            pos: 2,
+                            type: 'check',
+                            isLast: true,
+                        }
+                    },
+                    {
+                        type: 'add',
+                        label: '',
+                        value: '',
+                        placeholder: 'Ajouter une autre réponse'
+                    },
+                ]
             },
             {
-                type: 'response',
-                label: '',
-                value: '',
-                placeholder: 'Saisissez une réponse...',
-                question: {
-                    pos: 1,
-                }
-            },
-            {
-                type: 'response',
-                label: '',
-                value: '',
-                placeholder: 'Saisissez une réponse...',
-                question: {
-                    pos: 2,
-                    isLast: true,
-                }
-            },
-            {
-                type: 'add',
-                label: '',
-                value: '',
-                placeholder: 'Ajouter une autre réponse'
-            },
-            {
-                type: 'textarea',
-                label: '',
-                value: '',
-                placeholder: 'Saisissez une explication...'
-            },
-        ],
-        buttons: [
-            {
-                label: 'Supprimer',
-                icon: 'icon-supprimer',
-                action: 'delete'
-            },
-            {
-                label: 'Copier le lien',
-                icon: 'icon-copie',
-                action: 'copy'
-            },
+                name: 'Explication',
+                index: 4,
+                inputs: [
+                    {
+                        type: 'textarea',
+                        label: '',
+                        value: '',
+                        placeholder: 'Saisissez une explication'
+                    }
+                ]
+            }
         ]
     },
     {
         type: 'chapter',
         name: 'Chapitre',
         icon: 'icon-chapitre',
-        inputs: [
+        fields: [
             {
-                type: 'text',
-                label: 'Titre',
-                value: '',
-                placeholder: 'Saisissez...'
+                inputs: [
+                    {
+                        type: 'text',
+                        label: 'Titre',
+                        value: '',
+                        placeholder: 'Saisissez...'
+                    },
+                ]
             },
             {
-                type: 'response',
-                label: '',
-                value: '',
-                placeholder: 'Saisissez un objectif...',
-                question: {
-                    pos: 1,
-                    isLast: false
-                }
-            },
-            {
-                type: 'response',
-                label: '',
-                value: '',
-                placeholder: 'Saisissez un objectif...',
-                question: {
-                    pos: 2,
-                    isLast: true
-                }
-            },
-            {
-                type: 'add',
-                label: '',
-                value: '',
-                placeholder: 'Ajouter un autre objectif'
+                name: 'Objectifs',
+                inputs: [
+                    {
+                        type: 'response',
+                        label: '',
+                        value: '',
+                        placeholder: 'Saisissez un objectif...',
+                        question: {
+                            pos: 1,
+                            isLast: false
+                        }
+                    },
+                    {
+                        type: 'response',
+                        label: '',
+                        value: '',
+                        placeholder: 'Saisissez un objectif...',
+                        question: {
+                            pos: 2,
+                            isLast: true
+                        }
+                    },
+                    {
+                        type: 'add',
+                        label: '',
+                        value: '',
+                        placeholder: 'Ajouter un autre objectif'
+                    }
+                ]
             }
         ],
         buttons: [
@@ -394,48 +427,65 @@ const forms: Form[] = [
         type: 'epoc',
         name: 'Paramètre de l\'ePoc',
         icon: 'icon-epoc',
-        inputs :[
+        fields: [
             {
-                type: 'text',
-                label: 'Titre',
-                value: '',
-                placeholder: 'Saisissez...'
-            },
-            {
-                type: 'file',
-                label: 'Image de couverture',
-                value: '',
-                accept: 'image/*'
-            },
-            {
-                type: 'add',
-                label: 'Vignette',
-                value: '',
-                placeholder: 'Ajouter une vignette'
-            },
-            {
-                type: 'add',
-                label: 'Teaser',
-                value: '',
-                placeholder: 'Ajouter un teaser'
-            },
-            {
-                type: 'textarea',
-                label: 'Présentation',
-                value: '',
-                placeholder: 'Saisissez une présentation de l\'ePoc...'
-            },
-            {
-                type: 'text',
-                label: 'ID de l\'ePoc',
-                value: 'id234567890',
-
-            },
-            {
-                type: 'text',
-                label: 'Version',
-                value: '1.0',
+                inputs :[
+                    {
+                        type: 'text',
+                        label: 'Titre',
+                        value: '',
+                        placeholder: 'Saisissez...'
+                    },
+                    {
+                        type: 'file',
+                        label: 'Image de couverture',
+                        value: '',
+                        accept: 'image/*'
+                    },
+                    {
+                        type: 'add',
+                        label: 'Vignette',
+                        value: '',
+                        placeholder: 'Ajouter une vignette'
+                    },
+                    {
+                        type: 'add',
+                        label: 'Teaser',
+                        value: '',
+                        placeholder: 'Ajouter un teaser'
+                    },
+                    {
+                        type: 'textarea',
+                        label: 'Présentation',
+                        value: '',
+                        placeholder: 'Saisissez une présentation de l\'ePoc...'
+                    },
+                    {
+                        type: 'text',
+                        label: 'ID de l\'ePoc',
+                        value: 'id234567890',
+        
+                    },
+                    {
+                        type: 'text',
+                        label: 'Version',
+                        value: '1.0',
+                    }
+                ]
             }
+
+        ],
+        buttons: [
+            {
+                label: 'Supprimer',
+                icon: 'icon-supprimer',
+                action: 'delete'
+            },
+            {
+                label: 'Copier le lien',
+                icon: 'icon-copie',
+                action: 'copy'
+            },
         ]
     }
 ];

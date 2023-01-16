@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useEditorStore } from '../../shared/stores';
 import FormButton from './components/FormButton.vue';
-import GenericInput from './components/inputs/GenericInput.vue';
+import GenericField from './components/GenericField.vue';
 
 const editorStore = useEditorStore();
 
@@ -30,17 +30,12 @@ function actionOnForm(action: string) {
                 @click="actionOnForm(button.action)"
             />
         </div>
-        <!-- didn't find a solution using v-model -->
-        <GenericInput 
-            v-for="(input, index) of editorStore.formPanel.form.inputs"
+        <GenericField 
+            v-for="(field, index) of editorStore.formPanel.form.fields"
             :key="index"
-            :type="input.type"
-            :label="input.label"
-            :placeholder="input.placeholder"
-            :accept="input.accept"
-            :question="input.question"
-            :input-value="input.value"
-            @input="input.value = $event"
+            :inputs="field.inputs"
+            :field-name="field.name"
+            :field-index="field.index"
         />
     </div>
 </template>

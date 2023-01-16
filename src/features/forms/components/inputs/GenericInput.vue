@@ -15,6 +15,7 @@ defineProps<{
     question?: {
         isLast?: boolean;
         pos: number;
+        type?: string;
     }
 }>();
 
@@ -56,6 +57,7 @@ const emit = defineEmits<{
         v-if="type === 'response'"
         :pos="question.pos"
         :is-last="question.isLast"
+        :type="question.type"
         :input-value="inputValue"
         @input="emit('input', $event)"
     />

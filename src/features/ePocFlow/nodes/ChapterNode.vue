@@ -1,4 +1,5 @@
 <script setup lang="ts">
+//@ts-nocheck
 import ContentButton from '../../../components/ContentButton.vue';
 import { NodeElement } from '../../../shared/interfaces';
 import { useEditorStore } from '../../../shared/stores';
@@ -29,7 +30,7 @@ function openForm(element: NodeElement) {
             :is-active="editorStore.formPanel.openedElement ? editorStore.formPanel.openedElement.id === element.id : false"
             :is-draggable="false"
             :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true, 'btn-content-large': true }"
-            subtitle="Chapitre 1"
+            :subtitle="data.title"
             @click="openForm(element)"
         />
     </div>

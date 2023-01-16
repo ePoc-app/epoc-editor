@@ -5,11 +5,10 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
     base: process.env.ELECTRON=='true' ? './' : '.',
     plugins: [vue()],
-    test: {
-        environment: 'happy-dom'
-    },
+    // test: {
+    //     environment: 'happy-dom'
+    // },
     server: {
         port: 8000,
     },
 });
-

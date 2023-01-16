@@ -6,7 +6,8 @@ import CheckBoxInput from '../CheckBoxInput.vue';
 defineProps<{
     inputValue: string;
     pos: number;
-    isLast: boolean;
+    isLast?: boolean;
+    type?: string;
 }>();
 
 const emit = defineEmits<{
@@ -36,7 +37,7 @@ const emit = defineEmits<{
                 @input="emit('input', $event)"
             />
         </div>
-        <CheckBoxInput />
+        <CheckBoxInput v-if="type === 'check'" />
     </div>
 </template>
 

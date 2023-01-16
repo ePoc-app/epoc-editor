@@ -23,23 +23,21 @@ const nodeTypes = {
 };
 
 const epoc = {
-    id: 1,
+    id: '1',
     type: 'epoc',
     position: { x: 0, y: 0 },
     draggable: false,
 };
 
-const chapter =  {
-    id: 3,
-    type: 'chapter',
-    position: { x: 0, y: 200 },
-    draggable: false,
-};
-
 const add = {
-    id: 2,
+    id: '2',
     type: 'add',
-    position: { x: 33, y: 325 },
+    position: { x: 33, y: editorStore.chapters.length * 200 + 125 },
+    events: {
+        click: () => {
+            addChapter();
+        }
+    },
     draggable: false
 };
 
@@ -51,7 +49,7 @@ const mainEdge = {
 };
 
 
-const elements = [epoc, chapter, add, mainEdge];
+const elements = [epoc, add, mainEdge];
 
 //? Use this to detect interesctions(for creating screen);
 // onNodeDrag(({ intersections }) => {
@@ -152,8 +150,34 @@ function addToExistingScreen(action : SideAction):boolean {
 
 //Temporary function
 function onDelete() {
-    setNodes([epoc, chapter, add]);
+    setNodes([epoc, add]);
     setEdges([mainEdge]);
+}
+
+function addChapter() {
+    const chapterLength = editorStore.chapters.length;
+
+    const newElement: NodeElement = {
+        id: editorStore.generateId(),
+        action: {
+            type: 'chapter',
+            icon: 'icon-chapitre'    
+        },
+        form: editorStore.getForm('chapter'),
+    };
+
+    editorStore.chapters.push(newElement);
+
+    const newChapter = {
+        id: (nodes.value.length + 1).toString(),
+        type: 'chapter',
+        position: { x: 0, y: (chapterLength + 1) * 200 },
+        data: { elements: newElement, title: 'Chapitre ' + (chapterLength + 1)},
+        draggable: false,
+    };
+    
+    addNodes([newChapter]);
+    findNode('2').position.y += 200;
 }
 
 </script>
@@ -184,7 +208,7 @@ function onDelete() {
             <ePocNode :id="id" :data="data" />
         </template>
         <template #node-add="{ id, data }">
-            <ePocNode :id="id" :data="data" />
+            <AddChapterNode :id="id" :data="data" />
         </template>
         <template #connection-line="{ sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition }">
             <CustomConnectContent 

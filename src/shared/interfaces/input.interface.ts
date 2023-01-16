@@ -9,5 +9,6 @@ export interface Input {
     question?: {
         pos: number;
         isLast?: boolean;
+        type?: string;
     }
 }
