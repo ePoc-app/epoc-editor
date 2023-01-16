@@ -2,6 +2,7 @@
 import { useEditorStore } from '../../shared/stores';
 import FormButton from './components/FormButton.vue';
 import GenericField from './components/GenericField.vue';
+import CardGroup from './components/inputs/card/CardGroup.vue';
 
 const editorStore = useEditorStore();
 
@@ -12,6 +13,11 @@ function actionOnForm(action: string) {
         break;
     }
 }
+
+function addCard(type: string, index: number) {
+    editorStore.addInput(type, index);
+}
+
 </script>
 
 <template>
@@ -30,13 +36,26 @@ function actionOnForm(action: string) {
                 @click="actionOnForm(button.action)"
             />
         </div>
-        <GenericField 
+        <div
             v-for="(field, index) of editorStore.formPanel.form.fields"
             :key="index"
-            :inputs="field.inputs"
-            :field-name="field.name"
-            :field-index="field.index"
-        />
+            class="field"
+        >
+            <CardGroup
+                v-if="field.type === 'cardGroup'"
+                :inputs="field.inputs"
+                :field-name="field.name"
+                :field-index="field.index"
+                :type="field.inputType"
+                @add-card="addCard(field.inputType, index)"
+            />
+            <GenericField 
+                v-else
+                :inputs="field.inputs"
+                :field-name="field.name"
+                :field-index="field.index"
+            />
+        </div>
     </div>
 </template>
 

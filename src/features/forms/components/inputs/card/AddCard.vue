@@ -2,19 +2,16 @@
 
 defineProps<{
     placeholder: string
-    label: string;
-    addType: string;
 }>();
 
 const emit = defineEmits<{
-    (e: 'click', addType: string): void;
+    (e: 'click'): void
 }>();
 
 </script>
 
 <template>
-    <label class="input-label" :for="label">{{ label }}</label>
-    <button :id="label" class="btn btn-form" @click="emit('click', addType)">
+    <button class="btn btn-form" @click="emit('click')">
         <i class="icon-plus"></i>
         {{ placeholder }}
     </button>

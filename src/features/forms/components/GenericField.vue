@@ -15,13 +15,12 @@ defineProps<{
     <hr v-if="fieldName" class="separator">
     <!-- didn't find a solution using v-model -->
     <GenericInput 
-        v-for="input in inputs"
-        :key="input.type"
+        v-for="(input, index) in inputs"
+        :key="index"
         :type="input.type"
         :label="input.label"
         :placeholder="input.placeholder"
         :accept="input.accept"
-        :question="input.question"
         :input-value="input.value"
         @input="input.value = $event"
     />

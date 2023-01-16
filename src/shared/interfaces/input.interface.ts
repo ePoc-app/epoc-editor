@@ -6,9 +6,4 @@ export interface Input {
     placeholder?: string;
     accept?: string;
     icon?: string;
-    question?: {
-        pos: number;
-        isLast?: boolean;
-        type?: string;
-    }
 }

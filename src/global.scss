@@ -302,6 +302,8 @@ textarea {
 }
 
 .field {
+  display: flex;
+  flex-direction: column;
   &-index {
     color: var(--inria-red);
   }

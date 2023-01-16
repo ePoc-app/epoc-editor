@@ -6,8 +6,8 @@ import CheckBoxInput from '../CheckBoxInput.vue';
 defineProps<{
     inputValue: string;
     pos: number;
-    isLast?: boolean;
     type?: string;
+    isLast: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -21,11 +21,11 @@ const emit = defineEmits<{
             <h3>Réponse {{ pos }}</h3>
             <div class="card-header-icon">
                 <i class="icon-supprimer"></i>
-                <hr class="vertical-separator">
+                <hr v-if="!(isLast && pos === 1)" class="vertical-separator">
                 <i v-if="!isLast" class="icon-bas"></i>
                 <i v-if="pos !== 1" class="icon-haut"></i>
                 <hr class="vertical-separator">
-                <i class="icon-glisser"></i>
+                <i class="icon-glisser"></i> 
             </div>
         </div>
         <div class="card-content">
