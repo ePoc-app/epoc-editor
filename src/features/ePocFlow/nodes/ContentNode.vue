@@ -1,12 +1,10 @@
-
-
 <script setup lang="ts">
-//@ts-nocheck
 import { Handle, useVueFlow } from '@vue-flow/core';
 import ContentButton from '../../../components/ContentButton.vue';
 import { onMounted } from 'vue';
 import { useEditorStore } from '../../../shared/stores';
 import { NodeElement } from '../../..//shared/interfaces';
+import { Position } from '@vue-flow/core';
 
 const editorStore = useEditorStore();
 
@@ -15,6 +13,10 @@ const props = defineProps<{
     data: {
         type: object;
         required: true;
+        readyToDrop: boolean;
+        animated: boolean;
+        title: string;
+        elements: NodeElement[];
     }
 }>();
 
@@ -67,7 +69,7 @@ function openForm(element: NodeElement) {
 
 <template>
     <p contenteditable="true" class="node-title">{{ data.title }}</p>
-    <Handle type="target" position="left" />
+    <Handle type="target" :position="Position.Left" />
     <div
         :id="'node'+props.id"
         @dragover="dragOver"
@@ -84,7 +86,7 @@ function openForm(element: NodeElement) {
             @click="openForm(element)"
         />
     </div>
-    <Handle type="source" position="right" />
+    <Handle type="source" :position="Position.Right" />
 </template>
 
 <style scoped lang="scss">

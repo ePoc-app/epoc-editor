@@ -1,4 +1,6 @@
 <script setup lang="ts">
+//? The beta version use the SideBarV0 component
+//@ts-nocheck
 import SideActionButton from './components/SideActionButton.vue';
 import { useEditorStore } from '../../shared/stores';
 

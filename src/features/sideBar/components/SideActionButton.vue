@@ -1,4 +1,6 @@
 <script setup lang="ts">
+//? The beta version uses the SideActionButtonV0 component
+//@ts-nocheck
 import { SideAction } from '../../../shared/interfaces';
 import { useEditorStore } from '../../../shared/stores';
 import ContentButton from '../../../components/ContentButton.vue';

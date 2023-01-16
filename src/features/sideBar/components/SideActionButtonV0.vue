@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { SideAction } from '../../../shared/interfaces';
-import { useEditorStore } from '../../../shared/stores';
 import { ref } from 'vue';
 import ContentButton from '../../../components/ContentButton.vue';
 

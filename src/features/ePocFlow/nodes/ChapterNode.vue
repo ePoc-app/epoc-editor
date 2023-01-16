@@ -1,9 +1,9 @@
 <script setup lang="ts">
-//@ts-nocheck
 import ContentButton from '../../../components/ContentButton.vue';
 import { NodeElement } from '../../../shared/interfaces';
 import { useEditorStore } from '../../../shared/stores';
 import { Handle } from '@vue-flow/core';
+import { Position } from '@vue-flow/core';
 
 const editorStore = useEditorStore();
 
@@ -12,6 +12,7 @@ const props = defineProps<{
     data: {
         type: object;
         required: true;
+        title: string;
     }
 }>();
 
@@ -34,7 +35,7 @@ function openForm(element: NodeElement) {
             @click="openForm(element)"
         />
     </div>
-    <Handle type="source" position="right" />
+    <Handle type="source" :position="Position.Right" />
 </template>
 
 <style scoped lang="scss">
