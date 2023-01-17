@@ -36,6 +36,16 @@ function moveDownCard(cardIndex, fieldIndex) {
     inputs[cardIndex+1] = temp;
 }
 
+function swapCard(event, fieldIndex) {
+    const oldIndex = event.moved.oldIndex;
+    const newIndex = event.moved.newIndex;
+    const inputs = editorStore.formPanel.form.fields[fieldIndex].inputs;
+
+    let temp = inputs[oldIndex];
+    inputs[oldIndex] = inputs[newIndex];
+    inputs[newIndex] = temp;
+}
+
 </script>
 
 <template>
@@ -69,6 +79,7 @@ function moveDownCard(cardIndex, fieldIndex) {
                 @delete-card="deleteCard($event, index)"
                 @move-up-card="moveUpCard($event, index)"
                 @move-down-card="moveDownCard($event, index)"
+                @swap-card="swapCard($event, index)"
             />
             <GenericField 
                 v-else

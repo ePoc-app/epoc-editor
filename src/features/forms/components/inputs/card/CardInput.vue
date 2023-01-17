@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import TextAreaInput from '../TextAreaInput.vue';
 import CheckBoxInput from '../CheckBoxInput.vue';
+import { ref } from 'vue';
 
 defineProps<{
     inputValue: string;
@@ -19,32 +20,42 @@ const emit = defineEmits<{
     (e: 'moveDownCard'): void;
 }>();
 
+
+const dragging = ref(false);
+
 </script>
 
 <template>
-    <div class="card">
-        <div class="card-header">
-            <h3>{{ title }} {{ pos }}</h3>
-            <div class="card-header-icon">
-                <i class="icon-supprimer" @click="emit('deleteCard')"></i>
-                <hr v-if="!(isLast && pos === 1)" class="vertical-separator">
-                <i v-if="!isLast" class="icon-bas" @click="emit('moveDownCard')"></i>
-                <i v-if="pos !== 1" class="icon-haut" @click="emit('moveUpCard')"></i>
-                <hr class="vertical-separator">
-                <i class="icon-glisser"></i> 
+    <Transition>
+        <div
+            class="card draggable-card"
+            :class="{ 'dragging' : dragging }"
+            @dragstart="dragging = true"
+            @dragend="dragging = false"
+        >
+            <div class="card-header">
+                <h3>{{ title }} {{ pos }}</h3>
+                <div class="card-header-icon">
+                    <i class="icon-supprimer" @click="emit('deleteCard')"></i>
+                    <hr v-if="!(isLast && pos === 1)" class="vertical-separator">
+                    <i v-if="!isLast" class="icon-bas" @click="emit('moveDownCard')"></i>
+                    <i v-if="pos !== 1" class="icon-haut" @click="emit('moveUpCard')"></i>
+                    <hr class="vertical-separator">
+                    <i class="icon-glisser"></i> 
+                </div>
             </div>
+            <div class="card-content">
+                <TextAreaInput
+                    label=""
+                    :inside-card="true"
+                    :placeholder="placeholder"
+                    :input-value="inputValue"
+                    @input="emit('input', $event)"
+                />
+            </div>
+            <CheckBoxInput v-if="type === 'check'" />
         </div>
-        <div class="card-content">
-            <TextAreaInput
-                label=""
-                :inside-card="true"
-                :placeholder="placeholder"
-                :input-value="inputValue"
-                @input="emit('input', $event)"
-            />
-        </div>
-        <CheckBoxInput v-if="type === 'check'" />
-    </div>
+    </Transition>
 </template>
 
 <style scoped lang="scss">
@@ -53,6 +64,8 @@ const emit = defineEmits<{
     width: 25rem;
     border-radius: 4px;
     margin-bottom: 1rem;
+    cursor: grab;
+    transition: all .2s linear;
     &-header {
         padding: 0 .7rem;
         border-bottom: 1px solid var(--border);
@@ -86,6 +99,9 @@ const emit = defineEmits<{
     }
     &-content {
         padding: .7rem;
+    }
+    &.dragging {
+        opacity: .3;
     }
 }
 </style>
