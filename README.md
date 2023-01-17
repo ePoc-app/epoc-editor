@@ -2,28 +2,22 @@
 
 ## Setup
 ```bash
-# install dependencies
+# Install dependencies
 npm install
 
-# run in dev mode
-npm run electron:dev
-
-#electron build
-npm run app:build
-
-# vite dev mode
+# Run in dev mode
 npm run dev
 
-# vite build
+# Build electron app
 npm run build
 
-# run unit test
+# Run unit test
 npm run test
 
-# run end to end test
+# Run end to end test
 run run wdio
 
-# run linter
+# Run linter
 npm run lint
 
 ```

@@ -9,15 +9,10 @@
   "version": "0.0.0",
   "main": "electron/electron.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc && vite build",
-    "preview": "vite preview",
     "electron": "wait-on tcp:8000 && cross-env IS_DEV=true electron .",
-    "electron:pack": "electron-builder --dir",
-    "electron:dev": "concurrently -k \"cross-env BROWSER=none npm run dev\" \"npm run electron\"",
     "electron:builder": "electron-builder",
-    "build:for:electron": "vue-tsc --noEmit && cross-env ELECTRON=true vite build",
-    "app:build": "npm run build:for:electron && npm run electron:builder",
+    "dev": "concurrently -k 'cross-env BROWSER=none vite' 'npm run electron'",
+    "build": "vue-tsc --noEmit && cross-env ELECTRON=true vite build && npm run electron:builder",
     "test": "vitest",
     "coverage": "vitest --coverage",
     "wdio": "wdio run ./wdio.conf.ts",
@@ -58,7 +53,7 @@
     "wdio-electron-service": "^3.5.0"
   },
   "build": {
-    "appId": "com.my-website.my-app",
+    "appId": "fr.inria.epoc-editor",
     "productName": "ePoc Editor",
     "copyright": "Copyright © 2022 ${author}",
     "mac": {
