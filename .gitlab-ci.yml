@@ -11,7 +11,7 @@ build:
   stage: build
   script:
   - npm i
-  - npm run electron:build
+  - npm run build
   artifacts:
     expire_in: 1 yr
     paths:
