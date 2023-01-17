@@ -19,5 +19,5 @@ build:
     - dist_electron/*.deb
     - dist_electron/*.exe
   only:
-  - master
+  - main
   - web
