@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { fetchRecentProjects } from '../services';
-import { SideAction, Screen, ePocProject, NodeElement, Form, Input, Field } from '../interfaces';
+import { SideAction, Screen, ePocProject, NodeElement, Form, Input } from '../interfaces';
 import { toRaw } from 'vue';
 
 import { formsModel } from '../data/form.data';

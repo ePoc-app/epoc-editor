@@ -29,7 +29,7 @@ function dragStart(event, screen) {
     emit('dragStart',{ event: event, sideAction: screen.actions, isScreen: true });
 }
 
-const displayScreen = ref(false);
+const displayScreen = ref(true);
 
 </script>
 

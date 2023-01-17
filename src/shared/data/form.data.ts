@@ -22,6 +22,7 @@ const textForm: Form = {
                 {
                     type: 'file',
                     label: 'Vignette',
+                    placeholder: 'Ajouter une vignette',
                     value: '',
                     accept: 'image/*'
                 }
@@ -58,6 +59,7 @@ const videoForm: Form = {
                 {
                     type: 'file',
                     label: 'Vidéo',
+                    placeholder: 'Ajouter une vidéo',
                     value: '',
                     accept: 'video/*'
                 },
@@ -68,22 +70,25 @@ const videoForm: Form = {
                     placeholder: 'Saisissez un résumé...'
                 },
                 {
-                    type: 'add',
+                    type: 'file',
                     label: 'Transcription',
                     value: '',
-                    placeholder: 'Ajouter une transcription'
+                    placeholder: 'Ajouter une transcription',
+                    accept: 'text/*'
                 },
                 {
-                    type: 'add',
+                    type: 'file',
                     label: 'Vignette',
                     value: '',
-                    placeholder: 'Ajouter une vignette'
+                    placeholder: 'Ajouter une vignette',
+                    accept: 'image/*'
                 },
                 {
-                    type: 'add',
+                    type: 'file',
                     label: 'Sous-titres',
                     value: '',
-                    placeholder: 'Ajouter des sous-titres'
+                    placeholder: 'Ajouter des sous-titres',
+                    accept: '.vtt'
                 },
             ]
         }
@@ -211,20 +216,23 @@ const epocForm: Form = {
                 {
                     type: 'file',
                     label: 'Image de couverture',
+                    placeholder: 'Ajouter une image de couverture',
                     value: '',
                     accept: 'image/*'
                 },
                 {
-                    type: 'add',
+                    type: 'file',
                     label: 'Vignette',
                     value: '',
-                    placeholder: 'Ajouter une vignette'
+                    placeholder: 'Ajouter une vignette',
+                    accept: 'image/*'
                 },
                 {
-                    type: 'add',
+                    type: 'file',
                     label: 'Teaser',
                     value: '',
-                    placeholder: 'Ajouter un teaser'
+                    placeholder: 'Ajouter un teaser',
+                    accept: 'video/*'
                 },
                 {
                     type: 'textarea',
