@@ -53,7 +53,7 @@ const cardMap = new Map([
         </template>
     </draggable>
     <AddCard 
-        :placeholder="'Ajouter ' + cardMap.get(type+'-placeholder')"
+        :placeholder="'Ajouter'"
         class="add-card"
         @click="emit('addCard')"
     />
