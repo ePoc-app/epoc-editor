@@ -11,7 +11,7 @@ build:
   stage: build
   script:
   - npm i
-  - npm run build
+  - npm run build-all
   artifacts:
     expire_in: 1 yr
     paths:

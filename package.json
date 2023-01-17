@@ -1,5 +1,7 @@
 {
   "name": "epoc-editor-v2",
+  "homepage": "https://epoc.inria.fr",
+  "license": "CeCILL-B",
   "author": {
     "name": "Inria Learning Lab",
     "email": "ill-ePoc-contact@inria.fr"
@@ -13,6 +15,7 @@
     "electron:builder": "electron-builder",
     "dev": "concurrently -k 'cross-env BROWSER=none vite' 'npm run electron'",
     "build": "vue-tsc --noEmit && cross-env ELECTRON=true vite build && npm run electron:builder",
+    "build-all": "npm run build -- -- --linux deb --win nsis --mac zip",
     "test": "vitest",
     "coverage": "vitest --coverage",
     "wdio": "wdio run ./wdio.conf.ts",
