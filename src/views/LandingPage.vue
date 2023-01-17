@@ -17,8 +17,8 @@ function createProject() {
 <template>
     <div class="card card-large">
         <div class="logo">
-            <img src="../assets/img/epoc.svg" />
-            <img src="../assets/img/inria.svg" />
+            <img src="/img/epoc.svg" />
+            <img src="/img/inria.svg" />
         </div>
         <div class="buttons">
             <button class="btn btn-outline btn-large" @click="projectStore.openEPOC">

@@ -4,7 +4,7 @@ const path = require('path');
 const { app, BrowserWindow,dialog, Menu, ipcMain } = require('electron');
 const fs = require('fs');
 
-const isDev = process.env.IS_DEV === 'true' ? true : false;
+const isDev = process.env.IS_DEV === 'true';
 
 let mainWindow;
 
@@ -84,15 +84,14 @@ app.whenReady().then(() => {
         transparent: true
     });
 
-    //! Only work in dev mode
-    splashWindow.loadFile('dist/splashScreen.html');
+    splashWindow.loadFile(`${path.join(__dirname, '../dist/splash.html')}`);
     splashWindow.center();
 
     //TODO Replace this with a when app is ready to be launched
     setTimeout(() => {
         splashWindow.destroy();
         mainWindow.show();
-    }, 5000);
+    }, 3000);
 
     app.on('activate', function () {
         // On macOS it's common to re-create a window in the app when the dock icon is clicked and there are no other windows open.
@@ -135,9 +134,7 @@ function openEPOC() {
 
 function getRecentFiles() {
     //TODO: This solution surely won't work anymore with real data
-    //! Only work in dev mode
-    const fileContent = fs.readFileSync('dist/epocs.json').toString();
-    return fileContent;
+    return fs.readFileSync(`${path.join(__dirname, '../dist/epocs.json')}`).toString();
 }
 
 ipcMain.on('toMain', (event, data) => {

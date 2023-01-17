@@ -34,7 +34,7 @@ function deleteFile() {
         >
         <i class="icon-supprimer" @click="deleteFile"></i>
     </div>
-    <img src="../../../../assets/img/image.png" alt="preview img">
+    <img src="/img/image.png" alt="preview img">
     <!-- <img v-if="url" :src="url" alt="image preview"> -->
 </template>
 
