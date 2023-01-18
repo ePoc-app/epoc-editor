@@ -11,9 +11,9 @@ defineProps<{
         <label for="select-box">{{ label }}</label>
         <select id="select-box" class="select-box">
             <option value="">Sélectionnez</option>
-            <option value="1">Catégorie 1</option>
-            <option value="2">Catégorie 2</option>
-            <option value="3">Catégorie 3</option>
+            <option value="1">Position 1</option>
+            <option value="2">Position 2</option>
+            <option value="3">Position 3</option>
         </select>
     </div>
 </template>
