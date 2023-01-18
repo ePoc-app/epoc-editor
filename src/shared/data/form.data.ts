@@ -299,7 +299,6 @@ const screenForm: Form = {
     ]
 };
 
-<<<<<<< HEAD
 const audioForm: Form = {
     type: 'audio',
     name: 'Audio',
@@ -360,6 +359,3 @@ const audioForm: Form = {
 
 
 export const formsModel: Form[] = [textForm, videoForm, qcmForm, chapterForm, epocForm, screenForm, audioForm];
-=======
-export const formsModel: Form[] = [textForm, videoForm, qcmForm, chapterForm, epocForm, screenForm];
->>>>>>> front
