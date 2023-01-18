@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ScreenNode from './ScreenNode.vue';
+import ScreenTemplate from './ScreenTemplate.vue';
 import { useEditorStore } from '../../../shared/stores';
 import { Ref, ref } from 'vue';
 import { Screen, SideAction } from '../../../shared/interfaces';
@@ -44,7 +44,7 @@ const displayScreen = ref(true);
         </div>
         <div v-if="displayScreen" class="screens">
             <div class="col-left">
-                <ScreenNode 
+                <ScreenTemplate
                     v-for="(screen, index) of leftCol"
                     :key="index"
                     :title="screen.title"
@@ -53,7 +53,7 @@ const displayScreen = ref(true);
                 />
             </div>
             <div class="col-right">
-                <ScreenNode 
+                <ScreenTemplate
                     v-for="(screen, index) of rightCol"
                     :key="index"
                     :title="screen.title"

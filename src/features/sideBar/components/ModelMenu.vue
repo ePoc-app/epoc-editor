@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // The beta use the ModelMenuV0 component
 //@ts-nocheck
-import ScreenNode from './ScreenNode.vue';
+import ScreenNode from './ScreenTemplate.vue';
 import { useEpocStore } from '../../../shared/stores';
 import { ref } from 'vue';
 

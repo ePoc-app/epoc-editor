@@ -22,6 +22,7 @@ $editor-lightblue: #E8EDF3;
 $editor-shadow-outer: #ADBCD5;
 $editor-grayblue: #7789A6;
 $editor-blue: #00B3E9;
+$node-active: #E1F4FA;
 
 [color-scheme="light"] {
     --background: #{$editor-light};
@@ -35,6 +36,7 @@ $editor-blue: #00B3E9;
     --list-border: #E6EAF4;
     --button-blue: #{$editor-lightblue};
     --node: #{$inria-light};
+    --node-active: #{$node-active};
 }
 
 // Dark theme not implemented yet

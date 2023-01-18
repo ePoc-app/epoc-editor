@@ -5,6 +5,8 @@ import { toRaw } from 'vue';
 
 import { formsModel } from '../data/form.data';
 
+type uid = string;
+
 interface EditorState {
     recentProjects: ePocProject[];
     floatingMenu: boolean;
@@ -12,9 +14,8 @@ interface EditorState {
     formPanel: {
         isOpen: boolean;
         form: Form;
-        openedElement: NodeElement;
-        openedScreen: Screen;
     };
+    openedNodeId: uid | null;
     sideActions: SideAction[];
     questions: SideAction[];
     standardScreens: Screen[];
@@ -29,9 +30,8 @@ export const useEditorStore = defineStore('editor', {
         formPanel: {
             isOpen: false,
             form: null,
-            openedElement: null,
-            openedScreen: null
         },
+        openedNodeId: null,
         sideActions: actionItems,
         questions: questions,
         standardScreens: standardScreen,
@@ -63,18 +63,18 @@ export const useEditorStore = defineStore('editor', {
             this.floatingMenu = false;
             this.modelMenu = false;
         },
-        openFormPanel(element: NodeElement): void {
+        openFormPanel(id: string, form: Form): void {
             this.formPanel.isOpen = true;
-            this.formPanel.form = element.form;
-            this.formPanel.openedElement = element;
+            this.formPanel.form = form;
+            this.openedNodeId = id;
         },
         closeFormPanel(): void {
             this.formPanel.isOpen = false;
             this.formPanel.form = null;
-            this.formPanel.openedElement = null;
+            this.openedNodeId = null;
         },
         //generate id of format 'aaaaaaaa'-'aaaa'-'aaaa'-'aaaa'-'aaaaaaaaaaaa'
-        generateId(): string {
+        generateId(): uid {
             const s4 = () => {
                 return Math.floor((1 + Math.random()) * 0x10000)
                     .toString(16)
@@ -94,7 +94,7 @@ export const useEditorStore = defineStore('editor', {
             //         type: 'remove',
             //     }
             // ]);
-            console.log(this.formPanel.openedElement.parentId);
+            console.log(this.openedNodeId);
         },
         addInput(type: string, fieldIndex: number):void {
             const newInput: Input = {

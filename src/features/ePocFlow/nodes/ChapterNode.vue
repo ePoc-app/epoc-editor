@@ -19,7 +19,7 @@ const props = defineProps<{
 const element: NodeElement = { id: props.id, action: { icon: 'icon-chapitre', type: 'chapter'}, form: editorStore.getForm('chapter') };
 
 function openForm(element: NodeElement) {
-    editorStore.openFormPanel(element);
+    editorStore.openFormPanel(element.id, element.form);
 }
 
 </script>
@@ -28,7 +28,7 @@ function openForm(element: NodeElement) {
     <div>
         <ContentButton 
             :icon="element.action.icon"
-            :is-active="editorStore.formPanel.openedElement ? editorStore.formPanel.openedElement.id === element.id : false"
+            :is-active="editorStore.openedNodeId ? editorStore.openedNodeId === element.id : false"
             :is-draggable="false"
             :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true, 'btn-content-large': true }"
             :subtitle="data.title"
