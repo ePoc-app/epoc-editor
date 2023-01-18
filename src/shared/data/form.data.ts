@@ -14,7 +14,7 @@ const textForm: Form = {
                     placeholder: 'Saisissez...'
                 },
                 {
-                    type: 'textarea',
+                    type: 'ql-editor',
                     label: 'Résumé',
                     value: '',
                     placeholder: 'Saisissez un résumé...'
@@ -62,12 +62,6 @@ const videoForm: Form = {
                     placeholder: 'Ajouter une vidéo',
                     value: '',
                     accept: 'video/*'
-                },
-                {
-                    type: 'textarea',
-                    label: 'Résumé',
-                    value: '',
-                    placeholder: 'Saisissez un résumé...'
                 },
                 {
                     type: 'file',
@@ -179,7 +173,7 @@ const epocForm: Form = {
                     accept: 'video/*'
                 },
                 {
-                    type: 'textarea',
+                    type: 'ql-editor',
                     label: 'Présentation',
                     value: '',
                     placeholder: 'Saisissez une présentation de l\'ePoc...'
@@ -355,7 +349,7 @@ const qcmForm: Form = {
             index: 4,
             inputs: [
                 {
-                    type: 'textarea',
+                    type: 'ql-editor',
                     label: '',
                     value: '',
                     placeholder: 'Saisissez une explication'
@@ -424,7 +418,7 @@ const dragDropForm: Form = {
             index: 5,
             inputs: [
                 {
-                    type: 'textarea',
+                    type: 'ql-editor',
                     label: '',
                     value: '',
                     placeholder: 'Saisissez une explication'
@@ -498,7 +492,7 @@ const reorderForm: Form = {
             index: 4,
             inputs: [
                 {
-                    type: 'textarea',
+                    type: 'ql-editor',
                     label: '',
                     value: '',
                     placeholder: 'Saisissez une explication...'
@@ -590,7 +584,7 @@ const swipeForm: Form = {
             index: 5,
             inputs: [
                 {
-                    type: 'textarea',
+                    type: 'ql-editor',
                     label: '',
                     value: '',
                     placeholder: 'Saisissez une explication...'
@@ -671,7 +665,7 @@ const listForm: Form = {
             index: 5,
             inputs: [
                 {
-                    type: 'textarea',
+                    type: 'ql-editor',
                     label: '',
                     value: '',
                     placeholder: 'Saisissez une explication...'

@@ -270,10 +270,7 @@ hr {
 
   &-textarea {
     resize: none;
-    min-height: 10rem;
-    &.input-card {
-      min-height: 5rem;
-    }
+    min-height: 5rem;
   }
   &:focus {
     outline: 1px solid var(--editor-blue);

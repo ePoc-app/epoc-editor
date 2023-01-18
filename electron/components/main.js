@@ -17,7 +17,7 @@ module.exports.createMainWindow = function () {
             webPreferences: {
                 nodeIntegration: false,
                 contextIsolation: true,
-                preload: path.join(__dirname, 'preload.js')
+                preload: path.join(__dirname, '../preload.js')
             }
         });
 
@@ -25,7 +25,7 @@ module.exports.createMainWindow = function () {
     mainWindow.loadURL(
         isDev
             ? 'http://localhost:8000'
-            : `file://${path.join(__dirname, '../dist/index.html')}`
+            : `file://${path.join(__dirname, '../../dist/index.html')}`
     );
     mainWindow.center();
     return mainWindow
