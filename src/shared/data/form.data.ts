@@ -269,4 +269,34 @@ const epocForm: Form = {
     ]
 };
 
-export const formsModel: Form[] = [textForm, videoForm, qcmForm, chapterForm, epocForm];
+const screenForm: Form = { 
+    type: 'screen',
+    name: 'Écran',
+    icon: 'icon-ecran',
+    fields: [
+        {
+            inputs: [
+                {
+                    type: 'text',
+                    label: 'Titre',
+                    value: '',
+                    placeholder: 'Saisissez...'
+                },
+            ]
+        }
+    ],
+    buttons: [
+        {
+            label: 'Supprimer',
+            icon: 'icon-supprimer',
+            action: 'delete'
+        },
+        {
+            label: 'Copier le lien',
+            icon: 'icon-copie',
+            action: 'copy'
+        },
+    ]
+};
+
+export const formsModel: Form[] = [textForm, videoForm, qcmForm, chapterForm, epocForm, screenForm];

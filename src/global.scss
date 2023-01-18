@@ -220,6 +220,12 @@ hr {
       margin-top: .5rem;
   }
 
+  &.active {
+    border: 1px solid var(--editor-blue);
+    box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);
+    background-color: var(--node-active);
+  }
+
   &-animate {
       padding: 1.5rem;
       transition: all .15s ease-in-out;
