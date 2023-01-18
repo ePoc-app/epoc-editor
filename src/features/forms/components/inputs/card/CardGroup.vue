@@ -23,7 +23,9 @@ const emit = defineEmits<{
 //? This way doesn't seem to be optimal
 const cardMap = new Map([
     ['check', 'Réponse'],
-    ['objective', 'Objectif']
+    ['objective', 'Objectif'],
+    ['category', 'Catégorie'],
+    ['dd', 'Réponse'],
 ]);
 
 </script>
