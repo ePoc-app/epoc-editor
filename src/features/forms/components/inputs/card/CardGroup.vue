@@ -26,7 +26,8 @@ const cardMap = new Map([
     ['objective', 'Objectif'],
     ['category', 'Catégorie'],
     ['dd', 'Réponse'],
-    ['reorder', 'Réponse position']
+    ['reorder', 'Réponse position'],
+    ['swipe', 'Carte'],
 ]);
 
 </script>

@@ -520,4 +520,96 @@ const reorderForm: Form = {
     ]
 };
 
-export const formsModel: Form[] = [textForm, videoForm, qcmForm, chapterForm, epocForm, screenForm, audioForm, dragDropForm, reorderForm];
+const swipeForm: Form = {
+    type: 'swipe',
+    name: 'Swipe',
+    icon: 'icon-swipe',
+    fields: [
+        {
+            name: 'Configuration de l\'activité',
+            index: 1,
+            inputs: [
+                {
+                    type: 'text',
+                    label: 'Titre',
+                    value: '',
+                    placeholder: 'Saisissez...'
+                },
+                {
+                    type: 'textarea',
+                    label: 'Énoncé',
+                    value: '',
+                    placeholder: 'Saisissez...'
+                },
+                {
+                    type: 'score',
+                    label: 'Score',
+                    value: '0',
+                }
+            ]
+        },
+        {
+            name: 'Question',
+            index: 2,
+            inputs: [
+                {
+                    type: 'textarea',
+                    label: '',
+                    value: '',
+                    placeholder: 'Saisissez l\'intitulé de la question...'
+                }
+            ]
+        },
+        {
+            name: 'Catégories de choix proposées',
+            index: 3,
+            inputs: [
+                {
+                    type: 'text',
+                    label: 'Choix gauche',
+                    value: '',
+                    placeholder: 'Saisissez une réponse...'
+                },
+                {
+                    type: 'text',
+                    label: 'Choix droite',
+                    value: '',
+                    placeholder: 'Saisissez une réponse...'
+                }
+            ]
+        },
+        {
+            name: 'Cartes',
+            index: 4,
+            type: 'cardGroup',
+            inputType: 'swipe',
+            inputs: [],
+        },
+        {
+            name: 'Explication',
+            index: 5,
+            inputs: [
+                {
+                    type: 'textarea',
+                    label: '',
+                    value: '',
+                    placeholder: 'Saisissez une explication...'
+                }
+            ]
+        }
+    ],
+    buttons: [
+        {
+            label: 'Supprimer',
+            icon: 'icon-supprimer',
+            action: 'delete'
+        },
+        {
+            label: 'Copier le lien',
+            icon: 'icon-copie',
+            action: 'copy'
+        },
+    ]
+};
+
+export const formsModel: Form[] = [textForm, videoForm, qcmForm, chapterForm, epocForm, screenForm, audioForm, dragDropForm, reorderForm, swipeForm];

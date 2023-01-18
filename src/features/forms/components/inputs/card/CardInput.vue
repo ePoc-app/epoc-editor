@@ -3,6 +3,7 @@
 import TextAreaInput from '../TextAreaInput.vue';
 import CheckBoxInput from './components/CheckBoxInput.vue';
 import SelectInput from './components/SelectInput.vue';
+import RadioInput from './components/RadioInput.vue';
 
 defineProps<{
     inputValue: string;
@@ -50,6 +51,7 @@ const emit = defineEmits<{
             <CheckBoxInput v-if="type === 'check'" />
             <SelectInput v-if="type === 'dd'" :label="'À quelle catégorie appartient cette réponse ' + pos" />
             <SelectInput v-if="type === 'reorder'" label="Position affiché à l'écran avant réorganisation" />
+            <RadioInput :index="pos" v-if="type === 'swipe'" />
         </div>
     </Transition>
 </template>
