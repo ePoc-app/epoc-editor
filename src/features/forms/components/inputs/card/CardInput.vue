@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import TextAreaInput from '../TextAreaInput.vue';
 import CheckBoxInput from './components/CheckBoxInput.vue';
-import SelectInput from './SelectInput.vue';
+import SelectInput from './components/SelectInput.vue';
 
 defineProps<{
     inputValue: string;
@@ -49,6 +49,7 @@ const emit = defineEmits<{
             </div>
             <CheckBoxInput v-if="type === 'check'" />
             <SelectInput v-if="type === 'dd'" :label="'À quelle catégorie appartient cette réponse ' + pos" />
+            <SelectInput v-if="type === 'reorder'" label="Position affiché à l'écran avant réorganisation" />
         </div>
     </Transition>
 </template>
