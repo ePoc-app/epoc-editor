@@ -26,7 +26,9 @@ onMounted(() => {
 </script>
 
 <template>
+    <label for="ql-editor">{{ label }}</label>
     <QuillEditor
+        id="ql-editor"
         :toolbar="toolbar"
         theme="snow"
         :placeholder="placeholder"
