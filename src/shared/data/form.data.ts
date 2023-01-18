@@ -612,4 +612,86 @@ const swipeForm: Form = {
     ]
 };
 
-export const formsModel: Form[] = [textForm, videoForm, qcmForm, chapterForm, epocForm, screenForm, audioForm, dragDropForm, reorderForm, swipeForm];
+const listForm: Form = {
+    type: 'list',
+    name: 'Listes déroulantes',
+    icon: 'icon-liste',
+    fields: [
+        {
+            name: 'Configuration de l\'activité',
+            index: 1,
+            inputs: [
+                {
+                    type: 'text',
+                    label: 'Titre',
+                    value: '',
+                    placeholder: 'Saisissez...'
+                },
+                {
+                    type: 'textarea',
+                    label: 'Énoncé',
+                    value: '',
+                    placeholder: 'Saisissez...'
+                },
+                {
+                    type: 'score',
+                    label: 'Score',
+                    value: '0',
+                }
+            ]
+        },
+        {
+            name: 'Question',
+            index: 2,
+            inputs: [
+                {
+                    type: 'textarea',
+                    label: '',
+                    value: '',
+                    placeholder: 'Saisissez l\'intitulé de la question...'
+                }
+            ]
+        },
+        {
+            name: 'Catégories de choix proposées',
+            index: 3,
+            type: 'cardGroup',
+            inputType: 'list-choice',
+            inputs: []
+        },
+        {
+            name: 'Cartes',
+            index: 4,
+            type: 'cardGroup',
+            inputType: 'list',
+            inputs: [],
+        },
+        {
+            name: 'Explication',
+            index: 5,
+            inputs: [
+                {
+                    type: 'textarea',
+                    label: '',
+                    value: '',
+                    placeholder: 'Saisissez une explication...'
+                }
+            ]
+        }
+    ],
+    buttons: [
+        {
+            label: 'Supprimer',
+            icon: 'icon-supprimer',
+            action: 'delete'
+        },
+        {
+            label: 'Copier le lien',
+            icon: 'icon-copie',
+            action: 'copy'
+        },
+    ]
+};
+
+
+export const formsModel: Form[] = [textForm, videoForm, qcmForm, chapterForm, epocForm, screenForm, audioForm, dragDropForm, reorderForm, swipeForm, listForm];
