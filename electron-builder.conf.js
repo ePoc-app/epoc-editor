@@ -7,8 +7,9 @@ const packageJson = require('./package.json');
  * @see https://www.electron.build/configuration/configuration
  */
 module.exports = {
+    artifactName: '${productName}_v${version}_'+new Date().toISOString().split('T')[0]+'.${ext}',
     appId: "fr.inria.epoc-editor",
-    productName: "ePoc Editor",
+    productName: "ePoc-Editor",
     copyright: "Copyright © 2022 ${author}",
     buildVersion: cp.execSync('git rev-parse --short HEAD').toString().trim(),
     mac: {
@@ -28,7 +29,7 @@ module.exports = {
     },
     extraMetadata: {
         // Get the most recent git tag otherwise use the version from package.json
-      version: tcDefault(() => { cp.execSync('git describe --tags --abbrev=0', { stdio: [] }).toString().trim() }, packageJson.version)
+        version: tcDefault(() => { cp.execSync('git describe --tags --abbrev=0', { stdio: [] }).toString().trim() }, packageJson.version)
     },
     beforePack: async (context) => {
         // Write an appInfo file to be used in prod
