@@ -105,7 +105,7 @@ function addNode(position, actions: SideAction[]) {
         id: id,
         type: 'content',
         // Put animated: nodeIcons.length === 1 when implementing v2
-        data: { elements: elements, readyToDrop: false, animated: false, title: 'Screen', form: form },
+        data: { elements: elements, readyToDrop: false, animated: false, form: form },
         position,
         events: {
             click: () => {
