@@ -323,6 +323,11 @@ const qcmForm: Form = {
                     label: 'Énoncé',
                     value: '',
                     placeholder: 'Saisissez'
+                },
+                {
+                    type: 'score',
+                    label: 'Score',
+                    value: '0',
                 }
             ]
         },
@@ -380,6 +385,11 @@ const dragDropForm: Form = {
                     label: 'Énoncé',
                     value: '',
                     placeholder: 'Saisissez...'
+                },
+                {
+                    type: 'score',
+                    label: 'Score',
+                    value: '0',
                 }
             ]
         },
@@ -456,6 +466,11 @@ const reorderForm: Form = {
                     label: 'Énoncé',
                     value: '',
                     placeholder: 'Saisissez...'
+                },
+                {
+                    type: 'score',
+                    label: 'Score',
+                    value: '0',
                 }
             ]
         },
