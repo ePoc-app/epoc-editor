@@ -35,6 +35,7 @@ const cardMap = new Map([
         :model-value="inputs"
         item-key="index"
         handle=".card-header"
+        ghost-class="ghost"
         @change="emit('swapCard', $event)"
     >
         <template #item="{element, index}">
@@ -58,7 +59,3 @@ const cardMap = new Map([
         @click="emit('addCard')"
     />
 </template>
-
-<style scoped lang="scss">
-
-</style>

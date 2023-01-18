@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { VueFlow, useVueFlow, Panel, PanelPosition } from '@vue-flow/core';
 import { markRaw, nextTick, watch } from 'vue';
-import ContentNode from './nodes/ContentNode.vue';
+import ScreenNode from './nodes/ScreenNode.vue';
 import CustomConnectContent from './edges/CustomConnectContent.vue';
-import { SideAction, NodeElement } from '../../shared/interfaces';
+import { SideAction, NodeElement, Form } from '../../shared/interfaces';
 import { useEditorStore } from '../../shared/stores';
 import ChapterNode from './nodes/ChapterNode.vue';
 import ePocNode from './nodes/ePocNode.vue';
@@ -16,7 +16,7 @@ onConnect((params) => addEdges([{...params, updatable: true, style: { stroke: '#
 const editorStore = useEditorStore();
 
 const nodeTypes = {
-    content: markRaw(ContentNode),
+    content: markRaw(ScreenNode),
     chapter: markRaw(ChapterNode),
     epoc: markRaw(ePocNode),
     add: markRaw(AddChapterNode), 
@@ -89,7 +89,8 @@ function addNode(position, actions: SideAction[]) {
     let elements: NodeElement[] = [];
 
     
-    const id = (nodes.value.length + 1).toString();
+    const id = editorStore.generateId();
+    const form = editorStore.getForm('screen');
     
     actions.forEach((action) => {
         elements.push({
@@ -104,11 +105,11 @@ function addNode(position, actions: SideAction[]) {
         id: id,
         type: 'content',
         // Put animated: nodeIcons.length === 1 when implementing v2
-        data: { elements: elements, readyToDrop: false, animated: false, title: 'Screen' },
+        data: { elements: elements, readyToDrop: false, animated: false, title: 'Screen', form: form },
         position,
         events: {
             click: () => {
-                console.log('node' + id + ' clicked');
+                openForm(id, form);
             }
         }
     };
@@ -180,6 +181,11 @@ function addChapter() {
     findNode('2').position.y += 200;
 }
 
+function openForm(id: string, form: Form) {
+    console.log('open screen Form');
+    editorStore.openFormPanel(id, form);
+}
+
 </script>
 
 <template>
@@ -199,7 +205,7 @@ function addChapter() {
             <button style="background-color: #ff0000; padding: 1rem; border-radius: 8px; border: none; cursor: pointer; font-size: 1.2rem;" @click="onDelete">Delete all</button>
         </Panel>
         <template #node-custom="{ id, data }">
-            <ContentNode :id="id" :data="data" />
+            <ScreenNode :id="id" :data="data" />
         </template>
         <template #node-chapter="{ id, data }">
             <ChapterNode :id="id" :data="data" />
