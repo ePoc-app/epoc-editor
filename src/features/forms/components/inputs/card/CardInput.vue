@@ -63,13 +63,13 @@ const emit = defineEmits<{
     width: 25rem;
     border-radius: 4px;
     margin-bottom: 1rem;
-    cursor: move;
     transition: all .2s linear;
     &-header {
         padding: 0 .7rem;
         border-bottom: 1px solid var(--border);
         display: flex;
         flex-direction: row;
+        cursor: move;
         
         h3 {
             font-weight: bold;
