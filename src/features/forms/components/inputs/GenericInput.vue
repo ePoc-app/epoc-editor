@@ -2,6 +2,7 @@
 import TextInput from './TextInput.vue';
 import TextAreaInput from './TextAreaInput.vue';
 import FileInput from './FileInput.vue';
+import ScoreInput from './ScoreInput.vue';
 
 defineProps<{
     type: string;
@@ -48,5 +49,11 @@ const emit = defineEmits<{
         :accept="accept"
         :placeholder="placeholder"
         @input="emit('update:modelValue', $event)"
+    />
+    <ScoreInput
+        v-if="type === 'score'"
+        :label="label"
+        :input-value="inputValue"
+        @input="emit('input', $event)"
     />
 </template>
