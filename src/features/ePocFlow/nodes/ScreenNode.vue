@@ -3,7 +3,7 @@ import { Handle, useVueFlow } from '@vue-flow/core';
 import ContentButton from '../../../components/ContentButton.vue';
 import { onMounted } from 'vue';
 import { useEditorStore } from '../../../shared/stores';
-import { NodeElement } from '../../..//shared/interfaces';
+import { NodeElement } from '../../../shared/interfaces';
 import { Position } from '@vue-flow/core';
 
 const editorStore = useEditorStore();
@@ -15,7 +15,6 @@ const props = defineProps<{
         required: true;
         readyToDrop: boolean;
         animated: boolean;
-        title: string;
         elements: NodeElement[];
     }
 }>();
@@ -62,16 +61,18 @@ function dragEnter(event) {
 const { nodes } = useVueFlow();
 
 function openForm(element: NodeElement) {
-    editorStore.openFormPanel(element);
+    editorStore.openFormPanel(element.id, element.form);
 }
 
 </script>
 
 <template>
-    <p contenteditable="true" class="node-title">{{ data.title }}</p>
+    <p contenteditable="true" class="node-title">Screen</p>
     <Handle type="target" :position="Position.Left" />
     <div
         :id="'node'+props.id"
+        :class=" { 'active': editorStore.openedNodeId ? editorStore.openedNodeId === props.id : false }"
+        class="node"
         @dragover="dragOver"
         @dragleave="dragLeave"
         @dragenter="dragEnter"
@@ -80,7 +81,7 @@ function openForm(element: NodeElement) {
             v-for="element of props.data.elements"
             :key="element.action.icon"
             :icon="element.action.icon"
-            :is-active="editorStore.formPanel.openedElement ? editorStore.formPanel.openedElement.id === element.id : false"
+            :is-active="editorStore.openedNodeId ? editorStore.openedNodeId === element.id : false"
             :is-draggable="false"
             :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true }"
             @click="openForm(element)"

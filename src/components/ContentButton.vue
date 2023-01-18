@@ -22,7 +22,7 @@ function click(event) {
         class="btn btn-content"
         :class="[classList, { active: isActive }, { 'draggable': isDraggable }]"
         :draggable="isDraggable"
-        @click="click($event)"
+        @click.stop="click($event)"
     >
         <i :class="icon" />
         <span v-if="subtitle" class="subtitle">{{ subtitle }}</span>

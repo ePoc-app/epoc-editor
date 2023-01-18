@@ -1,8 +1,9 @@
 
 <script setup lang="ts">
 import TextAreaInput from '../TextAreaInput.vue';
-import CheckBoxInput from '../CheckBoxInput.vue';
-import { ref } from 'vue';
+import CheckBoxInput from './components/CheckBoxInput.vue';
+import SelectInput from './components/SelectInput.vue';
+import RadioInput from './components/RadioInput.vue';
 
 defineProps<{
     inputValue: string;
@@ -20,18 +21,12 @@ const emit = defineEmits<{
     (e: 'moveDownCard'): void;
 }>();
 
-
-const dragging = ref(false);
-
 </script>
 
 <template>
     <Transition>
         <div
             class="card draggable-card"
-            :class="{ 'dragging' : dragging }"
-            @dragstart="dragging = true"
-            @dragend="dragging = false"
         >
             <div class="card-header">
                 <h3>{{ title }} {{ pos }}</h3>
@@ -54,6 +49,10 @@ const dragging = ref(false);
                 />
             </div>
             <CheckBoxInput v-if="type === 'check'" />
+            <SelectInput v-if="type === 'dd'" :label="'À quelle catégorie appartient cette réponse ' + pos" />
+            <SelectInput v-if="type === 'reorder'" label="Position affiché à l'écran avant réorganisation" />
+            <SelectInput v-if="type === 'list'" label="Réponse" />
+            <RadioInput v-if="type === 'swipe'" :index="pos" />
         </div>
     </Transition>
 </template>
@@ -64,7 +63,7 @@ const dragging = ref(false);
     width: 25rem;
     border-radius: 4px;
     margin-bottom: 1rem;
-    cursor: grab;
+    cursor: move;
     transition: all .2s linear;
     &-header {
         padding: 0 .7rem;
@@ -100,8 +99,12 @@ const dragging = ref(false);
     &-content {
         padding: .7rem;
     }
-    &.dragging {
-        opacity: .3;
+    &.ghost {
+        background-color: var(--item-background);
+        border: 2px dashed var(--border);
+        * {
+            opacity: 0;
+        }
     }
 }
 </style>

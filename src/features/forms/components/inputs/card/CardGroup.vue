@@ -23,7 +23,13 @@ const emit = defineEmits<{
 //? This way doesn't seem to be optimal
 const cardMap = new Map([
     ['check', 'Réponse'],
-    ['objective', 'Objectif']
+    ['objective', 'Objectif'],
+    ['category', 'Catégorie'],
+    ['dd', 'Réponse'],
+    ['reorder', 'Réponse position'],
+    ['swipe', 'Carte'],
+    ['list-choice', 'Choix'],
+    ['list', 'Carte']
 ]);
 
 </script>
@@ -35,6 +41,7 @@ const cardMap = new Map([
         :model-value="inputs"
         item-key="index"
         handle=".card-header"
+        ghost-class="ghost"
         @change="emit('swapCard', $event)"
     >
         <template #item="{element, index}">
@@ -58,7 +65,3 @@ const cardMap = new Map([
         @click="emit('addCard')"
     />
 </template>
-
-<style scoped lang="scss">
-
-</style>
