@@ -11,5 +11,9 @@
     ],
     "target": "es2022",
     "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    }
   }
 }
