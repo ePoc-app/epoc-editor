@@ -15,7 +15,6 @@ const props = defineProps<{
         required: true;
         readyToDrop: boolean;
         animated: boolean;
-        title: string;
         elements: NodeElement[];
     }
 }>();
@@ -68,7 +67,7 @@ function openForm(element: NodeElement) {
 </script>
 
 <template>
-    <p contenteditable="true" class="node-title">{{ data.title }}</p>
+    <p contenteditable="true" class="node-title">Screen</p>
     <Handle type="target" :position="Position.Left" />
     <div
         :id="'node'+props.id"

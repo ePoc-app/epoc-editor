@@ -2,7 +2,6 @@
 <script setup lang="ts">
 import TextAreaInput from '../TextAreaInput.vue';
 import CheckBoxInput from '../CheckBoxInput.vue';
-import { ref } from 'vue';
 
 defineProps<{
     inputValue: string;
