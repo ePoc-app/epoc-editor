@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TextInput from './TextInput.vue';
 import TextAreaInput from './TextAreaInput.vue';
-import FileInput from './FileInput.vue';
+import FileInput from './card/components/FileInput.vue';
 
 defineProps<{
     type: string;

@@ -1,7 +1,8 @@
 
 <script setup lang="ts">
 import TextAreaInput from '../TextAreaInput.vue';
-import CheckBoxInput from '../CheckBoxInput.vue';
+import CheckBoxInput from './components/CheckBoxInput.vue';
+import SelectInput from './SelectInput.vue';
 
 defineProps<{
     inputValue: string;
@@ -47,6 +48,7 @@ const emit = defineEmits<{
                 />
             </div>
             <CheckBoxInput v-if="type === 'check'" />
+            <SelectInput v-if="type === 'dd'" :label="'À quelle catégorie appartient cette réponse ' + pos" />
         </div>
     </Transition>
 </template>

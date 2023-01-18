@@ -107,62 +107,6 @@ const videoForm: Form = {
     ]
 };
 
-const qcmForm: Form = {
-    type: 'qcm',
-    name: 'QCM',
-    icon: 'icon-qcm',
-    fields: [
-        {
-            name: 'Configuration de l\'activité',
-            index: 1,
-            inputs: [
-                {
-                    type: 'text',
-                    label: 'Titre',
-                    value: '',
-                    placeholder: 'Saisissez...'
-                },
-                {
-                    type: 'textarea',
-                    label: 'Énoncé',
-                    value: '',
-                    placeholder: 'Saisissez'
-                }
-            ]
-        },
-        {
-            name: 'Question',
-            index: 2,
-            inputs: [
-                {
-                    type: 'textarea',
-                    label: '',
-                    value: '',
-                    placeholder: 'Saisissez l\'intitulé de la question...'
-                }
-            ]
-        },
-        {
-            name: 'Réponses',
-            index: 3,
-            type: 'cardGroup',
-            inputType: 'check',
-            inputs: []
-        },
-        {
-            name: 'Explication',
-            index: 4,
-            inputs: [
-                {
-                    type: 'textarea',
-                    label: '',
-                    value: '',
-                    placeholder: 'Saisissez une explication'
-                }
-            ]
-        }
-    ]
-};
 
 const chapterForm: Form = {
     type: 'chapter',
@@ -244,7 +188,7 @@ const epocForm: Form = {
                     type: 'text',
                     label: 'ID de l\'ePoc',
                     value: 'id234567890',
-    
+                    
                 },
                 {
                     type: 'text',
@@ -357,5 +301,139 @@ const audioForm: Form = {
     ]
 };
 
+// Question forms
 
-export const formsModel: Form[] = [textForm, videoForm, qcmForm, chapterForm, epocForm, screenForm, audioForm];
+const qcmForm: Form = {
+    type: 'qcm',
+    name: 'QCM',
+    icon: 'icon-qcm',
+    fields: [
+        {
+            name: 'Configuration de l\'activité',
+            index: 1,
+            inputs: [
+                {
+                    type: 'text',
+                    label: 'Titre',
+                    value: '',
+                    placeholder: 'Saisissez...'
+                },
+                {
+                    type: 'textarea',
+                    label: 'Énoncé',
+                    value: '',
+                    placeholder: 'Saisissez'
+                }
+            ]
+        },
+        {
+            name: 'Question',
+            index: 2,
+            inputs: [
+                {
+                    type: 'textarea',
+                    label: '',
+                    value: '',
+                    placeholder: 'Saisissez l\'intitulé de la question...'
+                }
+            ]
+        },
+        {
+            name: 'Réponses',
+            index: 3,
+            type: 'cardGroup',
+            inputType: 'check',
+            inputs: []
+        },
+        {
+            name: 'Explication',
+            index: 4,
+            inputs: [
+                {
+                    type: 'textarea',
+                    label: '',
+                    value: '',
+                    placeholder: 'Saisissez une explication'
+                }
+            ]
+        }
+    ]
+};
+
+const dragDropForm: Form = {
+    type: 'dragdrop',
+    name: 'Drag & Drop',
+    icon: 'icon-dragdrop',
+    fields: [
+        {
+            name: 'Configuration de l\'activité',
+            index: 1,
+            inputs: [
+                {
+                    type: 'text',
+                    label: 'Titre',
+                    value: '',
+                    placeholder: 'Saisissez...'
+                },
+                {
+                    type: 'textarea',
+                    label: 'Énoncé',
+                    value: '',
+                    placeholder: 'Saisissez...'
+                }
+            ]
+        },
+        {
+            name: 'Question',
+            index: 2,
+            inputs: [
+                {
+                    type: 'textarea',
+                    label: '',
+                    value: '',
+                    placeholder: 'Saisissez l\'intitulé de la question...'
+                }
+            ]
+        },
+        {
+            name: 'Catégories de réponses proposées',
+            index: 3,
+            type: 'cardGroup',
+            inputType: 'category',
+            inputs: [],
+        },
+        {
+            name: 'Réponses proposées',
+            index: 4,
+            type: 'cardGroup',
+            inputType: 'dd',
+            inputs: [],
+        },
+        {
+            name: 'Explication',
+            index: 5,
+            inputs: [
+                {
+                    type: 'textarea',
+                    label: '',
+                    value: '',
+                    placeholder: 'Saisissez une explication'
+                }
+            ]
+        }
+    ],
+    buttons: [
+        {
+            label: 'Supprimer',
+            icon: 'icon-supprimer',
+            action: 'delete'
+        },
+        {
+            label: 'Copier le lien',
+            icon: 'icon-copie',
+            action: 'copy'
+        },
+    ]
+};
+
+export const formsModel: Form[] = [textForm, videoForm, qcmForm, chapterForm, epocForm, screenForm, audioForm, dragDropForm];
