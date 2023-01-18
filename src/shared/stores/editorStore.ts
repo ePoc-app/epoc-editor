@@ -131,6 +131,19 @@ const standardScreen: Screen[] = [
             }
         ]
     },
+    {
+        title: 'Ecran audio',
+        actions: [
+            {
+                icon: 'icon-audio',
+                type: 'audio'
+            },
+            {
+                icon: 'icon-texte',
+                type: 'text'
+            }
+        ]
+    }
 ];
 
 

@@ -299,4 +299,63 @@ const screenForm: Form = {
     ]
 };
 
-export const formsModel: Form[] = [textForm, videoForm, qcmForm, chapterForm, epocForm, screenForm];
+const audioForm: Form = {
+    type: 'audio',
+    name: 'Audio',
+    icon: 'icon-audio',
+    fields: [
+        {
+            inputs: [
+                {
+                    type: 'text',
+                    label: 'Titre',
+                    value: '',
+                    placeholder: 'Saisissez...'
+                },
+                {
+                    type: 'file',
+                    label: 'Piste audio',
+                    value: '',
+                    placeholder: 'Ajouter une piste audio',
+                    accept: 'audio/*'
+                },
+                {
+                    type: 'file',
+                    label: 'Transcription',
+                    value: '',
+                    placeholder: 'Ajouter une transcription',
+                    accept: 'text/*'
+                },
+                {
+                    type: 'file',
+                    label: 'Vignette',
+                    value: '',
+                    placeholder: 'Ajouter une vignette',
+                    accept: 'image/*'
+                },
+                {
+                    type: 'file',
+                    label: 'Sous-titres',
+                    value: '',
+                    placeholder: 'Ajouter des sous-titres',
+                    accept: '.vtt'
+                }
+            ]
+        }
+    ],
+    buttons: [
+        {
+            label: 'Supprimer',
+            icon: 'icon-supprimer',
+            action: 'delete'
+        },
+        {
+            label: 'Copier le lien',
+            icon: 'icon-copie',
+            action: 'copy'
+        },
+    ]
+};
+
+
+export const formsModel: Form[] = [textForm, videoForm, qcmForm, chapterForm, epocForm, screenForm, audioForm];
