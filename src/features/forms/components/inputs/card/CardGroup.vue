@@ -28,6 +28,8 @@ const cardMap = new Map([
     ['dd', 'Réponse'],
     ['reorder', 'Réponse position'],
     ['swipe', 'Carte'],
+    ['list-choice', 'Choix'],
+    ['list', 'Carte']
 ]);
 
 </script>

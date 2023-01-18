@@ -51,7 +51,8 @@ const emit = defineEmits<{
             <CheckBoxInput v-if="type === 'check'" />
             <SelectInput v-if="type === 'dd'" :label="'À quelle catégorie appartient cette réponse ' + pos" />
             <SelectInput v-if="type === 'reorder'" label="Position affiché à l'écran avant réorganisation" />
-            <RadioInput :index="pos" v-if="type === 'swipe'" />
+            <SelectInput v-if="type === 'list'" label="Réponse" />
+            <RadioInput v-if="type === 'swipe'" :index="pos" />
         </div>
     </Transition>
 </template>
