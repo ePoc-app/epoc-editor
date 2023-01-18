@@ -3,6 +3,7 @@ import TextInput from './TextInput.vue';
 import TextAreaInput from './TextAreaInput.vue';
 import FileInput from './FileInput.vue';
 import ScoreInput from './ScoreInput.vue';
+import QuillEditor from './QuillEditor.vue';
 
 defineProps<{
     type: string;
@@ -36,6 +37,13 @@ const emit = defineEmits<{
         :input-value="inputValue"
         @input="emit('input', $event)"
     />
+    <QuillEditor
+        v-if="type === 'ql-editor'"
+        :label="label"
+        :placeholder="placeholder"
+        :input-value="inputValue"
+        @input="emit('input', $event)"    
+    />  
     <TextAreaInput 
         v-if="type === 'textarea'"
         :label="label"
