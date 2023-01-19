@@ -7,11 +7,11 @@ const packageJson = require('./package.json');
  * @see https://www.electron.build/configuration/configuration
  */
 module.exports = {
-    artifactName: '${productName}_v${version}_'+new Date().toISOString().split('T')[0]+'.${ext}',
+    artifactName: '${name}_v${version}_'+new Date().toISOString().split('T')[0]+'.${ext}',
     appId: "fr.inria.epoc-editor",
-    productName: "ePoc-Editor",
+    productName: "ePoc Editor",
     copyright: "Copyright © 2022 ${author}",
-    buildVersion: cp.execSync('git rev-parse --short HEAD').toString().trim(),
+    buildNumber: cp.execSync('git rev-parse --short HEAD').toString().trim(),
     mac: {
         category: "public.app-category.utilities"
     },

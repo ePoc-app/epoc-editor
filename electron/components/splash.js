@@ -24,11 +24,11 @@ module.exports.createSplashWindow = function () {
     splashWindow.center();
     const appInfo = isDev ? {
         version: app.getVersion(),
-        buildVersion: 'dev'
+        buildNumber: 'dev'
     } : require('../../dist/appInfo.json')
     splashWindow.webContents.executeJavaScript(`
         document.getElementById('appVersion').innerHTML = "v${appInfo.version}"
-        document.getElementById('buildVersion').innerHTML = "(${appInfo.buildVersion})"
+        document.getElementById('buildVersion').innerHTML = "(${appInfo.buildNumber})"
     `);
     return splashWindow
 }
