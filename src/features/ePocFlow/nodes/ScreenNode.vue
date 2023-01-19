@@ -64,6 +64,18 @@ function openForm(element: NodeElement) {
     editorStore.openFormPanel(element.id, element.form);
 }
 
+
+// const node = ref(findNode(props.id));
+// const connectedEdges = ref(getConnectedEdges([node.value], edges.value));
+
+// const source = ref(connectedEdges.value.forEach((edge) => { if(edge.source === props.id) return true; }));
+// const target = ref(connectedEdges.value.forEach((edge) => { if(edge.target === props.id) return true; }));
+
+// onConnectEnd(() => {
+//     console.log('source', source.value);
+//     console.log('target', target.value);
+// });
+
 </script>
 
 <template>
