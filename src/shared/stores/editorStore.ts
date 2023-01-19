@@ -101,7 +101,12 @@ export const useEditorStore = defineStore('editor', {
                 type: type,
                 label: '',
                 placeholder: '',
-                value: ''
+                value: '',
+                assessment: {
+                    isChecked: false,
+                    selectedOption: '',
+                    selectedRadio: 0
+                }
             };
             this.formPanel.form.fields[fieldIndex].inputs.push(newInput);
         }
