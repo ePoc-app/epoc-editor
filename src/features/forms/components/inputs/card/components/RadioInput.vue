@@ -1,7 +1,12 @@
 <script setup lang="ts">
 
 defineProps<{
+    radioValue: number;
     index: number;
+}>();
+
+const emit = defineEmits<{
+    (e: 'radioCheck', value: number): void;
 }>();
 
 </script>
@@ -16,6 +21,8 @@ defineProps<{
                     :name="'pos' + index"
                     type="radio"
                     class="radio-input"
+                    :checked="radioValue === 1"
+                    @change="emit('radioCheck', 1)"
                 >
                 <label for="left">Choix gauche</label>
             </div>
@@ -25,6 +32,8 @@ defineProps<{
                     :name="'pos' + index"
                     type="radio"
                     class="radio-input"
+                    :checked="radioValue === 2"
+                    @change="emit('radioCheck', 2)"
                 >
                 <label for="right">Choix droite</label>
             </div>

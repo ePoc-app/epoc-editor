@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-const inputValue = ref(false);
+defineProps<{
+    isChecked: boolean;
+}>();
+
 const label = ref('C\'est une bonne réponse');
 
 const emit = defineEmits<{
     (e: 'input', value: string): void;
+    (e: 'check', value: boolean): void;
 }>();
 
 </script>
@@ -16,8 +20,8 @@ const emit = defineEmits<{
             :id="label"
             class="checkbox-input"
             type="checkbox"
-            :value="inputValue"
-            @input="emit('input', ($event.target as HTMLInputElement).value)"
+            :checked="isChecked"
+            @change="emit('check', ($event.target as HTMLInputElement).checked)"
         >
         <label :for="label">{{ label }}</label>
     </div>

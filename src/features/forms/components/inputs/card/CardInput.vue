@@ -12,13 +12,22 @@ defineProps<{
     isLast: boolean;
     placeholder: string;
     title: string;
+
+    isChecked?: boolean;
+    selectedOption?: string;
+    selectedRadio?: number;
+    selectOptionsLength?: number;
 }>();
 
 const emit = defineEmits<{
     (e: 'input', value: string): void;
+
     (e: 'deleteCard'): void;
     (e: 'moveUpCard'): void;
     (e: 'moveDownCard'): void;
+
+    (e: 'check', value: boolean): void;
+    (e: 'radioCheck', value: number): void;
 }>();
 
 </script>
@@ -36,7 +45,7 @@ const emit = defineEmits<{
                     <i v-if="!isLast" class="icon-bas" @click="emit('moveDownCard')"></i>
                     <i v-if="pos !== 1" class="icon-haut" @click="emit('moveUpCard')"></i>
                     <hr class="vertical-separator">
-                    <i class="icon-glisser"></i> 
+                    <i class="icon-glisser"></i>
                 </div>
             </div>
             <div class="card-content">
@@ -48,11 +57,26 @@ const emit = defineEmits<{
                     @input="emit('input', $event)"
                 />
             </div>
-            <CheckBoxInput v-if="type === 'check'" />
-            <SelectInput v-if="type === 'dd'" :label="'À quelle catégorie appartient cette réponse ' + pos" />
-            <SelectInput v-if="type === 'reorder'" label="Position affiché à l'écran avant réorganisation" />
-            <SelectInput v-if="type === 'list'" label="Réponse" />
-            <RadioInput v-if="type === 'swipe'" :index="pos" />
+            <CheckBoxInput v-if="type === 'check'" :is-checked="isChecked" @check="emit('check', $event)" />
+            <SelectInput
+                v-if="type === 'dd'"
+                :label="'À quelle catégorie appartient cette réponse ' + pos"
+                :selected="selectedOption"
+                :options-length="selectOptionsLength"
+            />
+            <SelectInput v-if="type === 'reorder'" label="Position affiché à l'écran avant réorganisation" :selected="selectedOption" />
+            <SelectInput
+                v-if="type === 'list'"
+                label="Réponse"
+                :selected="selectedOption"
+                :options-length="selectOptionsLength"
+            />
+            <RadioInput
+                v-if="type === 'swipe'"
+                :index="pos"
+                :radio-value="selectedRadio"
+                @radio-check="emit('radioCheck', $event)"
+            />
         </div>
     </Transition>
 </template>

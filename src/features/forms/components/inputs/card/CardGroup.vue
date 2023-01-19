@@ -51,11 +51,15 @@ const cardMap = new Map([
                 :is-last="index === inputs.length - 1"
                 :input-value="element.value"
                 :placeholder="'Saisissez...'"
+                :is-checked="element.assessment?.isChecked"
+                :selected-radio="element.assessment?.selectedRadio"
                 :title="cardMap.get(type)"
                 @input="element.value = $event"
                 @delete-card="emit('deleteCard', index)"
                 @move-up-card="emit('moveUpCard', index)"
                 @move-down-card="emit('moveDownCard', index)"
+                @check="element.assessment.isChecked = $event"
+                @radio-check="element.assessment.selectedRadio = $event"
             />
         </template>
     </draggable>
