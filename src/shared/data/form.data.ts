@@ -115,6 +115,12 @@ const chapterForm: Form = {
                     value: '',
                     placeholder: 'Saisissez...'
                 },
+                {
+                    type: 'text',
+                    label: 'Label',
+                    value: '',
+                    placeholder: 'Saisissez...'
+                }
             ]
         },
         {
@@ -148,6 +154,12 @@ const epocForm: Form = {
                 {
                     type: 'text',
                     label: 'Titre',
+                    value: '',
+                    placeholder: 'Saisissez...'
+                },
+                {
+                    type: 'text',
+                    label: 'Label',
                     value: '',
                     placeholder: 'Saisissez...'
                 },
