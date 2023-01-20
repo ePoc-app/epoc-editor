@@ -198,8 +198,10 @@ function openForm(id: string, form: Form) {
         :max-zoom="1.5"
         :min-zoom=".7"
         :node-extent="[[0, 0], [1300, 1300]]"
+        :translate-extent="[[-500, -500], [1800, 1800]]"
         :node-types="nodeTypes"
         :connection-mode="ConnectionMode.Strict"
+        :edge-updater-radius="30"
         @drop="onDrop"
         @dragover.prevent
         @dragenter.prevent
