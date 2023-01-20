@@ -23,6 +23,9 @@ $editor-shadow-outer: #ADBCD5;
 $editor-grayblue: #7789A6;
 $editor-blue: #00B3E9;
 $node-active: #E1F4FA;
+$editor-red: #E63312;
+
+$editor-node-ghost: #D6E2F0;
 
 [color-scheme="light"] {
     --background: #{$editor-light};
@@ -37,6 +40,7 @@ $node-active: #E1F4FA;
     --button-blue: #{$editor-lightblue};
     --node: #{$inria-light};
     --node-active: #{$node-active};
+    --node-ghost: #{$editor-node-ghost};
 }
 
 // Dark theme not implemented yet
@@ -52,4 +56,5 @@ $node-active: #E1F4FA;
     --editor-grayblue: #{$editor-grayblue};
     --editor-blue: #{$editor-blue};
     --editor-blue-shadow: rgba(0, 179, 233, 0.3);
+    --editor-red: #{$editor-red};
 }

@@ -15,6 +15,7 @@ function dragStart(event, sideAction) {
     event.dataTransfer.dropEffect= 'move';
     event.dataTransfer.effectAllowed= 'move';
     event.dataTransfer.setData('sideAction', JSON.stringify(sideAction));
+    dragging.value = true;
 }
 
 </script>
@@ -37,6 +38,7 @@ function dragStart(event, sideAction) {
 .dragging {
     transition: opacity .1s ease-in-out;
     opacity: .5;
+    box-shadow: none;
 }
 
 .question {

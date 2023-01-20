@@ -28,7 +28,7 @@ const emit = defineEmits<{
             <div class="card-header">
                 <h3>{{ card.label }} {{ pos }}</h3>
                 <div class="card-header-icon">
-                    <i class="icon-supprimer" @click="emit('deleteCard')"></i>
+                    <i class="icon-supprimer delete" @click="emit('deleteCard')"></i>
                     <hr v-if="!(isLast && pos === 1)" class="vertical-separator">
                     <i v-if="!isLast" class="icon-bas" @click="emit('moveDownCard')"></i>
                     <i v-if="pos !== 1" class="icon-haut" @click="emit('moveUpCard')"></i>
@@ -89,6 +89,10 @@ const emit = defineEmits<{
                 margin: auto;
                 &:not(:last-child) {
                     margin-right: .5rem;
+                }
+
+                &.delete:hover {
+                    color: var(--editor-red);
                 }
             }
         }

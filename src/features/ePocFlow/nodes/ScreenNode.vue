@@ -61,7 +61,7 @@ function dragEnter(event) {
 const { nodes } = useVueFlow();
 
 function openForm(element: NodeElement) {
-    editorStore.openFormPanel(element.id, element.form);
+    editorStore.openFormPanel(element.id, element.form, element.parentId);
 }
 
 

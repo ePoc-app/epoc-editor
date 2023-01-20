@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { VueFlow, useVueFlow, Panel, PanelPosition, MarkerType } from '@vue-flow/core';
+import { VueFlow, useVueFlow, Panel, PanelPosition, MarkerType, ConnectionMode } from '@vue-flow/core';
 import { markRaw, nextTick, watch } from 'vue';
 import ScreenNode from './nodes/ScreenNode.vue';
 import CustomConnectContent from './edges/CustomConnectContent.vue';
@@ -198,7 +198,10 @@ function openForm(id: string, form: Form) {
         :max-zoom="1.5"
         :min-zoom=".7"
         :node-extent="[[0, 0], [1300, 1300]]"
+        :translate-extent="[[-500, -500], [1800, 1800]]"
         :node-types="nodeTypes"
+        :connection-mode="ConnectionMode.Strict"
+        :edge-updater-radius="30"
         @drop="onDrop"
         @dragover.prevent
         @dragenter.prevent
