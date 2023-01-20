@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Input } from '../../../shared/interfaces';
+import { Input } from '@/src/shared/interfaces';
 import GenericInput from './inputs/GenericInput.vue';
 
 defineProps<{

@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
-import { fetchRecentProjects } from '../services';
-import { SideAction, Screen, ePocProject, NodeElement, Form, Input } from '../interfaces';
+import { fetchRecentProjects } from '@/src/shared/services';
+import { SideAction, Screen, ePocProject, NodeElement, Form, Card } from '@/src/shared/interfaces';
 import { toRaw } from 'vue';
 
-import { formsModel } from '../data/form.data';
+import { formsModel } from '@/src/shared/data/form.data';
 
 type uid = string;
 
@@ -86,6 +86,9 @@ export const useEditorStore = defineStore('editor', {
         getForm(type: string): Form {
             return structuredClone(toRaw(formsModel.find(form => form.type === type)));
         },
+        getCard(type: string): Card {
+            return structuredClone(toRaw(cardsModel.find(card => card.type === type)));
+        },
         deleteCurrentElement(): void {
             // const { applyNodeChanges } = useVueFlow();
             // applyNodeChanges([
@@ -96,22 +99,147 @@ export const useEditorStore = defineStore('editor', {
             // ]);
             console.log(this.openedNodeId);
         },
-        addInput(type: string, fieldIndex: number):void {
-            const newInput: Input = {
-                type: type,
-                label: '',
-                placeholder: '',
-                value: '',
-                assessment: {
-                    isChecked: false,
-                    selectedOption: '',
-                    selectedRadio: 0
-                }
-            };
-            this.formPanel.form.fields[fieldIndex].inputs.push(newInput);
+        addCard(type: string, fieldIndex: number):void {
+            const newCard: Card = this.getCard(type);
+            this.formPanel.form.fields[fieldIndex].inputs.push(newCard);
         }
     }
 });
+
+const cardsModel: Card[] = [
+    {
+        type: 'objective',
+        label: 'Objectif',
+        placeholder: 'Ajouter un objectif',
+        inputs: [
+            {
+                type:'textarea',
+                label: '',
+                placeholder: 'Saisissez un objectif...',
+                value: ''
+            }
+        ]
+    },
+    {
+        type: 'qcm',
+        label: 'Réponse',
+        placeholder: 'Ajouter une autre réponse',
+        inputs: [
+            {
+                type:'textarea',
+                label: '',
+                placeholder: 'Saisissez une réponse...',
+                value: ''
+            },
+            {
+                type: 'checkbox',
+                label: 'C\'est une bonne réponse',
+                value: 'false'
+            }
+        ]
+    },
+    {
+        type: 'category',
+        label: 'Catégorie',
+        placeholder: 'Ajouter une autre catégorie',
+        inputs: [
+            {
+                type: 'textarea',
+                label: '',
+                placeholder: 'Saisissez un intitulé de catégorie...',
+                value: ''
+            },
+        ]
+    },
+    {
+        type: 'dd',
+        label: 'Réponse',
+        placeholder: 'Ajouter une autre réponse proposée',
+        inputs: [
+            {
+                type: 'textarea',
+                label: '',
+                placeholder: 'Saisissez une réponse...',
+                value: ''
+            },
+            {
+                type: 'select',
+                label: 'À quelle catégorie appartient cette réponse',
+                placeholder: 'Catégorie',
+                value: '',
+            }
+        ]
+    },
+    {
+        type: 'reorder',
+        label: 'Réponse',
+        placeholder: 'Ajouter une autre réponse',
+        inputs: [
+            {
+                type: 'textarea',
+                label: '',
+                placeholder: 'Saisissez une réponse...',
+                value: ''
+            },
+            {
+                type: 'select',
+                label: 'Position affichée à l\'écran avant réorganisation',
+                placeholder: 'Affichée en position',
+                value: '',
+            },
+        ]
+    },
+    {
+        type: 'swipe',
+        label: 'Carte',
+        placeholder: 'Ajouter une autre carte',
+        inputs: [
+            {
+                type: 'textarea',
+                label: '',
+                placeholder: 'Saisissez une proposition...',
+                value: ''
+            },
+            {
+                type: 'radio-group',
+                label: 'Réponse',
+                value: '0'
+            },
+        ]
+    },
+    {
+        type: 'list-choice',
+        label: 'Choix',
+        placeholder: 'Ajouter un autre choix',
+        inputs: [
+            {
+                type: 'text',
+                label: '',
+                placeholder: 'Saisissez un choix...',
+                value: ''
+            },
+        ]
+    },
+    {
+        type: 'list',
+        label: 'Carte',
+        placeholder: 'Ajouter une autre carte',
+        inputs: [
+            {
+                type: 'textarea',
+                label: '',
+                placeholder: 'Saisissez une question...',
+                value: ''
+            },
+            {
+                type: 'select',
+                label: 'Réponse',
+                placeholder: 'Choix',
+                value: '',
+            }
+        ]
+    }
+];
 
 const standardScreen: Screen[] = [
     {

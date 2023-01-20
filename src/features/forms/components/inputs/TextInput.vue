@@ -4,6 +4,7 @@ defineProps<{
     label: string;
     placeholder?: string;
     inputValue: string;
+    insideCard?: boolean
 }>();
 
 const emit = defineEmits<{
@@ -17,6 +18,7 @@ const emit = defineEmits<{
     <input
         :id="label"
         class="input"
+        :class="{ 'input-card' : insideCard }"
         type="text"
         :placeholder="placeholder"
         :value="inputValue"

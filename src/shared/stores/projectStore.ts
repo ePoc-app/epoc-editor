@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import { ePocProject } from '../interfaces';
-import { openEPOC } from '../services';
+import { ePocProject } from '@/src/shared/interfaces';
+import { openEPOC } from '@/src/shared/services';
 
 interface ProjectState {
     project: ePocProject;

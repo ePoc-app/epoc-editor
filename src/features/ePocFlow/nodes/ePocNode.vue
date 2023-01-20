@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import ContentButton from '../../../components/ContentButton.vue';
-import { NodeElement } from '../../../shared/interfaces';
-import { useEditorStore } from '../../../shared/stores';
+import ContentButton from '@/src/components/ContentButton.vue';
+import { NodeElement } from '@/src/shared/interfaces';
+import { useEditorStore } from '@/src/shared/stores';
 
 const editorStore = useEditorStore();
 const props = defineProps<{
