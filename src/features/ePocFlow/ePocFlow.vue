@@ -3,8 +3,8 @@ import { VueFlow, useVueFlow, Panel, PanelPosition, MarkerType } from '@vue-flow
 import { markRaw, nextTick, watch } from 'vue';
 import ScreenNode from './nodes/ScreenNode.vue';
 import CustomConnectContent from './edges/CustomConnectContent.vue';
-import { SideAction, NodeElement, Form } from '../../shared/interfaces';
-import { useEditorStore } from '../../shared/stores';
+import { SideAction, NodeElement, Form } from '@/src/shared/interfaces';
+import { useEditorStore } from '@/src/shared/stores';
 import ChapterNode from './nodes/ChapterNode.vue';
 import ePocNode from './nodes/ePocNode.vue';
 import AddChapterNode from './nodes/AddChapterNode.vue';

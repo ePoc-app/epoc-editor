@@ -1,4 +1,4 @@
-import { ePocProject } from '../interfaces';
+import { ePocProject } from '@/src/shared/interfaces';
 
 export async function fetchRecentProjects(): Promise<ePocProject[]> {
     //@ts-ignore

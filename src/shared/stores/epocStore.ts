@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { Screen } from '../interfaces';
+import { Screen } from '@/src/shared/interfaces';
 
 interface EpocState {
     screensModel: {

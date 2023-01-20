@@ -1,22 +1,12 @@
 
 <script setup lang="ts">
-import TextAreaInput from '../TextAreaInput.vue';
-import CheckBoxInput from './components/CheckBoxInput.vue';
-import SelectInput from './components/SelectInput.vue';
-import RadioInput from './components/RadioInput.vue';
+import { Card } from '@/src/shared/interfaces';
+import GenericInput from '../GenericInput.vue';
 
 defineProps<{
-    inputValue: string;
     pos: number;
-    type?: string;
     isLast: boolean;
-    placeholder: string;
-    title: string;
-
-    isChecked?: boolean;
-    selectedOption?: string;
-    selectedRadio?: number;
-    selectOptionsLength?: number;
+    card: Card
 }>();
 
 const emit = defineEmits<{
@@ -34,11 +24,9 @@ const emit = defineEmits<{
 
 <template>
     <Transition>
-        <div
-            class="card draggable-card"
-        >
+        <div class="card draggable-card">
             <div class="card-header">
-                <h3>{{ title }} {{ pos }}</h3>
+                <h3>{{ card.label }} {{ pos }}</h3>
                 <div class="card-header-icon">
                     <i class="icon-supprimer" @click="emit('deleteCard')"></i>
                     <hr v-if="!(isLast && pos === 1)" class="vertical-separator">
@@ -48,35 +36,20 @@ const emit = defineEmits<{
                     <i class="icon-glisser"></i>
                 </div>
             </div>
+            
             <div class="card-content">
-                <TextAreaInput
-                    label=""
+                <GenericInput
+                    v-for="(input, index) in card.inputs"
+                    :key="index"
+                    :type="input.type"
                     :inside-card="true"
-                    :placeholder="placeholder"
-                    :input-value="inputValue"
-                    @input="emit('input', $event)"
+                    :label="input.label"
+                    :placeholder="input.placeholder"
+                    :input-value="input.value"
+                    :pos="pos"
+                    @input="input.value = $event"
                 />
             </div>
-            <CheckBoxInput v-if="type === 'check'" :is-checked="isChecked" @check="emit('check', $event)" />
-            <SelectInput
-                v-if="type === 'dd'"
-                :label="'À quelle catégorie appartient cette réponse ' + pos"
-                :selected="selectedOption"
-                :options-length="selectOptionsLength"
-            />
-            <SelectInput v-if="type === 'reorder'" label="Position affiché à l'écran avant réorganisation" :selected="selectedOption" />
-            <SelectInput
-                v-if="type === 'list'"
-                label="Réponse"
-                :selected="selectedOption"
-                :options-length="selectOptionsLength"
-            />
-            <RadioInput
-                v-if="type === 'swipe'"
-                :index="pos"
-                :radio-value="selectedRadio"
-                @radio-check="emit('radioCheck', $event)"
-            />
         </div>
     </Transition>
 </template>

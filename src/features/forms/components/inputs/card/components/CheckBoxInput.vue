@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 
 defineProps<{
-    isChecked: boolean;
+    inputValue: string;
+    label: string;
 }>();
 
-const label = ref('C\'est une bonne réponse');
 
 const emit = defineEmits<{
-    (e: 'input', value: string): void;
-    (e: 'check', value: boolean): void;
+    (e: 'change', value: string): void;
 }>();
 
 </script>
@@ -20,8 +18,8 @@ const emit = defineEmits<{
             :id="label"
             class="checkbox-input"
             type="checkbox"
-            :checked="isChecked"
-            @change="emit('check', ($event.target as HTMLInputElement).checked)"
+            :checked="JSON.parse(inputValue)"
+            @change="emit('change', String(($event.target as HTMLInputElement).checked))"
         >
         <label :for="label">{{ label }}</label>
     </div>
@@ -30,7 +28,7 @@ const emit = defineEmits<{
 <style scoped lang="scss">
 .checkbox {
     display: flex;
-    margin: 0 1rem 1rem 1rem;
+    margin: 1rem 0 .5rem 0;
     input[type="checkbox"] {
         appearance: none;
         margin: 0;

@@ -1,4 +1,4 @@
-import { Form } from '../interfaces';
+import { Form } from '@/src/shared/interfaces';
 
 const textForm: Form = {
     type: 'text',
@@ -353,7 +353,7 @@ const qcmForm: Form = {
             name: 'Réponses',
             index: 3,
             type: 'cardGroup',
-            inputType: 'check',
+            inputType: 'qcm',
             inputs: []
         },
         {

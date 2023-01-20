@@ -1,4 +1,4 @@
-import { SideAction } from './sideAction.interface';
+import { SideAction } from '.';
 
 export interface Screen {
     title: string;

@@ -2,6 +2,12 @@
 
 defineProps<{
     label: string;
+    inputValue: string;
+    placeholder: string;
+}>();
+
+const emit = defineEmits<{
+    (e: 'change', value: string): void;
 }>();
 
 </script>
@@ -9,11 +15,16 @@ defineProps<{
 <template>
     <div class="select">
         <label for="select-box">{{ label }}</label>
-        <select id="select-box" class="select-box">
+        <select
+            id="select-box"
+            :value="inputValue"
+            class="select-box"
+            @change="emit('change', ($event.target as HTMLInputElement).value)"
+        >
             <option value="">Sélectionnez</option>
-            <option value="1">Position 1</option>
-            <option value="2">Position 2</option>
-            <option value="3">Position 3</option>
+            <option value="1">{{ placeholder }} 1</option>
+            <option value="2">{{ placeholder }} 2</option>
+            <option value="3">{{ placeholder }} 3</option>
         </select>
     </div>
 </template>
@@ -22,7 +33,7 @@ defineProps<{
 .select {
     display: flex;
     flex-direction: column;
-    margin-bottom: 1rem;
+    margin: 1rem 0 .5rem 0;
     label {
         margin-bottom: 0.5rem;
     }
@@ -41,6 +52,5 @@ defineProps<{
         background-position: right 0.7rem top 50%;
         background-size: .8rem auto;
     }
-    margin: 0 1rem 1rem 1rem;
 }
 </style>

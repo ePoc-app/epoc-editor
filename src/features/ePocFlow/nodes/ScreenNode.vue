@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Handle, useVueFlow } from '@vue-flow/core';
-import ContentButton from '../../../components/ContentButton.vue';
+import ContentButton from '@/src/components/ContentButton.vue';
 import { onMounted } from 'vue';
-import { useEditorStore } from '../../../shared/stores';
-import { NodeElement } from '../../../shared/interfaces';
+import { useEditorStore } from '@/src/shared/stores';
+import { NodeElement } from '@/src/shared/interfaces';
 import { Position } from '@vue-flow/core';
 
 const editorStore = useEditorStore();
