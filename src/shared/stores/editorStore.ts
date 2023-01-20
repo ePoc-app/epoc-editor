@@ -2,8 +2,11 @@ import { defineStore } from 'pinia';
 import { fetchRecentProjects } from '@/src/shared/services';
 import { SideAction, Screen, ePocProject, NodeElement, Form, Card } from '@/src/shared/interfaces';
 import { toRaw } from 'vue';
+import { useVueFlow } from '@vue-flow/core';
 
 import { formsModel } from '@/src/shared/data/form.data';
+
+const { findNode } = useVueFlow();
 
 type uid = string;
 
@@ -16,6 +19,7 @@ interface EditorState {
         form: Form;
     };
     openedNodeId: uid | null;
+    openedParentId: uid | null;
     sideActions: SideAction[];
     questions: SideAction[];
     standardScreens: Screen[];
@@ -32,6 +36,7 @@ export const useEditorStore = defineStore('editor', {
             form: null,
         },
         openedNodeId: null,
+        openedParentId: null,
         sideActions: actionItems,
         questions: questions,
         standardScreens: standardScreen,
@@ -63,10 +68,11 @@ export const useEditorStore = defineStore('editor', {
             this.floatingMenu = false;
             this.modelMenu = false;
         },
-        openFormPanel(id: string, form: Form): void {
+        openFormPanel(id: string, form: Form, parentId?: string): void {
             this.formPanel.isOpen = true;
             this.formPanel.form = form;
             this.openedNodeId = id;
+            this.openedParentId = parentId;
         },
         closeFormPanel(): void {
             this.formPanel.isOpen = false;
@@ -97,7 +103,10 @@ export const useEditorStore = defineStore('editor', {
             //         type: 'remove',
             //     }
             // ]);
-            console.log(this.openedNodeId);
+            console.log('deleteCurrentElement', this.openedParentId);
+            const node = findNode(this.openedParentId);
+            console.log('node', node);
+            this.closeFormPanel();
         },
         addCard(type: string, fieldIndex: number):void {
             const newCard: Card = this.getCard(type);
