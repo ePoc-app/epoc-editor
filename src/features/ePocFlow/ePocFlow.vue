@@ -1,17 +1,20 @@
 <script setup lang="ts">
-import { VueFlow, useVueFlow, Panel, PanelPosition } from '@vue-flow/core';
+import { VueFlow, useVueFlow, Panel, PanelPosition, MarkerType } from '@vue-flow/core';
 import { markRaw, nextTick, watch } from 'vue';
 import ScreenNode from './nodes/ScreenNode.vue';
 import CustomConnectContent from './edges/CustomConnectContent.vue';
-import { SideAction, NodeElement, Form } from '../../shared/interfaces';
-import { useEditorStore } from '../../shared/stores';
+import { SideAction, NodeElement, Form } from '@/src/shared/interfaces';
+import { useEditorStore } from '@/src/shared/stores';
 import ChapterNode from './nodes/ChapterNode.vue';
 import ePocNode from './nodes/ePocNode.vue';
 import AddChapterNode from './nodes/AddChapterNode.vue';
 
 const { nodes, addNodes, addEdges, onConnect, vueFlowRef, project, findNode, setNodes, setEdges }  = useVueFlow();
 
-onConnect((params) => addEdges([{...params, updatable: true, style: { stroke: '#384257', strokeWidth: 2.5 }}]));
+//TODO: find a way to ignore the onConnect here and only use the snap to handle one
+onConnect((params) => {
+    addEdges([{...params, updatable: true, style: { stroke: '#384257', strokeWidth: 2.5 }, markerEnd: { type: MarkerType.ArrowClosed, color: '#384257'} }]);
+});
 
 const editorStore = useEditorStore();
 
@@ -51,7 +54,7 @@ const mainEdge = {
 
 const elements = [epoc, add, mainEdge];
 
-//? Use this to detect interesctions(for creating screen);
+//? Use this to detect intersections(for creating screen);
 // onNodeDrag(({ intersections }) => {
 //     const intersectionIds = intersections.map((intersection) => intersection.id);
 
@@ -182,7 +185,6 @@ function addChapter() {
 }
 
 function openForm(id: string, form: Form) {
-    console.log('open screen Form');
     editorStore.openFormPanel(id, form);
 }
 

@@ -17,3 +17,15 @@ classDiagram
   NodeElement -- SideAction: 1
   Form -- Input: 1..*
 ```
+
+---
+
+## Data Structure in the form
+```mermaid
+classDiagram
+  Form -- Field: 1..*
+  Field -- Input: 1..*
+  Field -- Card: 0..*
+  Card -- Input: 1..*
+
+```

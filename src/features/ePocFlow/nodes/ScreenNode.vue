@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Handle, useVueFlow } from '@vue-flow/core';
-import ContentButton from '../../../components/ContentButton.vue';
+import ContentButton from '@/src/components/ContentButton.vue';
 import { onMounted } from 'vue';
-import { useEditorStore } from '../../../shared/stores';
-import { NodeElement } from '../../../shared/interfaces';
+import { useEditorStore } from '@/src/shared/stores';
+import { NodeElement } from '@/src/shared/interfaces';
 import { Position } from '@vue-flow/core';
 
 const editorStore = useEditorStore();
@@ -63,6 +63,18 @@ const { nodes } = useVueFlow();
 function openForm(element: NodeElement) {
     editorStore.openFormPanel(element.id, element.form);
 }
+
+
+// const node = ref(findNode(props.id));
+// const connectedEdges = ref(getConnectedEdges([node.value], edges.value));
+
+// const source = ref(connectedEdges.value.forEach((edge) => { if(edge.source === props.id) return true; }));
+// const target = ref(connectedEdges.value.forEach((edge) => { if(edge.target === props.id) return true; }));
+
+// onConnectEnd(() => {
+//     console.log('source', source.value);
+//     console.log('target', target.value);
+// });
 
 </script>
 

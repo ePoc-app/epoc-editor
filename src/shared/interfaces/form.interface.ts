@@ -1,5 +1,5 @@
-import { Field } from './field.interface';
-import { FormButton } from './formButton.interface';
+import { Field, FormButton } from '.';
+
 export interface Form {
     type: string;
     name: string;

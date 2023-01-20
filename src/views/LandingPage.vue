@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { router } from '../router';
-import { useEditorStore, useProjectStore } from '../shared/stores';
+import { useEditorStore, useProjectStore } from '@/src/shared/stores';
 
 
 const editorStore = useEditorStore();

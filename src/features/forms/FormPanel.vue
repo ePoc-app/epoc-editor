@@ -3,6 +3,8 @@ import { useEditorStore } from '../../shared/stores';
 import FormButton from './components/FormButton.vue';
 import GenericField from './components/GenericField.vue';
 import CardGroup from './components/inputs/card/CardGroup.vue';
+import { Input } from '@/src/shared/interfaces';
+import { Card } from '@/src/shared/interfaces/card.interface';
 
 const editorStore = useEditorStore();
 
@@ -15,7 +17,7 @@ function actionOnForm(action: string) {
 }
 
 function addCard(type: string, index: number): void {
-    editorStore.addInput(type, index);
+    editorStore.addCard(type, index);
 }
 
 function deleteCard(cardIndex: number, fieldIndex: number): void {
@@ -71,7 +73,7 @@ function swapCard(event, fieldIndex) {
         >
             <CardGroup
                 v-if="field.type === 'cardGroup'"
-                :inputs="field.inputs"
+                :cards="(field.inputs as Card[])"
                 :field-name="field.name"
                 :field-index="field.index"
                 :type="field.inputType"
@@ -83,7 +85,7 @@ function swapCard(event, fieldIndex) {
             />
             <GenericField 
                 v-else
-                :inputs="field.inputs"
+                :inputs="(field.inputs as Input[])"
                 :field-name="field.name"
                 :field-index="field.index"
             />

@@ -5,6 +5,7 @@ defineProps<{
     placeholder: string;
     inputValue: string;
     insideCard?: boolean;
+    classList?: string;
 }>();
 
 const emit = defineEmits<{

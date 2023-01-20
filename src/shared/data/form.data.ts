@@ -1,4 +1,4 @@
-import { Form } from '../interfaces';
+import { Form } from '@/src/shared/interfaces';
 
 const textForm: Form = {
     type: 'text',
@@ -115,6 +115,12 @@ const chapterForm: Form = {
                     value: '',
                     placeholder: 'Saisissez...'
                 },
+                {
+                    type: 'text',
+                    label: 'Label',
+                    value: '',
+                    placeholder: 'Saisissez...'
+                }
             ]
         },
         {
@@ -148,6 +154,12 @@ const epocForm: Form = {
                 {
                     type: 'text',
                     label: 'Titre',
+                    value: '',
+                    placeholder: 'Saisissez...'
+                },
+                {
+                    type: 'text',
+                    label: 'Label',
                     value: '',
                     placeholder: 'Saisissez...'
                 },
@@ -341,7 +353,7 @@ const qcmForm: Form = {
             name: 'Réponses',
             index: 3,
             type: 'cardGroup',
-            inputType: 'check',
+            inputType: 'qcm',
             inputs: []
         },
         {

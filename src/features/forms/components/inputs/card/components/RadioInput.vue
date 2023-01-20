@@ -1,7 +1,13 @@
 <script setup lang="ts">
 
 defineProps<{
-    index: number;
+   inputValue: string;
+   label: string;
+   pos: number
+}>();
+
+const emit = defineEmits<{
+    (e: 'change', value: string): void;
 }>();
 
 </script>
@@ -13,18 +19,22 @@ defineProps<{
             <div class="radio-btn">
                 <input
                     id="left"
-                    :name="'pos' + index"
+                    :name="'pos' + pos"
                     type="radio"
                     class="radio-input"
+                    :checked="inputValue === '1'"
+                    @change="emit('change', '1')"
                 >
                 <label for="left">Choix gauche</label>
             </div>
             <div class="radio-btn">
                 <input
                     id="right"
-                    :name="'pos' + index"
+                    :name="'pos' + pos"
                     type="radio"
                     class="radio-input"
+                    :checked="inputValue === '2'"
+                    @change="emit('change', '2')"
                 >
                 <label for="right">Choix droite</label>
             </div>
@@ -34,7 +44,7 @@ defineProps<{
 
 <style scoped lang="scss">
 .radio {
-    margin: 0 1rem 1rem 1rem;
+    margin: 1rem 0 .5rem 0;
 
     .radio-group {
         margin-top: .5rem;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Position, connectionExists, getSimpleBezierPath, useVueFlow } from '@vue-flow/core';
+import { MarkerType, Position, connectionExists, getSimpleBezierPath, useVueFlow } from '@vue-flow/core';
 import { computed, reactive, ref, watch } from 'vue';
 
 const props = defineProps({
@@ -125,9 +125,14 @@ onConnectEnd(() => {
                     target: closest.node.id,
                     targetHandle: closest.handle.id,
                     updatable: true,
-                    style: { stroke: '#384257', strokeWidth: 2.5 }
+                    style: { stroke: '#384257', strokeWidth: 2.5 },
+                    markerEnd: { type: MarkerType.ArrowClosed, color: '#384257' },
                 },
             ]);
+            // document.querySelector('.vue-flow__handle-' + closest.handle.id)?.classList.add('connected');
+            // document.querySelector('.vue-flow__handle-' + closest.startHandle.handleId)?.classList.add('connected');
+            // console.log(closest.startHandle);
+            // console.log(closest.handle);
         }
     }
 });
