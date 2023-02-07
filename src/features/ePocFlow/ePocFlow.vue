@@ -9,7 +9,7 @@ import ChapterNode from './nodes/ChapterNode.vue';
 import ePocNode from './nodes/ePocNode.vue';
 import AddChapterNode from './nodes/AddChapterNode.vue';
 
-const { nodes, addNodes, addEdges, onConnect, vueFlowRef, project, findNode, setNodes, setEdges }  = useVueFlow();
+const { nodes, addNodes, addEdges, onConnect, vueFlowRef, project, findNode, setNodes, setEdges }  = useVueFlow({ id: 'main' });
 
 //TODO: find a way to ignore the onConnect here and only use the snap to handle one
 onConnect((params) => {
@@ -90,7 +90,6 @@ const onDrop = (event) => {
 function addNode(position, actions: SideAction[]) {
 
     let elements: NodeElement[] = [];
-
     
     const id = editorStore.generateId();
     const form = editorStore.getForm('screen');
@@ -102,6 +101,7 @@ function addNode(position, actions: SideAction[]) {
             form: editorStore.getForm(action.type),
             parentId: id
         });
+        editorStore.addElementToScreen(form, action);
     });
 
     const newNode = {
@@ -146,6 +146,7 @@ function addToExistingScreen(action : SideAction):boolean {
             });
             node.data.readyToDrop = false;
             document.querySelector('#node'+node.id).classList.remove('node-animate');
+            editorStore.addElementToScreen(node.data.form, action);
             return true;
         }
     }
@@ -165,7 +166,7 @@ function addChapter() {
         id: editorStore.generateId(),
         action: {
             type: 'chapter',
-            icon: 'icon-chapitre'    
+            icon: 'icon-chapitre'
         },
         form: editorStore.getForm('chapter'),
     };

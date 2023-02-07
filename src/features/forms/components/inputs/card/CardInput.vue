@@ -20,13 +20,21 @@ const emit = defineEmits<{
     (e: 'radioCheck', value: number): void;
 }>();
 
+const questions = ['qcm', 'dragdrop', 'reorder', 'swipe', 'list'];
+
+function isQuestion(type: string): boolean {
+    return questions.includes(type);
+}
+
 </script>
 
 <template>
     <Transition>
         <div class="card draggable-card">
-            <div class="card-header">
-                <h3>{{ card.label }} {{ pos }}</h3>
+            <div class="card-header" :class="{ 'border-bottom': card.type !== 'component', 'fixed': !isQuestion(card.action.type) }">
+                <div v-if="card.type === 'component'" class="form-icon"><i :class="card.action.icon"></i></div>
+                <h3 v-if="card.type === 'component'">{{ card.action.label }}</h3>
+                <h3 v-else>{{ card.label }} {{ pos }}</h3>
                 <div class="card-header-icon">
                     <i class="icon-supprimer delete" @click="emit('deleteCard')"></i>
                     <hr v-if="!(isLast && pos === 1)" class="vertical-separator">
@@ -37,7 +45,7 @@ const emit = defineEmits<{
                 </div>
             </div>
             
-            <div class="card-content">
+            <div v-if="card.type !== 'component'" class="card-content">
                 <GenericInput
                     v-for="(input, index) in card.inputs"
                     :key="index"
@@ -55,24 +63,34 @@ const emit = defineEmits<{
 </template>
 
 <style scoped lang="scss">
+.form-icon {
+    margin: .7rem .7rem .7rem 0;
+}
 .card {
-    border: 1px solid var(--border);
+    border: 2px solid var(--border);
     width: 25rem;
-    border-radius: 4px;
+    border-radius: 8px;
     margin-bottom: 1rem;
     transition: all .2s linear;
     &-header {
         padding: 0 .7rem;
-        border-bottom: 1px solid var(--border);
         display: flex;
         flex-direction: row;
         cursor: move;
+        &.border-bottom {
+            border-bottom: 2px solid var(--border);
+        }
+        &.fixed {
+            opacity: .7;
+            pointer-events: none;
+        }
         
         h3 {
             font-weight: bold;
             font-size: 1rem;
             margin: .7rem 0;
             flex-grow: 1;
+            margin: auto;
         }
         &-icon {
             display: flex;

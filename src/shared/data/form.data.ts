@@ -228,6 +228,12 @@ const screenForm: Form = {
                     placeholder: 'Saisissez...'
                 },
             ]
+        },
+        {
+            name: 'Composants',
+            type: 'cardGroup',
+            inputType: 'component',
+            inputs: []
         }
     ],
     buttons: [
