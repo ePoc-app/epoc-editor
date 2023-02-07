@@ -6,7 +6,7 @@ import { useVueFlow } from '@vue-flow/core';
 
 import { formsModel } from '@/src/shared/data/form.data';
 
-const { findNode } = useVueFlow();
+const { findNode } = useVueFlow({ id: 'main' });
 
 type uid = string;
 
@@ -108,9 +108,25 @@ export const useEditorStore = defineStore('editor', {
             console.log('node', node);
             this.closeFormPanel();
         },
-        addCard(type: string, fieldIndex: number):void {
+        addCard(type: string, fieldIndex: number): void {
             const newCard: Card = this.getCard(type);
             this.formPanel.form.fields[fieldIndex].inputs.push(newCard);
+        },
+        addElementToScreen(form: Form, action: SideAction): void {
+            const newCard: Card = this.getCard('component');
+            newCard.action = action;
+            form.fields[1].inputs.push(newCard);
+            console.log('action: ', action);
+        },
+        removeElementFromScreen(index: number): void {
+            const node = findNode(this.openedNodeId);
+            node.data.elements.splice(index, 1);
+        },
+        changeElementOrder(startIndex: number, finalIndex: number): void {
+            const node = findNode(this.openedNodeId);
+            const tmp = node.data.elements[startIndex];
+            node.data.elements[startIndex] = node.data.elements[finalIndex];
+            node.data.elements[finalIndex] = tmp;
         }
     }
 });
@@ -127,7 +143,13 @@ const cardsModel: Card[] = [
                 placeholder: 'Saisissez un objectif...',
                 value: ''
             }
-        ]
+        ],
+    },
+    {
+        type: 'component',
+        label: 'Composant',
+        placeholder: 'Ajouter un composant',
+        inputs: [],
     },
     {
         type: 'qcm',
@@ -256,7 +278,8 @@ const standardScreen: Screen[] = [
         actions: [
             {
                 icon: 'icon-texte',
-                type: 'text'
+                type: 'text',
+                label: 'Texte'
             }
         ]
     },
@@ -265,11 +288,13 @@ const standardScreen: Screen[] = [
         actions: [
             {
                 icon: 'icon-video',
-                type: 'video'
+                type: 'video',
+                label: 'Vidéo'
             },
             {
                 icon: 'icon-texte',
-                type: 'text'
+                type: 'text',
+                label: 'Texte'
             }
         ]
     },
@@ -278,11 +303,13 @@ const standardScreen: Screen[] = [
         actions: [
             {
                 icon: 'icon-audio',
-                type: 'audio'
+                type: 'audio',
+                label: 'Audio'
             },
             {
                 icon: 'icon-texte',
-                type: 'text'
+                type: 'text',
+                label: 'Texte'
             }
         ]
     }
@@ -292,54 +319,66 @@ const standardScreen: Screen[] = [
 const actionItems: SideAction[] = [
     {
         icon: 'icon-texte',
-        type: 'text'
+        type: 'text',
+        label: 'Texte'
         
     },
     {
         icon: 'icon-video',
-        type: 'video'
+        type: 'video',
+        label: 'Vidéo'
     },
     {
         icon: 'icon-audio',
-        type: 'audio'
+        type: 'audio',
+        label: 'Audio'
     },
     {
         icon: 'icon-question',
-        type: 'question'
+        type: 'question',
+        label: 'Question'
     },
     {
         icon: 'icon-condition',
-        type: 'condition'
+        type: 'condition',
+        label: 'Condition'
     },
     {
         icon: 'icon-javascript',
-        type: 'javascript'
+        type: 'javascript',
+        label: 'Javascript'
     },
     {
         icon: 'icon-modele',
-        type: 'model'
+        type: 'model',
+        label: 'Modèle'
     }
 ];
 
 const questions: SideAction[] = [
     {
         icon: 'icon-qcm',
-        type: 'qcm'
+        type: 'qcm',
+        label: 'QCM'
     },
     {
         icon: 'icon-dragdrop',
-        type: 'dragdrop'
+        type: 'dragdrop',
+        label: 'Drag & Drop'
     },
     {
         icon: 'icon-reorder',
-        type: 'reorder'
+        type: 'reorder',
+        label: 'Reorder'
     },
     {
         icon: 'icon-swipe',
-        type: 'swipe'
+        type: 'swipe',
+        label: 'Swipe'
     },
     {
         icon: 'icon-liste',
-        type: 'list'
+        type: 'list',
+        label: 'Liste déroulantes'
     }
 ];

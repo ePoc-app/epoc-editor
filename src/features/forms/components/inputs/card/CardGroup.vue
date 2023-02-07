@@ -42,6 +42,7 @@ const dragOptions = ref({
             handle=".card-header"
             ghost-class="ghost"
             v-bind="dragOptions"
+            filter=".fixed"
             @change="emit('swapCard', $event)"
             @start="drag = true"
             @end="drag = false"
@@ -61,7 +62,8 @@ const dragOptions = ref({
             </template>
         </draggable>
     </transition-group>
-    <AddCard 
+    <AddCard
+        v-if="type !== 'component'"
         :placeholder="'Ajouter'"
         class="add-card"
         @click="emit('addCard')"

@@ -215,6 +215,7 @@ hr {
   background-color: var(--node);
   border-radius: 8px;
   border: 1px solid var(--border);
+  transition: all .15s ease-in-out;
   
   :not(:first-child) {
       margin-top: .5rem;
@@ -228,7 +229,6 @@ hr {
 
   &-animate {
       padding: 1.5rem;
-      transition: all .15s ease-in-out;
   }
 
   &-creation-animation {
