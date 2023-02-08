@@ -110,6 +110,17 @@ export const useEditorStore = defineStore('editor', {
                     [{ id: nodeToDelete.id, type: 'remove' }],
                     nodes.value
                 );
+                if(nodeToDelete.type === 'chapter') {
+                    const chapters = nodes.value.filter(node => node.type === 'chapter');
+                    for(const chapter of chapters) {
+                        if(chapter.id > nodeToDelete.id) {
+                            chapter.position = {x: 0, y: chapter.position.y - 200};
+                            chapter.data.title = 'Chapitre ' + (Number(chapter.data.title.split(' ')[1]) - 1);
+                        }
+                    }
+                    findNode('2').position.y -= 200;
+                    this.chapters.splice(this.chapters.findIndex(chapter => chapter.id === nodeToDelete.id), 1);
+                }
             }
 
 
