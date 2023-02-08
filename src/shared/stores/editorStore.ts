@@ -2,11 +2,11 @@ import { defineStore } from 'pinia';
 import { fetchRecentProjects } from '@/src/shared/services';
 import { SideAction, Screen, ePocProject, NodeElement, Form, Card } from '@/src/shared/interfaces';
 import { toRaw } from 'vue';
-import { useVueFlow } from '@vue-flow/core';
+import { applyNodeChanges, useVueFlow } from '@vue-flow/core';
 
 import { formsModel } from '@/src/shared/data/form.data';
 
-const { findNode } = useVueFlow({ id: 'main' });
+const { findNode, nodes } = useVueFlow({ id: 'main' });
 
 type uid = string;
 
@@ -96,16 +96,24 @@ export const useEditorStore = defineStore('editor', {
             return structuredClone(toRaw(cardsModel.find(card => card.type === type)));
         },
         deleteCurrentElement(): void {
-            // const { applyNodeChanges } = useVueFlow();
-            // applyNodeChanges([
-            //     {
-            //         id: this.formPanel.openedElement.parentId,
-            //         type: 'remove',
-            //     }
-            // ]);
-            console.log('deleteCurrentElement', this.openedParentId);
-            const node = findNode(this.openedParentId);
-            console.log('node', node);
+            
+            const nodeToDelete = this.openedParentId ? findNode(this.openedParentId) : findNode(this.openedNodeId);
+
+            if(this.openedParentId && nodeToDelete.data.type === 'question' && nodeToDelete.data.elements.length > 1) {
+                for(const i in nodeToDelete.data.elements) {
+                    if(nodeToDelete.data.elements[i].id === this.openedNodeId) {
+                        this.removeElementFromScreen(Number(i));
+                    }
+                }
+            } else {
+                applyNodeChanges(
+                    [{ id: nodeToDelete.id, type: 'remove' }],
+                    nodes.value
+                );
+            }
+
+
+
             this.closeFormPanel();
         },
         addCard(type: string, fieldIndex: number): void {
@@ -116,11 +124,13 @@ export const useEditorStore = defineStore('editor', {
             const newCard: Card = this.getCard('component');
             newCard.action = action;
             form.fields[1].inputs.push(newCard);
-            console.log('action: ', action);
         },
         removeElementFromScreen(index: number): void {
-            const node = findNode(this.openedNodeId);
+            const node = this.openedParentId ? findNode(this.openedParentId) : findNode(this.openedNodeId);
             node.data.elements.splice(index, 1);
+            if(node.data.elements.length === 0) {
+                this.deleteCurrentElement();
+            }
         },
         changeElementOrder(startIndex: number, finalIndex: number): void {
             const node = findNode(this.openedNodeId);
