@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { Handle, useVueFlow } from '@vue-flow/core';
+import { Handle, getConnectedEdges, useVueFlow } from '@vue-flow/core';
 import ContentButton from '@/src/components/ContentButton.vue';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { NodeElement } from '@/src/shared/interfaces';
 import { Position } from '@vue-flow/core';
+import { connected } from 'process';
 
 const editorStore = useEditorStore();
 
@@ -58,7 +59,7 @@ function dragEnter(event) {
     counter ++;
 }
 
-const { nodes } = useVueFlow();
+const { nodes, edges, findNode, onConnect } = useVueFlow({ id: 'main' });
 
 function openForm(element: NodeElement) {
     editorStore.openFormPanel(element.id, element.form, element.parentId);
@@ -76,11 +77,19 @@ function openForm(element: NodeElement) {
 //     console.log('target', target.value);
 // });
 
+const isSource = ref(false);
+const isTarget = ref(false);
+
+onConnect((params) => {
+    if(params.source === props.id) isSource.value = true;
+    if(params.target === props.id) isTarget.value = true;
+});
+
 </script>
 
 <template>
     <p contenteditable="true" class="node-title">Screen</p>
-    <Handle type="target" :position="Position.Left" />
+    <Handle :class="{ 'connected': !isTarget }" type="target" :position="Position.Left" />
     <div
         :id="'node'+props.id"
         :class=" { 'active': editorStore.openedNodeId ? editorStore.openedNodeId === props.id : false }"
@@ -99,7 +108,7 @@ function openForm(element: NodeElement) {
             @click="openForm(element)"
         />
     </div>
-    <Handle type="source" :position="Position.Right" />
+    <Handle :class="{ 'connected': !isSource }" type="source" :position="Position.Right" />
 </template>
 
 <style scoped lang="scss">
@@ -113,6 +122,10 @@ function openForm(element: NodeElement) {
     &-right {
         right: -6px;
     }
+}
+
+.connected {
+    background-color: var(--editor-red);
 }
 .node-title {
     margin: .2rem;
