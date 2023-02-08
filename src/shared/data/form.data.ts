@@ -369,6 +369,18 @@ const qcmForm: Form = {
                 }
             ]
         }
+    ],
+    buttons: [
+        {
+            label: 'Supprimer',
+            icon: 'icon-supprimer',
+            action: 'delete'
+        },
+        {
+            label: 'Copier le lien',
+            icon: 'icon-copie',
+            action: 'copy'
+        },
     ]
 };
 
