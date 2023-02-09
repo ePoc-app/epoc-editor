@@ -29,7 +29,7 @@ const props = defineProps({
     },
 });
 
-const { getNodes, connectionStartHandle, onConnectEnd, addEdges, edges } = useVueFlow();
+const { getNodes, connectionStartHandle, onConnectEnd, addEdges, edges } = useVueFlow( { id: 'main' });
 
 const closest = reactive({
     node: null,

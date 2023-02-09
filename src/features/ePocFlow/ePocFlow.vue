@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { VueFlow, useVueFlow, Panel, PanelPosition, MarkerType, ConnectionMode } from '@vue-flow/core';
+import { VueFlow, useVueFlow, MarkerType, ConnectionMode } from '@vue-flow/core';
 import { markRaw, nextTick, watch } from 'vue';
 import ScreenNode from './nodes/ScreenNode.vue';
 import CustomConnectContent from './edges/CustomConnectContent.vue';
@@ -9,7 +9,7 @@ import ChapterNode from './nodes/ChapterNode.vue';
 import ePocNode from './nodes/ePocNode.vue';
 import AddChapterNode from './nodes/AddChapterNode.vue';
 
-const { nodes, addNodes, addEdges, onConnect, vueFlowRef, project, findNode, setNodes, setEdges }  = useVueFlow();
+const { nodes, addNodes, addEdges, onConnect, vueFlowRef, project, findNode }  = useVueFlow({ id: 'main' });
 
 //TODO: find a way to ignore the onConnect here and only use the snap to handle one
 onConnect((params) => {
@@ -89,8 +89,8 @@ const onDrop = (event) => {
 
 function addNode(position, actions: SideAction[]) {
 
+    const questionTypes = ['qcm', 'dragdrop', 'reorder', 'swipe', 'list'];
     let elements: NodeElement[] = [];
-
     
     const id = editorStore.generateId();
     const form = editorStore.getForm('screen');
@@ -102,13 +102,17 @@ function addNode(position, actions: SideAction[]) {
             form: editorStore.getForm(action.type),
             parentId: id
         });
+        editorStore.addElementToScreen(form, action);
     });
+
+    //? For the V0 the templates aren't editable
+    const type = questionTypes.includes(elements[0].action.type) ? 'question' : 'template';
 
     const newNode = {
         id: id,
         type: 'content',
         // Put animated: nodeIcons.length === 1 when implementing v2
-        data: { elements: elements, readyToDrop: false, animated: false, form: form },
+        data: { elements: elements, readyToDrop: false, animated: false, form: form, type: type },
         position,
         events: {
             click: () => {
@@ -146,16 +150,11 @@ function addToExistingScreen(action : SideAction):boolean {
             });
             node.data.readyToDrop = false;
             document.querySelector('#node'+node.id).classList.remove('node-animate');
+            editorStore.addElementToScreen(node.data.form, action);
             return true;
         }
     }
     return false;
-}
-
-//Temporary function
-function onDelete() {
-    setNodes([epoc, add]);
-    setEdges([mainEdge]);
 }
 
 function addChapter() {
@@ -165,7 +164,7 @@ function addChapter() {
         id: editorStore.generateId(),
         action: {
             type: 'chapter',
-            icon: 'icon-chapitre'    
+            icon: 'icon-chapitre'
         },
         form: editorStore.getForm('chapter'),
     };
@@ -206,9 +205,6 @@ function openForm(id: string, form: Form) {
         @dragover.prevent
         @dragenter.prevent
     >
-        <Panel :position="PanelPosition.TopRight" class="save-restore-controls">
-            <button style="background-color: #ff0000; padding: 1rem; border-radius: 8px; border: none; cursor: pointer; font-size: 1.2rem;" @click="onDelete">Delete all</button>
-        </Panel>
         <template #node-custom="{ id, data }">
             <ScreenNode :id="id" :data="data" />
         </template>

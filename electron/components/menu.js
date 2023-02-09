@@ -66,11 +66,18 @@ module.exports.setupMenu = function () {
                     click: function () {
                         BrowserWindow.getFocusedWindow().webContents.toggleDevTools();
                     }
+                },
+                {
+                    label: 'Reload',
+                    accelerator: 'CmdOrCtrl+R',
+                    click: function () {
+                        BrowserWindow.getFocusedWindow().webContents.reload();
+                    }
                 }
             ]
         }
     ];
 
     Menu.setApplicationMenu(Menu.buildFromTemplate(mainMenu));
-}
+};
 

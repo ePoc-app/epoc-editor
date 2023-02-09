@@ -228,6 +228,12 @@ const screenForm: Form = {
                     placeholder: 'Saisissez...'
                 },
             ]
+        },
+        {
+            name: 'Composants',
+            type: 'cardGroup',
+            inputType: 'component',
+            inputs: []
         }
     ],
     buttons: [
@@ -363,6 +369,18 @@ const qcmForm: Form = {
                 }
             ]
         }
+    ],
+    buttons: [
+        {
+            label: 'Supprimer',
+            icon: 'icon-supprimer',
+            action: 'delete'
+        },
+        {
+            label: 'Copier le lien',
+            icon: 'icon-copie',
+            action: 'copy'
+        },
     ]
 };
 

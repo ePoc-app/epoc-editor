@@ -2,11 +2,11 @@ import { defineStore } from 'pinia';
 import { fetchRecentProjects } from '@/src/shared/services';
 import { SideAction, Screen, ePocProject, NodeElement, Form, Card } from '@/src/shared/interfaces';
 import { toRaw } from 'vue';
-import { useVueFlow } from '@vue-flow/core';
+import { applyNodeChanges, useVueFlow } from '@vue-flow/core';
 
 import { formsModel } from '@/src/shared/data/form.data';
 
-const { findNode } = useVueFlow();
+const { findNode, nodes } = useVueFlow({ id: 'main' });
 
 type uid = string;
 
@@ -96,21 +96,58 @@ export const useEditorStore = defineStore('editor', {
             return structuredClone(toRaw(cardsModel.find(card => card.type === type)));
         },
         deleteCurrentElement(): void {
-            // const { applyNodeChanges } = useVueFlow();
-            // applyNodeChanges([
-            //     {
-            //         id: this.formPanel.openedElement.parentId,
-            //         type: 'remove',
-            //     }
-            // ]);
-            console.log('deleteCurrentElement', this.openedParentId);
-            const node = findNode(this.openedParentId);
-            console.log('node', node);
+            
+            const nodeToDelete = this.openedParentId ? findNode(this.openedParentId) : findNode(this.openedNodeId);
+
+            if(this.openedParentId && nodeToDelete.data.type === 'question' && nodeToDelete.data.elements.length > 1) {
+                for(const i in nodeToDelete.data.elements) {
+                    if(nodeToDelete.data.elements[i].id === this.openedNodeId) {
+                        this.removeElementFromScreen(Number(i));
+                    }
+                }
+            } else {
+                applyNodeChanges(
+                    [{ id: nodeToDelete.id, type: 'remove' }],
+                    nodes.value
+                );
+                if(nodeToDelete.type === 'chapter') {
+                    const chapters = nodes.value.filter(node => node.type === 'chapter');
+                    for(const chapter of chapters) {
+                        if(chapter.id > nodeToDelete.id) {
+                            chapter.position = {x: 0, y: chapter.position.y - 200};
+                            chapter.data.title = 'Chapitre ' + (Number(chapter.data.title.split(' ')[1]) - 1);
+                        }
+                    }
+                    findNode('2').position.y -= 200;
+                    this.chapters.splice(this.chapters.findIndex(chapter => chapter.id === nodeToDelete.id), 1);
+                }
+            }
+
+
+
             this.closeFormPanel();
         },
-        addCard(type: string, fieldIndex: number):void {
+        addCard(type: string, fieldIndex: number): void {
             const newCard: Card = this.getCard(type);
             this.formPanel.form.fields[fieldIndex].inputs.push(newCard);
+        },
+        addElementToScreen(form: Form, action: SideAction): void {
+            const newCard: Card = this.getCard('component');
+            newCard.action = action;
+            form.fields[1].inputs.push(newCard);
+        },
+        removeElementFromScreen(index: number): void {
+            const node = this.openedParentId ? findNode(this.openedParentId) : findNode(this.openedNodeId);
+            node.data.elements.splice(index, 1);
+            if(node.data.elements.length === 0) {
+                this.deleteCurrentElement();
+            }
+        },
+        changeElementOrder(startIndex: number, finalIndex: number): void {
+            const node = findNode(this.openedNodeId);
+            const tmp = node.data.elements[startIndex];
+            node.data.elements[startIndex] = node.data.elements[finalIndex];
+            node.data.elements[finalIndex] = tmp;
         }
     }
 });
@@ -127,7 +164,13 @@ const cardsModel: Card[] = [
                 placeholder: 'Saisissez un objectif...',
                 value: ''
             }
-        ]
+        ],
+    },
+    {
+        type: 'component',
+        label: 'Composant',
+        placeholder: 'Ajouter un composant',
+        inputs: [],
     },
     {
         type: 'qcm',
@@ -256,7 +299,8 @@ const standardScreen: Screen[] = [
         actions: [
             {
                 icon: 'icon-texte',
-                type: 'text'
+                type: 'text',
+                label: 'Texte'
             }
         ]
     },
@@ -265,11 +309,13 @@ const standardScreen: Screen[] = [
         actions: [
             {
                 icon: 'icon-video',
-                type: 'video'
+                type: 'video',
+                label: 'Vidéo'
             },
             {
                 icon: 'icon-texte',
-                type: 'text'
+                type: 'text',
+                label: 'Texte'
             }
         ]
     },
@@ -278,11 +324,13 @@ const standardScreen: Screen[] = [
         actions: [
             {
                 icon: 'icon-audio',
-                type: 'audio'
+                type: 'audio',
+                label: 'Audio'
             },
             {
                 icon: 'icon-texte',
-                type: 'text'
+                type: 'text',
+                label: 'Texte'
             }
         ]
     }
@@ -292,54 +340,66 @@ const standardScreen: Screen[] = [
 const actionItems: SideAction[] = [
     {
         icon: 'icon-texte',
-        type: 'text'
+        type: 'text',
+        label: 'Texte'
         
     },
     {
         icon: 'icon-video',
-        type: 'video'
+        type: 'video',
+        label: 'Vidéo'
     },
     {
         icon: 'icon-audio',
-        type: 'audio'
+        type: 'audio',
+        label: 'Audio'
     },
     {
         icon: 'icon-question',
-        type: 'question'
+        type: 'question',
+        label: 'Question'
     },
     {
         icon: 'icon-condition',
-        type: 'condition'
+        type: 'condition',
+        label: 'Condition'
     },
     {
         icon: 'icon-javascript',
-        type: 'javascript'
+        type: 'javascript',
+        label: 'Javascript'
     },
     {
         icon: 'icon-modele',
-        type: 'model'
+        type: 'model',
+        label: 'Modèle'
     }
 ];
 
 const questions: SideAction[] = [
     {
         icon: 'icon-qcm',
-        type: 'qcm'
+        type: 'qcm',
+        label: 'QCM'
     },
     {
         icon: 'icon-dragdrop',
-        type: 'dragdrop'
+        type: 'dragdrop',
+        label: 'Drag & Drop'
     },
     {
         icon: 'icon-reorder',
-        type: 'reorder'
+        type: 'reorder',
+        label: 'Reorder'
     },
     {
         icon: 'icon-swipe',
-        type: 'swipe'
+        type: 'swipe',
+        label: 'Swipe'
     },
     {
         icon: 'icon-liste',
-        type: 'list'
+        type: 'list',
+        label: 'Liste déroulantes'
     }
 ];

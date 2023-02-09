@@ -5,5 +5,5 @@ export interface Field {
     index?: number;
     type?: string;
     inputType?: string;
-    inputs: Input[] | Card[];
+    inputs: (Input | Card)[];
 }
