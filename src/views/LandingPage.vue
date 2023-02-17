@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { router } from '../router';
+import { router } from '@/src/router';
 import { useEditorStore, useProjectStore } from '@/src/shared/stores';
+import { editorService } from '@/src/shared/services';
 
 
 const editorStore = useEditorStore();
-editorStore.fetchRecentProjects();
-
 const projectStore = useProjectStore();
+
+function newProject() {
+  editorService.openEpocProject()
+}
 
 function createProject() {
     router.push('/editor');
@@ -20,30 +23,36 @@ function createProject() {
             <img src="/img/epoc.svg" />
             <img src="/img/inria.svg" />
         </div>
-        <div class="buttons">
-            <button class="btn btn-outline btn-large" @click="projectStore.openEPOC">
-                <i class="icon-ouvrir" />
-                Ouvrir un projet existant
+        <div v-if="!editorStore.loading">
+          <div class="buttons">
+            <button class="btn btn-outline btn-large" @click="newProject">
+              <i class="icon-ouvrir" />
+              Ouvrir un projet existant
             </button>
             <button class="btn btn-outline btn-large" @click="createProject">
-                <i class="icon-creer" />
-                Créer un nouveau projet
+              <i class="icon-creer" />
+              Créer un nouveau projet
             </button>
-        </div>
-        <div>
+          </div>
+          <div>
             <h3>Fichiers récents</h3>
             <hr class="separator" />
             <div v-for="epoc of editorStore.recentProjects" :key="epoc.name" class="card-list-item">
-                <div class="card-icon">
-                    <i class="icon-fichier" />
-                </div>
-                <p>{{ epoc.name }}</p>
-                <small>{{ epoc.modified }}</small>
-                <hr class="vertical-separator" />
-                <div class="btn-open">
-                    Ouvrir
-                </div>
+              <div class="card-icon">
+                <i class="icon-fichier" />
+              </div>
+              <p>{{ epoc.name }}</p>
+              <small>{{ epoc.modified }}</small>
+              <hr class="vertical-separator" />
+              <div class="btn-open">
+                Ouvrir
+              </div>
             </div>
+          </div>
+        </div>
+        <div class="loading" v-if="editorStore.loading">
+          <div class="spinner"></div>
+          <span>Chargement de "{{editorStore.currentProject.filepath}}"</span>
         </div>
     </div>
 </template>
@@ -66,5 +75,14 @@ function createProject() {
         margin-bottom: 2rem;
     }
 
+    .loading{
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .spinner{
+      margin-right: 1em;
+    }
 }
 </style>

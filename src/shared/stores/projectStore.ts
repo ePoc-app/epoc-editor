@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import { ePocProject } from '@/src/shared/interfaces';
-import { openEPOC } from '@/src/shared/services';
 
 interface ProjectState {
     project: ePocProject;
@@ -17,8 +16,5 @@ export const useProjectStore = defineStore('project', {
         
     }),
     actions: {
-        async openEPOC() {
-            this.project = await openEPOC();
-        }
     }
 });

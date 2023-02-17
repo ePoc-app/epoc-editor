@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
-import { fetchRecentProjects } from '@/src/shared/services';
-import { SideAction, Screen, ePocProject, NodeElement, Form, Card } from '@/src/shared/interfaces';
+import { SideAction, Screen, ePocRecentProject, NodeElement, Form, Card, ePocProject } from '@/src/shared/interfaces';
 import { toRaw } from 'vue';
 import { applyNodeChanges, useVueFlow } from '@vue-flow/core';
 
@@ -11,7 +10,9 @@ const { findNode, nodes } = useVueFlow({ id: 'main' });
 type uid = string;
 
 interface EditorState {
-    recentProjects: ePocProject[];
+    loading:boolean;
+    recentProjects: ePocRecentProject[];
+    currentProject: ePocProject;
     floatingMenu: boolean;
     modelMenu: boolean;
     formPanel: {
@@ -28,7 +29,9 @@ interface EditorState {
 
 export const useEditorStore = defineStore('editor', {
     state: (): EditorState => ({
+        loading: false,
         recentProjects: [],
+        currentProject: null,
         floatingMenu: false,
         modelMenu: false,
         formPanel: {
@@ -58,12 +61,6 @@ export const useEditorStore = defineStore('editor', {
     },
     
     actions: {
-        async fetchRecentProjects(): Promise<void> {
-            this.isLoading = true;
-            // ? recentProjects is a proxy is it a problem ?
-            this.recentProjects = await fetchRecentProjects();
-            this.isLoading = false;
-        },
         dismissModals(): void {
             this.floatingMenu = false;
             this.modelMenu = false;

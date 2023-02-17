@@ -365,3 +365,31 @@ textarea {
   background-position: right 50% top 50%;
   background-size: 1.5rem auto;
 }
+
+.spinner {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1.5em;
+  height: 1.5em;
+  &:after {
+    content: " ";
+    display: block;
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 50%;
+    border-width: 0.2em;
+    border-style: solid;
+    border-color: var(--editor-grayblue) transparent var(--editor-grayblue) transparent;
+    animation: spin 1.2s linear infinite;
+    box-sizing: border-box;
+  }
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+}

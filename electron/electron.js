@@ -6,6 +6,7 @@ const { createSplashWindow } = require('./components/splash');
 const { setupIpcListener } = require('./components/ipc');
 const { waitEvent, waitAll, wait} = require('./components/utils');
 const { setupMenu } = require('./components/menu');
+const { cleanAllWorkdir } = require('./components/file');
 
 // This method will be called when Electron has finished initialization and is ready to create browser windows.
 app.whenReady().then(() => {
@@ -19,7 +20,7 @@ app.whenReady().then(() => {
     // Display splash screen for minimum 2s then display main window
     waitAll([
         waitEvent(mainWindow, 'ready-to-show'),
-        wait(2000)
+        wait(200)
     ]).then(() => {
         splashWindow.destroy();
         mainWindow.show();
@@ -32,6 +33,7 @@ app.whenReady().then(() => {
 
     // Quit when all the window are closed, except on macOS. There, it's common for applications and their menu bar to stay active until the user quits explicitly with Cmd + Q.
     app.on('window-all-closed', () => {
+        cleanAllWorkdir();
         if(process.platform !== 'darwin') {
             app.quit();
         }

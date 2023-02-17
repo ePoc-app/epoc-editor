@@ -1,5 +1,6 @@
 const { ipcMain } = require('electron');
-const { getRecentFiles, openEPOC } = require('./file')
+const { getRecentFiles, openEpocProject, unzipEpocProject } = require('./file')
+const {wait} = require('./utils');
 
 /**
  * Setup ipc listeners that are received from renderer process
@@ -18,7 +19,12 @@ module.exports.setupIpcListener = function (targetWindow) {
         targetWindow.webContents.send('getRecentProjects', getRecentFiles());
     });
 
-    ipcMain.on('openEPOC', () => {
-        targetWindow.webContents.send('sendEPOC', openEPOC());
+    ipcMain.on('openEpocProject', () => {
+        targetWindow.webContents.send('epocProjectOpened', openEpocProject());
+    });
+
+    ipcMain.on('unzipEpocProject', async (event, epocProjectPath) => {
+        await wait(5000);
+        targetWindow.webContents.send('epocProjectReady', unzipEpocProject(epocProjectPath));
     });
 }
