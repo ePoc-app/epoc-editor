@@ -24,7 +24,7 @@ module.exports.setupIpcListener = function (targetWindow) {
     });
 
     ipcMain.on('unzipEpocProject', async (event, epocProjectPath) => {
-        await wait(5000);
+        await wait(1000);
         targetWindow.webContents.send('epocProjectReady', unzipEpocProject(epocProjectPath));
     });
 }

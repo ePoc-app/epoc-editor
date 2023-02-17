@@ -20,6 +20,9 @@ api.receive('epocProjectOpened', (epocProjectPath: string) => {
         workdir: null
     }
     editorStore.loading = true;
+    if (router.currentRoute.value.path !== '/landingpage') {
+        router.push('/landingpage')
+    }
     api.send('unzipEpocProject', epocProjectPath);
 });
 

@@ -1,4 +1,5 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain} = require('electron');
+const {openEpocProject} = require('./file');
 
 module.exports.setupMenu = function () {
     const mainMenu = [
@@ -27,7 +28,7 @@ module.exports.setupMenu = function () {
                     label: 'Ouvrir',
                     accelerator: 'CmdOrCtrl+O',
                     click: function () {
-                        BrowserWindow.getFocusedWindow().webContents.send('open');
+                        BrowserWindow.getFocusedWindow().webContents.send('epocProjectOpened', openEpocProject());
                     }
                 },
                 {
