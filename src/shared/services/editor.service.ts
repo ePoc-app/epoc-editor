@@ -13,6 +13,10 @@ api.receive('getRecentProjects', (data: string) => {
     editorStore.recentProjects = JSON.parse(data) as ePocRecentProject[];
 });
 
+api.receive('epocProjectNew', () => {
+    newEpocProject();
+});
+
 api.receive('epocProjectOpened', (epocProjectPath: string) => {
     if (!epocProjectPath) return;
     editorStore.currentProject =  {
@@ -20,15 +24,14 @@ api.receive('epocProjectOpened', (epocProjectPath: string) => {
         workdir: null
     }
     editorStore.loading = true;
-    if (router.currentRoute.value.path !== '/landingpage') {
-        router.push('/landingpage')
-    }
-    api.send('unzipEpocProject', epocProjectPath);
+    router.push('/landingpage').then(() => {
+        api.send('unzipEpocProject', epocProjectPath);
+    })
 });
 
 api.receive('epocProjectReady', (data: string) => {
     const ePocProject = JSON.parse(data) as ePocProject;
-    if (!ePocProject.filepath || !ePocProject.workdir) {
+    if (!ePocProject.workdir) {
         editorStore.loading = false;
         return;
     }
@@ -37,6 +40,14 @@ api.receive('epocProjectReady', (data: string) => {
         editorStore.loading = false;
     });
 });
+
+function newEpocProject(): void {
+    editorStore.loading = true;
+    router.push('/landingpage').then(() => {
+        api.send('newEpocProject');
+    })
+
+}
 
 function fetchRecentProjects(): void {
     api.send('getRecentProjects');
@@ -47,6 +58,7 @@ function openEpocProject(): void {
 }
 
 export const editorService = {
+    newEpocProject,
     openEpocProject,
     fetchRecentProjects
 }

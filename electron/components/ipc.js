@@ -1,12 +1,11 @@
-const { ipcMain } = require('electron');
-const { getRecentFiles, openEpocProject, unzipEpocProject } = require('./file')
-const {wait} = require('./utils');
+const { ipcMain, BrowserWindow} = require('electron');
+const { getRecentFiles, openEpocProject, unzipEpocProject, newEpocProject} = require('./file');
 
 /**
  * Setup ipc listeners that are received from renderer process
  * @param targetWindow
  */
-module.exports.setupIpcListener = function (targetWindow) {
+setupIpcListener = function (targetWindow) {
     ipcMain.on('msg', (event, data) => {
         console.log(data);
     });
@@ -16,15 +15,31 @@ module.exports.setupIpcListener = function (targetWindow) {
     });
 
     ipcMain.on('getRecentProjects', () => {
-        targetWindow.webContents.send('getRecentProjects', getRecentFiles());
+        sendToFrontend(targetWindow, 'getRecentProjects', getRecentFiles());
     });
 
     ipcMain.on('openEpocProject', () => {
-        targetWindow.webContents.send('epocProjectOpened', openEpocProject());
+        sendToFrontend(targetWindow, 'epocProjectOpened', openEpocProject());
     });
 
     ipcMain.on('unzipEpocProject', async (event, epocProjectPath) => {
-        await wait(1000);
-        targetWindow.webContents.send('epocProjectReady', unzipEpocProject(epocProjectPath));
+        sendToFrontend(targetWindow, 'epocProjectReady', await unzipEpocProject(epocProjectPath));
     });
+
+    ipcMain.on('newEpocProject', async () => {
+        sendToFrontend(targetWindow, 'epocProjectReady', await newEpocProject());
+    });
+}
+
+sendToFrontend = function(targetWindow, channel, data) {
+    if (typeof data === 'string') {
+        targetWindow.webContents.send(channel, data);
+    } else {
+        targetWindow.webContents.send(channel, JSON.stringify(data));
+    }
+}
+
+module.exports = {
+    setupIpcListener,
+    sendToFrontend
 }

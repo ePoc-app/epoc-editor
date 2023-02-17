@@ -1,5 +1,6 @@
 const { app, BrowserWindow, Menu, ipcMain} = require('electron');
-const {openEpocProject} = require('./file');
+const { openEpocProject, createWorkDir} = require('./file');
+const { sendToFrontend } = require('./ipc');
 
 module.exports.setupMenu = function () {
     const mainMenu = [
@@ -21,14 +22,14 @@ module.exports.setupMenu = function () {
                     label: 'Nouveau',
                     accelerator: 'CmdOrCtrl+N',
                     click: function () {
-                        BrowserWindow.getFocusedWindow().webContents.send('new');
+                        sendToFrontend(BrowserWindow.getFocusedWindow(),'epocProjectNew');
                     }
                 },
                 {
                     label: 'Ouvrir',
                     accelerator: 'CmdOrCtrl+O',
                     click: function () {
-                        BrowserWindow.getFocusedWindow().webContents.send('epocProjectOpened', openEpocProject());
+                        sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectOpened', openEpocProject());
                     }
                 },
                 {

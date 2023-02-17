@@ -31,7 +31,7 @@ export const useEditorStore = defineStore('editor', {
     state: (): EditorState => ({
         loading: false,
         recentProjects: [],
-        currentProject: null,
+        currentProject: {filepath: null, workdir: null},
         floatingMenu: false,
         modelMenu: false,
         formPanel: {

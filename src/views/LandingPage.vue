@@ -8,11 +8,11 @@ const editorStore = useEditorStore();
 const projectStore = useProjectStore();
 
 function newProject() {
-  editorService.openEpocProject()
+  editorService.openEpocProject();
 }
 
 function createProject() {
-    router.push('/editor');
+    editorService.newEpocProject();
 }
 
 </script>
@@ -52,7 +52,8 @@ function createProject() {
         </div>
         <div class="loading" v-if="editorStore.loading">
           <div class="spinner"></div>
-          <span>Chargement de "{{editorStore.currentProject.filepath}}"</span>
+          <span v-if="editorStore.currentProject.filepath">Chargement de "{{editorStore.currentProject.filepath}}"</span>
+          <span v-else>Chargement de l'ePoc</span>
         </div>
     </div>
 </template>
