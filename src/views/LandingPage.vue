@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { router } from '@/src/router';
 import { useEditorStore, useProjectStore } from '@/src/shared/stores';
 import { editorService } from '@/src/shared/services';
 
@@ -12,7 +11,7 @@ function newProject() {
 }
 
 function createProject() {
-    editorService.newEpocProject();
+  editorService.newEpocProject();
 }
 
 </script>

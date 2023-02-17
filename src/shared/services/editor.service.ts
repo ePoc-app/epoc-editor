@@ -1,7 +1,7 @@
 import { ApiInterface } from '@/src/shared/interfaces/api.interface';
 import { router } from '@/src/router';
 import { useEditorStore } from '@/src/shared/stores';
-import {ePocProject, ePocRecentProject} from '@/src/shared/interfaces';
+import { ePocProject, ePocRecentProject } from '@/src/shared/interfaces';
 
 declare var api: ApiInterface;
 

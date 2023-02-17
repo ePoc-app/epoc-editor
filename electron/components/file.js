@@ -4,7 +4,7 @@ const fs = require('fs');
 const os = require('os');
 const AdmZip = require('adm-zip')
 const glob = require('glob');
-const {wait} = require('./utils');
+const { wait } = require('./utils');
 
 /**
  * Get the list of recently opened ePoc projects

@@ -1,5 +1,5 @@
-const { ipcMain, BrowserWindow} = require('electron');
-const { getRecentFiles, openEpocProject, unzipEpocProject, newEpocProject} = require('./file');
+const { ipcMain } = require('electron');
+const { getRecentFiles, openEpocProject, unzipEpocProject, newEpocProject } = require('./file');
 
 /**
  * Setup ipc listeners that are received from renderer process
