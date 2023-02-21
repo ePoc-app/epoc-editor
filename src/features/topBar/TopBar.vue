@@ -1,13 +1,37 @@
 <script setup lang="ts">
 import TopActionButton from './TopActionButton.vue';
+import { useEditorStore } from '@/src/shared/stores';
+import { ref } from 'vue';
+
+const editorStore = useEditorStore();
+
+const savedSince = ref(since(editorStore.currentProject.modified));
+
+editorStore.$subscribe(() => {
+    savedSince.value = since(editorStore.currentProject.modified);
+});
+
+function since(date) {
+    const milliseconds = Math.abs(Date.now() - new Date(date).getTime());
+    const secs = Math.floor(Math.abs(milliseconds) / 1000);
+    const mins = Math.floor(secs / 60);
+    const hours = Math.floor(mins / 60);
+    const days = Math.floor(hours / 24);
+
+    return days > 1 ? `${days} jours` : hours > 1 ? `${hours} heures` : mins > 1 ? `${mins} mins` : 'moins d\'une minute';
+}
+
+setInterval(() => {
+    savedSince.value = since(editorStore.currentProject.modified);
+}, 60000);
 </script>
 
 <template>
     <div class="top-bar">
         <div class="top-bar-content">
             <div class="top-bar-title">
-                <h3>L'intelligence artificielle pour tous</h3>
-                <small>Dernière sauvegarde: Il y a 3 minutes</small>
+                <h3>{{ editorStore.currentProject.name }}</h3>
+                <small>Dernière sauvegarde: Il y a {{ savedSince }}</small>
             </div>
             <div class="top-bar-actions">
                 <TopActionButton icon="icon-chevron" text-before="100%" />

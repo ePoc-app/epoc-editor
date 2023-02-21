@@ -1,9 +1,10 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const { sendToFrontend } = require('./ipc');
-const { pickEpocProject, getRecentFiles } = require('./file');
+const { pickEpocProject, getRecentFiles, saveEpocProject } = require('./file');
+const store = require('./store');
 
 module.exports.setupMenu = function () {
-    const mainMenu = [
+    const mainMenuTemplate = [
         {
             label: 'App',
             submenu: [
@@ -46,15 +47,20 @@ module.exports.setupMenu = function () {
                     ]
                 },
                 {
+                    id: 'save',
                     label: 'Save',
                     accelerator: 'CmdOrCtrl+S',
-                    click: function () {
-                        BrowserWindow.getFocusedWindow().webContents.send('save');
+                    enabled: false,
+                    click: async function () {
+                        await saveEpocProject(store.state.currentProject.workdir, store.state.currentProject.filepath);
+                        sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectSaved');
                     }
                 },
                 {
+                    id: 'saveAs',
                     label: 'Save as',
                     accelerator: 'Shift+CmdOrCtrl+S',
+                    enabled: false,
                     click: function () {
                         BrowserWindow.getFocusedWindow().webContents.send('save-as');
                     }
@@ -93,6 +99,16 @@ module.exports.setupMenu = function () {
         }
     ];
 
-    Menu.setApplicationMenu(Menu.buildFromTemplate(mainMenu));
+    const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
+
+    Menu.setApplicationMenu(mainMenu);
+
+    // Update menu on different state
+    store.em.on('stateUpdated', () => {
+        const isProjectOpened = store.state.currentProject.filepath && store.state.currentProject.workdir;
+        mainMenu.getMenuItemById('save').enabled = isProjectOpened;
+        mainMenu.getMenuItemById('saveAs').enabled = isProjectOpened;
+    });
+
 };
 

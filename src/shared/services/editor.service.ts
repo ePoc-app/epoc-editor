@@ -17,6 +17,10 @@ api.receive('epocProjectNew', () => {
     newEpocProject();
 });
 
+api.receive('epocProjectSaved', () => {
+    editorStore.currentProject.modified = new Date().toISOString();
+});
+
 api.receive('epocProjectPicked', (data: string) => {
     const currentProject =  JSON.parse(data) as ePocProject;
     if (!currentProject || !currentProject.filepath) return;

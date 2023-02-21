@@ -94,7 +94,20 @@ const openEpocProject = async function (filepath) {
     const ellapsed = performance.now() - startTime;
     if (ellapsed < 500) await wait(500 - ellapsed);
 
-    return {filepath, workdir};
+    return project;
+};
+
+/**
+ * Zip the content of an ePoc project file from the project workdir
+ * @returns {boolean}
+ */
+const saveEpocProject = async function (workdir, filepath) {
+    if (!filepath) return null;
+
+    const zip = new AdmZip();
+    glob.sync(path.join(workdir, '*'));
+    zip.addLocalFolder(workdir, '/');
+    await zip.writeZipPromise(filepath, null);
 };
 
 /**
@@ -133,5 +146,6 @@ module.exports = {
     newEpocProject,
     pickEpocProject,
     openEpocProject,
+    saveEpocProject,
     cleanAllWorkdir
 };

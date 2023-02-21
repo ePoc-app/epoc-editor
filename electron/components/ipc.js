@@ -1,5 +1,6 @@
 const { ipcMain } = require('electron');
 const { getRecentFiles, pickEpocProject, openEpocProject, newEpocProject } = require('./file');
+const store = require('./store');
 
 /**
  * Setup ipc listeners that are received from renderer process
@@ -23,11 +24,15 @@ const setupIpcListener = function (targetWindow) {
     });
 
     ipcMain.on('openEpocProject', async (event, epocProjectPath) => {
-        sendToFrontend(targetWindow, 'epocProjectReady', await openEpocProject(epocProjectPath));
+        const project = await openEpocProject(epocProjectPath);
+        sendToFrontend(targetWindow, 'epocProjectReady', project);
+        store.updateState('currentProject', project);
     });
 
     ipcMain.on('newEpocProject', async () => {
-        sendToFrontend(targetWindow, 'epocProjectReady', await newEpocProject());
+        const project = await newEpocProject();
+        sendToFrontend(targetWindow, 'epocProjectReady', project);
+        store.updateState('currentProject', project);
     });
 };
 
