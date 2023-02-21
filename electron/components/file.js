@@ -54,7 +54,7 @@ const newEpocProject = async function () {
 
 /**
  * Open a dialog to choose an ePoc file or project and return its content
- * @returns {{filepath: string, workdir: null, name: null, modified: Date}}
+ * @returns {{filepath: string, workdir: null, name: null, modified: Date} | null}
  */
 const pickEpocProject = function () {
     const files = dialog.showOpenDialogSync(BrowserWindow.getFocusedWindow(), {
@@ -98,16 +98,42 @@ const openEpocProject = async function (filepath) {
 };
 
 /**
- * Zip the content of an ePoc project file from the project workdir
- * @returns {boolean}
+ * Save the content of the ePoc project workdir to the currently opened .epoc file or call for saveAs
+ * @returns {string}
  */
-const saveEpocProject = async function (workdir, filepath) {
-    if (!filepath) return null;
+const saveEpocProject = async function (project) {
+    if (!project.filepath) {
+        return saveAsEpocProject(project);
+    }
+
+    return zipEpocProject(project.workdir, project.filepath);
+};
+
+/**
+ * Save the content of the ePoc project workdir to a new .epoc file
+ * @returns {string}
+ */
+const saveAsEpocProject = async function (project) {
+    const files = dialog.showSaveDialogSync(BrowserWindow.getFocusedWindow(), {
+        filters: [{ name: 'ePoc', extensions: ['epoc']}]
+    });
+
+    if(!files) return null;
+
+    return zipEpocProject(project.workdir, files);
+};
+
+/**
+ * Zip the content of an ePoc project file from the project workdir
+ * @returns {string}
+ */
+const zipEpocProject = async function (workdir, filepath) {
+    if (!filepath || !workdir) return null;
 
     const zip = new AdmZip();
-    glob.sync(path.join(workdir, '*'));
     zip.addLocalFolder(workdir, '/');
     await zip.writeZipPromise(filepath, null);
+    return filepath;
 };
 
 /**
@@ -147,5 +173,6 @@ module.exports = {
     pickEpocProject,
     openEpocProject,
     saveEpocProject,
+    saveAsEpocProject,
     cleanAllWorkdir
 };

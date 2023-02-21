@@ -1,6 +1,7 @@
 const { ipcMain } = require('electron');
-const { getRecentFiles, pickEpocProject, openEpocProject, newEpocProject } = require('./file');
+const { getRecentFiles, pickEpocProject, openEpocProject, newEpocProject, saveEpocProject } = require('./file');
 const store = require('./store');
+const path = require('path');
 
 /**
  * Setup ipc listeners that are received from renderer process
@@ -34,6 +35,10 @@ const setupIpcListener = function (targetWindow) {
         sendToFrontend(targetWindow, 'epocProjectReady', project);
         store.updateState('currentProject', project);
     });
+
+    ipcMain.on('saveEpocProject', async () => {
+        updateSavedProject(targetWindow, await saveEpocProject(store.state.currentProject));
+    });
 };
 
 const sendToFrontend = function(targetWindow, channel, data) {
@@ -44,7 +49,21 @@ const sendToFrontend = function(targetWindow, channel, data) {
     }
 };
 
+const updateSavedProject = function (targetWindow, filepath) {
+    if (filepath) {
+        const project = {
+            name: path.basename(filepath),
+            filepath: filepath,
+            workdir: store.state.currentProject.workdir,
+            modified: new Date().toISOString()
+        };
+        store.updateState('currentProject', project);
+        sendToFrontend(targetWindow, 'epocProjectSaved', project);
+    }
+};
+
 module.exports = {
     setupIpcListener,
-    sendToFrontend
+    sendToFrontend,
+    updateSavedProject
 };

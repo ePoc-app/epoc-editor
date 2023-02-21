@@ -17,8 +17,10 @@ api.receive('epocProjectNew', () => {
     newEpocProject();
 });
 
-api.receive('epocProjectSaved', () => {
-    editorStore.currentProject.modified = new Date().toISOString();
+api.receive('epocProjectSaved', (data: string) => {
+    const currentProject =  JSON.parse(data) as ePocProject;
+    if (!currentProject || !currentProject.filepath) return;
+    editorStore.currentProject = currentProject;
 });
 
 api.receive('epocProjectPicked', (data: string) => {
@@ -63,8 +65,13 @@ function openEpocProject(project): void {
     });
 }
 
+function saveEpocProject(): void {
+    api.send('saveEpocProject');
+}
+
 export const editorService = {
     newEpocProject,
     pickEpocProject,
-    openEpocProject
+    openEpocProject,
+    saveEpocProject
 };
