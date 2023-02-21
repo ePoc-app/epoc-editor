@@ -1,9 +1,6 @@
-export interface ePocRecentProject {
+export interface ePocProject {
     name: string;
     modified: string;
-}
-
-export interface ePocProject {
     filepath: string;
     workdir: string;
 }

@@ -1,32 +1,26 @@
 import { ApiInterface } from '@/src/shared/interfaces/api.interface';
 import { router } from '@/src/router';
 import { useEditorStore } from '@/src/shared/stores';
-import { ePocProject, ePocRecentProject } from '@/src/shared/interfaces';
+import { ePocProject } from '@/src/shared/interfaces';
 
-declare var api: ApiInterface;
+declare const api: ApiInterface;
 
 const editorStore = useEditorStore();
 
 fetchRecentProjects();
 
 api.receive('getRecentProjects', (data: string) => {
-    editorStore.recentProjects = JSON.parse(data) as ePocRecentProject[];
+    editorStore.recentProjects = JSON.parse(data) as ePocProject[];
 });
 
 api.receive('epocProjectNew', () => {
     newEpocProject();
 });
 
-api.receive('epocProjectOpened', (epocProjectPath: string) => {
-    if (!epocProjectPath) return;
-    editorStore.currentProject =  {
-        filepath: epocProjectPath,
-        workdir: null
-    }
-    editorStore.loading = true;
-    router.push('/landingpage').then(() => {
-        api.send('unzipEpocProject', epocProjectPath);
-    })
+api.receive('epocProjectPicked', (data: string) => {
+    const currentProject =  JSON.parse(data) as ePocProject;
+    if (!currentProject || !currentProject.filepath) return;
+    openEpocProject(currentProject);
 });
 
 api.receive('epocProjectReady', (data: string) => {
@@ -45,7 +39,7 @@ function newEpocProject(): void {
     editorStore.loading = true;
     router.push('/landingpage').then(() => {
         api.send('newEpocProject');
-    })
+    });
 
 }
 
@@ -53,12 +47,20 @@ function fetchRecentProjects(): void {
     api.send('getRecentProjects');
 }
 
-function openEpocProject(): void {
-    api.send('openEpocProject');
+function pickEpocProject(): void {
+    api.send('pickEpocProject');
+}
+
+function openEpocProject(project): void {
+    editorStore.currentProject = project;
+    editorStore.loading = true;
+    router.push('/landingpage').then(() => {
+        api.send('openEpocProject', project.filepath);
+    });
 }
 
 export const editorService = {
     newEpocProject,
-    openEpocProject,
-    fetchRecentProjects
-}
+    pickEpocProject,
+    openEpocProject
+};

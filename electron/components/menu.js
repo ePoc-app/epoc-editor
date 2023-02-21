@@ -1,6 +1,6 @@
 const { app, BrowserWindow, Menu } = require('electron');
-const { openEpocProject } = require('./file');
 const { sendToFrontend } = require('./ipc');
+const { pickEpocProject, getRecentFiles } = require('./file');
 
 module.exports.setupMenu = function () {
     const mainMenu = [
@@ -29,8 +29,21 @@ module.exports.setupMenu = function () {
                     label: 'Ouvrir',
                     accelerator: 'CmdOrCtrl+O',
                     click: function () {
-                        sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectOpened', openEpocProject());
+                        sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectPicked', pickEpocProject());
                     }
+                },
+                {
+                    label: 'Projet récents',
+                    submenu: [
+                        ...getRecentFiles().map((project) => {
+                            return {
+                                label: project.filepath,
+                                click: function () {
+                                    sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectPicked', project);
+                                }
+                            };
+                        })
+                    ]
                 },
                 {
                     label: 'Save',

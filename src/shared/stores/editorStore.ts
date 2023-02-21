@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { SideAction, Screen, ePocRecentProject, NodeElement, Form, Card, ePocProject } from '@/src/shared/interfaces';
+import { SideAction, Screen, ePocProject, NodeElement, Form, Card } from '@/src/shared/interfaces';
 import { toRaw } from 'vue';
 import { applyNodeChanges, useVueFlow } from '@vue-flow/core';
 
@@ -11,7 +11,7 @@ type uid = string;
 
 interface EditorState {
     loading:boolean;
-    recentProjects: ePocRecentProject[];
+    recentProjects: ePocProject[];
     currentProject: ePocProject;
     floatingMenu: boolean;
     modelMenu: boolean;
@@ -31,7 +31,7 @@ export const useEditorStore = defineStore('editor', {
     state: (): EditorState => ({
         loading: false,
         recentProjects: [],
-        currentProject: {filepath: null, workdir: null},
+        currentProject: {filepath: null, workdir: null, name: null, modified: null},
         floatingMenu: false,
         modelMenu: false,
         formPanel: {
