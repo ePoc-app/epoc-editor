@@ -5,7 +5,7 @@ const { getRecentFiles, openEpocProject, unzipEpocProject, newEpocProject } = re
  * Setup ipc listeners that are received from renderer process
  * @param targetWindow
  */
-setupIpcListener = function (targetWindow) {
+const setupIpcListener = function (targetWindow) {
     ipcMain.on('msg', (event, data) => {
         console.log(data);
     });
@@ -29,17 +29,17 @@ setupIpcListener = function (targetWindow) {
     ipcMain.on('newEpocProject', async () => {
         sendToFrontend(targetWindow, 'epocProjectReady', await newEpocProject());
     });
-}
+};
 
-sendToFrontend = function(targetWindow, channel, data) {
+const sendToFrontend = function(targetWindow, channel, data) {
     if (typeof data === 'string') {
         targetWindow.webContents.send(channel, data);
     } else {
         targetWindow.webContents.send(channel, JSON.stringify(data));
     }
-}
+};
 
 module.exports = {
     setupIpcListener,
     sendToFrontend
-}
+};

@@ -18,17 +18,17 @@ module.exports.createSplashWindow = function () {
 
     splashWindow.loadFile(
         isDev
-        ? `${path.join(__dirname, '../../public/splash.html')}`
-        : `${path.join(__dirname, '../../dist/splash.html')}`
+            ? `${path.join(__dirname, '../../public/splash.html')}`
+            : `${path.join(__dirname, '../../dist/splash.html')}`
     );
     splashWindow.center();
     const appInfo = isDev ? {
         version: app.getVersion(),
         buildNumber: 'dev'
-    } : require('../../dist/appInfo.json')
+    } : require('../../dist/appInfo.json');
     splashWindow.webContents.executeJavaScript(`
         document.getElementById('appVersion').innerHTML = "v${appInfo.version}"
         document.getElementById('buildVersion').innerHTML = "(${appInfo.buildNumber})"
     `);
-    return splashWindow
-}
+    return splashWindow;
+};

@@ -4,8 +4,8 @@
  * @returns {Promise<Awaited<unknown>[]>}
  */
 module.exports.waitAll = function (promises) {
-    return Promise.all(promises)
-}
+    return Promise.all(promises);
+};
 
 /**
  * Wait a certain amount of time (in milliseconds)
@@ -14,7 +14,7 @@ module.exports.waitAll = function (promises) {
  */
 module.exports.wait = function (ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-}
+};
 
 /**
  * Converts an event listener that fire once to a promise
@@ -25,7 +25,7 @@ module.exports.wait = function (ms) {
 module.exports.waitEvent = function (target, event) {
     return new Promise((resolve) => {
         target.once(event, () => {
-            resolve()
-        })
-    })
-}
+            resolve();
+        });
+    });
+};

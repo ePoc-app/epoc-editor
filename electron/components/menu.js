@@ -1,5 +1,5 @@
-const { app, BrowserWindow, Menu, ipcMain} = require('electron');
-const { openEpocProject, createWorkDir} = require('./file');
+const { app, BrowserWindow, Menu } = require('electron');
+const { openEpocProject } = require('./file');
 const { sendToFrontend } = require('./ipc');
 
 module.exports.setupMenu = function () {
