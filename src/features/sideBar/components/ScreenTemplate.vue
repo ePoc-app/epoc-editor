@@ -25,7 +25,7 @@ function dragStart(event) {
     <div class="screen" :class="{ 'dragging': dragging }">
         <small>{{ title }}</small>
         <div
-            class="node screen-node"
+            class="node node-list screen-node"
             draggable="true"
             @dragstart="dragStart($event)"
             @dragend="dragging = false"
