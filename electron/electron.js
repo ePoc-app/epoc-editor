@@ -5,7 +5,6 @@ const { createMainWindow } = require('./components/main');
 const { createSplashWindow } = require('./components/splash');
 const { setupIpcListener } = require('./components/ipc');
 const { waitEvent, waitAll, wait} = require('./components/utils');
-const { setupMenu } = require('./components/menu');
 const { cleanAllWorkdir } = require('./components/file');
 const { cleanPreview } = require('./components/preview');
 
@@ -15,8 +14,6 @@ app.whenReady().then(() => {
     const splashWindow = createSplashWindow();
 
     setupIpcListener(mainWindow);
-
-    setupMenu();
 
     // Display splash screen for minimum 2s then display main window
     waitAll([

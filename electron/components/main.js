@@ -1,5 +1,6 @@
 const { BrowserWindow } = require('electron');
 const path = require('path');
+const { setupMenu } = require('./menu');
 
 /**
  * Create the app main window
@@ -19,6 +20,10 @@ module.exports.createMainWindow = function () {
             contextIsolation: true,
             preload: path.join(__dirname, '../preload.js')
         }
+    });
+
+    mainWindow.on('focus', () => {
+        setupMenu();
     });
 
     // load the index.html of the app.

@@ -8,6 +8,7 @@ module.exports.setupMenu = function () {
         {
             label: 'App',
             submenu: [
+                {label: 'About Application', selector: 'orderFrontStandardAboutPanel:'},
                 {
                     label: 'Quit',
                     accelerator: 'CmdOrCtrl+Q',
@@ -50,7 +51,7 @@ module.exports.setupMenu = function () {
                     id: 'save',
                     label: 'Save',
                     accelerator: 'CmdOrCtrl+S',
-                    enabled: false,
+                    enabled: !!(store.state.currentProject && store.state.currentProject.workdir),
                     click: async function () {
                         updateSavedProject(BrowserWindow.getFocusedWindow(),await saveEpocProject(store.state.currentProject));
                     }
@@ -59,7 +60,7 @@ module.exports.setupMenu = function () {
                     id: 'saveAs',
                     label: 'Save as',
                     accelerator: 'Shift+CmdOrCtrl+S',
-                    enabled: false,
+                    enabled: !!(store.state.currentProject && store.state.currentProject.workdir),
                     click: async function () {
                         updateSavedProject(BrowserWindow.getFocusedWindow(), await saveAsEpocProject(store.state.currentProject));
                     }
@@ -79,7 +80,6 @@ module.exports.setupMenu = function () {
         }, {
             label: 'Help',
             submenu: [
-                {label: 'About Application', selector: 'orderFrontStandardAboutPanel:'},
                 {
                     label: 'Dev Tools',
                     accelerator: 'CmdOrCtrl+D',
@@ -104,11 +104,49 @@ module.exports.setupMenu = function () {
 
     // Update menu on different state
     store.em.on('stateUpdated', () => {
-        const isProjectOpened = store.state.currentProject.workdir;
+        const isProjectOpened = store.state.currentProject && store.state.currentProject.workdir;
         mainMenu.getMenuItemById('save').enabled = isProjectOpened;
         mainMenu.getMenuItemById('saveAs').enabled = isProjectOpened;
     });
 
+};
+
+module.exports.setupMenuPreview = function () {
+    const previewMenuTemplate = [
+        {
+            label: 'App',
+            submenu: [
+                {label: 'About Application', selector: 'orderFrontStandardAboutPanel:'},
+                {
+                    label: 'Quit',
+                    accelerator: 'CmdOrCtrl+Q',
+                    click: function () {
+                        app.quit();
+                    }
+                }
+            ]
+        }, {
+            label: 'Preview',
+            submenu: [
+                {
+                    label: 'Reload',
+                    accelerator: 'CmdOrCtrl+R',
+                    click: function () {
+                        BrowserWindow.getFocusedWindow().webContents.reload();
+                    }
+                },
+                {
+                    label: 'Dev Tools',
+                    accelerator: 'CmdOrCtrl+D',
+                    click: function () {
+                        BrowserWindow.getFocusedWindow().webContents.toggleDevTools();
+                    }
+                }
+            ]
+        }
+    ];
+    const previewMenu = Menu.buildFromTemplate(previewMenuTemplate);
+    Menu.setApplicationMenu(previewMenu);
 };
 
 

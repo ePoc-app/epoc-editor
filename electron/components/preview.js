@@ -91,6 +91,11 @@ async function createPreviewWindow(server, contentPath) {
         });
     }
 
+    previewWindow.on('focus', () => {
+        const { setupMenuPreview } = require('./menu');
+        setupMenuPreview();
+    });
+
     await previewWindow.reload();
     await previewWindow.loadURL(`http://localhost:${server.address().port}/${contentPath}`);
     await previewWindow.focus();
