@@ -1,4 +1,4 @@
-const { dialog, BrowserWindow} = require('electron');
+const { dialog, BrowserWindow, shell} = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
@@ -131,9 +131,38 @@ const zipEpocProject = async function (workdir, filepath) {
     if (!filepath || !workdir) return null;
 
     const zip = new AdmZip();
-    zip.addLocalFolder(workdir, '/');
+    zip.addLocalFolder(workdir, '/', (entry) => {
+        const excluded = ['.DS_Store', '__MACOSX', '.git'];
+        return excluded.every(e => entry.indexOf(e) === -1) ;
+    });
     await zip.writeZipPromise(filepath, null);
     return filepath;
+};
+
+/**
+ * Export the content of an ePoc next to the .epoc file
+ * @param {string} workdir the path to the workdir
+ * @param {string} filepath the path to the .epoc project file
+ * @return {string|null}
+ */
+const exportProject = async function (workdir, filepath) {
+    const defaultPath = filepath ? path.join(path.dirname(filepath), path.basename(filepath, path.extname(filepath)) + '.zip') : '';
+
+    const exportPath = dialog.showSaveDialogSync(BrowserWindow.getFocusedWindow(), {
+        defaultPath: defaultPath,
+        filters: [{ name: 'zip', extensions: ['zip']}]
+    });
+
+    if(!exportPath) return null;
+
+    const zip = new AdmZip();
+    zip.addLocalFolder(workdir, '/', (entry) => {
+        const excluded = ['project.json','.DS_Store', '__MACOSX', '.git'];
+        return excluded.every(e => entry.indexOf(e) === -1) ;
+    });
+    await zip.writeZipPromise(exportPath, null);
+    shell.showItemInFolder(exportPath);
+    return exportPath;
 };
 
 /**
@@ -174,5 +203,6 @@ module.exports = {
     openEpocProject,
     saveEpocProject,
     saveAsEpocProject,
+    exportProject,
     cleanAllWorkdir
 };

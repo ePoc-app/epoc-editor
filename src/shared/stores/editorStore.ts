@@ -15,6 +15,7 @@ interface EditorState {
     currentProject: ePocProject;
     saving: boolean;
     loadingPreview: boolean;
+    exporting:boolean;
     floatingMenu: boolean;
     modelMenu: boolean;
     formPanel: {
@@ -36,6 +37,7 @@ export const useEditorStore = defineStore('editor', {
         currentProject: {filepath: null, workdir: null, name: null, modified: null},
         saving: false,
         loadingPreview: false,
+        exporting: false,
         floatingMenu: false,
         modelMenu: false,
         formPanel: {

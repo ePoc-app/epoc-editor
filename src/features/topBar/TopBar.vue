@@ -43,7 +43,7 @@ setInterval(() => {
                 <hr class="vertical-separator">
                 <TopActionButton icon="icon-save" text="Sauvegarder" :disabled="editorStore.saving" @click="editorService.saveEpocProject" />
                 <TopActionButton icon="icon-play" text="Aperçu" :disabled="editorStore.loadingPreview" @click="editorService.runPreview()" />
-                <TopActionButton icon="icon-export" :disabled="editorStore.loading" text="Exporter archive" />
+                <TopActionButton icon="icon-export" text="Exporter archive" :disabled="editorStore.exporting" @click="editorService.exportProject()" />
             </div>
         </div>
     </div>

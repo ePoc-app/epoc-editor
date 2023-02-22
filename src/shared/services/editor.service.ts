@@ -46,6 +46,10 @@ api.receive('previewReady', () => {
     editorStore.loadingPreview = false;
 });
 
+api.receive('projectExported', () => {
+    editorStore.exporting = false;
+});
+
 function newEpocProject(): void {
     editorStore.loading = true;
     router.push('/landingpage').then(() => {
@@ -80,10 +84,16 @@ function runPreview(): void {
     api.send('runPreview');
 }
 
+function exportProject(): void {
+    editorStore.exporting = true;
+    api.send('exportProject');
+}
+
 export const editorService = {
     newEpocProject,
     pickEpocProject,
     openEpocProject,
     saveEpocProject,
-    runPreview
+    runPreview,
+    exportProject
 };

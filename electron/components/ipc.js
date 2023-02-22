@@ -2,7 +2,7 @@ const { ipcMain } = require('electron');
 const path = require('path');
 const store = require('./store');
 const { runPreview } = require('./preview');
-const { getRecentFiles, pickEpocProject, openEpocProject, newEpocProject, saveEpocProject } = require('./file');
+const { getRecentFiles, pickEpocProject, openEpocProject, newEpocProject, saveEpocProject, exportProject } = require('./file');
 
 /**
  * Setup ipc listeners that are received from renderer process
@@ -44,6 +44,11 @@ const setupIpcListener = function (targetWindow) {
     ipcMain.on('runPreview', async (event, contentPath) => {
         await runPreview(store.state.currentProject.workdir, contentPath);
         sendToFrontend(targetWindow, 'previewReady');
+    });
+
+    ipcMain.on('exportProject', async () => {
+        await exportProject(store.state.currentProject.workdir, store.state.currentProject.filepath);
+        sendToFrontend(targetWindow, 'projectExported');
     });
 };
 
