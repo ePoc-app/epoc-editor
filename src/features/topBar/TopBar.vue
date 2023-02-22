@@ -1,15 +1,36 @@
 <script setup lang="ts">
 import TopActionButton from './TopActionButton.vue';
+import TopActionDropdown from './TopActionDropdown.vue';
 import { useEditorStore } from '@/src/shared/stores';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { editorService } from '@/src/shared/services';
+import { useVueFlow } from '@vue-flow/core';
 
 const editorStore = useEditorStore();
+const { zoomTo, fitView, onViewportChangeEnd }  = useVueFlow({ id: 'main' });
 
 const savedSince = ref(since(editorStore.currentProject.modified));
 
 editorStore.$subscribe(() => {
     savedSince.value = since(editorStore.currentProject.modified);
+});
+
+const zoom = ref(1);
+const zoomString = computed(() => zoom.value === 0 ? 'Ajuster' : `${Math.round(zoom.value * 100)}%`);
+
+zoomTo(1);
+
+function updateZoom(val) {
+    zoom.value = val;
+    if (val === 0) {
+        fitView({duration: 300});
+    } else {
+        zoomTo(val, {duration: 300});
+    }
+}
+
+onViewportChangeEnd ((event) => {
+    zoom.value = event.zoom;
 });
 
 function since(date) {
@@ -36,7 +57,7 @@ setInterval(() => {
                 <small>Dernière sauvegarde : {{ savedSince }}</small>
             </div>
             <div class="top-bar-actions">
-                <TopActionButton icon="icon-chevron" text-before="100%" />
+                <TopActionDropdown icon="icon-chevron" :text-before="zoomString" :input-value="zoom" @change="updateZoom" />
                 <hr class="vertical-separator">
                 <TopActionButton icon="icon-arriere" />
                 <TopActionButton icon="icon-avant" />
