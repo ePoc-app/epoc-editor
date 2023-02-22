@@ -92,16 +92,17 @@ export const useEditorStore = defineStore('editor', {
         getCard(type: string): Card {
             return structuredClone(toRaw(cardsModel.find(card => card.type === type)));
         },
-        deleteCurrentElement(): void {
+        deleteElement(id: string): void {
             
-            const nodeToDelete = this.openedParentId ? findNode(this.openedParentId) : findNode(this.openedNodeId);
+            const nodeToDelete = findNode(id);
 
-            if(this.openedParentId && nodeToDelete.data.type === 'question' && nodeToDelete.data.elements.length > 1) {
-                for(const i in nodeToDelete.data.elements) {
-                    if(nodeToDelete.data.elements[i].id === this.openedNodeId) {
-                        this.removeElementFromScreen(Number(i));
+            if(!nodeToDelete){
+                const parentNode = findNode(this.openedParentId);
+                parentNode.data.elements.forEach((value, index) => {
+                    if(value.id === id) {
+                        this.removeElementFromScreen(index, this.openedParentId);
                     }
-                }
+                });
             } else {
                 applyNodeChanges(
                     [{ id: nodeToDelete.id, type: 'remove' }],
@@ -119,32 +120,42 @@ export const useEditorStore = defineStore('editor', {
                     this.chapters.splice(this.chapters.findIndex(chapter => chapter.id === nodeToDelete.id), 1);
                 }
             }
-
-
-
             this.closeFormPanel();
         },
         addCard(type: string, fieldIndex: number): void {
             const newCard: Card = this.getCard(type);
             this.formPanel.form.fields[fieldIndex].inputs.push(newCard);
         },
-        addElementToScreen(form: Form, action: SideAction): void {
+        addElementToScreen(form: Form, action: SideAction, index: number): void {
             const newCard: Card = this.getCard('component');
             newCard.action = action;
-            form.fields[1].inputs.push(newCard);
-        },
-        removeElementFromScreen(index: number): void {
-            const node = this.openedParentId ? findNode(this.openedParentId) : findNode(this.openedNodeId);
-            node.data.elements.splice(index, 1);
-            if(node.data.elements.length === 0) {
-                this.deleteCurrentElement();
+            console.log('adding to screen: ', action);
+            if(index !== -1) {
+                form.fields[1].inputs.splice(index, 0, newCard);
+            } else {
+                form.fields[1].inputs.push(newCard);
             }
         },
-        changeElementOrder(startIndex: number, finalIndex: number): void {
-            const node = findNode(this.openedNodeId);
+        removeElementFromScreen(index: number, parentNodeId): void {
+            const node = findNode(parentNodeId);
+            console.log('removing from screen');
+
+            console.log('node before:', node.data.elements);
+            node.data.elements.splice(index, 1);
+            console.log('node after:', node.data.elements);
+            console.log('form before:', node.data.form.fields[1].inputs);
+            node.data.form.fields[1].inputs.splice(index, 1);
+            console.log('form after:', node.data.form.fields[1].inputs);
+            if(node.data.elements.length === 0) {
+                this.deleteElement(parentNodeId);
+            }
+        },
+        changeElementOrder(startIndex: number, finalIndex: number, parentNodeId: string): void {
+            const node = findNode(parentNodeId);
             const tmp = node.data.elements[startIndex];
-            node.data.elements[startIndex] = node.data.elements[finalIndex];
-            node.data.elements[finalIndex] = tmp;
+
+            node.data.elements.splice(startIndex, 1);
+            node.data.elements.splice(finalIndex, 0, tmp);
         }
     }
 });

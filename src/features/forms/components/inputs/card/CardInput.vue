@@ -31,7 +31,7 @@ function isQuestion(type: string): boolean {
 <template>
     <Transition>
         <div class="card draggable-card">
-            <div class="card-header" :class="{ 'border-bottom': card.type !== 'component', 'fixed': !isQuestion(card.action.type) }">
+            <div class="card-header" :class="{ 'border-bottom': card.type !== 'component', 'fixed': card.action && !isQuestion(card.action.type) }">
                 <div v-if="card.type === 'component'" class="form-icon"><i :class="card.action.icon"></i></div>
                 <h3 v-if="card.type === 'component'">{{ card.action.label }}</h3>
                 <h3 v-else>{{ card.label }} {{ pos }}</h3>

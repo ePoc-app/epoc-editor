@@ -4,6 +4,7 @@ import { useEditorStore } from '../../../shared/stores';
 import { Ref, ref } from 'vue';
 import { Screen, SideAction } from '../../../shared/interfaces';
 import SideActionButtonV0 from './SideActionButtonV0.vue';
+import draggable from 'vuedraggable';
 
 const editorStore = useEditorStore();
 
@@ -30,6 +31,17 @@ function dragStart(event, screen) {
 }
 
 const displayScreen = ref(true);
+
+const dragOptions = {
+    group: {
+        name: 'node',
+        pull: 'clone',
+        put: false,
+    },
+    disabled: false,
+    sort: false,
+    ghostClass: 'ghost',
+};
 
 </script>
 
@@ -63,20 +75,38 @@ const displayScreen = ref(true);
             </div>
         </div>
         <div v-else class="questions">
-            <div class="col-left">
-                <SideActionButtonV0
-                    v-for="question in questionsLeft"
-                    :key="question.type"
-                    :side-action="question"
-                />
-            </div>
-            <div class="col-right">
-                <SideActionButtonV0
-                    v-for="question in questionsRight"
-                    :key="question.type"
-                    :side-action="question"
-                />
-            </div>
+            <draggable
+                v-bind="dragOptions"
+                key="draggable"
+                class="col col-left"
+                :model-value="questionsLeft"
+                item-key="id"
+            >
+                <template #item="{ element, index }">
+                    <div>
+                        <SideActionButtonV0
+                            :key="index"
+                            :side-action="element"
+                        />
+                    </div>
+                </template>
+            </draggable>
+            <draggable
+                v-bind="dragOptions"
+                key="draggable"
+                class="col col-right"
+                :model-value="questionsRight"
+                item-key="id"
+            >
+                <template #item="{ element, index }">
+                    <div>
+                        <SideActionButtonV0
+                            :key="index"
+                            :side-action="element"
+                        />
+                    </div>
+                </template>
+            </draggable>
         </div>
     </div>
 </template>
@@ -113,7 +143,9 @@ const displayScreen = ref(true);
         display: flex;
         flex-direction: row;
         .col {
+            display: flex;
             flex-direction: column;
+            gap: 1.5rem;
             &-left {
                 margin-right: 3.5rem;
             }
@@ -151,5 +183,9 @@ const displayScreen = ref(true);
             }
         }
     }
+}
+
+.ghost {
+    opacity: .5;
 }
 </style>

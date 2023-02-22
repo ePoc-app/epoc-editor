@@ -42,7 +42,7 @@ function switchSelection() {
             <button :class="{'tab-button-active': epocStore.screensModel.personnalSelected}" class="tab-button tab-button-right" @click="switchSelection">Personnel</button>
         </div>
         <div class="screens">
-            <div class="col-left">
+            <div class="col col-left">
                 <ScreenNode 
                     v-for="(screen, index) of leftCol"
                     :key="index"
@@ -51,7 +51,7 @@ function switchSelection() {
                     @drag-start="dragStart($event, screen)"
                 />
             </div>
-            <div class="col-right">
+            <div class="col col-right">
                 <ScreenNode 
                     v-for="(screen, index) of rightCol"
                     :key="index"
@@ -84,7 +84,6 @@ function switchSelection() {
         
         .col {
             flex-direction: column;
-
             &-left {
                 margin-right: 1.5rem;
             }

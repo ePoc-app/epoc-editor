@@ -17,7 +17,7 @@ const emit = defineEmits<{
     (e: 'deleteCard', index: number): void;
     (e: 'moveUpCard', index: number): void;
     (e: 'moveDownCard', index: number): void;
-    (e: 'swapCard', event): void;
+    (e: 'changeCards', event): void;
 }>();
 
 const drag = ref(false);
@@ -34,34 +34,31 @@ const dragOptions = ref({
 <template>
     <h3 v-if="fieldName" class="field-title"><span v-if="fieldIndex" class="field-index">{{ fieldIndex }}. </span>{{ fieldName }}</h3>
     <hr v-if="fieldName" class="separator">
-    <transition-group>
-        <draggable
-            key="draggable"
-            :model-value="cards"
-            item-key="index"
-            handle=".card-header"
-            ghost-class="ghost"
-            v-bind="dragOptions"
-            filter=".fixed"
-            @change="emit('swapCard', $event)"
-            @start="drag = true"
-            @end="drag = false"
-        >
-            <template #item="{element, index}">
-                <CardInput
-                    :key="index"
-                    class="list-group-item"
-                    :pos="index + 1"
-                    :card="element"
-                    :is-last="index === cards.length - 1"
-                    @input="element.value = $event"
-                    @delete-card="emit('deleteCard', index)"
-                    @move-up-card="emit('moveUpCard', index)"
-                    @move-down-card="emit('moveDownCard', index)"
-                />
-            </template>
-        </draggable>
-    </transition-group>
+    <draggable
+        key="draggable"
+        :model-value="cards"
+        item-key="index"
+        handle=".card-header"
+        v-bind="dragOptions"
+        filter=".fixed"
+        @change="emit('changeCards', $event)"
+        @start="drag = true"
+        @end="drag = false"
+    >
+        <template #item="{element, index}">
+            <CardInput
+                :key="index"
+                class="list-group-item"
+                :pos="index + 1"
+                :card="element"
+                :is-last="index === cards.length - 1"
+                @input="element.value = $event"
+                @delete-card="emit('deleteCard', index)"
+                @move-up-card="emit('moveUpCard', index)"
+                @move-down-card="emit('moveDownCard', index)"
+            />
+        </template>
+    </draggable>
     <AddCard
         v-if="type !== 'component'"
         :placeholder="'Ajouter'"

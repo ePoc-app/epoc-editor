@@ -11,7 +11,7 @@ const editorStore = useEditorStore();
 function actionOnForm(action: string) {
     switch (action) {
     case 'delete':
-        editorStore.deleteCurrentElement();
+        editorStore.deleteElement(editorStore.openedNodeId);
         break;
     }
 }
@@ -24,7 +24,8 @@ function deleteCard(cardIndex: number, fieldIndex: number, type: string): void {
     editorStore.formPanel.form.fields[fieldIndex].inputs.splice(cardIndex ,1);
 
     if(type === 'component') {
-        editorStore.removeElementFromScreen(cardIndex);
+        const parentNodeId = editorStore.openedParentId ? editorStore.openedParentId : editorStore.openedNodeId;
+        editorStore.removeElementFromScreen(cardIndex, parentNodeId);
     }
 }
 
@@ -35,7 +36,7 @@ function moveUpCard(cardIndex, fieldIndex, type: string) {
     inputs[cardIndex-1] = temp;
 
     if(type === 'component') {
-        editorStore.changeElementOrder(cardIndex, cardIndex-1);
+        editorStore.changeElementOrder(cardIndex, cardIndex-1, editorStore.openedNodeId);
     }
 }
 
@@ -46,21 +47,21 @@ function moveDownCard(cardIndex, fieldIndex, type: string) {
     inputs[cardIndex+1] = temp;
 
     if(type === 'component') {
-        editorStore.changeElementOrder(cardIndex, cardIndex+1);
+        editorStore.changeElementOrder(cardIndex, cardIndex+1, editorStore.openedNodeId);
     }
 }
 
-function swapCard(event, fieldIndex, type: string) {
+function changeCards(event, fieldIndex, type: string) {
     const oldIndex = event.moved.oldIndex;
     const newIndex = event.moved.newIndex;
     const inputs = editorStore.formPanel.form.fields[fieldIndex].inputs;
 
-    let temp = inputs[oldIndex];
-    inputs[oldIndex] = inputs[newIndex];
-    inputs[newIndex] = temp;
+    const tmp = inputs[oldIndex];
+    inputs.splice(oldIndex, 1);
+    inputs.splice(newIndex, 0, tmp);
 
     if(type === 'component') {
-        editorStore.changeElementOrder(oldIndex, newIndex);
+        editorStore.changeElementOrder(oldIndex, newIndex, editorStore.openedNodeId);
     }
 }
 
@@ -97,7 +98,7 @@ function swapCard(event, fieldIndex, type: string) {
                 @delete-card="deleteCard($event, index, field.inputType)"
                 @move-up-card="moveUpCard($event, index, field.inputType)"
                 @move-down-card="moveDownCard($event, index, field.inputType)"
-                @swap-card="swapCard($event, index, field.inputType)"
+                @change-cards="changeCards($event, index, field.inputType)"
             />
             <GenericField 
                 v-else

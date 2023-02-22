@@ -54,15 +54,6 @@ const mainEdge = {
 
 const elements = [epoc, add, mainEdge];
 
-//? Use this to detect intersections(for creating screen);
-// onNodeDrag(({ intersections }) => {
-//     const intersectionIds = intersections.map((intersection) => intersection.id);
-
-//     getNodes.value.forEach((node) => {
-//         const isIntersecting = intersectionIds.includes(node.id);
-//     });
-// });
-
 const onDrop = (event) => {
     const { left, top } = vueFlowRef.value.getBoundingClientRect();
 
@@ -71,21 +62,69 @@ const onDrop = (event) => {
         y: event.clientY - top,
     });
 
-    const data = event.dataTransfer.getData('sideAction');
-    const isScreen = event.dataTransfer.getData('isScreen');
-
-    const actions = JSON.parse(data);
-
-    // not sure if this is better than transfer the isScreen in all the case and use it as a boolean here
-    if(isScreen === 'true') {
-        addNode(position, actions);
-    } else {
-        if(!addToExistingScreen(actions)) {
+    const sideActionData = event.dataTransfer.getData('sideAction');
+    const elementData = event.dataTransfer.getData('element');
+    
+    if(sideActionData) {
+        const isScreen = event.dataTransfer.getData('isScreen');
+        const actions = JSON.parse(sideActionData);
+    
+        // not sure if this is better than transfer the isScreen in all the case and use it as a boolean here
+        if(isScreen === 'true') {
+            addNode(position, actions);
+        } else {
             addNode(position, [actions]);
         }
+    } else if(elementData) {
+        const element = JSON.parse(elementData);
+        createNodeFromElement(position, element);
+
+        const source = JSON.parse(event.dataTransfer.getData('source'));
+        console.log('source', source);
+        console.log('removed with native drag');
+        editorStore.removeElementFromScreen(source.index, source.parent);
     }
 
 };
+
+function createNodeFromElement(position, element: NodeElement) {
+
+    const id = editorStore.generateId();
+    const form = editorStore.getForm('screen');
+
+    element.parentId = id;
+
+    const newNode = {
+        id: id,
+        type: 'content',
+        data: { elements: [element], readyToDrop: false, animated: false, form: form, type: 'question' },
+        position,
+        events: {
+            click: () => {
+                openForm(id, form);
+            }
+        }
+    };
+
+    editorStore.addElementToScreen(form, element.action, -1);
+
+    addNodes([newNode]);
+
+    // align node position after drop, so it's centered to the mouse
+    nextTick(() => {
+        const node = findNode(newNode.id);
+        const stop = watch(
+            () => node.dimensions,
+            (dimensions) => {
+                if (dimensions.width > 0 && dimensions.height > 0) {
+                    node.position = { x: node.position.x - node.dimensions.width / 2, y: node.position.y - node.dimensions.height / 2 };
+                    stop();
+                }
+            },
+            { deep: true, flush: 'post' },
+        );
+    });
+}
 
 function addNode(position, actions: SideAction[]) {
 
@@ -102,7 +141,7 @@ function addNode(position, actions: SideAction[]) {
             form: editorStore.getForm(action.type),
             parentId: id
         });
-        editorStore.addElementToScreen(form, action);
+        editorStore.addElementToScreen(form, action, -1);
     });
 
     //? For the V0 the templates aren't editable
@@ -138,25 +177,6 @@ function addNode(position, actions: SideAction[]) {
         );
     });
 }
-
-function addToExistingScreen(action : SideAction):boolean {
-    for(let node of nodes.value) {
-        if(node.data.readyToDrop) {
-            node.data.elements.push({
-                id: editorStore.generateId(),
-                action: action,
-                form: editorStore.getForm(action.type),
-                parentId: node.id
-            });
-            node.data.readyToDrop = false;
-            document.querySelector('#node'+node.id).classList.remove('node-animate');
-            editorStore.addElementToScreen(node.data.form, action);
-            return true;
-        }
-    }
-    return false;
-}
-
 function addChapter() {
     const chapterLength = editorStore.chapters.length;
 

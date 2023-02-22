@@ -41,8 +41,4 @@ function dragStart(event, sideAction) {
     box-shadow: none;
 }
 
-.question {
-    margin-bottom: 1.5rem;
-}
-
 </style>

@@ -212,13 +212,17 @@ hr {
 
 .node {
   padding: 1rem;
+  min-width: 62px;
+  min-height: 62px;
   background-color: var(--node);
   border-radius: 8px;
   border: 1px solid var(--border);
   transition: all .15s ease-in-out;
   
-  :not(:first-child) {
-      margin-top: .5rem;
+  &-list {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
   }
 
   &.active {
@@ -364,6 +368,19 @@ textarea {
   background-repeat: no-repeat;
   background-position: right 50% top 50%;
   background-size: 1.5rem auto;
+}
+
+.node:not(.hover) .ghost {
+  margin: 0 !important;
+  display: none;
+}
+
+
+.ghost {
+  opacity: .5;
+  // margin: 0 !important;
+  // padding: 0 !important;
+  //TODO: Change the css to have a correct representation of the ghost in both case
 }
 
 .spinner {
