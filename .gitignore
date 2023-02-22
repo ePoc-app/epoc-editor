@@ -13,6 +13,7 @@ dist-ssr
 *.local
 dist_electron
 .env
+public/preview.zip
 
 # Editor directories and files
 .vscode/*

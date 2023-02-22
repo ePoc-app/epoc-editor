@@ -18,6 +18,7 @@ api.receive('epocProjectNew', () => {
 });
 
 api.receive('epocProjectSaved', (data: string) => {
+    editorStore.saving = false;
     const currentProject =  JSON.parse(data) as ePocProject;
     if (!currentProject || !currentProject.filepath) return;
     editorStore.currentProject = currentProject;
@@ -39,6 +40,10 @@ api.receive('epocProjectReady', (data: string) => {
     router.push('/editor').then(() => {
         editorStore.loading = false;
     });
+});
+
+api.receive('previewReady', () => {
+    editorStore.loadingPreview = false;
 });
 
 function newEpocProject(): void {
@@ -66,12 +71,19 @@ function openEpocProject(project): void {
 }
 
 function saveEpocProject(): void {
+    editorStore.saving = true;
     api.send('saveEpocProject');
+}
+
+function runPreview(): void {
+    editorStore.loadingPreview = true;
+    api.send('runPreview');
 }
 
 export const editorService = {
     newEpocProject,
     pickEpocProject,
     openEpocProject,
-    saveEpocProject
+    saveEpocProject,
+    runPreview
 };

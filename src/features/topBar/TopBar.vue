@@ -31,7 +31,7 @@ setInterval(() => {
     <div class="top-bar">
         <div class="top-bar-content">
             <div class="top-bar-title">
-                <h3>{{ editorStore.currentProject.filepath }}</h3>
+                <h3>{{ editorStore.currentProject.filepath ? editorStore.currentProject.filepath : 'Nouvel ePoc' }}</h3>
                 <small>Dernière sauvegarde: Il y a {{ savedSince }}</small>
             </div>
             <div class="top-bar-actions">
@@ -40,9 +40,9 @@ setInterval(() => {
                 <TopActionButton icon="icon-arriere" />
                 <TopActionButton icon="icon-avant" />
                 <hr class="vertical-separator">
-                <TopActionButton icon="icon-save" text="Sauvegarder" @click="editorService.saveEpocProject" />
-                <TopActionButton icon="icon-play" text="Aperçu" />
-                <TopActionButton icon="icon-export" text="Exporter archive" />
+                <TopActionButton icon="icon-save" text="Sauvegarder" :disabled="editorStore.saving" @click="editorService.saveEpocProject" />
+                <TopActionButton icon="icon-play" text="Aperçu" :disabled="editorStore.loadingPreview" @click="editorService.runPreview()" />
+                <TopActionButton icon="icon-export" :disabled="editorStore.loading" text="Exporter archive" />
             </div>
         </div>
     </div>

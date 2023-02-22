@@ -7,6 +7,7 @@ const { setupIpcListener } = require('./components/ipc');
 const { waitEvent, waitAll, wait} = require('./components/utils');
 const { setupMenu } = require('./components/menu');
 const { cleanAllWorkdir } = require('./components/file');
+const { cleanPreview } = require('./components/preview');
 
 // This method will be called when Electron has finished initialization and is ready to create browser windows.
 app.whenReady().then(() => {
@@ -34,6 +35,7 @@ app.whenReady().then(() => {
     // Quit when all the window are closed, except on macOS. There, it's common for applications and their menu bar to stay active until the user quits explicitly with Cmd + Q.
     app.on('window-all-closed', () => {
         cleanAllWorkdir();
+        cleanPreview();
         if(process.platform !== 'darwin') {
             app.quit();
         }
