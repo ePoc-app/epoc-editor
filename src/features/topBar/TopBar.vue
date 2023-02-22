@@ -18,7 +18,11 @@ editorStore.$subscribe(() => {
 const zoom = ref(1);
 const zoomString = computed(() => zoom.value === 0 ? 'Ajuster' : `${Math.round(zoom.value * 100)}%`);
 
-zoomTo(1);
+zoomTo(zoom.value);
+
+onViewportChangeEnd ((event) => {
+    zoom.value = event.zoom;
+});
 
 function updateZoom(val) {
     zoom.value = val;
@@ -28,10 +32,6 @@ function updateZoom(val) {
         zoomTo(val, {duration: 300});
     }
 }
-
-onViewportChangeEnd ((event) => {
-    zoom.value = event.zoom;
-});
 
 function since(date) {
     if (!date) return 'jamais';
@@ -59,8 +59,8 @@ setInterval(() => {
             <div class="top-bar-actions">
                 <TopActionDropdown icon="icon-chevron" :text-before="zoomString" :input-value="zoom" @change="updateZoom" />
                 <hr class="vertical-separator">
-                <TopActionButton icon="icon-arriere" />
-                <TopActionButton icon="icon-avant" />
+                <TopActionButton icon="icon-arriere" :disabled="editorStore.undoStack.length <= 0" @click="editorStore.undo" />
+                <TopActionButton icon="icon-avant" :disabled="editorStore.redoStack.length <= 0" @click="editorStore.redo" />
                 <hr class="vertical-separator">
                 <TopActionButton icon="icon-save" text="Sauvegarder" :disabled="editorStore.saving" @click="editorService.saveEpocProject" />
                 <TopActionButton icon="icon-play" text="Aperçu" :disabled="editorStore.loadingPreview" @click="editorService.runPreview()" />
@@ -75,6 +75,7 @@ setInterval(() => {
     background-color: var(--content);
     border-bottom: 1px solid var(--border);
     padding-left: 1.7rem;
+    user-select: none;
 
     &-content {
         display: flex;

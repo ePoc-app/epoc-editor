@@ -21,8 +21,4 @@ defineProps<{
 .btn-squared {
     padding: .7rem;
 }
-
-.btn:disabled{
-    opacity: 0.5;
-}
 </style>

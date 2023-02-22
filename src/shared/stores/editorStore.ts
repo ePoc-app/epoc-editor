@@ -28,6 +28,8 @@ interface EditorState {
     questions: SideAction[];
     standardScreens: Screen[];
     chapters: NodeElement[];
+    undoStack: [];
+    redoStack: [];
 }
 
 export const useEditorStore = defineStore('editor', {
@@ -49,7 +51,9 @@ export const useEditorStore = defineStore('editor', {
         sideActions: actionItems,
         questions: questions,
         standardScreens: standardScreen,
-        chapters: []
+        chapters: [],
+        undoStack: [],
+        redoStack: []
     }),
     
     getters: {
@@ -162,6 +166,14 @@ export const useEditorStore = defineStore('editor', {
 
             node.data.elements.splice(startIndex, 1);
             node.data.elements.splice(finalIndex, 0, tmp);
+        },
+        undo() {
+            // @todo
+            console.log('todo undo', this.undoStack.length);
+        },
+        redo() {
+            // @todo
+            console.log('todo redo');
         }
     }
 });
