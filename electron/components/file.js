@@ -41,7 +41,7 @@ const newEpocProject = async function () {
     const startTime = performance.now();
     const project = {
         name: null,
-        modified: new Date().toISOString(),
+        modified: null,
         filepath: null,
         workdir: createWorkDir()
     };

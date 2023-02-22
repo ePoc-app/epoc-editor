@@ -13,13 +13,14 @@ editorStore.$subscribe(() => {
 });
 
 function since(date) {
+    if (!date) return 'jamais';
     const milliseconds = Math.abs(Date.now() - new Date(date).getTime());
     const secs = Math.floor(Math.abs(milliseconds) / 1000);
     const mins = Math.floor(secs / 60);
     const hours = Math.floor(mins / 60);
     const days = Math.floor(hours / 24);
 
-    return days > 1 ? `${days} jours` : hours > 1 ? `${hours} heures` : mins > 1 ? `${mins} mins` : 'moins d\'une minute';
+    return 'Il y a ' + (days > 1 ? `${days} jours` : hours > 1 ? `${hours} heures` : mins > 1 ? `${mins} mins` : 'moins d\'une minute');
 }
 
 setInterval(() => {
@@ -32,7 +33,7 @@ setInterval(() => {
         <div class="top-bar-content">
             <div class="top-bar-title">
                 <h3>{{ editorStore.currentProject.filepath ? editorStore.currentProject.filepath : 'Nouvel ePoc' }}</h3>
-                <small>Dernière sauvegarde: Il y a {{ savedSince }}</small>
+                <small>Dernière sauvegarde : {{ savedSince }}</small>
             </div>
             <div class="top-bar-actions">
                 <TopActionButton icon="icon-chevron" text-before="100%" />
