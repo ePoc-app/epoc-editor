@@ -32,7 +32,8 @@ const emit = defineEmits<{
             @change="onSelect"
         >
             <option value="0">Ajuster</option>
-            <option value="0.7">70%</option>
+            <option value="0.5">50%</option>
+            <option value="0.75">75%</option>
             <option value="1">100%</option>
             <option value="1.5">150%</option>
         </select>

@@ -167,11 +167,9 @@ onMounted(() => {
     <VueFlow
         v-model="projectStore.elements"
         auto-connect
-        fit-view-on-init
+        :default-zoom=".75"
         :max-zoom="1.5"
-        :min-zoom=".7"
-        :node-extent="[[0, 0], [1300, 1300]]"
-        :translate-extent="[[-500, -500], [1800, 1800]]"
+        :min-zoom=".5"
         :node-types="nodeTypes"
         :connection-mode="ConnectionMode.Strict"
         :edge-updater-radius="30"
