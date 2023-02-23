@@ -118,52 +118,56 @@ function dragStart(event, element: NodeElement, index: number) {
 </script>
 
 <template>
-    <p class="node-title">{{ node.data.form.fields[0].inputs[0].value || 'Page' }}</p>
-    <Handle
-        :class="{ 'not-connected': !node.data.isTarget }"
-        type="target"
-        :position="Position.Left"
-        :connectable="false"
-    />
     <div
-        :id="'node'+props.id"
-        :class=" { 'active': editorStore.openedNodeId ? editorStore.openedNodeId === props.id : false }"
-        class="node"
-        @dragover="dragOver($event)"
-        @dragleave="dragLeave($event)"
-        @dragenter="dragEnter($event)"
+        @click="editorStore.openFormPanel(node.id, node.data.form)"
     >
-        <draggable
-            :model-value="data.elements"
-            v-bind="dragOptions"
-            class="node-list"
-            item-key="id"
-            @change="change($event)"
-            @mousedown.stop
-            @drop.stop="drop()"
+        <p class="node-title">{{ node.data.form.fields[0].inputs[0].value || 'Page' }}</p>
+        <Handle
+            :class="{ 'not-connected': !node.data.isTarget }"
+            type="target"
+            :position="Position.Left"
+            :connectable="false"
+        />
+        <div
+            :id="'node'+props.id"
+            :class=" { 'active': editorStore.openedNodeId ? editorStore.openedNodeId === props.id : false }"
+            class="node"
+            @dragover="dragOver($event)"
+            @dragleave="dragLeave($event)"
             @dragenter="dragEnter($event)"
         >
-            <template #item="{ element, index }">
-                <div :class="{ 'question-item': !isQuestion }">
-                    <ContentButton 
-                        :key="index"
-                        :icon="element.action.icon"
-                        :is-active="editorStore.openedNodeId ? editorStore.openedNodeId === element.id : false"
-                        :is-draggable="isQuestion"
-                        :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true}"
-                        @click="openForm(element)"
-                        @dragstart="dragStart($event, element, index)"
-                    />
-                </div>
-            </template>
-        </draggable>
+            <draggable
+                :model-value="data.elements"
+                v-bind="dragOptions"
+                class="node-list"
+                item-key="id"
+                @change="change($event)"
+                @mousedown.stop
+                @drop.stop="drop()"
+                @dragenter="dragEnter($event)"
+            >
+                <template #item="{ element, index }">
+                    <div :class="{ 'question-item': !isQuestion }">
+                        <ContentButton 
+                            :key="index"
+                            :icon="element.action.icon"
+                            :is-active="editorStore.openedNodeId ? editorStore.openedNodeId === element.id : false"
+                            :is-draggable="isQuestion"
+                            :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true}"
+                            @click="openForm(element)"
+                            @dragstart="dragStart($event, element, index)"
+                        />
+                    </div>
+                </template>
+            </draggable>
+        </div>
+        <Handle
+            :class="{ 'not-connected': !node.data.isSource }"
+            type="source"
+            :position="Position.Right"
+            :connectable="!node.data.isSource"
+        />
     </div>
-    <Handle
-        :class="{ 'not-connected': !node.data.isSource }"
-        type="source"
-        :position="Position.Right"
-        :connectable="!node.data.isSource"
-    />
 </template>
 
 <style scoped lang="scss">

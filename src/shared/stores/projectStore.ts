@@ -25,6 +25,29 @@ export const useProjectStore = defineStore('project', {
         restore (flow) {
             if (!flow) this.elements = [epoc, add, mainEdge];
             this.flow = flow;
+        },
+        addChapter() {
+            const chapters = nodes.value.filter(node => node.type === 'chapter');
+        
+            const newElement: NodeElement = {
+                id: editorStore.generateId(),
+                action: {
+                    type: 'chapter',
+                    icon: 'icon-chapitre'
+                },
+                form: editorStore.getForm('chapter')
+            };
+
+            const newChapter = {
+                id: (nodes.value.length + 1).toString(),
+                type: 'chapter',
+                position: { x: 0, y: (chapters.length + 1) * 200 },
+                data: { elements: newElement, title: 'Chapitre ' + (chapters.length + 1)},
+                draggable: false,
+            };
+
+            addNodes([newChapter]);
+            findNode('2').position.y += 200;
         }
     }
 });
@@ -40,31 +63,6 @@ const add : Node = {
     id: '2',
     type: 'add',
     position: { x: 33, y: 125 },
-    events: {
-        click: () => {
-            const chapters = nodes.value.filter(node => node.type === 'chapter');
-
-            const newElement: NodeElement = {
-                id: editorStore.generateId(),
-                action: {
-                    type: 'chapter',
-                    icon: 'icon-chapitre'
-                },
-                form: editorStore.getForm('chapter'),
-            };
-
-            const newChapter = {
-                id: (nodes.value.length + 1).toString(),
-                type: 'chapter',
-                position: { x: 0, y: (chapters.length + 1) * 200 },
-                data: { elements: newElement, title: 'Chapitre ' + (chapters.length + 1)},
-                draggable: false,
-            };
-
-            addNodes([newChapter]);
-            findNode('2').position.y += 200;
-        }
-    },
     draggable: false
 };
 

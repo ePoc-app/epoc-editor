@@ -124,11 +124,6 @@ function addNode(position, actions: SideAction[]) {
         // Put animated: nodeIcons.length === 1 when implementing v2
         data: { elements: elements, readyToDrop: false, animated: false, form: form, type: type },
         position,
-        events: {
-            click: () => {
-                openForm(id, form);
-            }
-        },
         deletable: false
     };
        
