@@ -139,7 +139,6 @@ export const useEditorStore = defineStore('editor', {
         addElementToScreen(form: Form, action: SideAction, index: number): void {
             const newCard: Card = this.getCard('component');
             newCard.action = action;
-            console.log('adding to screen: ', action);
             if(index !== -1) {
                 form.fields[1].inputs.splice(index, 0, newCard);
             } else {
@@ -148,14 +147,9 @@ export const useEditorStore = defineStore('editor', {
         },
         removeElementFromScreen(index: number, parentNodeId): void {
             const node = findNode(parentNodeId);
-            console.log('removing from screen');
 
-            console.log('node before:', node.data.elements);
             node.data.elements.splice(index, 1);
-            console.log('node after:', node.data.elements);
-            console.log('form before:', node.data.form.fields[1].inputs);
             node.data.form.fields[1].inputs.splice(index, 1);
-            console.log('form after:', node.data.form.fields[1].inputs);
             if(node.data.elements.length === 0) {
                 this.deleteElement(parentNodeId);
             }

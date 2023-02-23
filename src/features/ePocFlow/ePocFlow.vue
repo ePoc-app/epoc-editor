@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ConnectionMode, MarkerType, useVueFlow, VueFlow } from '@vue-flow/core';
-import { markRaw, nextTick, onMounted, watch } from 'vue';
+import { ConnectionMode, MarkerType, useVueFlow, VueFlow, getConnectedEdges } from '@vue-flow/core';
+import { markRaw, nextTick, onMounted, watch, ref } from 'vue';
 import ScreenNode from './nodes/ScreenNode.vue';
 import CustomConnectContent from './edges/CustomConnectContent.vue';
 import { Form, NodeElement, SideAction } from '@/src/shared/interfaces';
@@ -9,11 +9,10 @@ import ChapterNode from './nodes/ChapterNode.vue';
 import ePocNode from './nodes/ePocNode.vue';
 import AddChapterNode from './nodes/AddChapterNode.vue';
 
-const { addNodes, addEdges, onConnect, vueFlowRef, project, findNode, setNodes, setEdges, setTransform }  = useVueFlow({ id: 'main' });
+const { addNodes, addEdges, onConnect, vueFlowRef, project, findNode, setNodes, setEdges, setTransform, findEdge, removeEdges, edges }  = useVueFlow({ id: 'main' });
 
-//TODO: find a way to ignore the onConnect here and only use the snap to handle one
 onConnect((params) => {
-    addEdges([{...params, updatable: true, style: { stroke: '#384257', strokeWidth: 2.5 }, markerEnd: { type: MarkerType.ArrowClosed, color: '#384257'} }]);
+    addEdges([{...params, updatable: true, style: { stroke: '#384257', strokeWidth: 2.5 }, markerEnd: { type: MarkerType.ArrowClosed, color: '#384257'} }]);    
 });
 
 const editorStore = useEditorStore();
@@ -52,8 +51,7 @@ const onDrop = (event) => {
         createNodeFromElement(position, element);
 
         const source = JSON.parse(event.dataTransfer.getData('source'));
-        console.log('source', source);
-        console.log('removed with native drag');
+
         editorStore.removeElementFromScreen(source.index, source.parent);
     }
 
@@ -75,7 +73,8 @@ function createNodeFromElement(position, element: NodeElement) {
             click: () => {
                 openForm(id, form);
             }
-        }
+        },
+        deletable: false
     };
 
     editorStore.addElementToScreen(form, element.action, -1);
@@ -129,7 +128,8 @@ function addNode(position, actions: SideAction[]) {
             click: () => {
                 openForm(id, form);
             }
-        }
+        },
+        deletable: false
     };
        
     addNodes([newNode]);
@@ -161,6 +161,64 @@ onMounted(() => {
         setTransform({ x, y, zoom: projectStore.flow.zoom || 0 });
     }
 });
+
+//? This is used only to remove
+const sourceNode = ref(null);
+const targetNode = ref(null);
+
+function changeEdge(event) {
+    if(event[0].type === 'select') {
+        const edge = findEdge(event[0].id);
+        sourceNode.value = findNode(edge.source);
+        targetNode.value = findNode(edge.target);
+    }if(event[0].type === 'remove') {
+        if(sourceNode.value) {
+            sourceNode.value.data.isSource = false;
+        }
+        if(targetNode.value) {
+            targetNode.value.data.isTarget = false;
+        }
+    }
+}
+
+function connectEdge(event) {
+    const source = findNode(event.source);
+    const target = findNode(event.target);
+    if(source.data.isSource || target.data.isTarget) {
+        const connectedEdges = getConnectedEdges([target], edges.value);
+        for(const edge of connectedEdges) {
+            if(edge.source === source.id) {
+                sourceNode.value = source;
+                targetNode.value = null;
+
+                //TODO: find why this is needed
+                setTimeout(() => {
+                    removeEdges([edge]);
+                }, 0);
+            }
+        }
+    }
+    source.data.isSource = true;
+    target.data.isTarget = true;
+}
+
+function update(event) {
+    let sourceNode = findNode(event.edge.source);
+    let targetNode = findNode(event.edge.target);
+
+    sourceNode.data.isSource = false;
+    targetNode.data.isTarget = false;
+
+    event.edge.source = event.connection.source;
+    event.edge.target = event.connection.target;
+
+    sourceNode = findNode(event.edge.source);
+    targetNode = findNode(event.edge.target);
+
+    sourceNode.data.isSource = true;
+    targetNode.data.isTarget = true;
+}
+
 </script>
 
 <template>
@@ -172,7 +230,11 @@ onMounted(() => {
         :min-zoom=".5"
         :node-types="nodeTypes"
         :connection-mode="ConnectionMode.Strict"
+        :connection-radius="50"
         :edge-updater-radius="30"
+        @edges-change="changeEdge"
+        @edge-update="update"
+        @connect="connectEdge"
         @drop="onDrop"
         @dragover.prevent
         @dragenter.prevent

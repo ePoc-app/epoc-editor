@@ -413,3 +413,9 @@ textarea {
   }
 
 }
+
+g.selected {
+  path{
+    stroke: var(--editor-blue) !important;
+  }
+}
