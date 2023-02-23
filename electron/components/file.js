@@ -166,6 +166,25 @@ const exportProject = async function (workdir, filepath) {
 };
 
 /**
+ * Write the project data to the project.json file in workdir
+ */
+const writeProjectData = async function (workdir, data) {
+    fs.writeFileSync(path.join(workdir, 'project.json'), data);
+};
+
+/**
+ * Read the project data from the project.json file in workdir
+ * @return string
+ */
+const readProjectData = async function (workdir) {
+    try {
+        return JSON.parse(fs.readFileSync(path.join(workdir, 'project.json'), 'utf8'));
+    } catch (err) {
+        return null;
+    }
+};
+
+/**
  * Create a workdir to host currently open project files
  * @returns {string} workdir path
  */
@@ -204,5 +223,7 @@ module.exports = {
     saveEpocProject,
     saveAsEpocProject,
     exportProject,
+    writeProjectData,
+    readProjectData,
     cleanAllWorkdir
 };

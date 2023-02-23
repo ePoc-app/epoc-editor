@@ -2,6 +2,7 @@ import { ApiInterface } from '@/src/shared/interfaces/api.interface';
 import { router } from '@/src/router';
 import { useEditorStore } from '@/src/shared/stores';
 import { ePocProject } from '@/src/shared/interfaces';
+import { projectService } from '@/src/shared/services/project.service';
 
 declare const api: ApiInterface;
 
@@ -31,12 +32,16 @@ api.receive('epocProjectPicked', (data: string) => {
 });
 
 api.receive('epocProjectReady', (data: string) => {
-    const ePocProject = JSON.parse(data) as ePocProject;
+    const parsedData = JSON.parse(data);
+    const ePocProject = parsedData.project as ePocProject;
     if (!ePocProject.workdir) {
         editorStore.loading = false;
         return;
     }
     editorStore.currentProject = ePocProject;
+
+    projectService.restoreProjectData(parsedData.flow);
+
     router.push('/editor').then(() => {
         editorStore.loading = false;
     });

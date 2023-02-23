@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { VueFlow, useVueFlow, MarkerType, ConnectionMode } from '@vue-flow/core';
-import { markRaw, nextTick, watch } from 'vue';
+import { ConnectionMode, MarkerType, useVueFlow, VueFlow } from '@vue-flow/core';
+import { markRaw, nextTick, onMounted, watch } from 'vue';
 import ScreenNode from './nodes/ScreenNode.vue';
 import CustomConnectContent from './edges/CustomConnectContent.vue';
-import { SideAction, NodeElement, Form } from '@/src/shared/interfaces';
-import { useEditorStore } from '@/src/shared/stores';
+import { Form, NodeElement, SideAction } from '@/src/shared/interfaces';
+import { useEditorStore, useProjectStore } from '@/src/shared/stores';
 import ChapterNode from './nodes/ChapterNode.vue';
 import ePocNode from './nodes/ePocNode.vue';
 import AddChapterNode from './nodes/AddChapterNode.vue';
 
-const { nodes, addNodes, addEdges, onConnect, vueFlowRef, project, findNode }  = useVueFlow({ id: 'main' });
+const { addNodes, addEdges, onConnect, vueFlowRef, project, findNode, setNodes, setEdges, setTransform }  = useVueFlow({ id: 'main' });
 
 //TODO: find a way to ignore the onConnect here and only use the snap to handle one
 onConnect((params) => {
@@ -17,6 +17,7 @@ onConnect((params) => {
 });
 
 const editorStore = useEditorStore();
+const projectStore = useProjectStore();
 
 const nodeTypes = {
     content: markRaw(ScreenNode),
@@ -24,35 +25,6 @@ const nodeTypes = {
     epoc: markRaw(ePocNode),
     add: markRaw(AddChapterNode), 
 };
-
-const epoc = {
-    id: '1',
-    type: 'epoc',
-    position: { x: 0, y: 0 },
-    draggable: false,
-};
-
-const add = {
-    id: '2',
-    type: 'add',
-    position: { x: 33, y: editorStore.chapters.length * 200 + 125 },
-    events: {
-        click: () => {
-            addChapter();
-        }
-    },
-    draggable: false
-};
-
-const mainEdge = {
-    id: 'mainEdge',
-    source: '1',
-    target: '2',
-    style: { stroke: '#CDD3E0', strokeWidth: 2.5 }
-};
-
-
-const elements = [epoc, add, mainEdge];
 
 const onDrop = (event) => {
     const { left, top } = vueFlowRef.value.getBoundingClientRect();
@@ -177,41 +149,23 @@ function addNode(position, actions: SideAction[]) {
         );
     });
 }
-function addChapter() {
-    const chapterLength = editorStore.chapters.length;
-
-    const newElement: NodeElement = {
-        id: editorStore.generateId(),
-        action: {
-            type: 'chapter',
-            icon: 'icon-chapitre'
-        },
-        form: editorStore.getForm('chapter'),
-    };
-
-    editorStore.chapters.push(newElement);
-
-    const newChapter = {
-        id: (nodes.value.length + 1).toString(),
-        type: 'chapter',
-        position: { x: 0, y: (chapterLength + 1) * 200 },
-        data: { elements: newElement, title: 'Chapitre ' + (chapterLength + 1)},
-        draggable: false,
-    };
-    
-    addNodes([newChapter]);
-    findNode('2').position.y += 200;
-}
 
 function openForm(id: string, form: Form) {
     editorStore.openFormPanel(id, form);
 }
-
+onMounted(() => {
+    if (projectStore.flow) {
+        const [x = 0, y = 0] = projectStore.flow.position;
+        setNodes(projectStore.flow.nodes);
+        setEdges(projectStore.flow.edges);
+        setTransform({ x, y, zoom: projectStore.flow.zoom || 0 });
+    }
+});
 </script>
 
 <template>
     <VueFlow
-        v-model="elements"
+        v-model="projectStore.elements"
         auto-connect
         fit-view-on-init
         :max-zoom="1.5"
