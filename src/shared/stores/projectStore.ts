@@ -39,10 +39,10 @@ const epoc : Node = {
 const add : Node = {
     id: '2',
     type: 'add',
-    position: { x: 33, y: editorStore.chapters.length * 200 + 125 },
+    position: { x: 33, y: 125 },
     events: {
         click: () => {
-            const chapterLength = editorStore.chapters.length;
+            const chapters = nodes.value.filter(node => node.type === 'chapter');
 
             const newElement: NodeElement = {
                 id: editorStore.generateId(),
@@ -53,13 +53,11 @@ const add : Node = {
                 form: editorStore.getForm('chapter'),
             };
 
-            editorStore.chapters.push(newElement);
-
             const newChapter = {
                 id: (nodes.value.length + 1).toString(),
                 type: 'chapter',
-                position: { x: 0, y: (chapterLength + 1) * 200 },
-                data: { elements: newElement, title: 'Chapitre ' + (chapterLength + 1)},
+                position: { x: 0, y: (chapters.length + 1) * 200 },
+                data: { elements: newElement, title: 'Chapitre ' + (chapters.length + 1)},
                 draggable: false,
             };
 

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { SideAction, Screen, ePocProject, NodeElement, Form, Card } from '@/src/shared/interfaces';
+import { SideAction, Screen, ePocProject, Form, Card } from '@/src/shared/interfaces';
 import { toRaw } from 'vue';
 import { applyNodeChanges, useVueFlow } from '@vue-flow/core';
 
@@ -27,7 +27,6 @@ interface EditorState {
     sideActions: SideAction[];
     questions: SideAction[];
     standardScreens: Screen[];
-    chapters: NodeElement[];
     undoStack: [];
     redoStack: [];
 }
@@ -51,7 +50,6 @@ export const useEditorStore = defineStore('editor', {
         sideActions: actionItems,
         questions: questions,
         standardScreens: standardScreen,
-        chapters: [],
         undoStack: [],
         redoStack: []
     }),
@@ -127,7 +125,6 @@ export const useEditorStore = defineStore('editor', {
                         }
                     }
                     findNode('2').position.y -= 200;
-                    this.chapters.splice(this.chapters.findIndex(chapter => chapter.id === nodeToDelete.id), 1);
                 }
             }
             this.closeFormPanel();
