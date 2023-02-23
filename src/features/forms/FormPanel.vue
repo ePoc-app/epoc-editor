@@ -21,11 +21,11 @@ function addCard(type: string, index: number): void {
 }
 
 function deleteCard(cardIndex: number, fieldIndex: number, type: string): void {
-    editorStore.formPanel.form.fields[fieldIndex].inputs.splice(cardIndex ,1);
-
     if(type === 'component') {
         const parentNodeId = editorStore.openedParentId ? editorStore.openedParentId : editorStore.openedNodeId;
         editorStore.removeElementFromScreen(cardIndex, parentNodeId);
+    } else {
+        editorStore.formPanel.form.fields[fieldIndex].inputs.splice(cardIndex ,1);
     }
 }
 
