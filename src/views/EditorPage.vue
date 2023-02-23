@@ -26,7 +26,7 @@ function dismissModals() {
 .editor-container {
     display: grid;
     height: 100%;
-    grid-template-columns: 100px auto;
+    grid-template-columns: 265px auto;
     grid-template-rows: 80px auto;
 
     .side-bar {
@@ -36,14 +36,10 @@ function dismissModals() {
 
     .top-bar {
         grid-column: 1/3;
-        //for v2: 
-        //grid-column: 2;
         grid-row: 1;
     }
 
     .editor-content {
-        margin: 0;
-        grid-column: 2;
         grid-column: 2;
         margin: auto;
     }

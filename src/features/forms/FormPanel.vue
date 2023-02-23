@@ -116,6 +116,7 @@ function changeCards(event, fieldIndex, type: string) {
     top: 80px;
     right: 0;
     height: calc(100% - 80px);
+    width: 26rem;
     background-color: white;
     padding: 0 1rem;
     display: flex;
