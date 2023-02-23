@@ -2,7 +2,7 @@
 import ContentButton from '@/src/components/ContentButton.vue';
 import { NodeElement } from '@/src/shared/interfaces';
 import { useEditorStore } from '@/src/shared/stores';
-import { Handle } from '@vue-flow/core';
+import { Handle, useVueFlow } from '@vue-flow/core';
 import { Position } from '@vue-flow/core';
 
 const editorStore = useEditorStore();
@@ -15,6 +15,10 @@ const props = defineProps<{
         title: string;
     }
 }>();
+
+const { findNode } = useVueFlow({ id: 'main' });
+
+const node = findNode(props.id);
 
 const element: NodeElement = { id: props.id, action: { icon: 'icon-chapitre', type: 'chapter'}, form: editorStore.getForm('chapter') };
 
@@ -35,7 +39,12 @@ function openForm(element: NodeElement) {
             @click="openForm(element)"
         />
     </div>
-    <Handle type="source" :position="Position.Right" />
+    <Handle
+        type="source"
+        :position="Position.Right"
+        :connectable="!node.data.isSource"
+        :class="{ 'not-connected': !node.data.isSource }"
+    />
 </template>
 
 <style scoped lang="scss">
@@ -46,4 +55,9 @@ function openForm(element: NodeElement) {
         right: -6px;
     }
 }
+
+.not-connected {
+    background-color: var(--editor-red);
+}
+
 </style>

@@ -17,10 +17,13 @@ const props = defineProps<{
         readyToDrop: boolean;
         animated: boolean;
         elements: NodeElement[];
+        isSource: boolean;
+        isTarget: boolean;
     }
 }>();
 
-const { findNode, onConnect } = useVueFlow({ id: 'main' });
+
+const { findNode } = useVueFlow({ id: 'main' });
 
 const node = findNode(props.id);
 const dropped = ref(false);
@@ -35,14 +38,6 @@ onMounted(() => {
 function openForm(element: NodeElement) {
     editorStore.openFormPanel(element.id, element.form, element.parentId);
 }
-
-const isSource = ref(false);
-const isTarget = ref(false);
-
-onConnect((params) => {
-    if(params.source === props.id) isSource.value = true;
-    if(params.target === props.id) isTarget.value = true;
-});
 
 let counter = 0;
 
@@ -63,7 +58,6 @@ function dragOver(event) {
 }
 
 function change(event) {
-    console.log('change', event);
 
     if(event.added && dropped.value) {
         let newElement: NodeElement;
@@ -95,7 +89,6 @@ function change(event) {
 
     } if(event.removed) {
         editorStore.removeElementFromScreen(event.removed.oldIndex, props.id);
-        console.log('removed with draggable');
     }
 }
 
@@ -116,7 +109,6 @@ const dragOptions = ref({
 });
 
 function dragStart(event, element: NodeElement, index: number) {
-    console.log('Content button drag start', event);
     event.dataTransfer.dropEffect= 'move';
     event.dataTransfer.effectAllowed= 'move';
     event.dataTransfer.setData('element', JSON.stringify(element));
@@ -126,8 +118,13 @@ function dragStart(event, element: NodeElement, index: number) {
 </script>
 
 <template>
-    <p contenteditable="true" class="node-title">Screen</p>
-    <Handle :class="{ 'connected': !isTarget }" type="target" :position="Position.Left" />
+    <p class="node-title">{{ node.data.form.fields[0].inputs[0].value || 'Page' }}</p>
+    <Handle
+        :class="{ 'not-connected': !node.data.isTarget }"
+        type="target"
+        :position="Position.Left"
+        :connectable="false"
+    />
     <div
         :id="'node'+props.id"
         :class=" { 'active': editorStore.openedNodeId ? editorStore.openedNodeId === props.id : false }"
@@ -140,6 +137,7 @@ function dragStart(event, element: NodeElement, index: number) {
             :model-value="data.elements"
             v-bind="dragOptions"
             class="node-list"
+            item-key="id"
             @change="change($event)"
             @mousedown.stop
             @drop.stop="drop()"
@@ -160,7 +158,12 @@ function dragStart(event, element: NodeElement, index: number) {
             </template>
         </draggable>
     </div>
-    <Handle :class="{ 'connected': !isSource }" type="source" :position="Position.Right" />
+    <Handle
+        :class="{ 'not-connected': !node.data.isSource }"
+        type="source"
+        :position="Position.Right"
+        :connectable="!node.data.isSource"
+    />
 </template>
 
 <style scoped lang="scss">
@@ -176,15 +179,15 @@ function dragStart(event, element: NodeElement, index: number) {
     }
 }
 
-.connected {
+.not-connected {
     background-color: var(--editor-red);
 }
 .node-title {
-    margin: .2rem;
+    margin: 0;
     padding: .2rem;
-    &:focus-visible {
-        outline: 1px solid var(--editor-blue);
-        border-radius: 4px;
-    }
+    max-width: calc(60px + 1.8rem);
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 </style>
