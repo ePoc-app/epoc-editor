@@ -72,5 +72,7 @@ const mainEdge : Edge = {
     id: 'mainEdge',
     source: '1',
     target: '2',
-    style: { stroke: '#CDD3E0', strokeWidth: 2.5 }
+    style: { stroke: '#CDD3E0', strokeWidth: 2.5 },
+    selectable: false,
+    deletable: false,
 };
