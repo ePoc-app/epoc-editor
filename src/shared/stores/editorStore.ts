@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 import { SideAction, Screen, ePocProject, Form, Card } from '@/src/shared/interfaces';
 import { toRaw } from 'vue';
-import { applyNodeChanges, useVueFlow } from '@vue-flow/core';
+import { applyNodeChanges, useVueFlow, getConnectedEdges } from '@vue-flow/core';
 
 import { formsModel } from '@/src/shared/data/form.data';
 
-const { findNode, nodes } = useVueFlow({ id: 'main' });
+const { findNode, nodes, edges } = useVueFlow({ id: 'main' });
 
 type uid = string;
 
@@ -148,6 +148,13 @@ export const useEditorStore = defineStore('editor', {
             node.data.elements.splice(index, 1);
             node.data.form.fields[1].inputs.splice(index, 1);
             if(node.data.elements.length === 0) {
+                const connectedEdges = getConnectedEdges([node], edges.value);
+                connectedEdges.forEach(edge => {
+                    const source = findNode(edge.source);
+                    const target = findNode(edge.target);
+                    source.data.isSource = false;
+                    target.data.isTarget = false;
+                });
                 this.deleteElement(parentNodeId);
             }
         },
