@@ -21,10 +21,7 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-    //! This will surely be replaced by input event
-    (e: 'update:modelValue', value: string): void;
     (e: 'input', value: string): void;
-    (e: 'addInput', event): void;
 }>();
 
 </script>
@@ -57,8 +54,9 @@ const emit = defineEmits<{
         v-if="type === 'file'"
         :label="label"
         :accept="accept"
+        :input-value="inputValue"
         :placeholder="placeholder"
-        @input="emit('update:modelValue', $event)"
+        @input="emit('input', $event)"
     />
     <ScoreInput
         v-if="type === 'score'"

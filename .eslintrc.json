@@ -47,7 +47,7 @@
         "vue/html-self-closing": 0,
         "vue/max-attributes-per-line": ["warn", {
             "singleline": {
-                "max": 3
+                "max": 5
             },
             "multiline": {
                 "max": 1

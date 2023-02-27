@@ -1,12 +1,14 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, protocol } = require('electron');
 const { createMainWindow } = require('./components/main');
 const { createSplashWindow } = require('./components/splash');
 const { setupIpcListener } = require('./components/ipc');
 const { waitEvent, waitAll, wait} = require('./components/utils');
 const { cleanAllWorkdir } = require('./components/file');
 const { cleanPreview } = require('./components/preview');
+const path = require('path');
+const store = require('./components/store');
 
 // This method will be called when Electron has finished initialization and is ready to create browser windows.
 app.whenReady().then(() => {
@@ -22,6 +24,15 @@ app.whenReady().then(() => {
     ]).then(() => {
         splashWindow.destroy();
         mainWindow.show();
+    });
+
+    // Intercept assets:// protocol to serve local files from workdir
+    protocol.registerFileProtocol('assets', (request, callback) => {
+        const workdir = store.state.currentProject.workdir;
+        const filepath = request.url.substring(9);
+        callback({path: path.join(workdir, filepath)});
+    }, (err) => {
+        if (err) console.error('Failed to register protocol');
     });
 
     app.on('activate', function () {

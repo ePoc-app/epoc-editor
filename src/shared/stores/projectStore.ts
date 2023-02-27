@@ -27,7 +27,6 @@ export const useProjectStore = defineStore('project', {
             this.restore();
         },
         restore () {
-            console.log('restore', this.flow);
             if (this.flow) {
                 const [x = 0, y = 0] = this.flow.position;
                 setNodes(this.flow.nodes);

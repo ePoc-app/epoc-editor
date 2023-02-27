@@ -10,8 +10,14 @@ function saveProjectData(): void {
     api.send('writeProjectData', data);
 }
 
-function restoreProjectData(flow) {
-    projectStore.restore(flow);
+function importFile(filepath): Promise<string> {
+    api.send('importFile', filepath);
+
+    return new Promise((resolve) => {
+        api.receiveOnce('fileImported', (data) => {
+            resolve(data);
+        });
+    });
 }
 
 let timerId = null;
@@ -28,5 +34,5 @@ onNodesChange(() => {
 });
 
 export const projectService = {
-    restoreProjectData
+    importFile
 };

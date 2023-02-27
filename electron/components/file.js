@@ -166,13 +166,6 @@ const exportProject = async function (workdir, filepath) {
 };
 
 /**
- * Write the project data to the project.json file in workdir
- */
-const writeProjectData = async function (workdir, data) {
-    fs.writeFileSync(path.join(workdir, 'project.json'), data);
-};
-
-/**
  * Read the project data from the project.json file in workdir
  * @return string
  */
@@ -182,6 +175,27 @@ const readProjectData = async function (workdir) {
     } catch (err) {
         return null;
     }
+};
+
+/**
+ * Write the project data to the project.json file in workdir
+ */
+const writeProjectData = async function (workdir, data) {
+    fs.writeFileSync(path.join(workdir, 'project.json'), data);
+};
+
+/**
+ * Copy the imported file to the workdir
+ * @param {string} workdir
+ * @param {string} filepath
+ * @return {string} the path of the copied file
+ */
+const copyFileToWorkdir = async function (workdir, filepath) {
+    const assetsPath = path.join(workdir, 'assets');
+    const copyPath = path.join(assetsPath, path.basename(filepath).replace(/[^a-z0-9.]/gi, '_'));
+    if (!fs.existsSync(assetsPath)) fs.mkdirSync(assetsPath);
+    fs.copyFileSync(filepath, copyPath);
+    return path.relative(workdir, copyPath);
 };
 
 /**
@@ -225,5 +239,6 @@ module.exports = {
     exportProject,
     writeProjectData,
     readProjectData,
+    copyFileToWorkdir,
     cleanAllWorkdir
 };

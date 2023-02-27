@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { projectService } from '@/src/shared/services';
 
-defineProps<{
+const props = defineProps<{
+    inputValue: string;
     label: string;
     accept: string;
     placeholder: string;
@@ -12,12 +14,21 @@ const emit = defineEmits<{
 }>();
 
 const url = ref('');
+const fileInput = ref(null);
+const filetype = computed(() => {
+    const ext = url.value.split('.').pop().toLowerCase();
+    if (['png', 'jpg', 'jpeg', 'gif', 'bmp', 'svg', 'webp'].includes(ext)) return 'img';
+    if (['mp4'].includes(ext)) return 'video';
+    if (['mp3'].includes(ext)) return 'audio';
+    return null;
+});
 
 //! This function have to fetch the image from the back
-function changeImage(e) {
-    console.log('change image');
+async function changeImage(e) {
     const file = e.target.files[0];
-    url.value = URL.createObjectURL(file);
+    if (!file) return;
+    fileInput.value.value = '';
+    url.value = await projectService.importFile(file.path);
     emit('input', url.value);
 }
 
@@ -26,27 +37,28 @@ function deleteFile() {
 }
 
 function openFile() {
-    const fileInput = document.getElementById('file-input');
-    fileInput.click();
+    fileInput.value.click();
 }
+
+onMounted(() => {
+    url.value = props.inputValue;
+});
 
 </script>
 
 <template>
     <label class="input-label" :for="label">{{ label }}</label>
     <div v-show="url" class="show-input">
-        <div :id="label" class="input">
-            <input
-                id="file-input"
-                class="input-file"
-                type="file"
-                :accept="accept"
-                @change="changeImage($event)"
-            >
+        <div class="input-file">
+            <input ref="fileInput" class="file" type="file" :accept="accept" @change="changeImage">
+            <input class="input" type="text" readonly :value="url" @click="openFile">
             <i class="icon-supprimer" @click="deleteFile"></i>
         </div>
-        <img src="/img/image.png" alt="preview img">
-        <!-- <img v-if="url" :src="url" alt="image preview"> -->
+        <div v-if="url" class="preview">
+            <img v-if="filetype === 'img'" :src="'assets://'+url" :alt="label" />
+            <video v-if="filetype === 'video'" :src="'assets://'+url" controls></video>
+            <audio v-if="filetype === 'audio'" :src="'assets://'+url" controls></audio>
+        </div>
     </div>
     <div v-if="!url">
         <button :id="label" class="btn btn-form" @click="openFile">
@@ -60,8 +72,14 @@ function openFile() {
 div {
     display: flex;
 }
-img {
-    margin-bottom: 1.5rem;
+.preview {
+    img, video, audio {
+        width:100%;
+        height:auto;
+        min-height: 50px;
+        max-width: 100%;
+        margin-bottom: 1.5rem;
+    }
 }
 
 i {
@@ -76,6 +94,27 @@ button {
 .show-input {
     display: flex;
     flex-direction: column;
+}
+
+.input-file{
+    position: relative;
+    margin-bottom: 1.5rem;
+
+    .input{
+        margin-bottom: 0;
+        padding-right: 1.5rem;
+    }
+
+    .file{
+        display: none;
+    }
+}
+
+.icon-supprimer{
+    position: absolute;
+    right:.5rem;
+    top:50%;
+    transform: translateY(-50%);
 }
 
 </style>

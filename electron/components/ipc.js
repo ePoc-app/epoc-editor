@@ -2,21 +2,13 @@ const { ipcMain } = require('electron');
 const path = require('path');
 const store = require('./store');
 const { runPreview } = require('./preview');
-const { getRecentFiles, pickEpocProject, openEpocProject, newEpocProject, saveEpocProject, exportProject, writeProjectData, readProjectData } = require('./file');
+const { getRecentFiles, pickEpocProject, openEpocProject, newEpocProject, saveEpocProject, exportProject, writeProjectData, readProjectData, copyFileToWorkdir } = require('./file');
 
 /**
  * Setup ipc listeners that are received from renderer process
  * @param targetWindow
  */
 const setupIpcListener = function (targetWindow) {
-    ipcMain.on('msg', (event, data) => {
-        console.log(data);
-    });
-
-    ipcMain.on('toMain', (event, data) => {
-        console.log(data);
-    });
-
     ipcMain.on('getRecentProjects', () => {
         sendToFrontend(targetWindow, 'getRecentProjects', getRecentFiles());
     });
@@ -24,7 +16,6 @@ const setupIpcListener = function (targetWindow) {
     ipcMain.on('getCurrentProject', async () => {
         if (store.state.currentProject && store.state.currentProject.workdir) {
             const flow = await readProjectData(store.state.currentProject.workdir);
-            console.log(store.state.currentProject.filepath);
             sendToFrontend(targetWindow, 'epocProjectReady', {project: store.state.currentProject, flow});
         }
     });
@@ -62,6 +53,10 @@ const setupIpcListener = function (targetWindow) {
 
     ipcMain.on('writeProjectData', async (event, data) => {
         await writeProjectData(store.state.currentProject.workdir, data);
+    });
+
+    ipcMain.on('importFile', async (event, filepath) => {
+        sendToFrontend(targetWindow, 'fileImported', await copyFileToWorkdir(store.state.currentProject.workdir, filepath));
     });
 };
 
