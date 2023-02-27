@@ -3,7 +3,7 @@ import { Edge, Node, useVueFlow } from '@vue-flow/core';
 import { useEditorStore } from '@/src/shared/stores/editorStore';
 import { NodeElement } from '@/src/shared/interfaces';
 
-const { nodes, addNodes, findNode  }  = useVueFlow({ id: 'main' });
+const { nodes, addNodes, findNode, setNodes, setEdges, setTransform  }  = useVueFlow({ id: 'main' });
 const editorStore = useEditorStore();
 
 interface ProjectState {
@@ -22,9 +22,20 @@ export const useProjectStore = defineStore('project', {
         flow: null
     }),
     actions: {
-        restore (flow) {
-            if (!flow) this.elements = [epoc, add, mainEdge];
+        setFlow(flow) {
             this.flow = flow;
+            this.restore();
+        },
+        restore () {
+            console.log('restore', this.flow);
+            if (this.flow) {
+                const [x = 0, y = 0] = this.flow.position;
+                setNodes(this.flow.nodes);
+                setEdges(this.flow.edges);
+                setTransform({ x, y, zoom: this.flow.zoom || 0 });
+            } else {
+                this.elements = [epoc, add, mainEdge];
+            }
         },
         addChapter() {
             const chapters = nodes.value.filter(node => node.type === 'chapter');

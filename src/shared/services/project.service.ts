@@ -1,11 +1,9 @@
 import { ApiInterface } from '@/src/shared/interfaces/api.interface';
-import { useProjectStore } from '@/src/shared/stores';
 import { useVueFlow } from '@vue-flow/core';
 
 declare const api: ApiInterface;
 
 const { toObject, onNodesChange }  = useVueFlow({ id: 'main' });
-const projectStore = useProjectStore();
 
 function saveProjectData(): void {
     const data = JSON.stringify(toObject());

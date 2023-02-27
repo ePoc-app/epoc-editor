@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ConnectionMode, MarkerType, useVueFlow, VueFlow, getConnectedEdges } from '@vue-flow/core';
-import { markRaw, nextTick, onMounted, watch, ref } from 'vue';
+import { ConnectionMode, getConnectedEdges, MarkerType, useVueFlow, VueFlow } from '@vue-flow/core';
+import { markRaw, nextTick, onMounted, ref, watch } from 'vue';
 import ScreenNode from './nodes/ScreenNode.vue';
 import CustomConnectContent from './edges/CustomConnectContent.vue';
 import { Form, NodeElement, SideAction } from '@/src/shared/interfaces';
@@ -9,7 +9,7 @@ import ChapterNode from './nodes/ChapterNode.vue';
 import ePocNode from './nodes/ePocNode.vue';
 import AddChapterNode from './nodes/AddChapterNode.vue';
 
-const { addNodes, addEdges, onConnect, vueFlowRef, project, findNode, setNodes, setEdges, setTransform, findEdge, removeEdges, edges }  = useVueFlow({ id: 'main' });
+const { addNodes, addEdges, onConnect, vueFlowRef, project, findNode, findEdge, removeEdges, edges }  = useVueFlow({ id: 'main' });
 
 onConnect((params) => {
     addEdges([{...params, updatable: true, style: { stroke: '#384257', strokeWidth: 2.5 }, markerEnd: { type: MarkerType.ArrowClosed, color: '#384257'} }]);    
@@ -149,12 +149,7 @@ function openForm(id: string, form: Form) {
     editorStore.openFormPanel(id, form);
 }
 onMounted(() => {
-    if (projectStore.flow) {
-        const [x = 0, y = 0] = projectStore.flow.position;
-        setNodes(projectStore.flow.nodes);
-        setEdges(projectStore.flow.edges);
-        setTransform({ x, y, zoom: projectStore.flow.zoom || 0 });
-    }
+    projectStore.restore();
 });
 
 //? This is used only to remove

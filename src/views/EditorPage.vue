@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import TopBar from '@/src/features/topBar/TopBar.vue';
-import ePocFlow from '@/src/features/ePocFlow/ePocFlow.vue';
-import { useEditorStore } from '@/src/shared/stores';
+import EPocFlow from '@/src/features/ePocFlow/ePocFlow.vue';
 import SideBarV0 from '@/src/features/sideBar/SideBarV0.vue';
 import FormPanel from '@/src/features/forms/FormPanel.vue';
+import { useEditorStore } from '@/src/shared/stores';
+import { editorService } from '@/src/shared/services';
 
 const editorStore = useEditorStore();
+
+editorService.setup();
 
 function dismissModals() {
     editorStore.dismissModals();

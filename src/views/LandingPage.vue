@@ -5,6 +5,8 @@ import { editorService } from '@/src/shared/services';
 
 const editorStore = useEditorStore();
 
+editorService.setup();
+
 function pickProject() {
     editorService.pickEpocProject();
 }

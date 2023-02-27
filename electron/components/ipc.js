@@ -21,6 +21,14 @@ const setupIpcListener = function (targetWindow) {
         sendToFrontend(targetWindow, 'getRecentProjects', getRecentFiles());
     });
 
+    ipcMain.on('getCurrentProject', async () => {
+        if (store.state.currentProject && store.state.currentProject.workdir) {
+            const flow = await readProjectData(store.state.currentProject.workdir);
+            console.log(store.state.currentProject.filepath);
+            sendToFrontend(targetWindow, 'epocProjectReady', {project: store.state.currentProject, flow});
+        }
+    });
+
     ipcMain.on('pickEpocProject', () => {
         sendToFrontend(targetWindow, 'epocProjectPicked', pickEpocProject());
     });
