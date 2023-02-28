@@ -51,6 +51,7 @@ function openForm(element: NodeElement) {
 .vue-flow__handle {
     width: 12px;
     height: 12px;
+    top: calc(30px + 1rem + 1px);
     &-right {
         right: -6px;
     }

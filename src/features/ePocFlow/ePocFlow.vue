@@ -222,6 +222,8 @@ function update(event) {
         :connection-mode="ConnectionMode.Strict"
         :connection-radius="50"
         :edge-updater-radius="30"
+        :snap-to-grid="true"
+        :snap-grid="[20, 20]"
         @edges-change="changeEdge"
         @edge-update="update"
         @connect="connectEdge"
