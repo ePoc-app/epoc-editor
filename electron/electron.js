@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { app, BrowserWindow, protocol } = require('electron');
+const { app, BrowserWindow, protocol, session } = require('electron');
 const { createMainWindow } = require('./components/main');
 const { createSplashWindow } = require('./components/splash');
 const { setupIpcListener } = require('./components/ipc');
@@ -34,6 +34,31 @@ app.whenReady().then(() => {
     }, (err) => {
         if (err) console.error('Failed to register protocol');
     });
+
+    // Intercept all url starting with assets/ and redirect it to custom protocol (wysiwyg/quill)
+    const filter = {
+        urls: ['*://*/assets/*']
+    };
+
+    session.defaultSession.webRequest.onBeforeRequest(filter, (details, callback) => {
+        if (details.url.indexOf('assets/') !== -1) {
+            const filepath = details.url.split('assets/')[1];
+
+            return callback({ redirectURL: `assets://assets/${filepath}` });
+        }
+        callback({});
+    });
+
+    // protocol.interceptHttpProtocol('http', (request, callback) => {
+    //     if (request.url.indexOf('assets/') !== -1) {
+    //         console.log(request);
+    //         const workdir = store.state.currentProject.workdir;
+    //         const filepath = request.url.split('assets/')[1];
+    //         callback({path: path.join(workdir, 'assets', filepath)});
+    //     }
+    //
+    //     callback({});
+    // });
 
     app.on('activate', function () {
         // On macOS it's common to re-create a window in the app when the dock icon is clicked and there are no other windows open.

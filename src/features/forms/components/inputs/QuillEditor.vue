@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
+//@ts-ignore
+import ImageUploader from 'quill-image-uploader';
 import { onMounted } from 'vue';
+import { projectService } from '@/src/shared/services';
 
 const props = defineProps<{
     label: string;
@@ -13,7 +16,19 @@ const emit = defineEmits<{
     (e: 'input', value: string): void;
 }>();
 
-const toolbar = [['bold', 'italic', 'underline'], [{ 'header': 1}, { 'header': 2 }], [{ 'list': 'ordered' }, { 'list': 'bullet' }]];
+const toolbar = [
+    ['bold', 'italic', 'underline', { 'header': 1}, { 'header': 2 }, { 'list': 'ordered' }, { 'list': 'bullet' }, { 'align': null}, {'align': 'center'}, {'align': 'right'}, 'link', 'image']
+];
+
+const modules = {
+    name: 'imageUploader',
+    module: ImageUploader,
+    options: {
+        upload: (file) => {
+            return projectService.importFile(file.path);
+        }
+    }
+};
 
 function textChange() {
     emit('input', document.querySelector('.ql-editor').innerHTML);
@@ -29,6 +44,7 @@ onMounted(() => {
     <label for="ql-editor">{{ label }}</label>
     <QuillEditor
         id="ql-editor"
+        :modules="modules"
         :toolbar="toolbar"
         theme="snow"
         :placeholder="placeholder"
