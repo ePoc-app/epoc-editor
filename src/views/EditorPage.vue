@@ -21,15 +21,27 @@ function dismissModals() {
         <SideBarV0 class="side-bar" />
         <TopBar class="top-bar" />
         <ePocFlow class="editor-content" />
-        <FormPanel v-if="editorStore.formPanel.isOpen" class="formPanel" />
+        <Transition>
+            <FormPanel v-if="editorStore.formPanel" class="formPanel" />
+        </Transition>
     </div>
 </template>
 
 <style scoped lang="scss">
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
 .editor-container {
     display: grid;
     height: 100%;
-    grid-template-columns: 265px auto;
+    // grid-template-columns: 265px auto;
+    grid-template-columns: 100px auto;
     grid-template-rows: 80px auto;
 
     .side-bar {
@@ -38,7 +50,7 @@ function dismissModals() {
     }
 
     .top-bar {
-        grid-column: 1/3;
+        grid-column: 2;
         grid-row: 1;
     }
 

@@ -25,12 +25,12 @@ function deleteCard(cardIndex: number, fieldIndex: number, type: string): void {
         const parentNodeId = editorStore.openedParentId ? editorStore.openedParentId : editorStore.openedNodeId;
         editorStore.removeElementFromScreen(cardIndex, parentNodeId);
     } else {
-        editorStore.formPanel.form.fields[fieldIndex].inputs.splice(cardIndex ,1);
+        editorStore.formPanel.fields[fieldIndex].inputs.splice(cardIndex ,1);
     }
 }
 
 function moveUpCard(cardIndex, fieldIndex, type: string) {
-    const inputs = editorStore.formPanel.form.fields[fieldIndex].inputs;
+    const inputs = editorStore.formPanel.fields[fieldIndex].inputs;
     let temp = inputs[cardIndex];
     inputs[cardIndex] = inputs[cardIndex-1];
     inputs[cardIndex-1] = temp;
@@ -41,7 +41,7 @@ function moveUpCard(cardIndex, fieldIndex, type: string) {
 }
 
 function moveDownCard(cardIndex, fieldIndex, type: string) {
-    const inputs = editorStore.formPanel.form.fields[fieldIndex].inputs;
+    const inputs = editorStore.formPanel.fields[fieldIndex].inputs;
     let temp = inputs[cardIndex];
     inputs[cardIndex] = inputs[cardIndex+1];
     inputs[cardIndex+1] = temp;
@@ -54,7 +54,7 @@ function moveDownCard(cardIndex, fieldIndex, type: string) {
 function changeCards(event, fieldIndex, type: string) {
     const oldIndex = event.moved.oldIndex;
     const newIndex = event.moved.newIndex;
-    const inputs = editorStore.formPanel.form.fields[fieldIndex].inputs;
+    const inputs = editorStore.formPanel.fields[fieldIndex].inputs;
 
     const tmp = inputs[oldIndex];
     inputs.splice(oldIndex, 1);
@@ -71,12 +71,12 @@ function changeCards(event, fieldIndex, type: string) {
     <div class="panel">
         <button class="btn btn-close" @click="editorStore.closeFormPanel"><i class="icon-x"></i></button>
         <div class="title">
-            <div class="form-icon"><i :class="editorStore.formPanel.form.icon"></i></div>
-            <h1>{{ editorStore.formPanel.form.name }}</h1>
+            <div class="form-icon"><i :class="editorStore.formPanel.icon"></i></div>
+            <h1>{{ editorStore.formPanel.name }}</h1>
         </div>
         <div class="buttons">
             <FormButton
-                v-for="button in editorStore.formPanel.form.buttons"
+                v-for="button in editorStore.formPanel.buttons"
                 :key="button.label"
                 :label="button.label"
                 :icon="button.icon"
@@ -84,7 +84,7 @@ function changeCards(event, fieldIndex, type: string) {
             />
         </div>
         <div
-            v-for="(field, index) of editorStore.formPanel.form.fields"
+            v-for="(field, index) of editorStore.formPanel.fields"
             :key="index"
             class="field"
         >
