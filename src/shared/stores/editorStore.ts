@@ -18,15 +18,13 @@ interface EditorState {
     exporting:boolean;
     floatingMenu: boolean;
     modelMenu: boolean;
-    formPanel: {
-        isOpen: boolean;
-        form: Form;
-    };
+    formPanel: Form;
     openedNodeId: uid | null;
     openedParentId: uid | null;
-    sideActions: SideAction[];
+    // sideActions: SideAction[];
     questions: SideAction[];
-    standardScreens: Screen[];
+    // standardScreens: Screen[];
+    standardScreens: SideAction[];
     undoStack: [];
     redoStack: [];
 }
@@ -41,17 +39,14 @@ export const useEditorStore = defineStore('editor', {
         exporting: false,
         floatingMenu: false,
         modelMenu: false,
-        formPanel: {
-            isOpen: false,
-            form: null,
-        },
+        formPanel: null,
         openedNodeId: null,
         openedParentId: null,
-        sideActions: actionItems,
+        // sideActions: actionItems,
         questions: questions,
         standardScreens: standardScreen,
         undoStack: [],
-        redoStack: []
+        redoStack: [],
     }),
     
     getters: {
@@ -74,14 +69,16 @@ export const useEditorStore = defineStore('editor', {
             this.modelMenu = false;
         },
         openFormPanel(id: string, form: Form, parentId?: string): void {
-            this.formPanel.isOpen = true;
-            this.formPanel.form = form;
             this.openedNodeId = id;
             this.openedParentId = parentId;
+            this.formPanel = null;
+            //? To be sure the view is notified of closing / reopening
+            setTimeout(() => [
+                this.formPanel = form
+            ]);
         },
         closeFormPanel(): void {
-            this.formPanel.isOpen = false;
-            this.formPanel.form = null;
+            this.formPanel = null;
             this.openedNodeId = null;
         },
         //generate id of format 'aaaaaaaa'-'aaaa'-'aaaa'-'aaaa'-'aaaaaaaaaaaa'
@@ -131,7 +128,7 @@ export const useEditorStore = defineStore('editor', {
         },
         addCard(type: string, fieldIndex: number): void {
             const newCard: Card = this.getCard(type);
-            this.formPanel.form.fields[fieldIndex].inputs.push(newCard);
+            this.formPanel.fields[fieldIndex].inputs.push(newCard);
         },
         addElementToScreen(form: Form, action: SideAction, index: number): void {
             const newCard: Card = this.getCard('component');
@@ -317,48 +314,66 @@ const cardsModel: Card[] = [
     }
 ];
 
-const standardScreen: Screen[] = [
+const standardScreen: SideAction[] = [
     {
-        title: 'Ecran texte',
-        actions: [
-            {
-                icon: 'icon-texte',
-                type: 'text',
-                label: 'Texte'
-            }
-        ]
+        icon: 'icon-texte',
+        type: 'text',
+        label: 'Texte'
     },
     {
-        title: 'Ecran video',
-        actions: [
-            {
-                icon: 'icon-video',
-                type: 'video',
-                label: 'Vidéo'
-            },
-            {
-                icon: 'icon-texte',
-                type: 'text',
-                label: 'Texte'
-            }
-        ]
+        icon: 'icon-video',
+        type: 'video',
+        label: 'Vidéo'
     },
     {
-        title: 'Ecran audio',
-        actions: [
-            {
-                icon: 'icon-audio',
-                type: 'audio',
-                label: 'Audio'
-            },
-            {
-                icon: 'icon-texte',
-                type: 'text',
-                label: 'Texte'
-            }
-        ]
-    }
+        icon: 'icon-question',
+        type: 'question',
+        label: 'Question'
+    },
 ];
+
+// const standardScreen: Screen[] = [
+//     {
+//         title: 'Ecran texte',
+//         actions: [
+//             {
+//                 icon: 'icon-texte',
+//                 type: 'text',
+//                 label: 'Texte'
+//             }
+//         ]
+//     },
+//     {
+//         title: 'Ecran video',
+//         actions: [
+//             {
+//                 icon: 'icon-video',
+//                 type: 'video',
+//                 label: 'Vidéo'
+//             },
+//             {
+//                 icon: 'icon-texte',
+//                 type: 'text',
+//                 label: 'Texte'
+//             }
+//         ]
+//     },
+//     {
+//         title: 'Ecran audio',
+//         actions: [
+//             {
+//                 icon: 'icon-audio',
+//                 type: 'audio',
+//                 label: 'Audio'
+//             },
+//             {
+//                 icon: 'icon-texte',
+//                 type: 'text',
+//                 label: 'Texte'
+//             }
+//         ]
+//     }
+// ];
 
 
 const actionItems: SideAction[] = [

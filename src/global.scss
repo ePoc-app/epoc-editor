@@ -419,3 +419,42 @@ g.selected {
     stroke: var(--editor-blue) !important;
   }
 }
+
+// arrow for the question menu
+.arrow {
+	position: relative;
+	background-color: var(--content);
+	text-align: left;
+  // transform: rotate(80%);
+}
+.arrow:before,
+.arrow:after {
+	content: '';
+	position: absolute;
+	background-color: inherit;
+}
+.arrow,
+.arrow:before,
+.arrow:after {
+	width:  .8rem;
+	height: .8rem;
+	border-top-right-radius: 30%;
+}
+
+.arrow {
+	transform: rotate(-60deg) skewX(-30deg) scale(1,.866);
+}
+.arrow:before {
+	transform: rotate(-135deg) skewX(-45deg) scale(1.414,.707) translate(0,-50%);
+}
+.arrow:after {
+	transform: rotate(135deg) skewY(-45deg) scale(.707,1.414) translate(50%);
+}
+
+.arrow-wrapper {
+  position: absolute;
+  top: calc(50% - .4rem);
+  right: calc(100% - 5px);
+  // transform-origin: center center;
+  transform: rotate(-90deg) translateY(-50%);
+}

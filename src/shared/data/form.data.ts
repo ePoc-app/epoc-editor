@@ -8,12 +8,6 @@ const textForm: Form = {
         {
             inputs: [
                 {
-                    type: 'text',
-                    label: 'Titre',
-                    value: '',
-                    placeholder: 'Saisissez...'
-                },
-                {
                     type: 'ql-editor',
                     label: 'Résumé',
                     value: '',
@@ -51,17 +45,17 @@ const videoForm: Form = {
         {
             inputs: [
                 {
-                    type: 'text',
-                    label: 'Titre',
-                    value: '',
-                    placeholder: 'Saisissez...'
-                },
-                {
                     type: 'file',
                     label: 'Vidéo',
                     placeholder: 'Ajouter une vidéo',
                     value: '',
                     accept: '.mp4'
+                },
+                {
+                    type: 'ql-editor',
+                    label: 'Résumé',
+                    value: '',
+                    placeholder: 'Saisissez...'
                 },
                 {
                     type: 'file',

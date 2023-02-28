@@ -1,15 +1,40 @@
 <script setup lang="ts">
-import ModelMenuV0 from './components/ModelMenuV0.vue';
+import { useEditorStore } from '@/src/shared/stores';
+import SideActionButtonV0 from './components/SideActionButtonV0.vue';
 
-function startDragModel({event, sideAction, isScreen }) {
-    event.dataTransfer.dropEffect = 'move';
-    event.dataTransfer.effectAllowed = 'move';
-    event.dataTransfer.setData('sideAction', JSON.stringify(sideAction));
-    event.dataTransfer.setData('isScreen', isScreen);
-}
+const editorStore = useEditorStore();
 
 </script>
 
 <template>
-    <ModelMenuV0 @drag-start="startDragModel" />
+    <div class="side-bar">
+        <img src="@/public/img/epoc.svg" alt="logo ePoc">
+        <div class="side-bar-actions">
+            <SideActionButtonV0
+                v-for="item of editorStore.standardScreens"
+                :key="item.icon"
+                :side-action="item"
+            />
+        </div>
+    </div>
 </template>
+
+<style scoped lang="scss">
+.side-bar {
+    background-color: var(--content);
+    border-right: 1px solid var(--border);
+    img {
+        width: 80%;
+        margin-top: 2rem;
+        margin-left: 10%;
+        margin-bottom: .5rem;
+    }
+    &-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 2rem;
+        gap: 1rem;
+    }
+}
+</style>
