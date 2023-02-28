@@ -61,21 +61,21 @@ const videoForm: Form = {
                     label: 'Vidéo',
                     placeholder: 'Ajouter une vidéo',
                     value: '',
-                    accept: 'video/*'
+                    accept: '.mp4'
                 },
                 {
                     type: 'file',
                     label: 'Transcription',
                     value: '',
                     placeholder: 'Ajouter une transcription',
-                    accept: 'text/*'
+                    accept: '.txt,.vtt'
                 },
                 {
                     type: 'file',
                     label: 'Vignette',
                     value: '',
                     placeholder: 'Ajouter une vignette',
-                    accept: 'image/*'
+                    accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp'
                 },
                 {
                     type: 'file',
@@ -168,21 +168,21 @@ const epocForm: Form = {
                     label: 'Image de couverture',
                     placeholder: 'Ajouter une image de couverture',
                     value: '',
-                    accept: 'image/*'
+                    accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp'
                 },
                 {
                     type: 'file',
                     label: 'Vignette',
                     value: '',
                     placeholder: 'Ajouter une vignette',
-                    accept: 'image/*'
+                    accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp'
                 },
                 {
                     type: 'file',
                     label: 'Teaser',
                     value: '',
                     placeholder: 'Ajouter un teaser',
-                    accept: 'video/*'
+                    accept: '.mp4'
                 },
                 {
                     type: 'ql-editor',
@@ -275,14 +275,14 @@ const audioForm: Form = {
                     label: 'Transcription',
                     value: '',
                     placeholder: 'Ajouter une transcription',
-                    accept: 'text/*'
+                    accept: '.txt,.vtt'
                 },
                 {
                     type: 'file',
                     label: 'Vignette',
                     value: '',
                     placeholder: 'Ajouter une vignette',
-                    accept: 'image/*'
+                    accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp'
                 },
                 {
                     type: 'file',
