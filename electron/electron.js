@@ -10,10 +10,26 @@ const { cleanPreview } = require('./components/preview');
 const path = require('path');
 const store = require('./components/store');
 
+let mainWindow;
+let splashWindow;
+// Open file with editor, on windows : using argv | on macOS using open-file event (see below)
+let filepath = process.platform === 'win32' && process.argv[1] ? path.normalize(process.argv[1]) : null;
+
+app.on('will-finish-launching', () => {
+    app.on('open-file', async (event, path) => {
+        event.preventDefault();
+        filepath = path;
+
+        if (mainWindow) {
+            mainWindow.webContents.send('epocProjectPicked', JSON.stringify({name: null, modified: null, filepath: filepath, workdir: null}));
+        }
+    });
+});
+
 // This method will be called when Electron has finished initialization and is ready to create browser windows.
 app.whenReady().then(() => {
-    let mainWindow = createMainWindow();
-    const splashWindow = createSplashWindow();
+    mainWindow = createMainWindow();
+    splashWindow = createSplashWindow();
 
     setupIpcListener(mainWindow);
 
@@ -21,9 +37,12 @@ app.whenReady().then(() => {
     waitAll([
         waitEvent(mainWindow, 'ready-to-show'),
         wait(200)
-    ]).then(() => {
+    ]).then(async () => {
         splashWindow.destroy();
         mainWindow.show();
+        if (filepath) {
+            mainWindow.webContents.send('epocProjectPicked', JSON.stringify({name: null, modified: null, filepath: filepath, workdir: null}));
+        }
     });
 
     // Intercept assets:// protocol to serve local files from workdir
@@ -53,13 +72,9 @@ app.whenReady().then(() => {
         // On macOS it's common to re-create a window in the app when the dock icon is clicked and there are no other windows open.
         if (BrowserWindow.getAllWindows().length === 0) mainWindow = createMainWindow();
     });
-
-    // Quit when all the window are closed, except on macOS. There, it's common for applications and their menu bar to stay active until the user quits explicitly with Cmd + Q.
     app.on('window-all-closed', () => {
         cleanAllWorkdir();
         cleanPreview();
-        if(process.platform !== 'darwin') {
-            app.quit();
-        }
+        app.quit();
     });
 });
