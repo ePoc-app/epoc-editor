@@ -109,6 +109,11 @@ export const useEditorStore = defineStore('editor', {
                     }
                 });
             } else {
+                const connectedEdges = getConnectedEdges([nodeToDelete], edges.value);
+                for(const edge of connectedEdges) {
+                    findNode(edge.source).data.isSource = false;
+                    findNode(edge.target).data.isTarget = false; 
+                }
                 applyNodeChanges(
                     [{ id: nodeToDelete.id, type: 'remove' }],
                     nodes.value
