@@ -11,7 +11,6 @@ const editorStore = useEditorStore();
 editorService.setup();
 
 function dismissModals() {
-    console.log('click');
     editorStore.dismissModals();
 }
 
