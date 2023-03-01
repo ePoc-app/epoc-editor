@@ -53,7 +53,13 @@ module.exports.setupMenu = function () {
                     accelerator: 'CmdOrCtrl+S',
                     enabled: !!(store.state.currentProject && store.state.currentProject.workdir),
                     click: async function () {
-                        updateSavedProject(BrowserWindow.getFocusedWindow(),await saveEpocProject(store.state.currentProject));
+                        sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectSaving');
+                        const result = await saveEpocProject(store.state.currentProject);
+                        if (result) {
+                            updateSavedProject(BrowserWindow.getFocusedWindow(), result);
+                        } else {
+                            sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectSaveCanceled');
+                        }
                     }
                 },
                 {
@@ -62,7 +68,13 @@ module.exports.setupMenu = function () {
                     accelerator: 'Shift+CmdOrCtrl+S',
                     enabled: !!(store.state.currentProject && store.state.currentProject.workdir),
                     click: async function () {
-                        updateSavedProject(BrowserWindow.getFocusedWindow(), await saveAsEpocProject(store.state.currentProject));
+                        sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectSaving');
+                        const result = await saveAsEpocProject(store.state.currentProject);
+                        if (result) {
+                            updateSavedProject(BrowserWindow.getFocusedWindow(), result);
+                        } else {
+                            sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectSaveCanceled');
+                        }
                     }
                 }
             ]
