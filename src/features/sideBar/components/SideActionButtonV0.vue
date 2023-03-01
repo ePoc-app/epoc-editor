@@ -89,8 +89,8 @@ const dragOptions = {
                 :class="{ 'dragging' : dragging }"
                 :icon="sideAction.icon"
                 :class-list="classList"
-                is-blue="true"
-                is-draggable="true"
+                is-blue
+                is-draggable
                 @dragstart="dragStart($event, sideAction)"
                 @dragend="dragging = false"
                 @click="showMenu"
