@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
-import { SideAction, Screen, ePocProject, Form, Card } from '@/src/shared/interfaces';
+import { Card, ePocProject, Form, Screen, SideAction } from '@/src/shared/interfaces';
 import { toRaw } from 'vue';
-import { applyNodeChanges, useVueFlow, getConnectedEdges } from '@vue-flow/core';
+import { applyNodeChanges, getConnectedEdges, useVueFlow } from '@vue-flow/core';
 
 import { formsModel } from '@/src/shared/data/form.data';
 
@@ -323,17 +323,20 @@ const standardScreen: SideAction[] = [
     {
         icon: 'icon-texte',
         type: 'text',
-        label: 'Texte'
+        label: 'Texte',
+        tooltip: 'Glisser déposer pour ajouter un texte'
     },
     {
         icon: 'icon-video',
         type: 'video',
-        label: 'Vidéo'
+        label: 'Vidéo',
+        tooltip: 'Glisser déposer pour ajouter une vidéo'
     },
     {
         icon: 'icon-question',
         type: 'question',
-        label: 'Question'
+        label: 'Question',
+        tooltip: 'Cliquer pour ajouter une question'
     },
 ];
 

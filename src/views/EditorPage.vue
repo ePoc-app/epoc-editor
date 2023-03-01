@@ -11,13 +11,14 @@ const editorStore = useEditorStore();
 editorService.setup();
 
 function dismissModals() {
+    console.log('click');
     editorStore.dismissModals();
 }
 
 </script>
 
 <template>
-    <div class="editor-container" @click="dismissModals">
+    <div class="editor-container" @mouseup="dismissModals" @click="dismissModals">
         <SideBarV0 class="side-bar" />
         <TopBar class="top-bar" />
         <ePocFlow class="editor-content" />

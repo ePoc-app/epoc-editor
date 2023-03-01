@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { SideAction } from '../../../shared/interfaces';
+import { SideAction } from '@/src/shared/interfaces';
 import { ref } from 'vue';
-import ContentButton from '../../../components/ContentButton.vue';
+import ContentButton from '@/src/components/ContentButton.vue';
 import { useEditorStore } from '@/src/shared/stores';
-import draggable from 'vuedraggable';
 
 const props = defineProps<{
     sideAction:SideAction;
@@ -43,46 +42,60 @@ const dragOptions = {
 
 <template>
     <div class="container">
-        <ContentButton
-            class="question"
-            :class="{ 'dragging' : dragging && sideAction.type !== 'question' }"
-            :icon="sideAction.icon"
-            :class-list="classList"
-            :is-blue="!(sideAction.type === 'question' && editorStore.floatingMenu)"
-            :is-active="sideAction.type === 'question' && editorStore.floatingMenu"
-            :is-draggable="sideAction.type !== 'question'"
-            @dragstart="dragStart($event, sideAction)"
-            @dragend="dragging = false"
-            @click="showMenu"
-        />
-        <Transition>
-            <div v-if="editorStore.floatingMenu && sideAction.type === 'question'" class="floating-menu" @click.stop>
-                <div class="arrow-wrapper">
-                    <div class="arrow">
-                    </div>
-                </div>
-                <draggable
-                    v-bind="dragOptions"
-                    key="draggable"
-                    :model-value="editorStore.questions"
-                    item-key="id"
-                    class="questions-list"
-                >
-                    <template #item="{ element, index }">
-                        <div>
-                            <ContentButton 
-                                :key="index"
-                                :icon="element.icon"
-                                :class-list="{ 'btn-content-blue': false }"
-                                :is-active="false"
-                                :is-draggable="true"
-                                @dragstart="dragStart($event, element)"
-                            />
+        <template v-if="sideAction.type === 'question'">
+            <ContentButton
+                class="question"
+                :class="{ 'dragging' : dragging }"
+                :icon="sideAction.icon"
+                :class-list="classList"
+                :is-active="editorStore.floatingMenu"
+                @dragstart="dragStart($event, sideAction)"
+                @dragend="dragging = false"
+                @click="showMenu"
+            />
+            <Transition>
+                <div v-if="editorStore.floatingMenu" class="floating-menu" @click.stop>
+                    <div class="arrow-wrapper">
+                        <div class="arrow">
                         </div>
-                    </template>
-                </draggable>
-            </div>
-        </Transition>
+                    </div>
+                    <draggable
+                        v-bind="dragOptions"
+                        key="draggable"
+                        :model-value="editorStore.questions"
+                        item-key="id"
+                        class="questions-list"
+                    >
+                        <template #item="{ element, index }">
+                            <div>
+                                <ContentButton
+                                    :key="index"
+                                    :icon="element.icon"
+                                    :class-list="{ 'btn-content-blue': false }"
+                                    :is-active="false"
+                                    :is-draggable="true"
+                                    v-tippy="{content: element.label, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
+                                    @dragstart="dragStart($event, element)"
+                                />
+                            </div>
+                        </template>
+                    </draggable>
+                </div>
+            </Transition>
+        </template>
+        <template v-else>
+            <ContentButton
+                class="question"
+                :class="{ 'dragging' : dragging }"
+                :icon="sideAction.icon"
+                :class-list="classList"
+                is-blue="true"
+                is-draggable="true"
+                @dragstart="dragStart($event, sideAction)"
+                @dragend="dragging = false"
+                @click="showMenu"
+            />
+        </template>
     </div>
 </template>
 

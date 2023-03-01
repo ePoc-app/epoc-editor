@@ -13,6 +13,7 @@ const editorStore = useEditorStore();
             <SideActionButtonV0
                 v-for="item of editorStore.standardScreens"
                 :key="item.icon"
+                v-tippy="{content: editorStore.floatingMenu ? null : item.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
                 :side-action="item"
             />
         </div>
