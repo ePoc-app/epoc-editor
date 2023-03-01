@@ -49,6 +49,7 @@ const dragOptions = {
                 :icon="sideAction.icon"
                 :class-list="classList"
                 :is-active="editorStore.floatingMenu"
+                :is-draggable="false"
                 @dragstart="dragStart($event, sideAction)"
                 @dragend="dragging = false"
                 @click="showMenu"
@@ -91,6 +92,7 @@ const dragOptions = {
                 :class-list="classList"
                 is-blue
                 is-draggable
+                :is-active="false"
                 @dragstart="dragStart($event, sideAction)"
                 @dragend="dragging = false"
                 @click="showMenu"
