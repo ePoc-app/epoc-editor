@@ -2,12 +2,31 @@ import { ApiInterface } from '@/src/shared/interfaces/api.interface';
 import { router } from '@/src/router';
 import { useEditorStore, useProjectStore } from '@/src/shared/stores';
 import { ePocProject } from '@/src/shared/interfaces';
+import { createToaster } from '@meforma/vue-toaster';
+
+const toaster = createToaster({
+    duration: 1000,
+    queue: true
+});
 
 declare const api: ApiInterface;
 
 const editorStore = useEditorStore();
 const projectStore = useProjectStore();
 let initialized = false;
+let currentToastStartTime;
+let currentToast;
+
+const waitingToast = function (message) {
+    currentToastStartTime = performance.now();
+    currentToast = toaster.show(message, {duration: false});
+}
+
+const waitingToastDismiss = function () {
+    if (currentToast) {
+        setTimeout(currentToast.destroy, 1000 - (performance.now() - currentToastStartTime));
+    }
+}
 
 const setup = function () {
     if (initialized) return;
@@ -22,7 +41,18 @@ const setup = function () {
         newEpocProject();
     });
 
+    api.receive('epocProjectSaving', () => {
+        editorStore.saving = true;
+        waitingToast('💾 Sauvegarde en cours...');
+    });
+
+    api.receive('epocProjectSaveCanceled', () => {
+        waitingToastDismiss();
+    });
+
     api.receive('epocProjectSaved', (data: string) => {
+        waitingToastDismiss();
+        toaster.success('Projet sauvegardé 💪');
         editorStore.saving = false;
         const currentProject =  JSON.parse(data) as ePocProject;
         if (!currentProject || !currentProject.filepath) return;
@@ -52,12 +82,27 @@ const setup = function () {
     });
 
     api.receive('previewReady', () => {
+        waitingToastDismiss();
+        editorStore.loadingPreview = false;
+    });
+
+    api.receive('previewError', () => {
+        waitingToastDismiss();
+        toaster.error('😵 Une erreur s\'est produite');
         editorStore.loadingPreview = false;
     });
 
     api.receive('projectExported', () => {
+        waitingToastDismiss();
         editorStore.exporting = false;
     });
+
+    api.receive('exportError', () => {
+        waitingToastDismiss();
+        toaster.error('😵 Une erreur s\'est produite');
+        editorStore.exporting = false;
+    });
+
     initialized = true;
 };
 function newEpocProject(): void {
@@ -94,11 +139,13 @@ function saveEpocProject(): void {
 }
 
 function runPreview(): void {
+    waitingToast('🔭 Démarrage de la prévisualisation...');
     editorStore.loadingPreview = true;
     api.send('runPreview');
 }
 
 function exportProject(): void {
+    waitingToast('⚙️ Exporrt en cours...');
     editorStore.exporting = true;
     api.send('exportProject');
 }

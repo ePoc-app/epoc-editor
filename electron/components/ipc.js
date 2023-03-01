@@ -38,17 +38,28 @@ const setupIpcListener = function (targetWindow) {
     });
 
     ipcMain.on('saveEpocProject', async () => {
+        sendToFrontend(targetWindow, 'epocProjectSaving');
         updateSavedProject(targetWindow, await saveEpocProject(store.state.currentProject));
     });
 
     ipcMain.on('runPreview', async (event, contentPath) => {
-        await runPreview(store.state.currentProject.workdir, contentPath);
-        sendToFrontend(targetWindow, 'previewReady');
+        try {
+            await runPreview(store.state.currentProject.workdir, contentPath);
+            sendToFrontend(targetWindow, 'previewReady');
+        } catch (e) {
+            console.error(e);
+            sendToFrontend(targetWindow, 'previewError');
+        }
     });
 
     ipcMain.on('exportProject', async () => {
-        await exportProject(store.state.currentProject.workdir, store.state.currentProject.filepath);
-        sendToFrontend(targetWindow, 'projectExported');
+        try {
+            await exportProject(store.state.currentProject.workdir, store.state.currentProject.filepath);
+            sendToFrontend(targetWindow, 'projectExported');
+        } catch (e) {
+            console.error(e);
+            sendToFrontend(targetWindow, 'exportError');
+        }
     });
 
     ipcMain.on('writeProjectData', async (event, data) => {
