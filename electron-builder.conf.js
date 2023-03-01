@@ -31,6 +31,9 @@ module.exports = {
         // Get the most recent git tag otherwise use the version from package.json
         version: tcDefault(() => { cp.execSync('git describe --tags --abbrev=0', { stdio: [] }).toString().trim(); }, packageJson.version)
     },
+    extraResources: [
+        {from: 'public/preview.zip', to: 'preview.zip'}
+    ],
     beforePack: async (context) => {
         // Write an appInfo file to be used in prod
         const appInfo = {
