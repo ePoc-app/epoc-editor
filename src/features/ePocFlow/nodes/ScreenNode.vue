@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { Handle, useVueFlow } from '@vue-flow/core';
+import { Handle, Position, useVueFlow } from '@vue-flow/core';
 import ContentButton from '@/src/components/ContentButton.vue';
 import { onMounted, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { NodeElement } from '@/src/shared/interfaces';
-import { Position } from '@vue-flow/core';
-import draggable from 'vuedraggable';
 
 const editorStore = useEditorStore();
 
@@ -137,7 +135,7 @@ function dragStart(event, element: NodeElement, index: number) {
                 @dragleave="dragLeave($event)"
                 @dragenter="dragEnter($event)"
             >
-                <draggable
+                <VueDraggable
                     :model-value="data.elements"
                     v-bind="dragOptions"
                     class="node-list"
@@ -160,7 +158,7 @@ function dragStart(event, element: NodeElement, index: number) {
                             />
                         </div>
                     </template>
-                </draggable>
+                </VueDraggable>
             </div>
             <Handle
                 :class="{ 'not-connected': !node.data.isSource }"

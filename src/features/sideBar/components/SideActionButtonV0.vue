@@ -60,7 +60,7 @@ const dragOptions = {
                         <div class="arrow">
                         </div>
                     </div>
-                    <draggable
+                    <VueDraggable
                         v-bind="dragOptions"
                         key="draggable"
                         :model-value="editorStore.questions"
@@ -80,7 +80,7 @@ const dragOptions = {
                                 />
                             </div>
                         </template>
-                    </draggable>
+                    </VueDraggable>
                 </div>
             </Transition>
         </template>

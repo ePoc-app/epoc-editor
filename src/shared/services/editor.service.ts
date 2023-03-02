@@ -20,13 +20,13 @@ let currentToast;
 const waitingToast = function (message) {
     currentToastStartTime = performance.now();
     currentToast = toaster.show(message, {duration: false});
-}
+};
 
 const waitingToastDismiss = function () {
     if (currentToast) {
         setTimeout(currentToast.destroy, 1000 - (performance.now() - currentToastStartTime));
     }
-}
+};
 
 const setup = function () {
     if (initialized) return;
@@ -72,6 +72,7 @@ const setup = function () {
             editorStore.loading = false;
             return;
         }
+        editorStore.closeFormPanel();
         editorStore.currentProject = ePocProject;
 
         projectStore.setFlow(parsedData.flow);
