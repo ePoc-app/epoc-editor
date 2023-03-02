@@ -1,8 +1,9 @@
-import { Form, SideAction } from '.';
+import { SideAction } from '.';
 
 export interface NodeElement {
     id: string;
-    action: SideAction
-    form: Form;
+    action: SideAction;
+    formType: string;
+    formValues: object;
     parentId?: string;
 }

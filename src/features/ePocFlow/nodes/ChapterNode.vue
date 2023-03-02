@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import ContentButton from '@/src/components/ContentButton.vue';
-import { NodeElement } from '@/src/shared/interfaces';
 import { useEditorStore } from '@/src/shared/stores';
 import { Handle, useVueFlow } from '@vue-flow/core';
 import { Position } from '@vue-flow/core';
@@ -16,14 +15,12 @@ const props = defineProps<{
     }
 }>();
 
-const { findNode } = useVueFlow({ id: 'main' });
+const { findNode } = useVueFlow({ id: 'main' });    
 
 const node = findNode(props.id);
 
-const element: NodeElement = { id: props.id, action: { icon: 'icon-chapitre', type: 'chapter'}, form: editorStore.getForm('chapter') };
-
-function openForm(element: NodeElement) {
-    editorStore.openFormPanel(element.id, element.form);
+function openForm() {
+    editorStore.openFormPanel(node.id, node.data.formType, node.data.formValues);
 }
 
 </script>
@@ -31,12 +28,12 @@ function openForm(element: NodeElement) {
 <template>
     <div>
         <ContentButton 
-            :icon="element.action.icon"
-            :is-active="editorStore.openedNodeId ? editorStore.openedNodeId === element.id : false"
+            :icon="node.data.action.icon"
+            :is-active="editorStore.openedNodeId ? editorStore.openedNodeId === node.id : false"
             :is-draggable="false"
             :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true, 'btn-content-large': true }"
-            :subtitle="data.title"
-            @click="openForm(element)"
+            :subtitle="node.data.title"
+            @click="openForm()"
         />
     </div>
     <Handle

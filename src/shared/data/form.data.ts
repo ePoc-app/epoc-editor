@@ -1,6 +1,6 @@
-import { Form } from '@/src/shared/interfaces';
+import { Form, SideAction } from '@/src/shared/interfaces';
 
-const textForm: Form = {
+export const textForm: Form = {
     type: 'text',
     name: 'Contenu',
     icon: 'icon-texte',
@@ -8,12 +8,14 @@ const textForm: Form = {
         {
             inputs: [
                 {
+                    id: 'html',
                     type: 'ql-editor',
                     label: 'Résumé',
                     value: '',
                     placeholder: 'Saisissez un résumé...'
                 },
                 {
+                    id: 'poster',
                     type: 'file',
                     label: 'Vignette',
                     placeholder: 'Ajouter une vignette',
@@ -37,7 +39,7 @@ const textForm: Form = {
     ]
 };
 
-const videoForm: Form = {
+export const videoForm: Form = {
     type: 'video',
     name: 'Vidéo',
     icon: 'icon-video',
@@ -45,6 +47,7 @@ const videoForm: Form = {
         {
             inputs: [
                 {
+                    id: 'source',
                     type: 'file',
                     label: 'Vidéo',
                     placeholder: 'Ajouter une vidéo',
@@ -52,12 +55,14 @@ const videoForm: Form = {
                     accept: '.mp4'
                 },
                 {
+                    id: 'summary',
                     type: 'ql-editor',
                     label: 'Résumé',
                     value: '',
                     placeholder: 'Saisissez...'
                 },
                 {
+                    id: 'transcript',
                     type: 'file',
                     label: 'Transcription',
                     value: '',
@@ -65,6 +70,7 @@ const videoForm: Form = {
                     accept: '.txt,.vtt'
                 },
                 {
+                    id: 'poster',
                     type: 'file',
                     label: 'Vignette',
                     value: '',
@@ -72,6 +78,7 @@ const videoForm: Form = {
                     accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp'
                 },
                 {
+                    id: 'subtitles',
                     type: 'file',
                     label: 'Sous-titres',
                     value: '',
@@ -96,7 +103,7 @@ const videoForm: Form = {
 };
 
 
-const chapterForm: Form = {
+export const chapterForm: Form = {
     type: 'chapter',
     name: 'Chapitre',
     icon: 'icon-chapitre',
@@ -104,24 +111,41 @@ const chapterForm: Form = {
         {
             inputs: [
                 {
+                    id: 'title',
                     type: 'text',
                     label: 'Titre',
                     value: '',
                     placeholder: 'Saisissez...'
                 },
                 {
-                    type: 'text',
-                    label: 'Label',
+                    id: 'image',
+                    type: 'file',
+                    label: 'Image',
+                    placeholder: 'Ajouter une image',
                     value: '',
-                    placeholder: 'Saisissez...'
-                }
-            ]
+                    accept: 'image/*'
+                },
+            ],
         },
         {
             name: 'Objectifs',
-            type: 'cardGroup',
-            inputType: 'objective',
-            inputs: []
+            inputs: [
+                {
+                    id: 'objectives',
+                    label: 'Objectif',
+                    type: 'repeat',
+                    value: '',
+                    inputs: [
+                        {
+                            id: '',
+                            type: 'textarea',
+                            label: '',
+                            placeholder: 'Saisissez un objectif ...',
+                            value: ''
+                        }
+                    ]
+                }
+            ]
         }
     ],
     buttons: [
@@ -138,7 +162,7 @@ const chapterForm: Form = {
     ]
 };
 
-const epocForm: Form = {
+export const epocForm: Form = {
     type: 'epoc',
     name: 'Paramètre de l\'ePoc',
     icon: 'icon-epoc',
@@ -146,18 +170,21 @@ const epocForm: Form = {
         {
             inputs :[
                 {
+                    id: 'title',
                     type: 'text',
                     label: 'Titre',
                     value: '',
                     placeholder: 'Saisissez...'
                 },
                 {
+                    id: 'chapterParameter',
                     type: 'text',
-                    label: 'Label',
+                    label: 'Label des chapitres',
                     value: '',
                     placeholder: 'Saisissez...'
                 },
                 {
+                    id: 'image',
                     type: 'file',
                     label: 'Image de couverture',
                     placeholder: 'Ajouter une image de couverture',
@@ -165,35 +192,40 @@ const epocForm: Form = {
                     accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp'
                 },
                 {
+                    id: 'teaser',
                     type: 'file',
-                    label: 'Vignette',
-                    value: '',
-                    placeholder: 'Ajouter une vignette',
-                    accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp'
-                },
-                {
-                    type: 'file',
-                    label: 'Teaser',
+                    label: 'Teaser vidéo',
                     value: '',
                     placeholder: 'Ajouter un teaser',
                     accept: '.mp4'
                 },
                 {
+                    id: 'thumbnail',
+                    type: 'file',
+                    label: 'Vignette de la vidéo',
+                    value: '',
+                    placeholder: 'Ajouter une vignette',
+                    accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp'
+                },
+                {
+                    id: 'summary',
                     type: 'ql-editor',
                     label: 'Présentation',
                     value: '',
                     placeholder: 'Saisissez une présentation de l\'ePoc...'
                 },
                 {
+                    id: 'id',
                     type: 'text',
                     label: 'ID de l\'ePoc',
-                    value: 'id234567890',
+                    value: 'E000XX',
                     
                 },
                 {
+                    id: 'edition',
                     type: 'text',
-                    label: 'Version',
-                    value: '1.0',
+                    label: 'Edition',
+                    value: String(new Date().getFullYear()),
                 }
             ]
         }
@@ -208,7 +240,7 @@ const epocForm: Form = {
     ]
 };
 
-const screenForm: Form = { 
+export const screenForm: Form = { 
     type: 'screen',
     name: 'Écran',
     icon: 'icon-ecran',
@@ -216,6 +248,7 @@ const screenForm: Form = {
         {
             inputs: [
                 {
+                    id:'title',
                     type: 'text',
                     label: 'Titre',
                     value: '',
@@ -225,65 +258,14 @@ const screenForm: Form = {
         },
         {
             name: 'Composants',
-            type: 'cardGroup',
-            inputType: 'component',
-            inputs: []
-        }
-    ],
-    buttons: [
-        {
-            label: 'Supprimer',
-            icon: 'icon-supprimer',
-            action: 'delete'
-        },
-        {
-            label: 'Copier le lien',
-            icon: 'icon-copie',
-            action: 'copy'
-        },
-    ]
-};
-
-const audioForm: Form = {
-    type: 'audio',
-    name: 'Audio',
-    icon: 'icon-audio',
-    fields: [
-        {
             inputs: [
                 {
-                    type: 'text',
-                    label: 'Titre',
+                    id: 'components',
+                    label: 'Composants',
+                    type: 'repeat',
                     value: '',
-                    placeholder: 'Saisissez...'
-                },
-                {
-                    type: 'file',
-                    label: 'Piste audio',
-                    value: '',
-                    placeholder: 'Ajouter une piste audio',
-                    accept: 'audio/*'
-                },
-                {
-                    type: 'file',
-                    label: 'Transcription',
-                    value: '',
-                    placeholder: 'Ajouter une transcription',
-                    accept: '.txt,.vtt'
-                },
-                {
-                    type: 'file',
-                    label: 'Vignette',
-                    value: '',
-                    placeholder: 'Ajouter une vignette',
-                    accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp'
-                },
-                {
-                    type: 'file',
-                    label: 'Sous-titres',
-                    value: '',
-                    placeholder: 'Ajouter des sous-titres',
-                    accept: '.vtt'
+                    addButton: false,
+                    inputs: []
                 }
             ]
         }
@@ -302,30 +284,27 @@ const audioForm: Form = {
     ]
 };
 
+
 // Question forms
 
-const qcmForm: Form = {
+export const qcmForm: Form = {
     type: 'qcm',
     name: 'QCM',
     icon: 'icon-qcm',
+    displayFieldIndex: true,
     fields: [
         {
             name: 'Configuration de l\'activité',
-            index: 1,
             inputs: [
                 {
-                    type: 'text',
-                    label: 'Titre',
-                    value: '',
-                    placeholder: 'Saisissez...'
-                },
-                {
+                    id: 'label',
                     type: 'textarea',
                     label: 'Énoncé',
                     value: '',
                     placeholder: 'Saisissez'
                 },
                 {
+                    id: 'score',
                     type: 'score',
                     label: 'Score',
                     value: '0',
@@ -334,9 +313,9 @@ const qcmForm: Form = {
         },
         {
             name: 'Question',
-            index: 2,
             inputs: [
                 {
+                    id: 'statement',
                     type: 'textarea',
                     label: '',
                     value: '',
@@ -346,16 +325,35 @@ const qcmForm: Form = {
         },
         {
             name: 'Réponses',
-            index: 3,
-            type: 'cardGroup',
-            inputType: 'qcm',
-            inputs: []
+            inputs: [
+                {
+                    id: 'responses',
+                    label: 'Réponse',
+                    type: 'repeat',
+                    value: '',
+                    inputs: [
+                        {
+                            id: 'response',
+                            type: 'textarea',
+                            label: '',
+                            placeholder: 'Saisissez une réponse ..',
+                            value: ''
+                        },
+                        {
+                            id: 'isCorrect',
+                            type: 'checkbox',
+                            label: 'Bonne réponse',
+                            value: 'false'
+                        }
+                    ]
+                }
+            ]
         },
         {
             name: 'Explication',
-            index: 4,
             inputs: [
                 {
+                    id: 'explanation',
                     type: 'ql-editor',
                     label: '',
                     value: '',
@@ -378,28 +376,24 @@ const qcmForm: Form = {
     ]
 };
 
-const dragDropForm: Form = {
+export const dragDropForm: Form = {
     type: 'dragdrop',
     name: 'Drag & Drop',
     icon: 'icon-dragdrop',
+    displayFieldIndex: true,
     fields: [
         {
             name: 'Configuration de l\'activité',
-            index: 1,
             inputs: [
                 {
-                    type: 'text',
-                    label: 'Titre',
-                    value: '',
-                    placeholder: 'Saisissez...'
-                },
-                {
+                    id: 'label',
                     type: 'textarea',
                     label: 'Énoncé',
                     value: '',
                     placeholder: 'Saisissez...'
                 },
                 {
+                    id: 'score',
                     type: 'score',
                     label: 'Score',
                     value: '0',
@@ -408,9 +402,9 @@ const dragDropForm: Form = {
         },
         {
             name: 'Question',
-            index: 2,
             inputs: [
                 {
+                    id: 'explanation',
                     type: 'textarea',
                     label: '',
                     value: '',
@@ -420,23 +414,56 @@ const dragDropForm: Form = {
         },
         {
             name: 'Catégories de réponses proposées',
-            index: 3,
-            type: 'cardGroup',
-            inputType: 'category',
-            inputs: [],
+            inputs: [
+                {
+                    id: 'categories',
+                    label: 'Catégorie',
+                    type: 'repeat',
+                    value: '',
+                    inputs: [
+                        {
+                            id: '',
+                            type: 'textarea',
+                            label: '',
+                            placeholder: 'Saisissez un intitulé catégorie..',
+                            value: '',
+                        }
+                    ]
+                }
+            ]
         },
         {
             name: 'Réponses proposées',
-            index: 4,
-            type: 'cardGroup',
-            inputType: 'dd',
-            inputs: [],
+            inputs: [
+                {
+                    id: 'responses',
+                    label: 'Réponse',
+                    type: 'repeat',
+                    value: '',
+                    inputs: [
+                        {
+                            id: 'response',
+                            type: 'textarea',
+                            label: '',
+                            placeholder: 'Saisissez une réponse...',
+                            value: '',
+                        },
+                        {
+                            id: 'choice',
+                            type: 'select',
+                            label: '',
+                            placeholder: '',
+                            value: '',
+                        }
+                    ]
+                }
+            ]
         },
         {
             name: 'Explication',
-            index: 5,
             inputs: [
                 {
+                    id: 'explanation',
                     type: 'ql-editor',
                     label: '',
                     value: '',
@@ -459,28 +486,24 @@ const dragDropForm: Form = {
     ]
 };
 
-const reorderForm: Form = {
+export const reorderForm: Form = {
     type: 'reorder',
     name: 'Reorder',
     icon: 'icon-reorder',
+    displayFieldIndex: true,
     fields: [
         {
             name: 'Configuration de l\'activité',
-            index: 1,
             inputs: [
                 {
-                    type: 'text',
-                    label: 'Titre',
-                    value: '',
-                    placeholder: 'Saisissez...'
-                },
-                {
+                    id: 'label',
                     type: 'textarea',
                     label: 'Énoncé',
                     value: '',
                     placeholder: 'Saisissez...'
                 },
                 {
+                    id: 'score',
                     type: 'score',
                     label: 'Score',
                     value: '0',
@@ -489,9 +512,9 @@ const reorderForm: Form = {
         },
         {
             name: 'Question',
-            index: 2,
             inputs: [
                 {
+                    id: 'statement',
                     type: 'textarea',
                     label: '',
                     value: '',
@@ -501,16 +524,29 @@ const reorderForm: Form = {
         },
         {
             name: 'Réponses',
-            index: 3,
-            type: 'cardGroup',
-            inputType: 'reorder',
-            inputs: [],
+            inputs: [
+                {
+                    id: 'responses',
+                    label: 'Réponse',
+                    type: 'repeat',
+                    value: '',
+                    inputs: [
+                        {
+                            id: '',
+                            type: 'textarea',
+                            label: '',
+                            placeholder: 'Saisissez une réponse...',
+                            value: ''
+                        },
+                    ]
+                }
+            ]
         },
         {
             name: 'Explication',
-            index: 4,
             inputs: [
                 {
+                    id: 'explanation',
                     type: 'ql-editor',
                     label: '',
                     value: '',
@@ -533,28 +569,24 @@ const reorderForm: Form = {
     ]
 };
 
-const swipeForm: Form = {
+export const swipeForm: Form = {
     type: 'swipe',
     name: 'Swipe',
     icon: 'icon-swipe',
+    displayFieldIndex: true,
     fields: [
         {
             name: 'Configuration de l\'activité',
-            index: 1,
             inputs: [
                 {
-                    type: 'text',
-                    label: 'Titre',
-                    value: '',
-                    placeholder: 'Saisissez...'
-                },
-                {
+                    id: 'label',
                     type: 'textarea',
                     label: 'Énoncé',
                     value: '',
                     placeholder: 'Saisissez...'
                 },
                 {
+                    id: 'score',
                     type: 'score',
                     label: 'Score',
                     value: '0',
@@ -563,9 +595,9 @@ const swipeForm: Form = {
         },
         {
             name: 'Question',
-            index: 2,
             inputs: [
                 {
+                    id: 'statement',
                     type: 'textarea',
                     label: '',
                     value: '',
@@ -575,15 +607,16 @@ const swipeForm: Form = {
         },
         {
             name: 'Catégories de choix proposées',
-            index: 3,
             inputs: [
                 {
+                    id: 'left',
                     type: 'text',
                     label: 'Choix gauche',
                     value: '',
                     placeholder: 'Saisissez une réponse...'
                 },
                 {
+                    id: 'right',
                     type: 'text',
                     label: 'Choix droite',
                     value: '',
@@ -592,17 +625,38 @@ const swipeForm: Form = {
             ]
         },
         {
-            name: 'Cartes',
-            index: 4,
-            type: 'cardGroup',
-            inputType: 'swipe',
-            inputs: [],
+            name: 'Réponse proposée',
+            inputs: [
+                {
+                    id: 'responses',
+                    label: 'Carte',
+                    type: 'repeat',
+                    value: '',
+                    inputs: [
+                        {
+                            id: 'response',
+                            type: 'textarea',
+                            label: '',
+                            placeholder: 'Saisissez une proposition',
+                            value: ''
+                        },
+                        {
+                            id:  'correctReponse',
+                            type: 'radio-group',
+                            label: 'Réponse',
+                            value: '0'
+                        }
+
+                    ]
+                }
+            ]
         },
         {
             name: 'Explication',
             index: 5,
             inputs: [
                 {
+                    id: 'explanation',
                     type: 'ql-editor',
                     label: '',
                     value: '',
@@ -625,28 +679,24 @@ const swipeForm: Form = {
     ]
 };
 
-const listForm: Form = {
+export const listForm: Form = {
     type: 'list',
     name: 'Listes déroulantes',
     icon: 'icon-liste',
+    displayFieldIndex: true,
     fields: [
         {
             name: 'Configuration de l\'activité',
-            index: 1,
             inputs: [
                 {
-                    type: 'text',
-                    label: 'Titre',
-                    value: '',
-                    placeholder: 'Saisissez...'
-                },
-                {
+                    id: 'label',
                     type: 'textarea',
                     label: 'Énoncé',
                     value: '',
                     placeholder: 'Saisissez...'
                 },
                 {
+                    id: 'score',
                     type: 'score',
                     label: 'Score',
                     value: '0',
@@ -655,9 +705,9 @@ const listForm: Form = {
         },
         {
             name: 'Question',
-            index: 2,
             inputs: [
                 {
+                    id: 'statement',
                     type: 'textarea',
                     label: '',
                     value: '',
@@ -667,23 +717,56 @@ const listForm: Form = {
         },
         {
             name: 'Catégories de choix proposées',
-            index: 3,
-            type: 'cardGroup',
-            inputType: 'list-choice',
-            inputs: []
+            inputs: [
+                {
+                    id: 'categories',
+                    label: 'Choix',
+                    type: 'repeat',
+                    value: '',
+                    inputs: [
+                        {
+                            id: '',
+                            type: 'text',
+                            label: '',
+                            placeholder: 'Saisissez une réponse...',
+                            value: ''
+                        }
+                    ]
+                }
+            ]
         },
         {
             name: 'Cartes',
-            index: 4,
-            type: 'cardGroup',
-            inputType: 'list',
-            inputs: [],
+            inputs: [
+                {
+                    id: 'responses',
+                    label: 'Carte',
+                    type: 'repeat',
+                    value: '',
+                    inputs: [
+                        {
+                            id: 'response',
+                            type: 'textarea',
+                            label: '',
+                            placeholder: 'Saisissez une question...',
+                            value: ''
+                        },
+                        {
+                            id: 'choice',
+                            type: 'select',
+                            label: '',
+                            placeholder: '',
+                            value: ''
+                        }
+                    ]
+                }
+            ]
         },
         {
             name: 'Explication',
-            index: 5,
             inputs: [
                 {
+                    id: 'explanation',
                     type: 'ql-editor',
                     label: '',
                     value: '',
@@ -706,5 +789,51 @@ const listForm: Form = {
     ]
 };
 
+export const formsModel: Form[] = [textForm, videoForm, chapterForm, screenForm, epocForm, qcmForm, swipeForm, reorderForm, listForm, dragDropForm];
 
-export const formsModel: Form[] = [textForm, videoForm, qcmForm, chapterForm, epocForm, screenForm, audioForm, dragDropForm, reorderForm, swipeForm, listForm];
+export const standardScreen: SideAction[] = [
+    {
+        icon: 'icon-texte',
+        type: 'text',
+        label: 'Texte'
+    },
+    {
+        icon: 'icon-video',
+        type: 'video',
+        label: 'Vidéo'
+    },
+    {
+        icon: 'icon-question',
+        type: 'question',
+        label: 'Question'
+    },
+];
+
+export const questions: SideAction[] = [
+    {
+        icon: 'icon-qcm',
+        type: 'qcm',
+        label: 'QCM'
+    },
+    {
+        icon: 'icon-dragdrop',
+        type: 'dragdrop',
+        label: 'Drag & Drop'
+    },
+    {
+        icon: 'icon-reorder',
+        type: 'reorder',
+        label: 'Reorder'
+    },
+    {
+        icon: 'icon-swipe',
+        type: 'swipe',
+        label: 'Swipe'
+    },
+    {
+        icon: 'icon-liste',
+        type: 'list',
+        label: 'Liste déroulantes'
+    }
+];
+

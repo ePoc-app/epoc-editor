@@ -34,7 +34,7 @@ onMounted(() => {
 });
 
 function openForm(element: NodeElement) {
-    editorStore.openFormPanel(element.id, element.form, element.parentId);
+    editorStore.openFormPanel(element.id, element.formType, element.formValues, element.parentId);
 }
 
 let counter = 0;
@@ -62,17 +62,19 @@ function change(event) {
         if(event.added.element.action) {
             newElement = event.added.element;
         } else {
+            console.log('new element', event.added.element);
             newElement = {
                 id: editorStore.generateId(),
                 parentId: props.id,
                 action: event.added.element,
-                form: editorStore.getForm(event.added.element.type)
+                formType: event.added.element.type,
+                formValues: event.added.element.formValues,
             };
         }
         node.data.elements.splice(event.added.newIndex, 0, newElement);
         dropped.value = false;
         
-        editorStore.addElementToScreen(node.data.form, newElement.action, event.added.newIndex);
+        editorStore.addElementToScreen(node.id, event.added.element, event.added.newIndex);
 
     } if(event.moved) {
         const oldIndex = event.moved.oldIndex;
@@ -117,10 +119,10 @@ function dragStart(event, element: NodeElement, index: number) {
 
 <template>
     <div
-        @click="editorStore.openFormPanel(node.id, node.data.form)"
+        @click="editorStore.openFormPanel(node.id, node.data.formType, node.data.formValues)"
     >
         <div class="container">
-            <p class="node-title">{{ node.data.form.fields[0].inputs[0].value || 'Page' }}</p>
+            <p class="node-title">{{ node.data.formValues?.title || 'Page' }}</p>
             <Handle
                 :class="{ 'not-connected': !node.data.isTarget }"
                 type="target"

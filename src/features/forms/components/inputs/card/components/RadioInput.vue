@@ -14,29 +14,29 @@ const emit = defineEmits<{
 
 <template>
     <div class="radio">
-        <label class="group-label" for="radio-group">Réponse</label>
-        <div id="radio-group" class="radio-group">
+        <label class="group-label" :for="String(pos)">Réponse</label>
+        <div :id="String(pos)" class="radio-group">
             <div class="radio-btn">
                 <input
-                    id="left"
+                    :id="'left-' + String(pos)"
                     :name="'pos' + pos"
                     type="radio"
                     class="radio-input"
                     :checked="inputValue === '1'"
                     @change="emit('change', '1')"
                 >
-                <label for="left">Choix gauche</label>
+                <label :for="'left-' + String(pos)">Choix gauche</label>
             </div>
             <div class="radio-btn">
                 <input
-                    id="right"
+                    :id="'right-' + String(pos)"
                     :name="'pos' + pos"
                     type="radio"
                     class="radio-input"
                     :checked="inputValue === '2'"
                     @change="emit('change', '2')"
                 >
-                <label for="right">Choix droite</label>
+                <label :for="'right-' + String(pos)">Choix droite</label>
             </div>
         </div>
     </div>

@@ -1,14 +1,22 @@
 <script setup lang="ts">
+import { useVueFlow } from '@vue-flow/core';
+import { useEditorStore } from '@/src/shared/stores';
 
 defineProps<{
     label: string;
     inputValue: string;
     placeholder: string;
+    // options: string[];
 }>();
 
 const emit = defineEmits<{
     (e: 'change', value: string): void;
 }>();
+
+const { findNode } = useVueFlow({ id: 'main' });
+const editorStore = useEditorStore();
+
+const node = editorStore.openedParentId ? findNode(editorStore.openedParentId) : findNode(editorStore.openedNodeId);
 
 </script>
 
@@ -22,9 +30,7 @@ const emit = defineEmits<{
             @change="emit('change', ($event.target as HTMLInputElement).value)"
         >
             <option value="">Sélectionnez</option>
-            <option value="1">{{ placeholder }} 1</option>
-            <option value="2">{{ placeholder }} 2</option>
-            <option value="3">{{ placeholder }} 3</option>
+            <option v-for="(option, index) in node.data.formValues['categories']" :key="index" :value="option">{{ option }}</option>
         </select>
     </div>
 </template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ContentButton from '@/src/components/ContentButton.vue';
-import { NodeElement } from '@/src/shared/interfaces';
 import { useEditorStore } from '@/src/shared/stores';
+import { useVueFlow } from '@vue-flow/core';
 
 const editorStore = useEditorStore();
 const props = defineProps<{
@@ -12,10 +12,12 @@ const props = defineProps<{
     }
 }>();
 
-const element: NodeElement = { id: props.id, action: { icon: 'icon-epoc', type: 'epoc'}, form: editorStore.getForm('epoc') };
+const { findNode } = useVueFlow({ id: 'main' });
 
-function openForm(element: NodeElement) {
-    editorStore.openFormPanel(element.id, element.form);
+const node = findNode(props.id);
+
+function openForm() {
+    editorStore.openFormPanel(node.id, node.data.formType, node.data.formValues);
 }
 
 </script>
@@ -23,12 +25,12 @@ function openForm(element: NodeElement) {
 <template>
     <div>
         <ContentButton 
-            :icon="element.action.icon"
-            :is-active="editorStore.openedNodeId ? editorStore.openedNodeId === element.id : false"
+            :icon="node.data.action.icon"
+            :is-active="editorStore.openedNodeId ? editorStore.openedNodeId === node.id : false"
             :is-draggable="false"
             :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true, 'btn-content-large': true }"
             subtitle="ePoc"
-            @click="openForm(element)"
+            @click="openForm()"
         />
     </div>
 </template>

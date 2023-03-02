@@ -6,4 +6,5 @@ export interface Form {
     icon: string;
     fields: Field[];
     buttons?: FormButton[];
+    displayFieldIndex?: boolean;
 }

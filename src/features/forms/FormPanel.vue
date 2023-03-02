@@ -2,9 +2,7 @@
 import { useEditorStore } from '../../shared/stores';
 import FormButton from './components/FormButton.vue';
 import GenericField from './components/GenericField.vue';
-import CardGroup from './components/inputs/card/CardGroup.vue';
 import { Input } from '@/src/shared/interfaces';
-import { Card } from '@/src/shared/interfaces/card.interface';
 
 const editorStore = useEditorStore();
 
@@ -13,55 +11,6 @@ function actionOnForm(action: string) {
     case 'delete':
         editorStore.deleteElement(editorStore.openedNodeId);
         break;
-    }
-}
-
-function addCard(type: string, index: number): void {
-    editorStore.addCard(type, index);
-}
-
-function deleteCard(cardIndex: number, fieldIndex: number, type: string): void {
-    if(type === 'component') {
-        const parentNodeId = editorStore.openedParentId ? editorStore.openedParentId : editorStore.openedNodeId;
-        editorStore.removeElementFromScreen(cardIndex, parentNodeId);
-    } else {
-        editorStore.formPanel.fields[fieldIndex].inputs.splice(cardIndex ,1);
-    }
-}
-
-function moveUpCard(cardIndex, fieldIndex, type: string) {
-    const inputs = editorStore.formPanel.fields[fieldIndex].inputs;
-    let temp = inputs[cardIndex];
-    inputs[cardIndex] = inputs[cardIndex-1];
-    inputs[cardIndex-1] = temp;
-
-    if(type === 'component') {
-        editorStore.changeElementOrder(cardIndex, cardIndex-1, editorStore.openedNodeId);
-    }
-}
-
-function moveDownCard(cardIndex, fieldIndex, type: string) {
-    const inputs = editorStore.formPanel.fields[fieldIndex].inputs;
-    let temp = inputs[cardIndex];
-    inputs[cardIndex] = inputs[cardIndex+1];
-    inputs[cardIndex+1] = temp;
-
-    if(type === 'component') {
-        editorStore.changeElementOrder(cardIndex, cardIndex+1, editorStore.openedNodeId);
-    }
-}
-
-function changeCards(event, fieldIndex, type: string) {
-    const oldIndex = event.moved.oldIndex;
-    const newIndex = event.moved.newIndex;
-    const inputs = editorStore.formPanel.fields[fieldIndex].inputs;
-
-    const tmp = inputs[oldIndex];
-    inputs.splice(oldIndex, 1);
-    inputs.splice(newIndex, 0, tmp);
-
-    if(type === 'component') {
-        editorStore.changeElementOrder(oldIndex, newIndex, editorStore.openedNodeId);
     }
 }
 
@@ -88,23 +37,11 @@ function changeCards(event, fieldIndex, type: string) {
             :key="index"
             class="field"
         >
-            <CardGroup
-                v-if="field.type === 'cardGroup'"
-                :cards="(field.inputs as Card[])"
-                :field-name="field.name"
-                :field-index="field.index"
-                :type="field.inputType"
-                @add-card="addCard(field.inputType, index)"
-                @delete-card="deleteCard($event, index, field.inputType)"
-                @move-up-card="moveUpCard($event, index, field.inputType)"
-                @move-down-card="moveDownCard($event, index, field.inputType)"
-                @change-cards="changeCards($event, index, field.inputType)"
-            />
             <GenericField 
-                v-else
                 :inputs="(field.inputs as Input[])"
                 :field-name="field.name"
-                :field-index="field.index"
+                :field-index="index"
+                :display-field-index="editorStore.formPanel.displayFieldIndex"
             />
         </div>
     </div>

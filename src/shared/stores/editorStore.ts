@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
-import { Card, ePocProject, Form, Screen, SideAction } from '@/src/shared/interfaces';
+import { SideAction, Screen, ePocProject, Form } from '@/src/shared/interfaces';
 import { toRaw } from 'vue';
 import { applyNodeChanges, getConnectedEdges, useVueFlow } from '@vue-flow/core';
 
-import { formsModel } from '@/src/shared/data/form.data';
+import { formsModel, standardScreen, questions } from '@/src/shared/data/form.data';
 
 const { findNode, nodes, edges } = useVueFlow({ id: 'main' });
 
@@ -21,9 +21,7 @@ interface EditorState {
     formPanel: Form;
     openedNodeId: uid | null;
     openedParentId: uid | null;
-    // sideActions: SideAction[];
     questions: SideAction[];
-    // standardScreens: Screen[];
     standardScreens: SideAction[];
     undoStack: [];
     redoStack: [];
@@ -42,7 +40,6 @@ export const useEditorStore = defineStore('editor', {
         formPanel: null,
         openedNodeId: null,
         openedParentId: null,
-        // sideActions: actionItems,
         questions: questions,
         standardScreens: standardScreen,
         undoStack: [],
@@ -68,14 +65,14 @@ export const useEditorStore = defineStore('editor', {
             this.floatingMenu = false;
             this.modelMenu = false;
         },
-        openFormPanel(id: string, form: Form, parentId?: string): void {
+        openFormPanel(id: string, formType: string, formValues, parentId?: string): void {
             this.openedNodeId = id;
             this.openedParentId = parentId;
             this.formPanel = null;
             //? To be sure the view is notified of closing / reopening
-            setTimeout(() => [
-                this.formPanel = form
-            ]);
+            setTimeout(() => { 
+                this.formPanel = structuredClone(formsModel.find(form => form.type === formType));
+            });
         },
         closeFormPanel(): void {
             this.formPanel = null;
@@ -93,9 +90,6 @@ export const useEditorStore = defineStore('editor', {
         //return a copy of the form linked to the type
         getForm(type: string): Form {
             return structuredClone(toRaw(formsModel.find(form => form.type === type)));
-        },
-        getCard(type: string): Card {
-            return structuredClone(toRaw(cardsModel.find(card => card.type === type)));
         },
         deleteElement(id: string): void {
             
@@ -131,24 +125,24 @@ export const useEditorStore = defineStore('editor', {
             }
             this.closeFormPanel();
         },
-        addCard(type: string, fieldIndex: number): void {
-            const newCard: Card = this.getCard(type);
-            this.formPanel.fields[fieldIndex].inputs.push(newCard);
-        },
-        addElementToScreen(form: Form, action: SideAction, index: number): void {
-            const newCard: Card = this.getCard('component');
-            newCard.action = action;
-            if(index !== -1) {
-                form.fields[1].inputs.splice(index, 0, newCard);
-            } else {
-                form.fields[1].inputs.push(newCard);
+        addElementToScreen(nodeId: string, action: SideAction, index?: number) {
+            const node = findNode(nodeId);
+            if(index) {
+                node.data.formValues.components.splice(index, 0, { action: action });
+            }
+            else {
+                if(!node.data.formValues.components) {
+                    node.data.formValues.components = [];
+                }
+                node.data.formValues.components.push({ action: action });
             }
         },
         removeElementFromScreen(index: number, parentNodeId): void {
             const node = findNode(parentNodeId);
 
             node.data.elements.splice(index, 1);
-            node.data.form.fields[1].inputs.splice(index, 1);
+            node.data.formValues.components.splice(index, 1);
+            // node.data.form.fields[1].inputs.splice(index, 1);
             if(node.data.elements.length === 0) {
                 const connectedEdges = getConnectedEdges([node], edges.value);
                 connectedEdges.forEach(edge => {
@@ -174,279 +168,14 @@ export const useEditorStore = defineStore('editor', {
         redo() {
             // @todo
             console.log('todo redo');
+        },
+        generateContentId() {
+            const firstNumber = (Math.random() * 46656) | 0;
+            const secondNumber = (Math.random() * 46656) | 0;
+            const firstPart = ('000' + firstNumber.toString(36)).slice(-3);
+            const secondPart = ('000' + secondNumber.toString(36)).slice(-3);
+            return firstPart + secondPart;
         }
     }
 });
 
-const cardsModel: Card[] = [
-    {
-        type: 'objective',
-        label: 'Objectif',
-        placeholder: 'Ajouter un objectif',
-        inputs: [
-            {
-                type:'textarea',
-                label: '',
-                placeholder: 'Saisissez un objectif...',
-                value: ''
-            }
-        ],
-    },
-    {
-        type: 'component',
-        label: 'Composant',
-        placeholder: 'Ajouter un composant',
-        inputs: [],
-    },
-    {
-        type: 'qcm',
-        label: 'Réponse',
-        placeholder: 'Ajouter une autre réponse',
-        inputs: [
-            {
-                type:'textarea',
-                label: '',
-                placeholder: 'Saisissez une réponse...',
-                value: ''
-            },
-            {
-                type: 'checkbox',
-                label: 'C\'est une bonne réponse',
-                value: 'false'
-            }
-        ]
-    },
-    {
-        type: 'category',
-        label: 'Catégorie',
-        placeholder: 'Ajouter une autre catégorie',
-        inputs: [
-            {
-                type: 'textarea',
-                label: '',
-                placeholder: 'Saisissez un intitulé de catégorie...',
-                value: ''
-            },
-        ]
-    },
-    {
-        type: 'dd',
-        label: 'Réponse',
-        placeholder: 'Ajouter une autre réponse proposée',
-        inputs: [
-            {
-                type: 'textarea',
-                label: '',
-                placeholder: 'Saisissez une réponse...',
-                value: ''
-            },
-            {
-                type: 'select',
-                label: 'À quelle catégorie appartient cette réponse',
-                placeholder: 'Catégorie',
-                value: '',
-            }
-        ]
-    },
-    {
-        type: 'reorder',
-        label: 'Réponse',
-        placeholder: 'Ajouter une autre réponse',
-        inputs: [
-            {
-                type: 'textarea',
-                label: '',
-                placeholder: 'Saisissez une réponse...',
-                value: ''
-            },
-            {
-                type: 'select',
-                label: 'Position affichée à l\'écran avant réorganisation',
-                placeholder: 'Affichée en position',
-                value: '',
-            },
-        ]
-    },
-    {
-        type: 'swipe',
-        label: 'Carte',
-        placeholder: 'Ajouter une autre carte',
-        inputs: [
-            {
-                type: 'textarea',
-                label: '',
-                placeholder: 'Saisissez une proposition...',
-                value: ''
-            },
-            {
-                type: 'radio-group',
-                label: 'Réponse',
-                value: '0'
-            },
-        ]
-    },
-    {
-        type: 'list-choice',
-        label: 'Choix',
-        placeholder: 'Ajouter un autre choix',
-        inputs: [
-            {
-                type: 'text',
-                label: '',
-                placeholder: 'Saisissez un choix...',
-                value: ''
-            },
-        ]
-    },
-    {
-        type: 'list',
-        label: 'Carte',
-        placeholder: 'Ajouter une autre carte',
-        inputs: [
-            {
-                type: 'textarea',
-                label: '',
-                placeholder: 'Saisissez une question...',
-                value: ''
-            },
-            {
-                type: 'select',
-                label: 'Réponse',
-                placeholder: 'Choix',
-                value: '',
-            }
-        ]
-    }
-];
-
-const standardScreen: SideAction[] = [
-    {
-        icon: 'icon-texte',
-        type: 'text',
-        label: 'Texte',
-        tooltip: 'Glisser déposer pour ajouter un texte'
-    },
-    {
-        icon: 'icon-video',
-        type: 'video',
-        label: 'Vidéo',
-        tooltip: 'Glisser déposer pour ajouter une vidéo'
-    },
-    {
-        icon: 'icon-question',
-        type: 'question',
-        label: 'Question',
-        tooltip: 'Cliquer pour ajouter une question'
-    },
-];
-
-// const standardScreen: Screen[] = [
-//     {
-//         title: 'Ecran texte',
-//         actions: [
-//             {
-//                 icon: 'icon-texte',
-//                 type: 'text',
-//                 label: 'Texte'
-//             }
-//         ]
-//     },
-//     {
-//         title: 'Ecran video',
-//         actions: [
-//             {
-//                 icon: 'icon-video',
-//                 type: 'video',
-//                 label: 'Vidéo'
-//             },
-//             {
-//                 icon: 'icon-texte',
-//                 type: 'text',
-//                 label: 'Texte'
-//             }
-//         ]
-//     },
-//     {
-//         title: 'Ecran audio',
-//         actions: [
-//             {
-//                 icon: 'icon-audio',
-//                 type: 'audio',
-//                 label: 'Audio'
-//             },
-//             {
-//                 icon: 'icon-texte',
-//                 type: 'text',
-//                 label: 'Texte'
-//             }
-//         ]
-//     }
-// ];
-
-
-const actionItems: SideAction[] = [
-    {
-        icon: 'icon-texte',
-        type: 'text',
-        label: 'Texte'
-        
-    },
-    {
-        icon: 'icon-video',
-        type: 'video',
-        label: 'Vidéo'
-    },
-    {
-        icon: 'icon-audio',
-        type: 'audio',
-        label: 'Audio'
-    },
-    {
-        icon: 'icon-question',
-        type: 'question',
-        label: 'Question'
-    },
-    {
-        icon: 'icon-condition',
-        type: 'condition',
-        label: 'Condition'
-    },
-    {
-        icon: 'icon-javascript',
-        type: 'javascript',
-        label: 'Javascript'
-    },
-    {
-        icon: 'icon-modele',
-        type: 'model',
-        label: 'Modèle'
-    }
-];
-
-const questions: SideAction[] = [
-    {
-        icon: 'icon-qcm',
-        type: 'qcm',
-        label: 'QCM'
-    },
-    {
-        icon: 'icon-dragdrop',
-        type: 'dragdrop',
-        label: 'Drag & Drop'
-    },
-    {
-        icon: 'icon-reorder',
-        type: 'reorder',
-        label: 'Reorder'
-    },
-    {
-        icon: 'icon-swipe',
-        type: 'swipe',
-        label: 'Swipe'
-    },
-    {
-        icon: 'icon-liste',
-        type: 'list',
-        label: 'Liste déroulantes'
-    }
-];

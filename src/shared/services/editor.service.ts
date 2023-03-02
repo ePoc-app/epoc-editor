@@ -2,6 +2,7 @@ import { ApiInterface } from '@/src/shared/interfaces/api.interface';
 import { router } from '@/src/router';
 import { useEditorStore, useProjectStore } from '@/src/shared/stores';
 import { ePocProject } from '@/src/shared/interfaces';
+import { projectService } from './project.service';
 import { createToaster } from '@meforma/vue-toaster';
 
 const toaster = createToaster({
@@ -137,6 +138,7 @@ function openEpocProject(project): void {
 function saveEpocProject(): void {
     editorStore.saving = true;
     api.send('saveEpocProject');
+    projectService.createContentJSON();
 }
 
 function runPreview(): void {

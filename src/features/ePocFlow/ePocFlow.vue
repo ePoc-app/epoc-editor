@@ -3,7 +3,7 @@ import { ConnectionMode, getConnectedEdges, MarkerType, useVueFlow, VueFlow } fr
 import { markRaw, nextTick, onMounted, ref, watch } from 'vue';
 import ScreenNode from './nodes/ScreenNode.vue';
 import CustomConnectContent from './edges/CustomConnectContent.vue';
-import { Form, NodeElement, SideAction } from '@/src/shared/interfaces';
+import { NodeElement, SideAction } from '@/src/shared/interfaces';
 import { useEditorStore, useProjectStore } from '@/src/shared/stores';
 import ChapterNode from './nodes/ChapterNode.vue';
 import ePocNode from './nodes/ePocNode.vue';
@@ -60,24 +60,23 @@ const onDrop = (event) => {
 function createNodeFromElement(position, element: NodeElement) {
 
     const id = editorStore.generateId();
-    const form = editorStore.getForm('screen');
 
     element.parentId = id;
 
     const newNode = {
         id: id,
         type: 'content',
-        data: { elements: [element], readyToDrop: false, animated: false, form: form, type: 'question' },
+        data: { elements: [element], readyToDrop: false, animated: false, formType: 'screen', formValues: {}, type: 'question', contentId: uid() },
         position,
         events: {
             click: () => {
-                openForm(id, form);
+                openForm(id, newNode.data.formType, newNode.data.formValues);
             }
         },
         deletable: false
     };
 
-    editorStore.addElementToScreen(form, element.action, -1);
+    editorStore.addElementToScreen(id, element.action);
 
     addNodes([newNode]);
 
@@ -98,21 +97,20 @@ function createNodeFromElement(position, element: NodeElement) {
 }
 
 function addNode(position, actions: SideAction[]) {
-
+    
     const questionTypes = ['qcm', 'dragdrop', 'reorder', 'swipe', 'list'];
     let elements: NodeElement[] = [];
     
     const id = editorStore.generateId();
-    const form = editorStore.getForm('screen');
-    
+
     actions.forEach((action) => {
         elements.push({
             id: editorStore.generateId(),
             action: action,
-            form: editorStore.getForm(action.type),
+            formType: action.type,
+            formValues: {},
             parentId: id
         });
-        editorStore.addElementToScreen(form, action, -1);
     });
 
     //? For the V0 the templates aren't editable
@@ -121,13 +119,16 @@ function addNode(position, actions: SideAction[]) {
     const newNode = {
         id: id,
         type: 'content',
-        // Put animated: nodeIcons.length === 1 when implementing v2
-        data: { elements: elements, readyToDrop: false, animated: false, form: form, type: type },
+        data: { type: type, readyToDrop: false, animated: false, elements: elements, contentId: uid(), formType: 'screen', formValues: {} },
         position,
         deletable: false
     };
        
     addNodes([newNode]);
+
+    actions.forEach((action) => {
+        editorStore.addElementToScreen(id, action);
+    });
     
     // align node position after drop, so it's centered to the mouse
     nextTick(() => {
@@ -145,8 +146,8 @@ function addNode(position, actions: SideAction[]) {
     });
 }
 
-function openForm(id: string, form: Form) {
-    editorStore.openFormPanel(id, form);
+function openForm(id: string, formType: string, formValues) {
+    editorStore.openFormPanel(id, formType, formValues);
 }
 onMounted(() => {
     projectStore.restore();
@@ -207,6 +208,14 @@ function update(event) {
 
     sourceNode.data.isSource = true;
     targetNode.data.isTarget = true;
+}
+
+function uid() {
+    const firstNumber = (Math.random() * 46656) | 0;
+    const secondNumber = (Math.random() * 46656) | 0;
+    const firstPart = ('000' + firstNumber.toString(36)).slice(-3);
+    const secondPart = ('000' + secondNumber.toString(36)).slice(-3);
+    return firstPart + secondPart;
 }
 
 function onEdgeclick (event) {

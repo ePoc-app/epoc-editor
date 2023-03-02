@@ -1,13 +1,13 @@
 <script setup lang="ts">
 
 defineProps<{
-    inputValue: string;
+    inputValue: boolean;
     label: string;
 }>();
 
 
 const emit = defineEmits<{
-    (e: 'change', value: string): void;
+    (e: 'change', value: boolean): void;
 }>();
 
 </script>
@@ -15,13 +15,12 @@ const emit = defineEmits<{
 <template>
     <div class="checkbox">
         <input
-            :id="label"
             class="checkbox-input"
             type="checkbox"
-            :checked="JSON.parse(inputValue)"
-            @change="emit('change', String(($event.target as HTMLInputElement).checked))"
+            :checked="inputValue"
+            @change="emit('change', ($event.target as HTMLInputElement).checked)"
         >
-        <label :for="label">{{ label }}</label>
+        <label>{{ label }}</label>
     </div>
 </template>
 

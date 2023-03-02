@@ -1,28 +1,62 @@
 <script setup lang="ts">
 import { Input } from '@/src/shared/interfaces';
 import GenericInput from './inputs/GenericInput.vue';
+import { useEditorStore } from '@/src/shared/stores';
+import { useVueFlow } from '@vue-flow/core';
 
 defineProps<{
     inputs: Input[];
     fieldName?: string;
     fieldIndex?: number;
+    displayFieldIndex: boolean;
 }>();
+
+const { findNode } = useVueFlow({ id:'main' });
+
+const editorStore = useEditorStore();
+
+const node = editorStore.openedParentId ? findNode(editorStore.openedParentId) : findNode(editorStore.openedNodeId);
+
+function onInput(value, id) {
+    node.data.formValues[id] = value;
+}
+
+function onRepeatInput(value, id) {
+    if(value.type === 'add') {
+        if(!node.data.formValues[id]) {
+            node.data.formValues[id] = [];
+        }
+        node.data.formValues[id].push('');
+    } else if(value.type === 'remove') {
+        node.data.formValues[id].splice(value.index, 1);
+    } else if(value.type === 'move') {
+        const item = node.data.formValues[id].splice(value.oldIndex, 1);
+        node.data.formValues[id].splice(value.newIndex, 0, item[0]);
+    } else if(value.type === 'change') {
+        if(value.id === '') {
+            node.data.formValues[id][value.index] = value.value;
+        } else {
+            if(!node.data.formValues[id][value.index]) {
+                node.data.formValues[id][value.index] = {};
+            }
+            node.data.formValues[id][value.index][value.id] = value.value;
+        }
+    }
+}
 
 </script>
 
 <template>
-    <h3 v-if="fieldName" class="field-title"><span v-if="fieldIndex" class="field-index">{{ fieldIndex }}. </span>{{ fieldName }}</h3>
+    <h3 v-if="fieldName" class="field-title"><span v-if="displayFieldIndex" class="field-index">{{ fieldIndex+1 }}. </span>{{ fieldName }}</h3>
     <hr v-if="fieldName" class="separator">
-    <!-- didn't find a solution using v-model -->
     <GenericInput 
         v-for="(input, index) in inputs"
         :key="index"
-        :type="input.type"
-        :label="input.label"
-        :placeholder="input.placeholder"
-        :accept="input.accept"
-        :input-value="input.value"
-        @input="input.value = $event"
+        :input="input"
+        :field-index="fieldIndex"
+        :input-value="node.data.formValues[input.id] ? node.data.formValues[input.id] : input.value"
+        @input="onInput($event, input.id)"
+        @repeat-input="onRepeatInput($event, input.id)"
     />
 </template>
 

@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { Edge, Node, useVueFlow } from '@vue-flow/core';
 import { useEditorStore } from '@/src/shared/stores/editorStore';
-import { NodeElement } from '@/src/shared/interfaces';
 
 const { nodes, addNodes, findNode, setNodes, setEdges, setTransform  }  = useVueFlow({ id: 'main' });
 const editorStore = useEditorStore();
@@ -38,21 +37,12 @@ export const useProjectStore = defineStore('project', {
         },
         addChapter() {
             const chapters = nodes.value.filter(node => node.type === 'chapter');
-        
-            const newElement: NodeElement = {
-                id: editorStore.generateId(),
-                action: {
-                    type: 'chapter',
-                    icon: 'icon-chapitre'
-                },
-                form: editorStore.getForm('chapter')
-            };
 
             const newChapter = {
                 id: (nodes.value.length + 1).toString(),
                 type: 'chapter',
                 position: { x: 0, y: (chapters.length + 1) * 200 },
-                data: { elements: newElement, title: 'Chapitre ' + (chapters.length + 1)},
+                data: { action: { icon: 'icon-chapitre', type: 'chapter' }, formType: 'chapter', formValues: {} , title: 'Chapitre ' + (chapters.length + 1), contentId: uid()},
                 draggable: false,
             };
 
@@ -65,6 +55,7 @@ export const useProjectStore = defineStore('project', {
 const epoc : Node = {
     id: '1',
     type: 'epoc',
+    data: { action: { icon: 'icon-epoc', type: 'epoc' }, formType: 'epoc', formValues: {} },
     position: { x: 0, y: 0 },
     draggable: false,
 };
@@ -84,3 +75,11 @@ const mainEdge : Edge = {
     selectable: false,
     deletable: false,
 };
+
+function uid() {
+    const firstNumber = (Math.random() * 46656) | 0;
+    const secondNumber = (Math.random() * 46656) | 0;
+    const firstPart = ('000' + firstNumber.toString(36)).slice(-3);
+    const secondPart = ('000' + secondNumber.toString(36)).slice(-3);
+    return firstPart + secondPart;
+}
