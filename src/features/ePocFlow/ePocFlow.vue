@@ -209,6 +209,20 @@ function update(event) {
     targetNode.data.isTarget = true;
 }
 
+function onEdgeclick (event) {
+    const marker = event.edge.markerEnd;
+    // watch property changed to change color back
+    Object.defineProperty(event.edge, 'selected', {
+        get() {
+            return this._selected;
+        },
+        set(newValue) {
+            this._selected = newValue !== false;
+            marker.color = this._selected ? '#00B3E9' : '#384257';
+        }
+    });
+}
+
 </script>
 
 <template>
@@ -230,6 +244,7 @@ function update(event) {
         @drop="onDrop"
         @dragover.prevent
         @dragenter.prevent
+        @edge-click="onEdgeclick"
     >
         <template #node-custom="{ id, data }">
             <ScreenNode :id="id" :data="data" />
