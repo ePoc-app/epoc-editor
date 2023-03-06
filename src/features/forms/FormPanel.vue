@@ -3,6 +3,7 @@ import { useEditorStore } from '../../shared/stores';
 import FormButton from './components/FormButton.vue';
 import GenericField from './components/GenericField.vue';
 import { Input } from '@/src/shared/interfaces';
+import { projectService } from '@/src/shared/services';
 
 const editorStore = useEditorStore();
 
@@ -10,6 +11,7 @@ function actionOnForm(action: string) {
     switch (action) {
     case 'delete':
         editorStore.deleteElement(editorStore.openedNodeId);
+        projectService.saveProjectData();
         break;
     }
 }
