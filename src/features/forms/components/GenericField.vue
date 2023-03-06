@@ -3,6 +3,7 @@ import { Input } from '@/src/shared/interfaces';
 import GenericInput from './inputs/GenericInput.vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { useVueFlow } from '@vue-flow/core';
+import { projectService } from '@/src/shared/services';
 
 defineProps<{
     inputs: Input[];
@@ -19,6 +20,7 @@ const node = editorStore.openedParentId ? findNode(editorStore.openedParentId) :
 
 function onInput(value, id) {
     node.data.formValues[id] = value;
+    projectService.saveProjectData();
 }
 
 function onRepeatInput(value, id) {
@@ -42,6 +44,7 @@ function onRepeatInput(value, id) {
             node.data.formValues[id][value.index][value.id] = value.value;
         }
     }
+    projectService.saveProjectData();
 }
 
 </script>

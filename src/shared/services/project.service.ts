@@ -8,8 +8,10 @@ const { toObject, onNodesChange, nodes, edges, findNode }  = useVueFlow({ id: 'm
 const projectStore = useProjectStore();
 
 function saveProjectData(): void {
-    const data = JSON.stringify(toObject());
-    api.send('writeProjectData', data);
+    debounceFunction(500, () => {
+        const data = JSON.stringify(toObject());
+        api.send('writeProjectData', data);
+    });
 }
 
 function importFile(filepath): Promise<string> {
@@ -30,9 +32,7 @@ const debounceFunction = function (delay, cb) {
 };
 
 onNodesChange(() => {
-    debounceFunction(500, () => {
-        saveProjectData();
-    });
+    saveProjectData();
 });
 
 
