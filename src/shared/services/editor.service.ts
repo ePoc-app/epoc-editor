@@ -49,6 +49,7 @@ const setup = function () {
 
     api.receive('epocProjectSaveCanceled', () => {
         waitingToastDismiss();
+        editorStore.saving = false;
     });
 
     api.receive('epocProjectSaved', (data: string) => {
