@@ -45,7 +45,6 @@ const dragOptions = {
         <template v-if="sideAction.type === 'question'">
             <ContentButton
                 class="question"
-                :class="{ 'dragging' : dragging }"
                 :icon="sideAction.icon"
                 :class-list="classList"
                 :is-active="editorStore.floatingMenu"

@@ -23,7 +23,9 @@ const { findNode } = useVueFlow({ id: 'main' });
 const editorStore = useEditorStore();
 
 const node = editorStore.openedParentId ? findNode(editorStore.openedParentId) : findNode(editorStore.openedNodeId);
+const disabled = node.data.type === 'template';
 
+console.log(node.data);
 
 function onInput(value, id, index) {
     emit('change', {
@@ -77,6 +79,13 @@ const dragOptions = {
 
 const drag = ref(false);
 
+function onClick(index) {
+    if (node.data.elements && node.data.elements[index]) {
+        const element = node.data.elements[index];
+        editorStore.openFormPanel(element.id, element.formType, element.formValues, element.parentId);
+    }
+}
+
 </script>
 
 <template>
@@ -87,13 +96,14 @@ const drag = ref(false);
         handle=".card-header"
         v-bind="dragOptions"
         filter=".fixed"
+        :disabled="disabled"
         @change="moveCard($event.moved.oldIndex, $event.moved.newIndex)"
         @start="drag = true"
         @end="drag = false"
     >
         <template #item="{ element, index }">
             <div :key="index" class="card draggable-card">
-                <div class="card-header" :class="{ 'border-bottom': inputs.length >= 1, 'fixed': node.data.type === 'template' }">
+                <div class="card-header" :class="{ 'border-bottom': inputs.length >= 1 }" @click="onClick(index)">
                     <div v-if="element.action" class="component-container">
                         <div class="form-icon"><i :class="element.action.icon"></i></div>
                         <h3>{{ element.action.label }}</h3>
@@ -104,8 +114,8 @@ const drag = ref(false);
                         <hr v-if="!(isLast(index) && index === 0)" class="vertical-separator">
                         <i v-if="!isLast(index)" class="icon-bas" @click="moveCard(index, index + 1)"></i>
                         <i v-if="index !== 0" class="icon-haut" @click="moveCard(index, index - 1)"></i>
-                        <hr class="vertical-separator">
-                        <i class="icon-glisser"></i>
+                        <hr v-if="!disabled" class="vertical-separator">
+                        <i v-if="!disabled" class="icon-glisser"></i>
                     </div>
                 </div>
                 <div v-if="!element.action" class="card-content">
@@ -152,13 +162,9 @@ const drag = ref(false);
         padding: 0 .7rem;
         display: flex;
         flex-direction: row;
-        cursor: move;
+        cursor: pointer;
         &.border-bottom {
             border-bottom: 2px solid var(--border);
-        }
-        &.fixed {
-            opacity: .7;
-            pointer-events: none;
         }
         
         h3 {
@@ -178,7 +184,6 @@ const drag = ref(false);
                 margin-right: .5rem;
             }
             i {
-                cursor: pointer;
                 color: var(--editor-grayblue);
                 margin: auto;
                 &:not(:last-child) {
@@ -189,6 +194,10 @@ const drag = ref(false);
                     color: var(--editor-red);
                 }
             }
+        }
+
+        .icon-glisser{
+            cursor: move;
         }
     }
     &-content {
