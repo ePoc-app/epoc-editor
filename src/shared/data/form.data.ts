@@ -795,17 +795,20 @@ export const standardScreen: SideAction[] = [
     {
         icon: 'icon-texte',
         type: 'text',
-        label: 'Texte'
+        label: 'Texte',
+        tooltip: 'Glisser/déposer pour ajouter un texte'
     },
     {
         icon: 'icon-video',
         type: 'video',
-        label: 'Vidéo'
+        label: 'Vidéo',
+        tooltip: 'Glisser/déposer pour ajouter une vidéo'
     },
     {
         icon: 'icon-question',
         type: 'question',
-        label: 'Question'
+        label: 'Question',
+        tooltip: 'Cliquer pour ajouter une question'
     },
 ];
 
