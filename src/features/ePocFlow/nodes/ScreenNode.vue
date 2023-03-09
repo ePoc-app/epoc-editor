@@ -79,11 +79,6 @@ function change(event) {
     } if(event.moved) {
         const oldIndex = event.moved.oldIndex;
         const newIndex = event.moved.newIndex;
-        const inputs = node.data.form.fields[1].inputs;
-
-        const tmp = inputs[oldIndex];
-        inputs.splice(oldIndex, 1);
-        inputs.splice(newIndex, 0, tmp);
         
         editorStore.changeElementOrder(oldIndex, newIndex, props.id);
 

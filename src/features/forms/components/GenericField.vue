@@ -31,9 +31,17 @@ function onRepeatInput(value, id) {
         node.data.formValues[id].push('');
     } else if(value.type === 'remove') {
         node.data.formValues[id].splice(value.index, 1);
+        if (node.data.elements && node.data.elements[value.index]) {
+            const nodeToDelete = node.data.elements[value.index];
+            editorStore.deleteElement( nodeToDelete.id, nodeToDelete.parentId);
+        }
     } else if(value.type === 'move') {
-        const item = node.data.formValues[id].splice(value.oldIndex, 1);
-        node.data.formValues[id].splice(value.newIndex, 0, item[0]);
+        if (node.data.elements) {
+            editorStore.changeElementOrder(value.oldIndex, value.newIndex, node.id);
+        } else {
+            const item = node.data.formValues[id].splice(value.oldIndex, 1);
+            node.data.formValues[id].splice(value.newIndex, 0, item[0]);
+        }
     } else if(value.type === 'change') {
         if(value.id === '') {
             node.data.formValues[id][value.index] = value.value;

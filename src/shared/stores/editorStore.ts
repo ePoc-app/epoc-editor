@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
-import { SideAction, Screen, ePocProject, Form } from '@/src/shared/interfaces';
+import { ePocProject, Form, Screen, SideAction } from '@/src/shared/interfaces';
 import { toRaw } from 'vue';
 import { applyNodeChanges, getConnectedEdges, useVueFlow } from '@vue-flow/core';
 
-import { formsModel, standardScreen, questions } from '@/src/shared/data/form.data';
+import { formsModel, questions, standardScreen } from '@/src/shared/data/form.data';
 
 const { findNode, nodes, edges } = useVueFlow({ id: 'main' });
 
@@ -91,15 +91,13 @@ export const useEditorStore = defineStore('editor', {
         getForm(type: string): Form {
             return structuredClone(toRaw(formsModel.find(form => form.type === type)));
         },
-        deleteElement(id: string): void {
-            
+        deleteElement(id: string, parentId?: string): void {
             const nodeToDelete = findNode(id);
-
-            if(!nodeToDelete){
-                const parentNode = findNode(this.openedParentId);
+            if(parentId || !nodeToDelete){
+                const parentNode = findNode(parentId ? parentId : this.openedParentId);
                 parentNode.data.elements.forEach((value, index) => {
                     if(value.id === id) {
-                        this.removeElementFromScreen(index, this.openedParentId);
+                        this.removeElementFromScreen(index, parentId ? parentId : this.openedParentId);
                     }
                 });
             } else {
@@ -156,10 +154,14 @@ export const useEditorStore = defineStore('editor', {
         },
         changeElementOrder(startIndex: number, finalIndex: number, parentNodeId: string): void {
             const node = findNode(parentNodeId);
-            const tmp = node.data.elements[startIndex];
 
+            const tmpElem = node.data.elements[startIndex];
             node.data.elements.splice(startIndex, 1);
-            node.data.elements.splice(finalIndex, 0, tmp);
+            node.data.elements.splice(finalIndex, 0, tmpElem);
+
+            const tmpValues = node.data.formValues.components[startIndex];
+            node.data.formValues.components.splice(startIndex, 1);
+            node.data.formValues.components.splice(finalIndex, 0, tmpValues);
         },
         undo() {
             // @todo

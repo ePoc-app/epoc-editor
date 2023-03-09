@@ -25,8 +25,6 @@ const editorStore = useEditorStore();
 const node = editorStore.openedParentId ? findNode(editorStore.openedParentId) : findNode(editorStore.openedNodeId);
 const disabled = node.data.type === 'template';
 
-console.log(node.data);
-
 function onInput(value, id, index) {
     emit('change', {
         type: 'change',
@@ -110,10 +108,10 @@ function onClick(index) {
                     </div>
                     <h3 v-else>{{ label }} {{ index + 1 }}</h3>
                     <div class="card-header-icon">
-                        <i class="icon-supprimer delete" @click="removeCard(index)"></i>
+                        <i class="icon-supprimer delete" @click.stop="removeCard(index)"></i>
                         <hr v-if="!(isLast(index) && index === 0)" class="vertical-separator">
-                        <i v-if="!isLast(index)" class="icon-bas" @click="moveCard(index, index + 1)"></i>
-                        <i v-if="index !== 0" class="icon-haut" @click="moveCard(index, index - 1)"></i>
+                        <i v-if="!isLast(index)" class="icon-bas" @click.stop="moveCard(index, index + 1)"></i>
+                        <i v-if="index !== 0" class="icon-haut" @click.stop="moveCard(index, index - 1)"></i>
                         <hr v-if="!disabled" class="vertical-separator">
                         <i v-if="!disabled" class="icon-glisser"></i>
                     </div>
