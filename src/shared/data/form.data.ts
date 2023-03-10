@@ -13,14 +13,6 @@ export const textForm: Form = {
                     label: 'Résumé',
                     value: '',
                     placeholder: 'Saisissez un résumé...'
-                },
-                {
-                    id: 'poster',
-                    type: 'file',
-                    label: 'Vignette',
-                    placeholder: 'Ajouter une vignette',
-                    value: '',
-                    accept: 'image/*'
                 }
             ],
         }
@@ -30,11 +22,6 @@ export const textForm: Form = {
             label: 'Supprimer',
             icon: 'icon-supprimer',
             action: 'delete'
-        },
-        {
-            label: 'Copier le lien',
-            icon: 'icon-copie',
-            action: 'copy'
         },
     ]
 };
@@ -93,11 +80,6 @@ export const videoForm: Form = {
             label: 'Supprimer',
             icon: 'icon-supprimer',
             action: 'delete'
-        },
-        {
-            label: 'Copier le lien',
-            icon: 'icon-copie',
-            action: 'delete'
         }
     ]
 };
@@ -116,15 +98,7 @@ export const chapterForm: Form = {
                     label: 'Titre',
                     value: '',
                     placeholder: 'Saisissez...'
-                },
-                {
-                    id: 'image',
-                    type: 'file',
-                    label: 'Image',
-                    placeholder: 'Ajouter une image',
-                    value: '',
-                    accept: 'image/*'
-                },
+                }
             ],
         },
         {
@@ -154,32 +128,33 @@ export const chapterForm: Form = {
             icon: 'icon-supprimer',
             action: 'delete'
         },
-        {
-            label: 'Copier le lien',
-            icon: 'icon-copie',
-            action: 'copy'
-        },
     ]
 };
 
 export const epocForm: Form = {
     type: 'epoc',
-    name: 'Paramètre de l\'ePoc',
+    name: 'A propos de l\'ePoc',
     icon: 'icon-epoc',
     fields: [
         {
             inputs :[
                 {
+                    id: 'id',
+                    type: 'text',
+                    label: 'ID de l\'ePoc',
+                    value: 'E000XX',
+
+                },
+                {
+                    id: 'edition',
+                    type: 'text',
+                    label: 'Edition',
+                    value: String(new Date().getFullYear()),
+                },
+                {
                     id: 'title',
                     type: 'text',
                     label: 'Titre',
-                    value: '',
-                    placeholder: 'Saisissez...'
-                },
-                {
-                    id: 'chapterParameter',
-                    type: 'text',
-                    label: 'Label des chapitres',
                     value: '',
                     placeholder: 'Saisissez...'
                 },
@@ -213,30 +188,24 @@ export const epocForm: Form = {
                     label: 'Présentation',
                     value: '',
                     placeholder: 'Saisissez une présentation de l\'ePoc...'
-                },
+                }
+            ]
+        },
+        {
+            name: 'Paramètres :',
+            inputs : [
                 {
-                    id: 'id',
+                    id: 'chapterParameter',
                     type: 'text',
-                    label: 'ID de l\'ePoc',
-                    value: 'E000XX',
-                    
-                },
-                {
-                    id: 'edition',
-                    type: 'text',
-                    label: 'Edition',
-                    value: String(new Date().getFullYear()),
+                    label: 'Label des chapitres',
+                    value: '',
+                    placeholder: 'Saisissez...'
                 }
             ]
         }
 
     ],
     buttons: [
-        {
-            label: 'Copier le lien',
-            icon: 'icon-copie',
-            action: 'copy'
-        },
     ]
 };
 
@@ -276,11 +245,6 @@ export const screenForm: Form = {
             icon: 'icon-supprimer',
             action: 'delete'
         },
-        {
-            label: 'Copier le lien',
-            icon: 'icon-copie',
-            action: 'copy'
-        },
     ]
 };
 
@@ -297,13 +261,6 @@ export const qcmForm: Form = {
             name: 'Configuration de l\'activité',
             inputs: [
                 {
-                    id: 'label',
-                    type: 'textarea',
-                    label: 'Énoncé',
-                    value: '',
-                    placeholder: 'Saisissez'
-                },
-                {
                     id: 'score',
                     type: 'score',
                     label: 'Score',
@@ -315,11 +272,18 @@ export const qcmForm: Form = {
             name: 'Question',
             inputs: [
                 {
+                    id: 'label',
+                    type: 'textarea',
+                    label: 'Question',
+                    value: '',
+                    placeholder: 'Posez la question'
+                },
+                {
                     id: 'statement',
                     type: 'textarea',
-                    label: '',
+                    label: 'Consigne',
                     value: '',
-                    placeholder: 'Saisissez l\'intitulé de la question...'
+                    placeholder: 'Instruction pour répondre à la question'
                 }
             ]
         },
@@ -368,11 +332,6 @@ export const qcmForm: Form = {
             icon: 'icon-supprimer',
             action: 'delete'
         },
-        {
-            label: 'Copier le lien',
-            icon: 'icon-copie',
-            action: 'copy'
-        },
     ]
 };
 
@@ -386,13 +345,6 @@ export const dragDropForm: Form = {
             name: 'Configuration de l\'activité',
             inputs: [
                 {
-                    id: 'label',
-                    type: 'textarea',
-                    label: 'Énoncé',
-                    value: '',
-                    placeholder: 'Saisissez...'
-                },
-                {
                     id: 'score',
                     type: 'score',
                     label: 'Score',
@@ -404,11 +356,18 @@ export const dragDropForm: Form = {
             name: 'Question',
             inputs: [
                 {
-                    id: 'explanation',
+                    id: 'label',
                     type: 'textarea',
-                    label: '',
+                    label: 'Question',
                     value: '',
-                    placeholder: 'Saisissez l\'intitulé de la question...'
+                    placeholder: 'Posez la question'
+                },
+                {
+                    id: 'statement',
+                    type: 'textarea',
+                    label: 'Consigne',
+                    value: '',
+                    placeholder: 'Instruction pour répondre à la question'
                 }
             ]
         },
@@ -478,11 +437,6 @@ export const dragDropForm: Form = {
             icon: 'icon-supprimer',
             action: 'delete'
         },
-        {
-            label: 'Copier le lien',
-            icon: 'icon-copie',
-            action: 'copy'
-        },
     ]
 };
 
@@ -496,13 +450,6 @@ export const reorderForm: Form = {
             name: 'Configuration de l\'activité',
             inputs: [
                 {
-                    id: 'label',
-                    type: 'textarea',
-                    label: 'Énoncé',
-                    value: '',
-                    placeholder: 'Saisissez...'
-                },
-                {
                     id: 'score',
                     type: 'score',
                     label: 'Score',
@@ -514,11 +461,18 @@ export const reorderForm: Form = {
             name: 'Question',
             inputs: [
                 {
+                    id: 'label',
+                    type: 'textarea',
+                    label: 'Question',
+                    value: '',
+                    placeholder: 'Posez la question'
+                },
+                {
                     id: 'statement',
                     type: 'textarea',
-                    label: '',
+                    label: 'Consigne',
                     value: '',
-                    placeholder: 'Saisissez l\'intitulé de la question...'
+                    placeholder: 'Instruction pour répondre à la question'
                 }
             ]
         },
@@ -561,11 +515,6 @@ export const reorderForm: Form = {
             icon: 'icon-supprimer',
             action: 'delete'
         },
-        {
-            label: 'Copier le lien',
-            icon: 'icon-copie',
-            action: 'copy'
-        },
     ]
 };
 
@@ -579,13 +528,6 @@ export const swipeForm: Form = {
             name: 'Configuration de l\'activité',
             inputs: [
                 {
-                    id: 'label',
-                    type: 'textarea',
-                    label: 'Énoncé',
-                    value: '',
-                    placeholder: 'Saisissez...'
-                },
-                {
                     id: 'score',
                     type: 'score',
                     label: 'Score',
@@ -597,11 +539,18 @@ export const swipeForm: Form = {
             name: 'Question',
             inputs: [
                 {
+                    id: 'label',
+                    type: 'textarea',
+                    label: 'Question',
+                    value: '',
+                    placeholder: 'Posez la question'
+                },
+                {
                     id: 'statement',
                     type: 'textarea',
-                    label: '',
+                    label: 'Consigne',
                     value: '',
-                    placeholder: 'Saisissez l\'intitulé de la question...'
+                    placeholder: 'Instruction pour répondre à la question'
                 }
             ]
         },
@@ -671,11 +620,6 @@ export const swipeForm: Form = {
             icon: 'icon-supprimer',
             action: 'delete'
         },
-        {
-            label: 'Copier le lien',
-            icon: 'icon-copie',
-            action: 'copy'
-        },
     ]
 };
 
@@ -689,13 +633,6 @@ export const listForm: Form = {
             name: 'Configuration de l\'activité',
             inputs: [
                 {
-                    id: 'label',
-                    type: 'textarea',
-                    label: 'Énoncé',
-                    value: '',
-                    placeholder: 'Saisissez...'
-                },
-                {
                     id: 'score',
                     type: 'score',
                     label: 'Score',
@@ -707,11 +644,18 @@ export const listForm: Form = {
             name: 'Question',
             inputs: [
                 {
+                    id: 'label',
+                    type: 'textarea',
+                    label: 'Question',
+                    value: '',
+                    placeholder: 'Posez la question'
+                },
+                {
                     id: 'statement',
                     type: 'textarea',
-                    label: '',
+                    label: 'Consigne',
                     value: '',
-                    placeholder: 'Saisissez l\'intitulé de la question...'
+                    placeholder: 'Instruction pour répondre à la question'
                 }
             ]
         },
@@ -780,11 +724,6 @@ export const listForm: Form = {
             label: 'Supprimer',
             icon: 'icon-supprimer',
             action: 'delete'
-        },
-        {
-            label: 'Copier le lien',
-            icon: 'icon-copie',
-            action: 'copy'
         },
     ]
 };

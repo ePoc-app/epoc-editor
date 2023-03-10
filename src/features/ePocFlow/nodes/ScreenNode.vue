@@ -62,7 +62,6 @@ function change(event) {
         if(event.added.element.action) {
             newElement = event.added.element;
         } else {
-            console.log('new element', event.added.element);
             newElement = {
                 id: editorStore.generateId(),
                 parentId: props.id,

@@ -25,7 +25,7 @@ function actionOnForm(action: string) {
             <div class="form-icon"><i :class="editorStore.formPanel.icon"></i></div>
             <h1>{{ editorStore.formPanel.name }}</h1>
         </div>
-        <div class="buttons">
+        <div class="buttons" v-if="editorStore.formPanel.buttons && editorStore.formPanel.buttons.length > 0">
             <FormButton
                 v-for="button in editorStore.formPanel.buttons"
                 :key="button.label"
