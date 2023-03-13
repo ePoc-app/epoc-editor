@@ -192,6 +192,68 @@ export const epocForm: Form = {
             ]
         },
         {
+            name: 'Auteurs',
+            inputs: [
+                {
+                    id: 'authors',
+                    label: 'Auteur',
+                    type: 'repeat',
+                    value: '',
+                    inputs: [
+                        {
+                            id: 'name',
+                            type: 'text',
+                            label: 'Nom',
+                            placeholder: 'Préom nom',
+                            value: ''
+                        },
+                        {
+                            id: 'image',
+                            type: 'file',
+                            label: 'Image',
+                            placeholder: 'Ajouter une image',
+                            value: '',
+                            accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp'
+                        },
+                        {
+                            id: 'title',
+                            type: 'text',
+                            label: 'Titre',
+                            placeholder: 'Chercheuse à l\'Inria',
+                            value: '',
+                        },
+                        {
+                            id: 'description',
+                            type: 'ql-editor',
+                            label: '',
+                            placeholder: 'Description',
+                            value: ''
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            name: 'Objectifs',
+            inputs: [
+                {
+                    id: 'objectives',
+                    label: 'Objectif',
+                    type: 'repeat',
+                    value: '',
+                    inputs: [
+                        {
+                            id: '',
+                            type: 'textarea',
+                            label: '',
+                            placeholder: 'Saisissez un objectif ...',
+                            value: ''
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             name: 'Paramètres :',
             inputs : [
                 {

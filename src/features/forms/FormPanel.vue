@@ -11,7 +11,7 @@ function actionOnForm(action: string) {
     switch (action) {
     case 'delete':
         editorStore.deleteElement(editorStore.openedNodeId);
-        projectService.saveProjectData();
+        projectService.writeProjectData();
         break;
     }
 }

@@ -60,7 +60,7 @@ app.whenReady().then(() => {
     };
 
     session.defaultSession.webRequest.onBeforeRequest(filter, (details, callback) => {
-        if (details.url.indexOf('assets/') !== -1) {
+        if (mainWindow.webContents.id === details.webContents.id && details.url.indexOf('assets/') !== -1) {
             const filepath = details.url.split('assets/')[1];
 
             return callback({ redirectURL: `assets://assets/${filepath}` });

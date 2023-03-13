@@ -185,6 +185,13 @@ const writeProjectData = async function (workdir, data) {
 };
 
 /**
+ * Write the epoc data to the content.json file in workdir
+ */
+const writeEpocData = async function (workdir, data) {
+    fs.writeFileSync(path.join(workdir, 'content.json'), data);
+};
+
+/**
  * Copy the imported file to the workdir
  * @param {string} workdir
  * @param {string} filepath
@@ -238,6 +245,7 @@ module.exports = {
     saveAsEpocProject,
     exportProject,
     writeProjectData,
+    writeEpocData,
     readProjectData,
     copyFileToWorkdir,
     cleanAllWorkdir

@@ -2,7 +2,7 @@ const { ipcMain } = require('electron');
 const path = require('path');
 const store = require('./store');
 const { runPreview } = require('./preview');
-const { getRecentFiles, pickEpocProject, openEpocProject, newEpocProject, saveEpocProject, exportProject, writeProjectData, readProjectData, copyFileToWorkdir } = require('./file');
+const { getRecentFiles, pickEpocProject, openEpocProject, newEpocProject, saveEpocProject, exportProject, writeProjectData, writeEpocData, readProjectData, copyFileToWorkdir } = require('./file');
 
 /**
  * Setup ipc listeners that are received from renderer process
@@ -64,6 +64,10 @@ const setupIpcListener = function (targetWindow) {
 
     ipcMain.on('writeProjectData', async (event, data) => {
         await writeProjectData(store.state.currentProject.workdir, data);
+    });
+
+    ipcMain.on('writeEpocData', async (event, data) => {
+        await writeEpocData(store.state.currentProject.workdir, data);
     });
 
     ipcMain.on('importFile', async (event, filepath) => {

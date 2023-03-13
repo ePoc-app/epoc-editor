@@ -20,7 +20,7 @@ const node = editorStore.openedParentId ? findNode(editorStore.openedParentId) :
 
 function onInput(value, id) {
     node.data.formValues[id] = value;
-    projectService.saveProjectData();
+    projectService.writeProjectData();
 }
 
 function onRepeatInput(value, id) {
@@ -52,7 +52,7 @@ function onRepeatInput(value, id) {
             node.data.formValues[id][value.index][value.id] = value.value;
         }
     }
-    projectService.saveProjectData();
+    projectService.writeProjectData();
 }
 
 </script>
