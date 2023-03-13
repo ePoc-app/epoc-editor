@@ -61,6 +61,7 @@ function change(event) {
         let newElement: NodeElement;
         if(event.added.element.action) {
             newElement = event.added.element;
+            newElement.parentId = props.id;
         } else {
             newElement = {
                 id: editorStore.generateId(),
