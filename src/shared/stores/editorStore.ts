@@ -125,7 +125,8 @@ export const useEditorStore = defineStore('editor', {
         },
         addElementToScreen(nodeId: string, action: SideAction, index?: number) {
             const node = findNode(nodeId);
-            if(index) {
+            //? can be 0 
+            if(index !== undefined) {
                 node.data.formValues.components.splice(index, 0, { action: action });
             }
             else {
@@ -140,7 +141,7 @@ export const useEditorStore = defineStore('editor', {
 
             node.data.elements.splice(index, 1);
             node.data.formValues.components.splice(index, 1);
-            // node.data.form.fields[1].inputs.splice(index, 1);
+
             if(node.data.elements.length === 0) {
                 const connectedEdges = getConnectedEdges([node], edges.value);
                 connectedEdges.forEach(edge => {
