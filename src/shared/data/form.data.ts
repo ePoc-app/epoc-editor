@@ -285,6 +285,13 @@ export const screenForm: Form = {
                     value: '',
                     placeholder: 'Saisissez...'
                 },
+                {
+                    id:'subtitle',
+                    type: 'text',
+                    label: 'Sous-titre',
+                    value: '',
+                    placeholder: 'Saisissez...'
+                }
             ]
         },
         {

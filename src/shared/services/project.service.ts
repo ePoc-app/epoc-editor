@@ -2,6 +2,8 @@ import { ApiInterface } from '@/src/shared/interfaces/api.interface';
 import { useProjectStore } from '../stores';
 import { getConnectedEdges, GraphNode, useVueFlow } from '@vue-flow/core';
 import { EpocV1 } from '@/src/shared/classes/epoc-v1';
+import { Assessment, Content, Html, SimpleQuestion, Video } from '@epoc/epoc-specs/dist/v1';
+import { Question } from '@epoc/epoc-specs/dist/v1/question';
 
 declare const api: ApiInterface;
 
@@ -60,10 +62,7 @@ function createContentJSON() : EpocV1 {
         ePocValues.chapterParameter
     );
 
-    console.log(epoc);
-
     chapterNodes.forEach(chapter => {
-        console.log(chapter.data);
         const chapterValues = chapter.data.formValues;
         epoc.addChapter(chapter.data.contentId, {
             title: chapterValues.title || '',
@@ -71,22 +70,82 @@ function createContentJSON() : EpocV1 {
             objectives: chapterValues.objectives || [],
             contents: []
         });
-        let nextNode = getNextNode(chapter);
-        while (nextNode) {
-            console.log(nextNode.data);
-            const chapterValues = chapter.data.formValues;
-            epoc.addChapter(chapter.data.contentId, {
-                title: chapterValues.title || '',
-                image: chapterValues.image || '',
-                objectives: chapterValues.objectives || [],
-                contents: []
-            });
-            nextNode = getNextNode(nextNode);
+        let screenNode = getNextNode(chapter);
+        while (screenNode) {
+            const contentId = newContent(epoc, screenNode);
+            epoc.chapters[chapter.data.contentId].contents.push(contentId);
+            screenNode = getNextNode(screenNode);
         }
     });
 
 
     return epoc;
+}
+
+function newContent(epoc: EpocV1, screenNode) : string {
+    const baseContent: Content = {
+        type: 'unknown',
+        title: screenNode.data.formValues.title || '',
+        subtitle: screenNode.data.formValues.subtitle || ''
+    };
+    if (screenNode.data.type === 'template') {
+        const contentNode = screenNode.data.elements[0];
+        if (contentNode.action.type === 'video') {
+            const content: Video = {
+                ...baseContent,
+                type: 'video',
+                poster: contentNode.formValues.poster,
+                source: contentNode.formValues.source,
+                subtitles: contentNode.formValues.subtitles,
+                summary: contentNode.formValues.summary,
+                transcript: contentNode.formValues.transcript,
+
+            };
+            return epoc.addContent(screenNode.data.contentId, content);
+        } else if (contentNode.action.type === 'html' || contentNode.action.type === 'text') {
+            const content: Html = {
+                ...baseContent,
+                type: 'html',
+                html: contentNode.formValues.html
+            };
+            return epoc.addContent(screenNode.data.contentId, content);
+        }
+    } else {
+        if (screenNode.data.elements.length > 1) {
+            const questions = screenNode.data.elements.reduce((q, questionNode) => {
+                q.push(newQuestion(epoc, questionNode));
+                return q;
+            }, []);
+            const content: Assessment = {
+                ...baseContent,
+                type: 'assessment',
+                summary: '',
+                questions: questions
+            };
+            return epoc.addContent(screenNode.data.contentId, content);
+        } else {
+            const content: SimpleQuestion = {
+                ...baseContent,
+                type: 'simple-question',
+                question: newQuestion(epoc, screenNode.data.elements[0])
+            };
+            return epoc.addContent(screenNode.data.contentId, content);
+        }
+    }
+}
+
+function newQuestion(epoc: EpocV1, questionNode) : string {
+    // todo
+    const question : Question = {
+        type: '',
+        label: '',
+        statement: '',
+        score: 0,
+        responses: undefined,
+        correctResponse: undefined,
+        explanation: '',
+    };
+    return epoc.addQuestion(questionNode.contentId, question);
 }
 
 function getNextNode(node) {

@@ -1,4 +1,4 @@
-import { Assessment, Chapter, Content, Epoc, html, Parameters, uid } from '@epoc/epoc-specs/dist/v1';
+import { Chapter, Content, Epoc, html, Parameters, uid, Video } from '@epoc/epoc-specs/dist/v1';
 import { Question } from '@epoc/epoc-specs/dist/v1/question';
 import { Author } from '@epoc/epoc-specs/dist/v1/author';
 
@@ -52,13 +52,29 @@ export class EpocV1 implements Epoc {
         this.chapters[id] = chapter;
     }
 
-    addContent(id, chapterId, content) {
-        this.questions[id] = content;
-        this.chapters[chapterId].contents.push(id);
+    addContent(id: uid, content: Content) : uid {
+        this.contents[id] = content;
+        return id;
     }
 
-    addDuestion(id, contentId, question) {
+    addQuestion(id, question) : uid {
         this.questions[id] = question;
-        (this.contents[contentId] as Assessment).questions.push(id);
+        return id;
     }
+}
+
+export class VideoContent implements Video {
+
+    constructor(content: Video) {
+        
+    }
+
+    type: 'video';
+    id: uid;
+    poster: string;
+    source: string;
+    subtitles: { label: string; lang: string; src: string }[];
+    summary: html;
+    title: string;
+    transcript: string;
 }
