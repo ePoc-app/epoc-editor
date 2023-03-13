@@ -75,7 +75,7 @@ function change(event) {
         node.data.elements.splice(event.added.newIndex, 0, newElement);
         dropped.value = false;
 
-        editorStore.addElementToScreen(node.id, event.added.element, event.added.newIndex);
+        editorStore.addElementToScreen(node.id, event.added.element.action, event.added.newIndex);
 
     } if(event.moved) {
         const oldIndex = event.moved.oldIndex;
