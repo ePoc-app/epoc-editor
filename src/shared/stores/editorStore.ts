@@ -137,6 +137,7 @@ export const useEditorStore = defineStore('editor', {
             }
         },
         removeElementFromScreen(index: number, parentNodeId): void {
+            this.closeFormPanel();
             const node = findNode(parentNodeId);
 
             node.data.elements.splice(index, 1);

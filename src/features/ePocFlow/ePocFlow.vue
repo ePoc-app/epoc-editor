@@ -76,9 +76,9 @@ function createNodeFromElement(position, element: NodeElement) {
         deletable: false
     };
 
-    editorStore.addElementToScreen(id, element.action);
-
     addNodes([newNode]);
+
+    editorStore.addElementToScreen(id, element.action);
 
     // align node position after drop, so it's centered to the mouse
     nextTick(() => {
