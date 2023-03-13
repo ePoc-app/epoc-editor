@@ -140,7 +140,9 @@ export const useEditorStore = defineStore('editor', {
             const node = findNode(parentNodeId);
 
             node.data.elements.splice(index, 1);
-            node.data.formValues.components.splice(index, 1);
+            if(this.openedParentId) {
+                node.data.formValues.components.splice(index, 1);
+            }
 
             if(node.data.elements.length === 0) {
                 const connectedEdges = getConnectedEdges([node], edges.value);
