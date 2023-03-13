@@ -6,4 +6,5 @@ export interface NodeElement {
     formType: string;
     formValues: object;
     parentId?: string;
+    contentId?: string;
 }

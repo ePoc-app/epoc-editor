@@ -109,10 +109,11 @@ function addNode(position, actions: SideAction[]) {
             action: action,
             formType: action.type,
             formValues: {},
-            parentId: id
+            parentId: id,
+            contentId: editorStore.generateContentId()
         });
     });
-
+    
     //? For the V0 the templates aren't editable
     const type = questionTypes.includes(elements[0].action.type) ? 'question' : 'template';
 

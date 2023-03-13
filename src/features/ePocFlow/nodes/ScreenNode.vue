@@ -68,11 +68,12 @@ function change(event) {
                 action: event.added.element,
                 formType: event.added.element.type,
                 formValues: event.added.element.formValues,
+                contentId: editorStore.generateContentId(),
             };
         }
         node.data.elements.splice(event.added.newIndex, 0, newElement);
         dropped.value = false;
-        
+
         editorStore.addElementToScreen(node.id, event.added.element, event.added.newIndex);
 
     } if(event.moved) {
