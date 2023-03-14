@@ -8,7 +8,7 @@ const editorStore = useEditorStore();
 
 <template>
     <div class="side-bar">
-        <img src="@/public/img/epoc.svg" alt="logo ePoc">
+        <img src="@/public/img/epoc.svg" alt="logo ePoc" draggable="false">
         <div class="side-bar-actions">
             <SideActionButtonV0
                 v-for="item of editorStore.standardScreens"
@@ -29,6 +29,7 @@ const editorStore = useEditorStore();
         margin-top: 2rem;
         margin-left: 10%;
         margin-bottom: .5rem;
+        user-select: none;
     }
     &-actions {
         display: flex;

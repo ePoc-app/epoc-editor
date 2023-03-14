@@ -160,7 +160,7 @@ function onClick(index) {
         padding: 0 .7rem;
         display: flex;
         flex-direction: row;
-        cursor: pointer;
+        cursor: move;
         &.border-bottom {
             border-bottom: 2px solid var(--border);
         }
@@ -178,6 +178,7 @@ function onClick(index) {
             width: fit-content;
             text-align: end;
             margin: auto;
+            cursor: pointer;
             hr {
                 margin-right: .5rem;
             }

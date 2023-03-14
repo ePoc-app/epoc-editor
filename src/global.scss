@@ -451,3 +451,9 @@ g.selected {
   // transform-origin: center center;
   transform: rotate(-90deg) translateY(-50%);
 }
+
+.panel {
+  h1, h3, label {
+    user-select: none;
+  }
+}
