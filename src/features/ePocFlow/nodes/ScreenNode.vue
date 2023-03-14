@@ -56,7 +56,6 @@ function dragOver(event) {
 }
 
 function change(event) {
-
     if(event.added && dropped.value) {
         let newElement: NodeElement;
         if(event.added.element.action) {
@@ -75,7 +74,9 @@ function change(event) {
         node.data.elements.splice(event.added.newIndex, 0, newElement);
         dropped.value = false;
 
-        editorStore.addElementToScreen(node.id, event.added.element.action, event.added.newIndex);
+        const action = event.added.element.action ? event.added.element.action : event.added.element;
+
+        editorStore.addElementToScreen(node.id, action, event.added.newIndex);
 
     } if(event.moved) {
         const oldIndex = event.moved.oldIndex;

@@ -26,6 +26,7 @@ const nodeTypes = {
 };
 
 const onDrop = (event) => {
+
     const { left, top } = vueFlowRef.value.getBoundingClientRect();
 
     const position = project({
@@ -94,6 +95,11 @@ function createNodeFromElement(position, element: NodeElement) {
             { deep: true, flush: 'post' },
         );
     });
+
+    //? Conflicts with vue draggable on node edge
+    document.querySelectorAll('.node .ghost').forEach((ghost) => {
+        ghost.remove();
+    });
 }
 
 function addNode(position, actions: SideAction[]) {
@@ -144,6 +150,11 @@ function addNode(position, actions: SideAction[]) {
             },
             { deep: true, flush: 'post' },
         );
+    });
+
+    //? Conflicts with vue draggable on node edge
+    document.querySelectorAll('.node .ghost').forEach((ghost) => {
+        ghost.remove();
     });
 }
 
