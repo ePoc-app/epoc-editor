@@ -135,15 +135,70 @@ function newContent(epoc: EpocV1, screenNode) : string {
 }
 
 function newQuestion(epoc: EpocV1, questionNode) : string {
-    // todo
+    let type = 'unknown';
+    let responses = [];
+    let correctResponse = [];
+
+    const mapType = {
+        dragdrop: 'drag-and-drop',
+        list: 'dropdown-list',
+        swipe: 'swipe'
+    };
+
+    if (questionNode.formValues && questionNode.formValues.responses) {
+        if (questionNode.formType === 'qcm') {
+            responses = questionNode.formValues.responses.map(r => {
+                return {
+                    label: r.label,
+                    value: r.value
+                };
+            });
+            correctResponse = questionNode.formValues.responses.filter(r => r.isCorrect).map(r => r.value);
+            type = correctResponse.length > 1 ? 'multiple-choice' : 'choice';
+        } else if (questionNode.formType === 'reorder') {
+            responses = questionNode.formValues.responses.map(r => {
+                return {
+                    label: r.label,
+                    value: r.value
+                };
+            });
+            correctResponse = questionNode.formValues.responses.reduce((acc, r) => acc+r.value, '');
+            type = 'reorder';
+        } else if (['dragdrop', 'list'].includes(questionNode.formType)) {
+            // responses = questionNode.formValues.responses.map(r => {
+            //     return {
+            //         label: r.label,
+            //         value: r.value
+            //     };
+            // });
+            // correctResponse = questionNode.formValues.responses.reduce((acc, r) => acc+r.value, '');
+            // type = mapType[questionNode.formType];
+        } else if (questionNode.formType === 'swipe') {
+            responses = questionNode.formValues.responses.map(r => {
+                return {
+                    label: r.label,
+                    value: r.value
+                };
+            });
+            correctResponse = [{
+                label: questionNode.formValues.right,
+                values: questionNode.formValues.responses.filter(r => r.correctReponse === '2').map(r => r.value)
+            },
+            {
+                label: questionNode.formValues.left,
+                values: questionNode.formValues.responses.filter(r => r.correctReponse === '1').map(r => r.value)
+            }];
+            type = mapType[questionNode.formType];
+        }
+    }
     const question : Question = {
-        type: '',
-        label: '',
-        statement: '',
-        score: 0,
-        responses: undefined,
-        correctResponse: undefined,
-        explanation: '',
+        type,
+        label: questionNode.formValues?.label || '',
+        statement: questionNode.formValues?.statement || '',
+        score: questionNode.formValues?.explanation || 0,
+        responses,
+        correctResponse,
+        explanation: questionNode.formValues?.explanation || '',
     };
     return epoc.addQuestion(questionNode.contentId, question);
 }

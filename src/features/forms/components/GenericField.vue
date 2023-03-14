@@ -39,11 +39,11 @@ function onRepeatInput(value, id) {
         if(element) {
             if(!element.formValues[id]) element.formValues[id] = [];
 
-            element.formValues[id].push('');
+            element.formValues[id].push(value.defaultValues);
         } else {
             if(!node.data.formValues[id]) node.data.formValues[id] = [];
 
-            node.data.formValues[id].push('');
+            node.data.formValues[id].push(value.defaultValues);
         }
     } else if(value.type === 'remove') {
         element ? element.formValues[id].splice(value.index, 1) : node.data.formValues[id].splice(value.index, 1);

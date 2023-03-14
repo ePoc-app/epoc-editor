@@ -37,6 +37,12 @@ function onInput(value, id, index) {
 function addCard() {
     emit('change', {
         type: 'add',
+        defaultValues: props.inputs.length === 1 ? props.inputs[0].value : {
+            ...props.inputs.reduce((defaultValues, input) => {
+                defaultValues[input['id']] = input['type'] === 'hidden' ? editorStore.generateContentId() : input['value'];
+                return defaultValues;
+            }, {})
+        }
     });
 }
 

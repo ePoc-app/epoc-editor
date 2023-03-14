@@ -333,7 +333,7 @@ export const qcmForm: Form = {
                     id: 'score',
                     type: 'score',
                     label: 'Score',
-                    value: '0',
+                    value: 0,
                 }
             ]
         },
@@ -366,17 +366,24 @@ export const qcmForm: Form = {
                     value: '',
                     inputs: [
                         {
-                            id: 'response',
+                            id: 'label',
                             type: 'textarea',
                             label: '',
                             placeholder: 'Saisissez une réponse ..',
                             value: ''
                         },
                         {
+                            id: 'value',
+                            type: 'hidden',
+                            label: '',
+                            placeholder: 'Valeur cachée',
+                            value: ''
+                        },
+                        {
                             id: 'isCorrect',
                             type: 'checkbox',
                             label: 'Bonne réponse',
-                            value: 'false'
+                            value: false
                         }
                     ]
                 }
@@ -417,7 +424,7 @@ export const dragDropForm: Form = {
                     id: 'score',
                     type: 'score',
                     label: 'Score',
-                    value: '0',
+                    value: 0,
                 }
             ]
         },
@@ -470,11 +477,18 @@ export const dragDropForm: Form = {
                     value: '',
                     inputs: [
                         {
-                            id: 'response',
+                            id: 'label',
                             type: 'textarea',
                             label: '',
                             placeholder: 'Saisissez une réponse...',
                             value: '',
+                        },
+                        {
+                            id: 'value',
+                            type: 'hidden',
+                            label: '',
+                            placeholder: 'Valeur cachée',
+                            value: ''
                         },
                         {
                             id: 'choice',
@@ -522,7 +536,7 @@ export const reorderForm: Form = {
                     id: 'score',
                     type: 'score',
                     label: 'Score',
-                    value: '0',
+                    value: 0,
                 }
             ]
         },
@@ -555,10 +569,17 @@ export const reorderForm: Form = {
                     value: '',
                     inputs: [
                         {
-                            id: '',
+                            id: 'label',
                             type: 'textarea',
                             label: '',
                             placeholder: 'Saisissez une réponse...',
+                            value: ''
+                        },
+                        {
+                            id: 'value',
+                            type: 'hidden',
+                            label: '',
+                            placeholder: 'Valeur cachée',
                             value: ''
                         },
                     ]
@@ -600,7 +621,7 @@ export const swipeForm: Form = {
                     id: 'score',
                     type: 'score',
                     label: 'Score',
-                    value: '0',
+                    value: 0,
                 }
             ]
         },
@@ -652,17 +673,24 @@ export const swipeForm: Form = {
                     value: '',
                     inputs: [
                         {
-                            id: 'response',
+                            id: 'label',
                             type: 'textarea',
                             label: '',
                             placeholder: 'Saisissez une proposition',
                             value: ''
                         },
                         {
+                            id: 'value',
+                            type: 'hidden',
+                            label: '',
+                            placeholder: 'Valeur cachée',
+                            value: ''
+                        },
+                        {
                             id:  'correctReponse',
                             type: 'radio-group',
                             label: 'Réponse',
-                            value: '0'
+                            value: 0
                         }
 
                     ]
@@ -705,7 +733,7 @@ export const listForm: Form = {
                     id: 'score',
                     type: 'score',
                     label: 'Score',
-                    value: '0',
+                    value: 0,
                 }
             ]
         },
@@ -758,10 +786,17 @@ export const listForm: Form = {
                     value: '',
                     inputs: [
                         {
-                            id: 'response',
+                            id: 'label',
                             type: 'textarea',
                             label: '',
                             placeholder: 'Saisissez une question...',
+                            value: ''
+                        },
+                        {
+                            id: 'value',
+                            type: 'hidden',
+                            label: '',
+                            placeholder: 'Valeur cachée',
                             value: ''
                         },
                         {
