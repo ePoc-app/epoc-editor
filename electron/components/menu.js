@@ -1,6 +1,6 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const { sendToFrontend, updateSavedProject } = require('./ipc');
-const { pickEpocProject, getRecentFiles, saveEpocProject, saveAsEpocProject } = require('./file');
+const { pickEpocToImport, pickEpocProject, getRecentFiles, saveEpocProject, saveAsEpocProject } = require('./file');
 const store = require('./store');
 
 module.exports.setupMenu = function () {
@@ -46,6 +46,13 @@ module.exports.setupMenu = function () {
                             };
                         })
                     ]
+                },
+                {
+                    label: 'Importer',
+                    click: async function () {
+                        sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportPicked');
+                        sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportExtracted', await pickEpocToImport());
+                    }
                 },
                 {
                     id: 'save',

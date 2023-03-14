@@ -53,6 +53,38 @@ const newEpocProject = async function () {
 };
 
 /**
+ * Open a dialog to choose an ePoc export archive to import
+ * @returns {{filepath: null, workdir: string, name: null, modified: Date} | null}
+ */
+const pickEpocToImport = async function () {
+    const startTime = performance.now();
+    const files = dialog.showOpenDialogSync(BrowserWindow.getFocusedWindow(), {
+        properties: ['openFile'],
+        filters: [{name: 'ePoc export archive', extensions: ['zip']}]
+    });
+    if (!files || !files[0]) return null;
+    const filepath = files[0];
+    const workdir = createWorkDir();
+    const zip = new AdmZip(filepath, {});
+    zip.extractAllTo(workdir, true, false, null);
+
+    let epoc;
+    try {
+        epoc = JSON.parse(fs.readFileSync(path.join(workdir, 'content.json'), 'utf8'));
+    } catch (err) {
+        return null;
+    }
+
+    const ellapsed = performance.now() - startTime;
+    if (ellapsed < 500) await wait(500 - ellapsed);
+
+    return {
+        epoc,
+        workdir
+    };
+};
+
+/**
  * Open a dialog to choose an ePoc file or project and return its content
  * @returns {{filepath: string, workdir: null, name: null, modified: Date} | null}
  */
@@ -239,6 +271,7 @@ module.exports = {
     getRecentFiles,
     openFile,
     newEpocProject,
+    pickEpocToImport,
     pickEpocProject,
     openEpocProject,
     saveEpocProject,

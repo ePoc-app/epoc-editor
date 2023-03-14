@@ -83,6 +83,18 @@ const setup = function () {
         });
     });
 
+    api.receive('epocImportPicked', () => {
+        editorStore.loading = true;
+    });
+
+    api.receive('epocImportExtracted', (data: string) => {
+        const importedEpoc =  JSON.parse(data);
+        if (!importedEpoc || !importedEpoc.workdir) return editorStore.loading = false;
+        // todo parse ePoc data and create flow chart
+        console.log(importedEpoc.workdir);
+        console.log(importedEpoc);
+    });
+
     api.receive('previewReady', () => {
         waitingToastDismiss();
         editorStore.loadingPreview = false;
