@@ -13,6 +13,10 @@ function actionOnForm(action: string) {
         editorStore.deleteElement(editorStore.openedNodeId);
         projectService.writeProjectData();
         break;
+
+    case 'duplicate-screen':
+        editorStore.duplicateScreen();
+        break;
     }
 }
 
@@ -25,9 +29,9 @@ function actionOnForm(action: string) {
             <div class="form-icon"><i :class="editorStore.formPanel.icon"></i></div>
             <h1>{{ editorStore.formPanel.name }}</h1>
         </div>
-        <div v-if="editorStore.formPanel.buttons && editorStore.formPanel.buttons.length > 0" class="buttons">
+        <div class="buttons">
             <FormButton
-                v-for="button in editorStore.formPanel.buttons"
+                v-for="button in editorStore.getFormButtons()"
                 :key="button.label"
                 :label="button.label"
                 :icon="button.icon"

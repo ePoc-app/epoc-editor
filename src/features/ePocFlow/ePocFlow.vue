@@ -69,11 +69,6 @@ function createNodeFromElement(position, element: NodeElement) {
         type: 'content',
         data: { elements: [element], readyToDrop: false, animated: false, formType: 'screen', formValues: {}, type: 'question', contentId: uid() },
         position,
-        events: {
-            click: () => {
-                openForm(id, newNode.data.formType, newNode.data.formValues);
-            }
-        },
         deletable: false
     };
 
@@ -158,9 +153,6 @@ function addNode(position, actions: SideAction[]) {
     });
 }
 
-function openForm(id: string, formType: string, formValues) {
-    editorStore.openFormPanel(id, formType, formValues);
-}
 onMounted(() => {
     projectStore.restore();
 });

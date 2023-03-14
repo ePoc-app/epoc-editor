@@ -34,12 +34,10 @@ onMounted(() => {
 });
 
 function openForm(element: NodeElement) {
-    document.querySelectorAll('.node.selected').forEach(node => node.classList.remove('selected'));
     editorStore.openFormPanel(element.id, element.formType, element.formValues, element.parentId);
 }
 
 function openPageForm(id, formType, formValues) {
-    document.querySelectorAll('.node.selected').forEach(node => node.classList.remove('selected'));
     editorStore.openFormPanel(id, formType, formValues);
 }
 
@@ -129,11 +127,7 @@ const isSelected = computed(() => {
 </script>
 
 <template>
-    <div
-        @click.exact="openPageForm(node.id, node.data.formType, node.data.formValues)"
-        @click.meta="cmdClick"
-        @click.ctrl="cmdClick"
-    >
+    <div>
         <div class="container">
             <p class="node-title">{{ node.data.formValues?.title || 'Page' }}</p>
             <Handle
@@ -146,6 +140,9 @@ const isSelected = computed(() => {
                 :id="'node'+ props.id"
                 :class=" { 'active': editorStore.openedNodeId ? editorStore.openedNodeId === props.id : false, 'selected': isSelected }"
                 class="node"
+                @click.exact="openPageForm(node.id, node.data.formType, node.data.formValues)"
+                @click.meta="cmdClick"
+                @click.ctrl="cmdClick"  
                 @dragover="dragOver($event)"
                 @dragleave="dragLeave($event)"
                 @dragenter="dragEnter($event)"
@@ -167,7 +164,7 @@ const isSelected = computed(() => {
                                 :icon="element.action.icon"
                                 :is-active="editorStore.openedNodeId ? editorStore.openedNodeId === element.id : false"
                                 :is-draggable="isQuestion"
-                                :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true}"
+                                :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true }"
                                 @click.exact="openForm(element)"
                                 @click.meta="cmdClick"
                                 @click.ctrl="cmdClick"

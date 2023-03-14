@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
-import { ePocProject, Form, Screen, SideAction } from '@/src/shared/interfaces';
+import { ePocProject, Form, FormButton, Screen, SideAction } from '@/src/shared/interfaces';
 import { toRaw } from 'vue';
 import { applyNodeChanges, getConnectedEdges, useVueFlow } from '@vue-flow/core';
 
 import { formsModel, questions, standardScreen } from '@/src/shared/data/form.data';
 
-const { findNode, nodes, edges } = useVueFlow({ id: 'main' });
+const { findNode, nodes, edges, addNodes } = useVueFlow({ id: 'main' });
 
 type uid = string;
 
@@ -72,6 +72,7 @@ export const useEditorStore = defineStore('editor', {
             //? To be sure the view is notified of closing / reopening
             setTimeout(() => { 
                 this.formPanel = structuredClone(formsModel.find(form => form.type === formType));
+                document.querySelectorAll('.node.selected').forEach(node => node.classList.remove('selected'));
             });
         },
         closeFormPanel(): void {
@@ -181,6 +182,52 @@ export const useEditorStore = defineStore('editor', {
             const firstPart = ('000' + firstNumber.toString(36)).slice(-3);
             const secondPart = ('000' + secondNumber.toString(36)).slice(-3);
             return firstPart + secondPart;
+        },
+        getFormButtons(): FormButton[] {
+            const buttons: FormButton[] = [];
+            if(this.formPanel.type !== 'epoc') {
+                buttons.push({ label: 'Supprimer',icon: 'icon-supprimer',action: 'delete'});
+                if(this.formPanel.type !== 'chapter') {
+                    if(!this.openedParentId) {
+                        buttons.push({ label: 'Dupliquer la page', icon: 'icon-plus', action: 'duplicate-screen' });
+                    }
+                }
+            }
+            return buttons;
+        },
+        duplicateScreen() {
+            const node = findNode(this.openedNodeId);
+
+            const newElements = [];
+
+            const nodeId = this.generateId();
+
+            for(const element of node.data.elements) {
+                const newElement = structuredClone(toRaw(element));
+                newElement.id = this.generateId();
+                newElement.parentId = nodeId;
+                newElements.push(newElement);
+            }
+
+
+            const newNode = {
+                id: nodeId,
+                type: node.type,
+                position: { x: node.position.x + 150, y: node.position.y },
+                data: {
+                    elements: newElements,
+                    readyToDrop: false,
+                    animated: false,
+                    formType: 'screen',
+                    formValues: structuredClone(toRaw(node.data.formValues)),
+                    type: node.data.type,
+                    contentId: this.generateContentId(),
+                    deletable: false
+                },
+            };
+
+            addNodes([newNode]);
+            this.closeFormPanel();
         }
     }
 });

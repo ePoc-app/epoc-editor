@@ -16,13 +16,6 @@ export const textForm: Form = {
                 }
             ],
         }
-    ],
-    buttons: [
-        {
-            label: 'Supprimer',
-            icon: 'icon-supprimer',
-            action: 'delete'
-        },
     ]
 };
 
@@ -74,13 +67,6 @@ export const videoForm: Form = {
                 },
             ]
         }
-    ],
-    buttons: [
-        {
-            label: 'Supprimer',
-            icon: 'icon-supprimer',
-            action: 'delete'
-        }
     ]
 };
 
@@ -121,13 +107,6 @@ export const chapterForm: Form = {
                 }
             ]
         }
-    ],
-    buttons: [
-        {
-            label: 'Supprimer',
-            icon: 'icon-supprimer',
-            action: 'delete'
-        },
     ]
 };
 
@@ -267,8 +246,6 @@ export const epocForm: Form = {
         }
 
     ],
-    buttons: [
-    ]
 };
 
 export const screenForm: Form = { 
@@ -307,13 +284,6 @@ export const screenForm: Form = {
                 }
             ]
         }
-    ],
-    buttons: [
-        {
-            label: 'Supprimer',
-            icon: 'icon-supprimer',
-            action: 'delete'
-        },
     ]
 };
 
@@ -401,13 +371,6 @@ export const qcmForm: Form = {
                 }
             ]
         }
-    ],
-    buttons: [
-        {
-            label: 'Supprimer',
-            icon: 'icon-supprimer',
-            action: 'delete'
-        },
     ]
 };
 
@@ -515,13 +478,6 @@ export const dragDropForm: Form = {
                 }
             ]
         }
-    ],
-    buttons: [
-        {
-            label: 'Supprimer',
-            icon: 'icon-supprimer',
-            action: 'delete'
-        },
     ]
 };
 
@@ -600,13 +556,6 @@ export const reorderForm: Form = {
                 }
             ]
         }
-    ],
-    buttons: [
-        {
-            label: 'Supprimer',
-            icon: 'icon-supprimer',
-            action: 'delete'
-        },
     ]
 };
 
@@ -712,13 +661,6 @@ export const swipeForm: Form = {
                 }
             ]
         }
-    ],
-    buttons: [
-        {
-            label: 'Supprimer',
-            icon: 'icon-supprimer',
-            action: 'delete'
-        },
     ]
 };
 
@@ -826,13 +768,6 @@ export const listForm: Form = {
                 }
             ]
         }
-    ],
-    buttons: [
-        {
-            label: 'Supprimer',
-            icon: 'icon-supprimer',
-            action: 'delete'
-        },
     ]
 };
 
