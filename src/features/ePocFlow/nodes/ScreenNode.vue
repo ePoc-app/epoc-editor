@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Handle, Position, useVueFlow } from '@vue-flow/core';
 import ContentButton from '@/src/components/ContentButton.vue';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { NodeElement } from '@/src/shared/interfaces';
 
@@ -21,7 +21,7 @@ const props = defineProps<{
 }>();
 
 
-const { findNode } = useVueFlow({ id: 'main' });
+const { findNode, getSelectedNodes } = useVueFlow({ id: 'main' });
 
 const node = findNode(props.id);
 const dropped = ref(false);
@@ -34,7 +34,13 @@ onMounted(() => {
 });
 
 function openForm(element: NodeElement) {
+    document.querySelectorAll('.node.selected').forEach(node => node.classList.remove('selected'));
     editorStore.openFormPanel(element.id, element.formType, element.formValues, element.parentId);
+}
+
+function openPageForm(id, formType, formValues) {
+    document.querySelectorAll('.node.selected').forEach(node => node.classList.remove('selected'));
+    editorStore.openFormPanel(id, formType, formValues);
 }
 
 let counter = 0;
@@ -112,11 +118,21 @@ function dragStart(event, element: NodeElement, index: number) {
     event.dataTransfer.setData('source', JSON.stringify({ parent: props.id, index: index}));
 }
 
+function cmdClick() {
+    editorStore.closeFormPanel();
+}
+
+const isSelected = computed(() => {
+    return getSelectedNodes.value.find((selectedNode) => selectedNode.id === node.id);
+});
+
 </script>
 
 <template>
     <div
-        @click="editorStore.openFormPanel(node.id, node.data.formType, node.data.formValues)"
+        @click.exact="openPageForm(node.id, node.data.formType, node.data.formValues)"
+        @click.meta="cmdClick"
+        @click.ctrl="cmdClick"
     >
         <div class="container">
             <p class="node-title">{{ node.data.formValues?.title || 'Page' }}</p>
@@ -127,8 +143,8 @@ function dragStart(event, element: NodeElement, index: number) {
                 :connectable="false"
             />
             <div
-                :id="'node'+props.id"
-                :class=" { 'active': editorStore.openedNodeId ? editorStore.openedNodeId === props.id : false }"
+                :id="'node'+ props.id"
+                :class=" { 'active': editorStore.openedNodeId ? editorStore.openedNodeId === props.id : false, 'selected': isSelected }"
                 class="node"
                 @dragover="dragOver($event)"
                 @dragleave="dragLeave($event)"
@@ -152,7 +168,9 @@ function dragStart(event, element: NodeElement, index: number) {
                                 :is-active="editorStore.openedNodeId ? editorStore.openedNodeId === element.id : false"
                                 :is-draggable="isQuestion"
                                 :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true}"
-                                @click="openForm(element)"
+                                @click.exact="openForm(element)"
+                                @click.meta="cmdClick"
+                                @click.ctrl="cmdClick"
                                 @dragstart="dragStart($event, element, index)"
                             />
                         </div>

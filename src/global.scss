@@ -228,6 +228,11 @@ hr {
     border: 1px solid var(--editor-blue);
     box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);
     background-color: var(--node-active);
+  } 
+  
+  &.selected {
+    border: 1px solid var(--editor-blue);
+    box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);  
   }
 
   &-animate {
@@ -456,4 +461,15 @@ g.selected {
   h1, h3, label {
     user-select: none;
   }
+}
+
+.vue-flow__nodesselection-rect, .vue-flow__selection {
+  background-color: #00B3E920;
+  border: 2px dashed #00B3E9f0;
+  border-radius: 8px;
+}
+
+.vue-flow__nodesselection-rect {
+  padding: 2rem 1rem 1rem 1rem;
+  transform: translate(-1rem, -2rem);
 }
