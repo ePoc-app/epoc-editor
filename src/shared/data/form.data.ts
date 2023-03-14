@@ -496,6 +496,8 @@ export const dragDropForm: Form = {
                             label: '',
                             placeholder: '',
                             value: '',
+                            options: [],
+                            linkedOptions: 'categories'
                         }
                     ]
                 }
@@ -804,7 +806,9 @@ export const listForm: Form = {
                             type: 'select',
                             label: '',
                             placeholder: '',
-                            value: ''
+                            value: '',
+                            options: [],
+                            linkedOptions: 'categories'
                         }
                     ]
                 }

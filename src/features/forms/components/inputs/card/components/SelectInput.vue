@@ -2,11 +2,12 @@
 import { useVueFlow } from '@vue-flow/core';
 import { useEditorStore } from '@/src/shared/stores';
 
-defineProps<{
+const props = defineProps<{
     label: string;
     inputValue: string;
     placeholder: string;
-    // options: string[];
+    options: string[];
+    linkedOptions: string;
 }>();
 
 const emit = defineEmits<{
@@ -17,6 +18,12 @@ const { findNode } = useVueFlow({ id: 'main' });
 const editorStore = useEditorStore();
 
 const node = editorStore.openedParentId ? findNode(editorStore.openedParentId) : findNode(editorStore.openedNodeId);
+const element = node.data.elements.find(e => e.id === editorStore.openedNodeId);
+
+
+function getOptions() {
+    return props.linkedOptions ? element.formValues[props.linkedOptions] : props.options;
+}
 
 </script>
 
@@ -30,7 +37,7 @@ const node = editorStore.openedParentId ? findNode(editorStore.openedParentId) :
             @change="emit('change', ($event.target as HTMLInputElement).value)"
         >
             <option value="">Sélectionnez</option>
-            <option v-for="(option, index) in node.data.formValues['categories']" :key="index" :value="option">{{ option }}</option>
+            <option v-for="(option, index) in getOptions()" :key="index" :value="option">{{ option }}</option>
         </select>
     </div>
 </template>

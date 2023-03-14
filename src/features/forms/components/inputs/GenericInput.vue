@@ -84,6 +84,8 @@ const emit = defineEmits<{
         :label="input.label"
         :placeholder="input.placeholder"
         :input-value="inputValue"
+        :options="input.options"
+        :linked-options="input.linkedOptions"
         @change="emit('input', $event)"
     />
     <RepeatInput

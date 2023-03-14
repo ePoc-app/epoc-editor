@@ -165,14 +165,19 @@ function newQuestion(epoc: EpocV1, questionNode) : string {
             correctResponse = questionNode.formValues.responses.reduce((acc, r) => acc+r.value, '');
             type = 'reorder';
         } else if (['dragdrop', 'list'].includes(questionNode.formType)) {
-            // responses = questionNode.formValues.responses.map(r => {
-            //     return {
-            //         label: r.label,
-            //         value: r.value
-            //     };
-            // });
-            // correctResponse = questionNode.formValues.responses.reduce((acc, r) => acc+r.value, '');
-            // type = mapType[questionNode.formType];
+            responses = questionNode.formValues.responses.map(r => {
+                return {
+                    label: r.label,
+                    value: r.value
+                };
+            });
+            correctResponse = questionNode.formValues.categories.map(cat => {
+                return {
+                    label: cat,
+                    values: questionNode.formValues.responses.filter(r => r.choice === cat).map(r => r.value)
+                };
+            });
+            type = mapType[questionNode.formType];
         } else if (questionNode.formType === 'swipe') {
             responses = questionNode.formValues.responses.map(r => {
                 return {
