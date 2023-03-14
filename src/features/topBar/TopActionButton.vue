@@ -10,7 +10,7 @@ defineProps<{
 </script>
 
 <template>
-    <button class="btn btn-top-bar" :class="!text ? 'btn-squared' : ''" :disabled="disabled">
+    <button class="btn btn-top-bar" :class="{ 'btn-squared': !text }" :disabled="disabled">
         <span v-if="textBefore" class="text-top-bar zoom-span">{{ textBefore }}</span>
         <i :class="icon" />
         <span v-if="text" class="text-top-bar">{{ text }}</span>
@@ -20,5 +20,9 @@ defineProps<{
 <style scoped lang="scss">
 .btn-squared {
     padding: .7rem;
+}
+
+button:disabled {
+    pointer-events: none;
 }
 </style>
