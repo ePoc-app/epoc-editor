@@ -192,6 +192,11 @@ export const useEditorStore = defineStore('editor', {
                         buttons.push({ label: 'Dupliquer la page', icon: 'icon-plus', action: 'duplicate-screen' });
                     } else {
                         buttons.push({ label: 'Revenir à la page', icon: 'icon-ecran', action: 'open-page' });
+
+                        //? This is temporary
+                        if(this.formPanel.type !== 'text' && this.formPanel.type !== 'video') {
+                            buttons.push({ label: 'Dupliquer l\'élément', icon: 'icon-plus', action: 'duplicate-element' });
+                        }
                     }
                 }
             }
@@ -234,6 +239,16 @@ export const useEditorStore = defineStore('editor', {
 
             addNodes([newNode]);
             this.closeFormPanel();
+        },
+        duplicateElement() {
+            const node = findNode(this.openedParentId);
+
+            const newElement = structuredClone(toRaw(node.data.elements.find(element => element.id === this.openedNodeId)));
+            newElement.id = this.generateId();
+            newElement.parentId = node.id;
+
+            node.data.elements.push(newElement);
+            this.addElementToScreen(node.id, newElement.action);
         }
     }
 });

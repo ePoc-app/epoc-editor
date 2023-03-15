@@ -21,7 +21,10 @@ function actionOnForm(action: string) {
     case 'open-page':
         editorStore.openPage();
         break;
-        
+    
+    case 'duplicate-element':
+        editorStore.duplicateElement();
+        break;
     }
 
 }
