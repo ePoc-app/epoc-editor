@@ -70,11 +70,11 @@ const dragOptions = {
                             <div>
                                 <ContentButton
                                     :key="index"
+                                    v-tippy="{content: element.label, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
                                     :icon="element.icon"
-                                    :class-list="{ 'btn-content-blue': false }"
+                                    :class-list="{ 'btn-content-blue': true }"
                                     :is-active="false"
                                     :is-draggable="true"
-                                    v-tippy="{content: element.label, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
                                     @dragstart="dragStart($event, element)"
                                 />
                             </div>
