@@ -51,7 +51,9 @@ module.exports.setupMenu = function () {
                     label: 'Importer',
                     click: async function () {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportPicked');
-                        sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportExtracted', await pickEpocToImport());
+                        const project = await pickEpocToImport();
+                        store.updateState('currentProject', project);
+                        sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportExtracted', project);
                     }
                 },
                 {

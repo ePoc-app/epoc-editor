@@ -56,14 +56,15 @@ app.whenReady().then(() => {
 
     // Intercept all url starting with assets/ and redirect it to custom protocol (wysiwyg/quill)
     const filter = {
-        urls: ['*://*/assets/*']
+        urls: ['*://*/assets/*', '*://*/images/*', '*://*/videos/*']
     };
 
     session.defaultSession.webRequest.onBeforeRequest(filter, (details, callback) => {
-        if (mainWindow.webContents.id === details.webContents.id && details.url.indexOf('assets/') !== -1) {
-            const filepath = details.url.split('assets/')[1];
-
-            return callback({ redirectURL: `assets://assets/${filepath}` });
+        const assetsFolder = ['assets/', 'images/', 'videos/'].find(folder => details.url.includes(folder));
+        console.log(assetsFolder);
+        if (mainWindow.webContents.id === details.webContents.id && assetsFolder) {
+            const filepath = details.url.split(assetsFolder)[1];
+            return callback({ redirectURL: `assets://${assetsFolder}${filepath}` });
         }
         callback({});
     });

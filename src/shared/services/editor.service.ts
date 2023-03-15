@@ -3,6 +3,7 @@ import { router } from '@/src/router';
 import { useEditorStore, useProjectStore } from '@/src/shared/stores';
 import { ePocProject } from '@/src/shared/interfaces';
 import { createToaster } from '@meforma/vue-toaster';
+import { EpocV1 } from '@/src/shared/classes/epoc-v1';
 
 const toaster = createToaster({
     duration: 1000,
@@ -89,10 +90,11 @@ const setup = function () {
 
     api.receive('epocImportExtracted', (data: string) => {
         const importedEpoc =  JSON.parse(data);
-        if (!importedEpoc || !importedEpoc.workdir) return editorStore.loading = false;
-        // todo parse ePoc data and create flow chart
-        console.log(importedEpoc.workdir);
-        console.log(importedEpoc);
+        editorStore.loading = false;
+        if (!importedEpoc || !importedEpoc.workdir) return;
+        router.push('/editor').then(() => {
+            generateEpocFromData(importedEpoc.epoc);
+        });
     });
 
     api.receive('previewReady', () => {
@@ -159,9 +161,17 @@ function runPreview(): void {
 }
 
 function exportProject(): void {
-    waitingToast('⚙️ Exporrt en cours...');
+    waitingToast('⚙️ Export en cours...');
     editorStore.exporting = true;
     api.send('exportProject');
+}
+
+function generateEpocFromData(epoc: EpocV1) {
+    console.log(epoc);
+    projectStore.setEpocNodeData(epoc);
+    for (const [chapterId, chapter] of Object.entries(epoc.chapters)) {
+        projectStore.addChapter(chapterId, chapter);
+    }
 }
 
 export const editorService = {

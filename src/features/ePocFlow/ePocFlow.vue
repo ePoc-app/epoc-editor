@@ -244,7 +244,7 @@ function onEdgeclick (event) {
         auto-connect
         :default-zoom=".75"
         :max-zoom="1.5"
-        :min-zoom=".5"
+        :min-zoom=".4"
         :node-types="nodeTypes"
         :connection-mode="ConnectionMode.Strict"
         :connection-radius="50"

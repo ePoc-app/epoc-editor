@@ -66,7 +66,6 @@ function createContentJSON() : EpocV1 {
         const chapterValues = chapter.data.formValues;
         epoc.addChapter(chapter.data.contentId, {
             title: chapterValues.title || '',
-            image: chapterValues.image || '',
             objectives: chapterValues.objectives || [],
             contents: []
         });

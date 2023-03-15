@@ -8,7 +8,7 @@ const editorStore = useEditorStore();
 
 <template>
     <div class="side-bar">
-        <img src="@/public/img/epoc.svg" alt="logo ePoc" draggable="false">
+        <img src="/img/epoc.svg" alt="logo ePoc" draggable="false">
         <div class="side-bar-actions">
             <SideActionButtonV0
                 v-for="item of editorStore.standardScreens"
