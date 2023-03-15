@@ -17,7 +17,13 @@ function actionOnForm(action: string) {
     case 'duplicate-screen':
         editorStore.duplicateScreen();
         break;
+
+    case 'open-page':
+        editorStore.openPage();
+        break;
+        
     }
+
 }
 
 </script>

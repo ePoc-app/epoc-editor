@@ -190,10 +190,16 @@ export const useEditorStore = defineStore('editor', {
                 if(this.formPanel.type !== 'chapter') {
                     if(!this.openedParentId) {
                         buttons.push({ label: 'Dupliquer la page', icon: 'icon-plus', action: 'duplicate-screen' });
+                    } else {
+                        buttons.push({ label: 'Revenir à la page', icon: 'icon-ecran', action: 'open-page' });
                     }
                 }
             }
             return buttons;
+        },
+        openPage() {
+            const parentNode = findNode(this.openedParentId);
+            this.openFormPanel(parentNode.id, parentNode.data.formType, parentNode.data.formValues);
         },
         duplicateScreen() {
             const node = findNode(this.openedNodeId);
