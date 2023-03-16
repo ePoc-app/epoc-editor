@@ -63,7 +63,6 @@ app.whenReady().then(() => {
 
     session.defaultSession.webRequest.onBeforeRequest(filter, (details, callback) => {
         const assetsFolder = ['assets/', 'images/', 'videos/'].find(folder => details.url.includes(folder));
-        console.log(assetsFolder);
         if (mainWindow.webContents.id === details.webContents.id && assetsFolder) {
             const filepath = details.url.split(assetsFolder)[1];
             return callback({ redirectURL: `assets://${assetsFolder}${filepath}` });
