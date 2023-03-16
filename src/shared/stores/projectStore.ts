@@ -1,10 +1,12 @@
 import { defineStore } from 'pinia';
-import { Edge, Node, useVueFlow } from '@vue-flow/core';
+import { Edge, MarkerType, Node, useVueFlow } from '@vue-flow/core';
 import { useEditorStore } from '@/src/shared/stores/editorStore';
 import { Chapter } from '@epoc/epoc-specs/dist/v1';
 import { EpocV1 } from '@/src/shared/classes/epoc-v1';
+import { NodeElement, SideAction } from '@/src/shared/interfaces';
+import { nextTick, watch } from 'vue';
 
-const {nodes, addNodes, findNode, setNodes, setEdges, setTransform} = useVueFlow({id: 'main'});
+const {nodes, onConnect, addNodes, addEdges, findNode, setNodes, setEdges, setTransform} = useVueFlow({id: 'main'});
 const editorStore = useEditorStore();
 
 interface ProjectState {
@@ -67,7 +69,7 @@ export const useProjectStore = defineStore('project', {
                     objectives: chapter.objectives
                 };
             }
-            const newChapter = {
+            const newChapter: Node = {
                 id: (nodes.value.length + 1).toString(),
                 type: 'chapter',
                 position: {x: 0, y: (chapters.length + 1) * 200},
@@ -76,7 +78,156 @@ export const useProjectStore = defineStore('project', {
             };
 
             addNodes([newChapter]);
-            findNode('2').position.y += 200;
+
+            return newChapter;
+        },
+        createNodeLinkedNextNode(element, contentElements) {
+            const position = {
+                x: element.position.x + 150,
+                y: element.position.y
+            };
+            const screenNode: Node = {
+                id: contentElements[0].parentId,
+                type: 'content',
+                data: {
+                    elements: contentElements,
+                    readyToDrop: false,
+                    animated: false,
+                    formType: 'screen',
+                    formValues: {},
+                    type: 'template',
+                    contentId: uid()
+                },
+                position: position,
+                deletable: false
+            };
+            const edge : Edge = {
+                id: editorStore.generateId(),
+                source: element.id,
+                target: contentElements[0].parentId,
+                type: 'default',
+                updatable: true,
+                style: {stroke: '#384257', strokeWidth: 2.5},
+                markerEnd: {type: MarkerType.ArrowClosed, color: '#384257'}
+            };
+            addNodes([screenNode]);
+            addEdges([edge]);
+            return screenNode;
+        },
+        createNodeFromElement(position, element: NodeElement) {
+
+            const id = editorStore.generateId();
+
+            element.parentId = id;
+
+            const newNode = {
+                id: id,
+                type: 'content',
+                data: {
+                    elements: [element],
+                    readyToDrop: false,
+                    animated: false,
+                    formType: 'screen',
+                    formValues: {},
+                    type: 'question',
+                    contentId: uid()
+                },
+                position,
+                deletable: false
+            };
+
+            addNodes([newNode]);
+
+            editorStore.addElementToScreen(id, element.action);
+
+            // align node position after drop, so it's centered to the mouse
+            nextTick(() => {
+                const node = findNode(newNode.id);
+                const stop = watch(
+                    () => node.dimensions,
+                    (dimensions) => {
+                        if (dimensions.width > 0 && dimensions.height > 0) {
+                            node.position = {
+                                x: node.position.x - node.dimensions.width / 2,
+                                y: node.position.y - node.dimensions.height / 2
+                            };
+                            stop();
+                        }
+                    },
+                    {deep: true, flush: 'post'},
+                );
+            });
+
+            //? Conflicts with vue draggable on node edge
+            document.querySelectorAll('.node .ghost').forEach((ghost) => {
+                ghost.remove();
+            });
+        },
+        addNode(position, actions: SideAction[]) {
+
+            const questionTypes = ['qcm', 'dragdrop', 'reorder', 'swipe', 'list'];
+            const elements: NodeElement[] = [];
+
+            const id = editorStore.generateId();
+
+            actions.forEach((action) => {
+                elements.push({
+                    id: editorStore.generateId(),
+                    action: action,
+                    formType: action.type,
+                    formValues: {},
+                    parentId: id,
+                    contentId: editorStore.generateContentId()
+                });
+            });
+
+            //? For the V0 the templates aren't editable
+            const type = questionTypes.includes(elements[0].action.type) ? 'question' : 'template';
+
+            const newNode = {
+                id: id,
+                type: 'content',
+                data: {
+                    type: type,
+                    readyToDrop: false,
+                    animated: false,
+                    elements: elements,
+                    contentId: uid(),
+                    formType: 'screen',
+                    formValues: {}
+                },
+                position,
+                deletable: false
+            };
+
+            addNodes([newNode]);
+
+            actions.forEach((action) => {
+                editorStore.addElementToScreen(id, action);
+            });
+
+            // align node position after drop, so it's centered to the mouse
+            nextTick(() => {
+                const node = findNode(newNode.id);
+                const stop = watch(
+                    () => node.dimensions,
+                    (dimensions) => {
+                        if (dimensions.width > 0 && dimensions.height > 0) {
+                            node.position = {
+                                x: node.position.x - node.dimensions.width / 2,
+                                y: node.position.y - node.dimensions.height / 2
+                            };
+                            stop();
+                        }
+                    },
+                    {deep: true, flush: 'post'},
+                );
+            });
+
+            //? Conflicts with vue draggable on node edge
+            document.querySelectorAll('.node .ghost').forEach((ghost) => {
+                ghost.remove();
+            });
         }
     }
 });
@@ -112,3 +263,22 @@ function uid() {
     const secondPart = ('000' + secondNumber.toString(36)).slice(-3);
     return firstPart + secondPart;
 }
+
+// Update position of add chapter button based on number of chapters
+const projectStore = useProjectStore();
+projectStore.$subscribe(() => {
+    const chapters = projectStore.elements.filter(node => node.type === 'chapter');
+    const addNode = findNode('2');
+    if (addNode) {
+        addNode.position.y = 200 * chapters.length + 125;
+    }
+});
+
+onConnect((params) => {
+    addEdges([{
+        ...params,
+        updatable: true,
+        style: {stroke: '#384257', strokeWidth: 2.5},
+        markerEnd: {type: MarkerType.ArrowClosed, color: '#384257'}
+    }]);
+});

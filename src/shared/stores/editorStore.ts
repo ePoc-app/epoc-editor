@@ -119,7 +119,6 @@ export const useEditorStore = defineStore('editor', {
                             chapter.data.title = 'Chapitre ' + (Number(chapter.data.title.split(' ')[1]) - 1);
                         }
                     }
-                    findNode('2').position.y -= 200;
                 }
             }
             this.closeFormPanel();

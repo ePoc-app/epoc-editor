@@ -4,6 +4,7 @@ import { useEditorStore, useProjectStore } from '@/src/shared/stores';
 import { ePocProject } from '@/src/shared/interfaces';
 import { createToaster } from '@meforma/vue-toaster';
 import { EpocV1 } from '@/src/shared/classes/epoc-v1';
+import { Assessment, SimpleQuestion } from '@epoc/epoc-specs/dist/v1';
 
 const toaster = createToaster({
     duration: 1000,
@@ -86,14 +87,16 @@ const setup = function () {
 
     api.receive('epocImportPicked', () => {
         editorStore.loading = true;
+        router.push('/landingpage');
     });
 
     api.receive('epocImportExtracted', (data: string) => {
         const importedEpoc =  JSON.parse(data);
-        editorStore.loading = false;
-        if (!importedEpoc || !importedEpoc.workdir) return;
+        projectStore.setFlow(null);
         router.push('/editor').then(() => {
-            generateEpocFromData(importedEpoc.epoc);
+            editorStore.loading = false;
+            if (!importedEpoc || !importedEpoc.workdir) return;
+            generateFlowEpocFromData(importedEpoc.epoc);
         });
     });
 
@@ -166,11 +169,76 @@ function exportProject(): void {
     api.send('exportProject');
 }
 
-function generateEpocFromData(epoc: EpocV1) {
+function generateFlowEpocFromData(epoc: EpocV1) {
     console.log(epoc);
     projectStore.setEpocNodeData(epoc);
     for (const [chapterId, chapter] of Object.entries(epoc.chapters)) {
-        projectStore.addChapter(chapterId, chapter);
+        let currentNode = projectStore.addChapter(chapterId, chapter);
+        for (const contentId of chapter.contents) {
+            const content = epoc.contents[contentId];
+            const id = editorStore.generateId();
+            const action = {
+                icon: '',
+                type: ''
+            };
+            const mapType = {
+                'video': 'video',
+                'html': 'text',
+                'multiple-choice': 'qcm',
+                'choice': 'qcm',
+                'drag-and-drop': 'dragdrop',
+                'dropdown-list': 'list',
+                'swipe': 'swipe',
+                'reorder': 'reorder'
+            };
+            const mapIcon = {
+                'video': 'icon-video',
+                'html': 'icon-texte',
+                'multiple-choice': 'icon-qcm',
+                'choice': 'icon-qcm',
+                'drag-and-drop': 'icon-dragdrop',
+                'dropdown-list': 'icon-liste',
+                'swipe': 'icon-swipe',
+                'reorder': 'icon-reorder'
+            };
+            const contentElements = [];
+            const contentElement = {
+                id: editorStore.generateId(),
+                action: action,
+                formType: mapType[content.type],
+                formValues: {},
+                parentId: id,
+                contentId: editorStore.generateContentId()
+            };
+            if (content.type === 'assessment') {
+                (content as Assessment).questions.forEach((qid) => {
+                    const question = epoc.questions[qid];
+                    const contentElement = {
+                        id: editorStore.generateId(),
+                        action: {
+                            icon:mapIcon[question.type],
+                            type:mapType[question.type]
+                        },
+                        formType: mapType[question.type],
+                        formValues: {},
+                        parentId: id,
+                        contentId: editorStore.generateContentId()
+                    };
+                    contentElements.push(contentElement);
+                });
+            } else if (content.type === 'simple-question') {
+                const question = epoc.questions[(content as SimpleQuestion).question];
+                contentElement.formType = mapType[question.type];
+                contentElement.action.type = mapType[question.type];
+                contentElement.action.icon = mapIcon[question.type];
+                contentElements.push(contentElement);
+            } else {
+                contentElement.action.type = mapType[content.type];
+                contentElement.action.icon = mapIcon[content.type];
+                contentElements.push(contentElement);
+            }
+            currentNode = projectStore.createNodeLinkedNextNode(currentNode, contentElements);
+        }
     }
 }
 
