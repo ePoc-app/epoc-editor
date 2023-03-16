@@ -212,11 +212,18 @@ function getNextNode(node) {
     return edge ? getNodeById(edge.target) : null;
 }
 
+function getPreviousNode(node) {
+    const edge = getConnectedEdges([node], edges.value).filter((edge) => edge.target === node.id)[0];
+    return edge ? getNodeById(edge.source) : null;
+}
+
 function getNodeById(id) : GraphNode {
     return nodes.value.find((node) => { return node.id === id; });
 }
 
 export const projectService = {
     importFile,
-    writeProjectData
+    writeProjectData,
+    getPreviousNode,
+    getNextNode
 };

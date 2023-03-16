@@ -23,7 +23,7 @@ let previewWindow;
 async function runPreview(workdir, contentPath) {
     const ePocRootName = path.basename(workdir);
     const ePocRootFolder = path.join(previewEpocPath, ePocRootName);
-    const ePocContentPath = contentPath ? contentPath : `epoc/preview-editor/${ePocRootName}`;
+    const ePocContentPath = contentPath ? `epoc/play/${ePocRootName}/${contentPath}` : `epoc/preview-editor/${ePocRootName}`;
 
     if (!previewInitialized) {
         if (!fs.existsSync(appDataPath)) {

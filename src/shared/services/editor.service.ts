@@ -5,6 +5,7 @@ import { ePocProject } from '@/src/shared/interfaces';
 import { createToaster } from '@meforma/vue-toaster';
 import { EpocV1 } from '@/src/shared/classes/epoc-v1';
 import { Assessment, SimpleQuestion } from '@epoc/epoc-specs/dist/v1';
+import { projectService } from '@/src/shared/services/project.service';
 
 const toaster = createToaster({
     duration: 1000,
@@ -164,8 +165,34 @@ function saveEpocProject(): void {
 
 function runPreview(): void {
     waitingToast('🔭 Démarrage de la prévisualisation...');
-    editorStore.loadingPreview = true;
-    api.send('runPreview');
+    const openedNodeId = editorStore.openedParentId ? editorStore.openedParentId : editorStore.openedNodeId;
+    const openedNode = projectStore.elements.find(e => e.id === openedNodeId);
+    let contentPath;
+    let error;
+    if (openedNode) {
+        if (openedNode.type === 'epoc') {
+            // do nothing
+        } else if (openedNode.type === 'chapter') {
+            contentPath = openedNode.data.contentId;
+        } else {
+            let prevNode = projectService.getPreviousNode(openedNode);
+            while (prevNode && prevNode.type !== 'chapter') {
+                prevNode = projectService.getPreviousNode(prevNode);
+            }
+            if (prevNode) {
+                contentPath = `${prevNode.data.contentId}/content/${openedNode.data.contentId}`;
+            } else {
+                error = true;
+                waitingToastDismiss();
+                toaster.warning('🚨Contenu orphelin non visualisable', {duration: 3000});
+            }
+        }
+    }
+
+    if (!error) {
+        editorStore.loadingPreview = true;
+        api.send('runPreview',  contentPath);
+    }
 }
 
 function exportProject(): void {
