@@ -42,6 +42,7 @@ const subtitle = computed(() => {
             :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true, 'btn-content-large': true }"
             :subtitle="subtitle"
             @click="openForm()"
+            @mousedown="editorStore.closeFormPanel()"
         />
     </div>
     <Handle

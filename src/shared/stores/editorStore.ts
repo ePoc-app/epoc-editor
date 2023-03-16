@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
-import { ePocProject, Form, FormButton, Screen, SideAction } from '@/src/shared/interfaces';
-import { toRaw } from 'vue';
+import { ePocProject, Form, FormButton, NodeElement, Screen, SideAction } from '@/src/shared/interfaces';
+import { nextTick, toRaw, watch } from 'vue';
 import { applyNodeChanges, getConnectedEdges, useVueFlow } from '@vue-flow/core';
 
 import { formsModel, questions, standardScreen } from '@/src/shared/data/form.data';
 
-const { findNode, nodes, edges, addNodes } = useVueFlow({ id: 'main' });
+const { findNode, nodes, edges, addNodes, project, vueFlowRef } = useVueFlow({ id: 'main' });
 
 type uid = string;
 
@@ -72,7 +72,9 @@ export const useEditorStore = defineStore('editor', {
             //? To be sure the view is notified of closing / reopening
             setTimeout(() => { 
                 this.formPanel = structuredClone(formsModel.find(form => form.type === formType));
-                document.querySelectorAll('.node.selected').forEach(node => node.classList.remove('selected'));
+            });
+            nodes.value.forEach((node) => {
+                node.selected = false;
             });
         },
         closeFormPanel(): void {
@@ -248,6 +250,54 @@ export const useEditorStore = defineStore('editor', {
 
             node.data.elements.push(newElement);
             this.addElementToScreen(node.id, newElement.action);
+        },
+        addNewPage(type: string, pos: { x: number, y: number }) {
+            const types = standardScreen.concat(questions);
+
+            const elements: NodeElement[] = [];
+            const id = this.generateId();
+
+            elements.push({
+                id: this.generateId(),
+                action: types.find((value) => value.type === type),
+                formType: type,
+                formValues: {},
+                parentId: id,
+                contentId: this.generateContentId(),
+            });
+
+            const { left, top } = vueFlowRef.value.getBoundingClientRect();
+
+            const position = project({
+                x: pos.x - left,
+                y: pos.y - top,
+            });
+
+            const newNode = {
+                id: id,
+                type: 'content',
+                data: { type: type, readyToDrop: false, animated: false, elements: elements, formType: 'screen', formValues: {}, contentId: id },
+                position: position,
+                deletable: false
+            };
+
+            addNodes([newNode]);
+
+            nextTick(() => {
+                const node = findNode(newNode.id);
+                const stop = watch(
+                    () => node.dimensions,
+                    (dimensions) => {
+                        if (dimensions.width > 0 && dimensions.height > 0) {
+                            node.position = { x: node.position.x - node.dimensions.width / 2, y: node.position.y - node.dimensions.height / 2 };
+                            stop();
+                        }
+                    },
+                    { deep: true, flush: 'post' },
+                );
+            });
+
+            this.addElementToScreen(id, elements[0].action);
         }
     }
 });

@@ -122,6 +122,11 @@ const setup = function () {
         editorStore.exporting = false;
     });
 
+    api.receive('addPage', (data: string) => {
+        const page = JSON.parse(data);
+        editorStore.addNewPage(page.type, page.pos);
+    });
+
     initialized = true;
 };
 function newEpocProject(): void {

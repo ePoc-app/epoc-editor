@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Handle, Position, useVueFlow } from '@vue-flow/core';
 import ContentButton from '@/src/components/ContentButton.vue';
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { NodeElement } from '@/src/shared/interfaces';
 
@@ -21,7 +21,7 @@ const props = defineProps<{
 }>();
 
 
-const { findNode, getSelectedNodes } = useVueFlow({ id: 'main' });
+const { findNode } = useVueFlow({ id: 'main' });
 
 const node = findNode(props.id);
 const dropped = ref(false);
@@ -116,13 +116,9 @@ function dragStart(event, element: NodeElement, index: number) {
     event.dataTransfer.setData('source', JSON.stringify({ parent: props.id, index: index}));
 }
 
-function cmdClick() {
+function closeFormPanel() {
     editorStore.closeFormPanel();
 }
-
-const isSelected = computed(() => {
-    return getSelectedNodes.value.find((selectedNode) => selectedNode.id === node.id);
-});
 
 </script>
 
@@ -138,11 +134,12 @@ const isSelected = computed(() => {
             />
             <div
                 :id="'node'+ props.id"
-                :class=" { 'active': editorStore.openedNodeId ? editorStore.openedNodeId === props.id : false, 'selected': isSelected }"
+                :class=" { 'active': editorStore.openedNodeId ? editorStore.openedNodeId === props.id : false }"
                 class="node"
                 @click.exact="openPageForm(node.id, node.data.formType, node.data.formValues)"
-                @click.meta="cmdClick"
-                @click.ctrl="cmdClick"  
+                @click.meta="closeFormPanel"
+                @click.ctrl="closeFormPanel"
+                @mousedown="closeFormPanel"
                 @dragover="dragOver($event)"
                 @dragleave="dragLeave($event)"
                 @dragenter="dragEnter($event)"
@@ -166,8 +163,8 @@ const isSelected = computed(() => {
                                 :is-draggable="isQuestion"
                                 :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true }"
                                 @click.exact="openForm(element)"
-                                @click.meta="cmdClick"
-                                @click.ctrl="cmdClick"
+                                @click.meta="closeFormPanel"
+                                @click.ctrl="closeFormPanel"
                                 @dragstart="dragStart($event, element, index)"
                             />
                         </div>

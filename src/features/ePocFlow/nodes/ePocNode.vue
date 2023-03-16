@@ -31,6 +31,7 @@ function openForm() {
             :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true, 'btn-content-large': true }"
             subtitle="ePoc"
             @click="openForm()"
+            @mousedown="editorStore.closeFormPanel()"
         />
     </div>
 </template>

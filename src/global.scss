@@ -229,11 +229,6 @@ hr {
     box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);
     background-color: var(--node-active);
   } 
-  
-  &.selected {
-    border: 1px solid var(--editor-blue);
-    box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);  
-  }
 
   &-animate {
       padding: 1.5rem;
@@ -472,4 +467,11 @@ g.selected {
 .vue-flow__nodesselection-rect {
   padding: 2rem 1rem 1rem 1rem;
   transform: translate(-1rem, -2rem);
+}
+
+.vue-flow__node.selected {
+  .node {
+    border: 1px solid var(--editor-blue);
+    box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);  
+  }
 }

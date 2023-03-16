@@ -10,6 +10,8 @@ const { cleanPreview } = require('./components/preview');
 const path = require('path');
 const store = require('./components/store');
 
+const { popupMenu } = require('./components/contextMenu');
+
 let mainWindow;
 let splashWindow;
 // Open file with editor, on windows : using argv | on macOS using open-file event (see below)
@@ -77,5 +79,9 @@ app.whenReady().then(() => {
         cleanAllWorkdir();
         cleanPreview();
         app.quit();
+    });
+
+    mainWindow.webContents.on('context-menu', () => {
+        popupMenu.popup(mainWindow.webContents);
     });
 });

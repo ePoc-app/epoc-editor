@@ -151,6 +151,7 @@ function onEdgeclick (event) {
         @dragover.prevent
         @dragenter.prevent
         @edge-click="onEdgeclick"
+        @pane-click="editorStore.closeFormPanel()"
     >
         <template #node-custom="{ id, data }">
             <ScreenNode :id="id" :data="data" />
