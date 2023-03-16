@@ -239,7 +239,7 @@ export const epocForm: Form = {
                     id: 'chapterParameter',
                     type: 'text',
                     label: 'Label des chapitres',
-                    value: '',
+                    value: 'Chapitre',
                     placeholder: 'Saisissez...'
                 }
             ]

@@ -3,6 +3,7 @@ import ContentButton from '@/src/components/ContentButton.vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { Handle, useVueFlow } from '@vue-flow/core';
 import { Position } from '@vue-flow/core';
+import { computed } from 'vue';
 
 const editorStore = useEditorStore();
 
@@ -15,13 +16,20 @@ const props = defineProps<{
     }
 }>();
 
-const { findNode } = useVueFlow({ id: 'main' });    
+const { findNode, nodes } = useVueFlow({ id: 'main' });    
 
 const node = findNode(props.id);
 
 function openForm() {
     editorStore.openFormPanel(node.id, node.data.formType, node.data.formValues);
 }
+
+const subtitle = computed(() => {
+    const chapters = nodes.value.filter(node => node.type === 'chapter');
+    const epocNode = findNode('1');
+    const label = epocNode.data.formValues.chapterParameter ? epocNode.data.formValues.chapterParameter : 'Chapter';
+    return `${label} ${chapters.findIndex(chapter => chapter.id === node.id) + 1}` ;
+});
 
 </script>
 
@@ -32,7 +40,7 @@ function openForm() {
             :is-active="editorStore.openedNodeId ? editorStore.openedNodeId === node.id : false"
             :is-draggable="false"
             :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true, 'btn-content-large': true }"
-            :subtitle="node.data.title"
+            :subtitle="subtitle"
             @click="openForm()"
         />
     </div>
