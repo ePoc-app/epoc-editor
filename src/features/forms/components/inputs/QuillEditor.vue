@@ -3,7 +3,7 @@ import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 //@ts-ignore
 import ImageUploader from 'quill-image-uploader';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { projectService } from '@/src/shared/services';
 
 const props = defineProps<{
@@ -31,12 +31,14 @@ const modules = {
 };
 
 function textChange() {
-    emit('input', document.querySelector('.ql-editor').innerHTML);
+    emit('input', qlEditor.value.getHTML());
 }
 
 onMounted(() => {
-    document.querySelector('.ql-editor').innerHTML = props.inputValue;
+    qlEditor.value.setHTML(props.inputValue);
 });
+
+const qlEditor = ref(null);
 
 </script>
 
@@ -44,6 +46,7 @@ onMounted(() => {
     <label for="ql-editor">{{ label }}</label>
     <QuillEditor
         id="ql-editor"
+        ref="qlEditor"
         :modules="modules"
         :toolbar="toolbar"
         theme="snow"
