@@ -70,7 +70,7 @@ export const config: Options.Testrunner = {
         browserName: 'chrome',
         acceptInsecureCerts: true,
         'goog:chromeOptions': {
-            binary: '/Users/nviaud/Documents/GitHub/epoc-editor-v2/dist_electron/mac/ePoc Editor.app/Contents/MacOS/ePoc Editor'
+            binary: '/Users/nviaud/Documents/GitHub/epoc-editor/dist_electron/mac/ePoc Editor.app/Contents/MacOS/ePoc Editor'
         }
         // If outputDir is provided WebdriverIO can capture driver session logs
         // it is possible to configure which logTypes to include/exclude.
