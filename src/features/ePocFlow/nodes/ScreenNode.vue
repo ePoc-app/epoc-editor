@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Handle, Position, useVueFlow } from '@vue-flow/core';
+import { Handle, Position, getConnectedEdges, useVueFlow } from '@vue-flow/core';
 import ContentButton from '@/src/components/ContentButton.vue';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { NodeElement } from '@/src/shared/interfaces';
 
@@ -21,7 +21,7 @@ const props = defineProps<{
 }>();
 
 
-const { findNode } = useVueFlow({ id: 'main' });
+const { findNode, edges } = useVueFlow({ id: 'main' });
 
 const node = findNode(props.id);
 const dropped = ref(false);
@@ -120,6 +120,9 @@ function closeFormPanel() {
     editorStore.closeFormPanel();
 }
 
+const isSource = computed(() => getConnectedEdges([node], edges.value).some((edge) => edge.source === props.id));
+const isTarget = computed(() => getConnectedEdges([node], edges.value).some((edge) => edge.target === props.id));
+
 </script>
 
 <template>
@@ -133,7 +136,7 @@ function closeFormPanel() {
         >
             <p class="node-title" :class="{ 'active': editorStore.openedNodeId ? editorStore.openedNodeId === props.id : false }">{{ node.data.formValues?.title || 'Page' }}</p>
             <Handle
-                :class="{ 'not-connected': !node.data.isTarget }"
+                :class="{ 'not-connected': !isTarget }"
                 type="target"
                 :position="Position.Left"
                 :connectable="false"
@@ -158,7 +161,7 @@ function closeFormPanel() {
                 >
                     <template #item="{ element, index }">
                         <div :class="{ 'question-item': !isQuestion }">
-                            <ContentButton 
+                            <ContentButton
                                 :key="index"
                                 :icon="element.action.icon"
                                 :is-active="editorStore.openedNodeId ? editorStore.openedNodeId === element.id : false"
@@ -174,10 +177,10 @@ function closeFormPanel() {
                 </VueDraggable>
             </div>
             <Handle
-                :class="{ 'not-connected': !node.data.isSource }"
                 type="source"
+                :class="{ 'not-connected': !isSource }"
                 :position="Position.Right"
-                :connectable="!node.data.isSource"
+                :connectable="!isSource"
             />
         </div>
     </div>

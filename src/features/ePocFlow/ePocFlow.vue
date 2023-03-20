@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ConnectionMode, getConnectedEdges, useVueFlow, VueFlow } from '@vue-flow/core';
-import { markRaw, onMounted, ref } from 'vue';
+import { ConnectionMode, useVueFlow, VueFlow } from '@vue-flow/core';
+import { markRaw, onMounted } from 'vue';
 import ScreenNode from './nodes/ScreenNode.vue';
 import CustomConnectContent from './edges/CustomConnectContent.vue';
 import { useEditorStore, useProjectStore } from '@/src/shared/stores';
@@ -8,7 +8,7 @@ import ChapterNode from './nodes/ChapterNode.vue';
 import ePocNode from './nodes/ePocNode.vue';
 import AddChapterNode from './nodes/AddChapterNode.vue';
 
-const { vueFlowRef, project, findNode, findEdge, removeEdges, edges }  = useVueFlow({ id: 'main' });
+const { vueFlowRef, project, updateEdge }  = useVueFlow({ id: 'main' });
 
 
 const editorStore = useEditorStore();
@@ -61,62 +61,6 @@ onMounted(() => {
     projectStore.restore();
 });
 
-//? This is used only to remove
-const sourceNode = ref(null);
-const targetNode = ref(null);
-
-function changeEdge(event) {
-    if(event[0].type === 'select') {
-        const edge = findEdge(event[0].id);
-        sourceNode.value = findNode(edge.source);
-        targetNode.value = findNode(edge.target);
-    }if(event[0].type === 'remove') {
-        if(sourceNode.value) {
-            sourceNode.value.data.isSource = false;
-        }
-        if(targetNode.value) {
-            targetNode.value.data.isTarget = false;
-        }
-    }
-}
-
-function connectEdge(event) {
-    const source = findNode(event.source);
-    const target = findNode(event.target);
-    if(source.data.isSource || target.data.isTarget) {
-        const connectedEdges = getConnectedEdges([target], edges.value);
-        for(const edge of connectedEdges) {
-            if(edge.source === source.id) {
-                sourceNode.value = source;
-                targetNode.value = null;
-
-                //TODO: find why this is needed
-                setTimeout(() => {
-                    removeEdges([edge]);
-                }, 0);
-            }
-        }
-    }
-    source.data.isSource = true;
-    target.data.isTarget = true;
-}
-
-function update(event) {
-    let sourceNode = findNode(event.edge.source);
-    let targetNode = findNode(event.edge.target);
-
-    sourceNode.data.isSource = false;
-    targetNode.data.isTarget = false;
-
-    event.edge.source = event.connection.source;
-    event.edge.target = event.connection.target;
-
-    sourceNode = findNode(event.edge.source);
-    targetNode = findNode(event.edge.target);
-
-    sourceNode.data.isSource = true;
-    targetNode.data.isTarget = true;
-}
 
 function onEdgeclick (event) {
     const marker = event.edge.markerEnd;
@@ -132,6 +76,17 @@ function onEdgeclick (event) {
     });
 }
 
+function selectionStart() {
+    editorStore.closeFormPanel();
+}
+
+function update(event) {
+    updateEdge(event.edge, {
+        source: event.connection.source,
+        target: event.connection.target,
+    });
+}
+
 </script>
 
 <template>
@@ -142,14 +97,13 @@ function onEdgeclick (event) {
         :max-zoom="1.5"
         :min-zoom=".4"
         :node-types="nodeTypes"
-        :connection-mode="ConnectionMode.Strict"
+        :connection-mode="ConnectionMode.Loose"
         :connection-radius="50"
         :edge-updater-radius="30"
         :snap-to-grid="true"
-        :snap-grid="[20, 20]"
-        @edges-change="changeEdge"
+        :snap-grid="[16, 16]"
         @edge-update="update"
-        @connect="connectEdge"
+        @selection-start="selectionStart"
         @drop="onDrop"
         @dragover.prevent
         @dragenter.prevent

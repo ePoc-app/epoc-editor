@@ -75,6 +75,7 @@ export const useProjectStore = defineStore('project', {
                 position: {x: 0, y: (chapters.length + 1) * 200},
                 data,
                 draggable: false,
+                deletable: false,
             };
 
             addNodes([newChapter]);
@@ -197,7 +198,7 @@ export const useProjectStore = defineStore('project', {
                     formValues: {}
                 },
                 position,
-                deletable: false
+                deletable: true
             };
 
             addNodes([newNode]);
@@ -238,13 +239,15 @@ const epoc: Node = {
     data: {action: {icon: 'icon-epoc', type: 'epoc'}, formType: 'epoc', formValues: {}},
     position: {x: 0, y: 0},
     draggable: false,
+    deletable: false
 };
 
 const add: Node = {
     id: '2',
     type: 'add',
-    position: {x: 33, y: 125},
-    draggable: false
+    position: {x: 32, y: 128},
+    draggable: false,
+    deletable: false
 };
 
 const mainEdge: Edge = {
@@ -253,7 +256,7 @@ const mainEdge: Edge = {
     target: '2',
     style: {stroke: '#CDD3E0', strokeWidth: 2.5},
     selectable: false,
-    deletable: false,
+    deletable: false
 };
 
 function uid() {

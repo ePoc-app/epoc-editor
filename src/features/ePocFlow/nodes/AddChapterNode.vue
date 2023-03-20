@@ -14,8 +14,8 @@ const projectStore = useProjectStore();
 <style scoped lang="scss">
 .add-btn {
     border-radius: 50%;
-    height: 30px;
-    width: 30px;
+    height: 31px;
+    width: 31px;
     background-color: var(--content);
     border: 1px solid var(--border);
     font-size: .7rem;

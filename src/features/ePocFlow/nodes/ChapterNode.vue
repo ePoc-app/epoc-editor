@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ContentButton from '@/src/components/ContentButton.vue';
 import { useEditorStore } from '@/src/shared/stores';
-import { Handle, useVueFlow } from '@vue-flow/core';
+import { Handle, useVueFlow, getConnectedEdges } from '@vue-flow/core';
 import { Position } from '@vue-flow/core';
 import { computed } from 'vue';
 
@@ -16,7 +16,7 @@ const props = defineProps<{
     }
 }>();
 
-const { findNode, nodes } = useVueFlow({ id: 'main' });    
+const { findNode, nodes, edges } = useVueFlow({ id: 'main' });    
 
 const node = findNode(props.id);
 
@@ -30,6 +30,8 @@ const subtitle = computed(() => {
     const label = epocNode.data.formValues.chapterParameter ? epocNode.data.formValues.chapterParameter : 'Chapitre';
     return `${label} ${chapters.findIndex(chapter => chapter.id === node.id) + 1}` ;
 });
+
+const isSource = computed(() => getConnectedEdges([node], edges.value).some((edge) => edge.sourceNode.id === props.id));
 
 </script>
 
@@ -45,11 +47,13 @@ const subtitle = computed(() => {
             @mousedown="editorStore.closeFormPanel()"
         />
     </div>
+    <!-- ! mousedown.stop important in vue-flow v1.16.4 on non draggable node -->
     <Handle
         type="source"
         :position="Position.Right"
-        :connectable="!node.data.isSource"
-        :class="{ 'not-connected': !node.data.isSource }"
+        :connectable="!isSource"
+        :class="{ 'not-connected': !isSource }"
+        @mousedown.stop
     />
 </template>
 
