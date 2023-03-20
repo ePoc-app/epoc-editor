@@ -124,8 +124,14 @@ function closeFormPanel() {
 
 <template>
     <div>
-        <div class="container">
-            <p class="node-title">{{ node.data.formValues?.title || 'Page' }}</p>
+        <div 
+            class="container"
+            @click.exact="openPageForm(node.id, node.data.formType, node.data.formValues)"
+            @click.meta="closeFormPanel"
+            @click.ctrl="closeFormPanel"
+            @mousedown="closeFormPanel"
+        >
+            <p class="node-title" :class="{ 'active': editorStore.openedNodeId ? editorStore.openedNodeId === props.id : false }">{{ node.data.formValues?.title || 'Page' }}</p>
             <Handle
                 :class="{ 'not-connected': !node.data.isTarget }"
                 type="target"
@@ -136,10 +142,6 @@ function closeFormPanel() {
                 :id="'node'+ props.id"
                 :class=" { 'active': editorStore.openedNodeId ? editorStore.openedNodeId === props.id : false }"
                 class="node"
-                @click.exact="openPageForm(node.id, node.data.formType, node.data.formValues)"
-                @click.meta="closeFormPanel"
-                @click.ctrl="closeFormPanel"
-                @mousedown="closeFormPanel"
                 @dragover="dragOver($event)"
                 @dragleave="dragLeave($event)"
                 @dragenter="dragEnter($event)"
@@ -212,5 +214,9 @@ function closeFormPanel() {
     white-space: nowrap;
     text-overflow: ellipsis;
     position: absolute;
+
+    &.active {
+        color: var(--editor-blue);
+    }
 }
 </style>
