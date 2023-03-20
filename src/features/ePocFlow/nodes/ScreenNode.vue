@@ -89,7 +89,7 @@ function change(event) {
         editorStore.changeElementOrder(oldIndex, newIndex, props.id);
 
     } if(event.removed) {
-        editorStore.removeElementFromScreen(event.removed.oldIndex, props.id);
+        editorStore.removeElementFromScreen(event.removed.oldIndex, props.id, true);
     }
 }
 

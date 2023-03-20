@@ -138,12 +138,13 @@ export const useEditorStore = defineStore('editor', {
                 node.data.formValues.components.push({ action: action });
             }
         },
-        removeElementFromScreen(index: number, parentNodeId): void {
+        removeElementFromScreen(index: number, parentNodeId, nodeMoved?: boolean): void {
             this.closeFormPanel();
             const node = findNode(parentNodeId);
-
+            
             node.data.elements.splice(index, 1);
-            if(this.openedParentId) {
+
+            if(this.openedParentId || nodeMoved) {
                 node.data.formValues.components.splice(index, 1);
             }
 
