@@ -74,7 +74,9 @@ export const useEditorStore = defineStore('editor', {
                 this.formPanel = structuredClone(formsModel.find(form => form.type === formType));
             });
             nodes.value.forEach((node) => {
-                node.selected = false;
+                if(node.id !== this.openedNodeId) {
+                    node.selected = false;
+                }
             });
         },
         closeFormPanel(): void {
