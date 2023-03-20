@@ -49,7 +49,10 @@ const onDrop = (event) => {
 
         const source = JSON.parse(event.dataTransfer.getData('source'));
 
-        editorStore.removeElementFromScreen(source.index, source.parent);
+        //? Used to prevent removeEventListener error in Vue Draggable
+        setTimeout(() => {
+            editorStore.removeElementFromScreen(source.index, source.parent);
+        }, 0);
     }
 
 };
