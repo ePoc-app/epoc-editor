@@ -138,6 +138,7 @@ export const useEditorStore = defineStore('editor', {
                 node.data.formValues.components.push({ action: action });
             }
         },
+        //? The parameter nodeMoved is used when openedParentId is not usable
         removeElementFromScreen(index: number, parentNodeId, nodeMoved?: boolean): void {
             this.closeFormPanel();
             const node = findNode(parentNodeId);
@@ -245,7 +246,14 @@ export const useEditorStore = defineStore('editor', {
         duplicateElement() {
             const node = findNode(this.openedParentId);
 
-            const newElement = structuredClone(toRaw(node.data.elements.find(element => element.id === this.openedNodeId)));
+            const element = node.data.elements.find(element => element.id === this.openedNodeId);
+            
+            //! Structured Clone create error 
+            // const newElement = structuredClone(toRaw(element));
+            const newElement = JSON.parse(JSON.stringify(toRaw(element)));
+
+            console.log('new Element', newElement);
+
             newElement.id = this.generateId();
             newElement.parentId = node.id;
 
