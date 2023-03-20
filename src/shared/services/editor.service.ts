@@ -4,7 +4,7 @@ import { useEditorStore, useProjectStore } from '@/src/shared/stores';
 import { ePocProject } from '@/src/shared/interfaces';
 import { createToaster } from '@meforma/vue-toaster';
 import { EpocV1 } from '@/src/shared/classes/epoc-v1';
-import { Assessment, SimpleQuestion } from '@epoc/epoc-specs/dist/v1';
+import { Assessment, SimpleQuestion } from '@epoc/epoc-types/dist/v1';
 import { projectService } from '@/src/shared/services/project.service';
 
 const toaster = createToaster({

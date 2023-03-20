@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { Edge, MarkerType, Node, useVueFlow } from '@vue-flow/core';
 import { useEditorStore } from '@/src/shared/stores/editorStore';
-import { Chapter } from '@epoc/epoc-specs/dist/v1';
+import { Chapter } from '@epoc/epoc-types/dist/v1';
 import { EpocV1 } from '@/src/shared/classes/epoc-v1';
 import { NodeElement, SideAction } from '@/src/shared/interfaces';
 import { nextTick, watch } from 'vue';
