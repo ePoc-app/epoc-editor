@@ -87,6 +87,13 @@ function update(event) {
     });
 }
 
+function nodeChange(event) {
+    if(event[0].type === 'remove') {
+        console.log('closing panel');
+        editorStore.closeFormPanel();
+    }
+}
+
 </script>
 
 <template>
@@ -103,6 +110,7 @@ function update(event) {
         :snap-to-grid="true"
         :snap-grid="[16, 16]"
         @edge-update="update"
+        @nodes-change="nodeChange"
         @selection-start="selectionStart"
         @drop="onDrop"
         @dragover.prevent
