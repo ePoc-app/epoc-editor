@@ -207,6 +207,8 @@ function onClick(index) {
     }
     &-content {
         padding: .7rem;
+        display: flex;
+        flex-direction: column;
     }
     &.ghost {
         background-color: var(--item-background);

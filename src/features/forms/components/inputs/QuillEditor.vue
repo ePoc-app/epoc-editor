@@ -8,8 +8,9 @@ import { projectService } from '@/src/shared/services';
 
 const props = defineProps<{
     label: string;
-    placeholder?: string;
     inputValue: string;
+    placeholder?: string;
+    insideCard?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -17,7 +18,7 @@ const emit = defineEmits<{
 }>();
 
 const toolbar = [
-    ['bold', 'italic', 'underline', { 'header': 1}, { 'header': 2 }, { 'list': 'ordered' }, { 'list': 'bullet' }, { 'align': null}, {'align': 'center'}, {'align': 'right'}, 'link', 'image']
+    ['bold', 'italic', 'underline', { 'list': 'ordered' }, { 'list': 'bullet' }, { 'align': null}, {'align': 'center'}, {'align': 'right'}, 'link', 'image']
 ];
 
 const modules = {
@@ -47,6 +48,7 @@ const qlEditor = ref(null);
     <QuillEditor
         id="ql-editor"
         ref="qlEditor"
+        :class="{ 'ql-card': insideCard }"
         :modules="modules"
         :toolbar="toolbar"
         theme="snow"
@@ -94,6 +96,10 @@ const qlEditor = ref(null);
             border-radius: 4px;
             background-color: #F3F4F6 !important;
         }
+    }
+
+    &-card {
+        margin-bottom: 1rem;
     }
 }
 

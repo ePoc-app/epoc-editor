@@ -183,7 +183,7 @@ export const epocForm: Form = {
                             id: 'name',
                             type: 'text',
                             label: 'Nom',
-                            placeholder: 'Préom nom',
+                            placeholder: 'Prénom Nom',
                             value: ''
                         },
                         {
@@ -204,8 +204,8 @@ export const epocForm: Form = {
                         {
                             id: 'description',
                             type: 'ql-editor',
-                            label: '',
-                            placeholder: 'Description',
+                            label: 'Description',
+                            placeholder: 'Saisissez une description...',
                             value: ''
                         }
                     ]
