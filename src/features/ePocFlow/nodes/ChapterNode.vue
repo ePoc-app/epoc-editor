@@ -27,8 +27,9 @@ function openForm() {
 const subtitle = computed(() => {
     const chapters = nodes.value.filter(node => node.type === 'chapter');
     const epocNode = findNode('1');
-    const label = epocNode.data.formValues.chapterParameter ? epocNode.data.formValues.chapterParameter : 'Chapitre';
-    return `${label} ${chapters.findIndex(chapter => chapter.id === node.id) + 1}` ;
+    let label = epocNode.data.formValues.chapterParameter ? epocNode.data.formValues.chapterParameter : 'Chapitre';
+    label = label.length > 8 ? label.substring(0, 7) + '...' : label;
+    return `${label} ${chapters.findIndex(chapter => chapter.id === node.id) + 1}`;
 });
 
 const isSource = computed(() => getConnectedEdges([node], edges.value).some((edge) => edge.sourceNode.id === props.id));
