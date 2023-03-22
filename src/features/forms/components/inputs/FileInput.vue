@@ -79,6 +79,7 @@ div {
         min-height: 50px;
         max-width: 100%;
         margin-bottom: 1.5rem;
+        border-radius: 4px;
     }
 }
 
