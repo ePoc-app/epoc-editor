@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 import { ePocProject, Form, FormButton, NodeElement, Screen, SideAction } from '@/src/shared/interfaces';
 import { nextTick, toRaw, watch } from 'vue';
-import { applyNodeChanges, getConnectedEdges, useVueFlow } from '@vue-flow/core';
+import { applyNodeChanges, useVueFlow } from '@vue-flow/core';
 
 import { formsModel, questions, standardScreen } from '@/src/shared/data/form.data';
 
-const { findNode, nodes, edges, addNodes, project, vueFlowRef } = useVueFlow({ id: 'main' });
+const { findNode, nodes, addNodes, project, vueFlowRef } = useVueFlow({ id: 'main' });
 
 type uid = string;
 
@@ -106,11 +106,6 @@ export const useEditorStore = defineStore('editor', {
                     }
                 });
             } else {
-                const connectedEdges = getConnectedEdges([nodeToDelete], edges.value);
-                for(const edge of connectedEdges) {
-                    findNode(edge.source).data.isSource = false;
-                    findNode(edge.target).data.isTarget = false; 
-                }
                 applyNodeChanges(
                     [{ id: nodeToDelete.id, type: 'remove' }],
                     nodes.value
@@ -152,13 +147,6 @@ export const useEditorStore = defineStore('editor', {
             }
 
             if(node.data.elements.length === 0) {
-                const connectedEdges = getConnectedEdges([node], edges.value);
-                connectedEdges.forEach(edge => {
-                    const source = findNode(edge.source);
-                    const target = findNode(edge.target);
-                    source.data.isSource = false;
-                    target.data.isTarget = false;
-                });
                 this.deleteElement(parentNodeId);
             }
         },
