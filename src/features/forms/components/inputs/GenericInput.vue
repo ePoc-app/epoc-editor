@@ -71,6 +71,7 @@ const emit = defineEmits<{
         v-if="input.type === 'checkbox'"
         :label="input.label"
         :input-value="inputValue"
+        :pos="pos"
         @change="emit('check', $event)"
     />
     <RadioInput

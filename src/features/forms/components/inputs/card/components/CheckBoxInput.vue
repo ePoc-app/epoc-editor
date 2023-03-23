@@ -3,6 +3,7 @@
 defineProps<{
     inputValue: boolean;
     label: string;
+    pos: number;
 }>();
 
 
@@ -15,12 +16,13 @@ const emit = defineEmits<{
 <template>
     <div class="checkbox">
         <input
+            :id="'Checkbox' + String(pos)"
             class="checkbox-input"
             type="checkbox"
             :checked="inputValue"
             @change="emit('change', ($event.target as HTMLInputElement).checked)"
         >
-        <label>{{ label }}</label>
+        <label :for="'Checkbox' + String(pos)">{{ label }}</label>
     </div>
 </template>
 
