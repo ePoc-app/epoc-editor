@@ -3,7 +3,7 @@ import { useEditorStore } from '../../shared/stores';
 import FormButton from './components/FormButton.vue';
 import GenericField from './components/GenericField.vue';
 import { Input } from '@/src/shared/interfaces';
-import { projectService } from '@/src/shared/services';
+import { projectService, editorService } from '@/src/shared/services';
 
 const editorStore = useEditorStore();
 
@@ -24,6 +24,10 @@ function actionOnForm(action: string) {
     
     case 'duplicate-element':
         editorStore.duplicateElement();
+        break;
+
+    case 'launch-preview':
+        editorService.runPreviewAtPage();
         break;
     }
 

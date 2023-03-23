@@ -165,6 +165,12 @@ function saveEpocProject(): void {
 
 function runPreview(): void {
     waitingToast('🔭 Démarrage de la prévisualisation...');
+    editorStore.loadingPreview = true;
+    api.send('runPreview');
+}
+
+function runPreviewAtPage(): void {
+    waitingToast('🔭 Démarrage de la prévisualisation...');
     const openedNodeId = editorStore.openedParentId ? editorStore.openedParentId : editorStore.openedNodeId;
     const openedNode = projectStore.elements.find(e => e.id === openedNodeId);
     let contentPath;
@@ -281,5 +287,6 @@ export const editorService = {
     openEpocProject,
     saveEpocProject,
     runPreview,
+    runPreviewAtPage,
     exportProject
 };

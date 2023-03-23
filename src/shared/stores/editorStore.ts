@@ -183,6 +183,7 @@ export const useEditorStore = defineStore('editor', {
                 if(this.formPanel.type !== 'chapter') {
                     if(!this.openedParentId) {
                         buttons.push({ label: 'Dupliquer la page', icon: 'icon-plus', action: 'duplicate-screen' });
+                        buttons.push({ label: 'Lancer l\'aperçu ici', icon: 'icon-play', action: 'launch-preview' });
                     } else {
                         buttons.push({ label: 'Revenir à la page', icon: 'icon-ecran', action: 'open-page' });
 
