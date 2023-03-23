@@ -83,8 +83,8 @@ const dragOptions = {
 
 const drag = ref(false);
 
-function onClick(index) {
-    if (node.data.elements && node.data.elements[index]) {
+function onClick(index, action) {
+    if (node.data.elements && node.data.elements[index] && action) {
         const element = node.data.elements[index];
         editorStore.openFormPanel(element.id, element.formType, element.formValues, element.parentId);
     }
@@ -107,7 +107,7 @@ function onClick(index) {
     >
         <template #item="{ element, index }">
             <div :key="index" class="card draggable-card">
-                <div class="card-header" :class="{ 'border-bottom': inputs.length >= 1 }" @click="onClick(index)">
+                <div class="card-header" :class="{ 'border-bottom': inputs.length >= 1, 'clickable': element.action }" @click="onClick(index, element.action)">
                     <div v-if="element.action" class="component-container">
                         <div class="form-icon"><i :class="element.action.icon"></i></div>
                         <h3>{{ element.action.label }}</h3>
@@ -167,6 +167,11 @@ function onClick(index) {
         display: flex;
         flex-direction: row;
         cursor: move;
+
+        &.clickable {
+            cursor: pointer;
+        }
+
         &.border-bottom {
             border-bottom: 2px solid var(--border);
         }

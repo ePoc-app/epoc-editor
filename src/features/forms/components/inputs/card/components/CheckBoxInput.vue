@@ -62,4 +62,8 @@ const emit = defineEmits<{
         }
     }
 }
+
+label {
+    cursor: pointer;
+}
 </style>

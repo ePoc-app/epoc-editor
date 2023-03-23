@@ -59,6 +59,7 @@ const emit = defineEmits<{
 
             label {
                 margin-left: .5rem;
+                cursor: pointer;
             }
             input[type="radio"] {
                 appearance: none;
