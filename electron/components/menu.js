@@ -8,9 +8,9 @@ module.exports.setupMenu = function () {
         {
             label: 'App',
             submenu: [
-                {label: 'About Application', selector: 'orderFrontStandardAboutPanel:'},
+                {label: 'À propos', selector: 'orderFrontStandardAboutPanel:'},
                 {
-                    label: 'Quit',
+                    label: 'Quitter',
                     accelerator: 'CmdOrCtrl+Q',
                     click: function () {
                         app.quit();
@@ -18,7 +18,7 @@ module.exports.setupMenu = function () {
                 }
             ]
         }, {
-            label: 'File',
+            label: 'Fichier',
             submenu: [
                 {
                     label: 'Nouveau',
@@ -58,7 +58,7 @@ module.exports.setupMenu = function () {
                 },
                 {
                     id: 'save',
-                    label: 'Save',
+                    label: 'Sauvegarder',
                     accelerator: 'CmdOrCtrl+S',
                     enabled: !!(store.state.currentProject && store.state.currentProject.workdir),
                     click: async function () {
@@ -73,7 +73,7 @@ module.exports.setupMenu = function () {
                 },
                 {
                     id: 'saveAs',
-                    label: 'Save as',
+                    label: 'Sauvegarder sous...',
                     accelerator: 'Shift+CmdOrCtrl+S',
                     enabled: !!(store.state.currentProject && store.state.currentProject.workdir),
                     click: async function () {
@@ -88,7 +88,7 @@ module.exports.setupMenu = function () {
                 }
             ]
         }, {
-            label: 'Edit',
+            label: 'Édition',
             submenu: [
                 {label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:'},
                 {label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:'},
@@ -99,7 +99,7 @@ module.exports.setupMenu = function () {
                 {label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:'}
             ]
         }, {
-            label: 'Help',
+            label: 'Aide',
             submenu: [
                 {
                     label: 'Dev Tools',
