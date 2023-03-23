@@ -80,7 +80,8 @@ app.whenReady().then(() => {
         app.quit();
     });
 
-    mainWindow.webContents.on('context-menu', () => {
-        popupMenu.popup(mainWindow.webContents);
-    });
+    //? Context menu disabled for now
+    // mainWindow.webContents.on('context-menu', () => {
+    //     popupMenu.popup(mainWindow.webContents);
+    // });
 });

@@ -89,7 +89,6 @@ function update(event) {
 
 function nodeChange(event) {
     if(event[0].type === 'remove') {
-        console.log('closing panel');
         editorStore.closeFormPanel();
     }
 }
