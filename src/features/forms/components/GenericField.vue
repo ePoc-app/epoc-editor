@@ -60,8 +60,9 @@ function onRepeatInput(value, id) {
                 const item = element.formValues[id].splice(value.oldIndex, 1);
                 element.formValues[id].splice(value.newIndex, 0, item[0]);
             } else {
-                const item = node.data.formValues[id].splice(value.oldIndex, 1);
-                node.data.formValues[id].splice(value.newIndex, 0, item[0]);
+                const tmp = node.data.formValues[id][value.oldIndex];
+                node.data.formValues[id][value.oldIndex] = node.data.formValues[id][value.newIndex];
+                node.data.formValues[id][value.newIndex] = tmp;
             }
         }
     } else if(value.type === 'change') {
