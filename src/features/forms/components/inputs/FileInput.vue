@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { projectService } from '@/src/shared/services';
 
 const props = defineProps<{
@@ -43,6 +43,13 @@ function openFile() {
 onMounted(() => {
     url.value = props.inputValue;
 });
+
+watch(
+    () => props.inputValue,
+    () => {
+        url.value = props.inputValue;
+    }
+);
 
 </script>
 

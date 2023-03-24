@@ -3,7 +3,7 @@ import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 //@ts-ignore
 import ImageUploader from 'quill-image-uploader';
-import { onMounted, ref } from 'vue';
+import { Ref, ref, watch } from 'vue';
 import { projectService } from '@/src/shared/services';
 
 const props = defineProps<{
@@ -32,14 +32,23 @@ const modules = {
 };
 
 function textChange() {
-    emit('input', qlEditor.value.getHTML());
+    emit('input', content.value);
 }
 
-onMounted(() => {
-    qlEditor.value.setHTML(props.inputValue);
-});
+function initQuill() {
+    content.value = props.inputValue;
+}
 
 const qlEditor = ref(null);
+
+const content: Ref<string> = ref(null);
+
+watch(
+    () => props.inputValue,
+    () => {
+        content.value = props.inputValue;
+    }
+);
 
 </script>
 
@@ -48,12 +57,15 @@ const qlEditor = ref(null);
     <QuillEditor
         id="ql-editor"
         ref="qlEditor"
+        v-model:content="content"
+        content-type="html"
+        theme="snow"
         :class="{ 'ql-card': insideCard }"
         :modules="modules"
         :toolbar="toolbar"
-        theme="snow"
         :placeholder="placeholder"
         @text-change="textChange"
+        @ready="initQuill"
     />
 </template>
 
