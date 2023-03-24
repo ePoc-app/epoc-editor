@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Handle, Position, getConnectedEdges, useVueFlow } from '@vue-flow/core';
 import ContentButton from '@/src/components/ContentButton.vue';
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { NodeElement } from '@/src/shared/interfaces';
 
@@ -13,7 +13,6 @@ const props = defineProps<{
         type: object;
         required: true;
         readyToDrop: boolean;
-        animated: boolean;
         elements: NodeElement[];
         isSource: boolean;
         isTarget: boolean;
@@ -25,13 +24,6 @@ const { findNode, edges } = useVueFlow({ id: 'main' });
 
 const node = findNode(props.id);
 const dropped = ref(false);
-
-// This add an animation when the node is added to the flow
-onMounted(() => {
-    const node = document.querySelector('#node' + props.id);
-    node.classList.add('node');
-    if(props.data.animated) node.classList.add('node-creation-animation');
-});
 
 function openForm(element: NodeElement) {
     editorStore.openFormPanel(element.id, element.formType, element.formValues, element.parentId);

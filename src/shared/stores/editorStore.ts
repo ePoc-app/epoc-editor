@@ -222,7 +222,6 @@ export const useEditorStore = defineStore('editor', {
                 data: {
                     elements: newElements,
                     readyToDrop: false,
-                    animated: false,
                     formType: 'screen',
                     formValues: structuredClone(toRaw(node.data.formValues)),
                     type: node.data.type,
@@ -276,7 +275,7 @@ export const useEditorStore = defineStore('editor', {
             const newNode = {
                 id: id,
                 type: 'content',
-                data: { type: type, readyToDrop: false, animated: false, elements: elements, formType: 'screen', formValues: {}, contentId: id },
+                data: { type: type, readyToDrop: false, elements: elements, formType: 'screen', formValues: {}, contentId: id },
                 position: position,
                 deletable: false
             };

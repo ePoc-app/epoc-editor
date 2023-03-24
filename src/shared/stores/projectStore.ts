@@ -93,7 +93,6 @@ export const useProjectStore = defineStore('project', {
                 data: {
                     elements: contentElements,
                     readyToDrop: false,
-                    animated: false,
                     formType: 'screen',
                     formValues: {},
                     type: 'template',
@@ -127,7 +126,6 @@ export const useProjectStore = defineStore('project', {
                 data: {
                     elements: [element],
                     readyToDrop: false,
-                    animated: false,
                     formType: 'screen',
                     formValues: {},
                     type: 'question',
@@ -191,7 +189,6 @@ export const useProjectStore = defineStore('project', {
                 data: {
                     type: type,
                     readyToDrop: false,
-                    animated: false,
                     elements: elements,
                     contentId: uid(),
                     formType: 'screen',

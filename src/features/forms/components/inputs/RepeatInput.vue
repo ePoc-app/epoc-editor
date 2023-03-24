@@ -189,11 +189,11 @@ function onClick(index, action) {
             width: fit-content;
             text-align: end;
             margin: auto;
-            cursor: pointer;
             hr {
                 margin-right: .5rem;
             }
             i {
+                cursor: pointer;
                 color: var(--editor-grayblue);
                 margin: auto;
                 &:not(:last-child) {

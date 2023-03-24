@@ -93,6 +93,10 @@ div {
 i {
     font-size: .9rem;
     cursor: pointer;
+    
+    &:hover {
+        color: var(--editor-red);
+    }
 }
 
 button {
