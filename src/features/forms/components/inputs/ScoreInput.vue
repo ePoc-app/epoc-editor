@@ -68,6 +68,12 @@ function plus(inputValue: string) {
         color: var(--editor-grayblue);
         cursor: pointer;
         height: 100%;
+
+        &:hover {
+            transition: all 0.2s ease-in-out;
+            background-color: rgba(0, 0, 0, 0.1);
+            filter: brightness(80%);
+        }
     }
 
     i {
