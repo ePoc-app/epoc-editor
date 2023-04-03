@@ -10,7 +10,7 @@ const editorStore = useEditorStore();
 function actionOnForm(action: string) {
     switch (action) {
     case 'delete':
-        editorStore.deleteElement(editorStore.openedNodeId);
+        editorStore.deleteValidation();
         projectService.writeProjectData();
         break;
 

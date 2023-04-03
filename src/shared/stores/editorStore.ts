@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 import { ePocProject, Form, FormButton, NodeElement, Screen, SideAction } from '@/src/shared/interfaces';
 import { nextTick, toRaw, watch } from 'vue';
-import { applyNodeChanges, useVueFlow } from '@vue-flow/core';
+import { applyEdgeChanges, applyNodeChanges, useVueFlow } from '@vue-flow/core';
 
 import { formsModel, questions, standardScreen } from '@/src/shared/data/form.data';
 
-const { findNode, nodes, addNodes, project, vueFlowRef } = useVueFlow({ id: 'main' });
+const { findNode, nodes, addNodes, project, vueFlowRef, edges } = useVueFlow({ id: 'main' });
 
 type uid = string;
 
@@ -18,6 +18,7 @@ interface EditorState {
     exporting:boolean;
     floatingMenu: boolean;
     modelMenu: boolean;
+    validationModal: boolean;
     formPanel: Form;
     openedNodeId: uid | null;
     openedParentId: uid | null;
@@ -37,6 +38,7 @@ export const useEditorStore = defineStore('editor', {
         exporting: false,
         floatingMenu: false,
         modelMenu: false,
+        validationModal: false,
         formPanel: null,
         openedNodeId: null,
         openedParentId: null,
@@ -121,6 +123,32 @@ export const useEditorStore = defineStore('editor', {
                 }
             }
             this.closeFormPanel();
+        },
+        deleteSelectedNodes(): void {
+            const selectedNodes = nodes.value.filter(node => node.selected);
+            const isChild = this.openedParentId ? true : false;
+            for(const node of selectedNodes) {
+                this.deleteElement(node.id);
+            }
+            if(isChild) {
+                this.deleteElement(this.openedNodeId, this.openedParentId);
+            }
+            this.validationModal = false;
+        },
+        deleteValidation(): void {
+            const selectedNodes = nodes.value.filter(node => node.selected);
+            const isChild = this.openedParentId ? true : false;
+            if(selectedNodes.length > 0 || isChild) {
+                this.validationModal = true;
+            } else {
+                const selectedEdges = edges.value.filter(edge => edge.selected);
+                for(const edge of selectedEdges) {  
+                    applyEdgeChanges(
+                        [{ id: edge.id, type: 'remove' }],
+                        edges.value
+                    );
+                }
+            }
         },
         addElementToScreen(nodeId: string, action: SideAction, index?: number) {
             const node = findNode(nodeId);

@@ -1,5 +1,4 @@
 import { ApiInterface } from '@/src/shared/interfaces/api.interface';
-import { useProjectStore } from '../stores';
 import { getConnectedEdges, GraphNode, useVueFlow } from '@vue-flow/core';
 import { EpocV1 } from '@/src/shared/classes/epoc-v1';
 import { Assessment, Content, Html, SimpleQuestion, Video } from '@epoc/epoc-types/dist/v1';
@@ -7,8 +6,7 @@ import { Question } from '@epoc/epoc-types/dist/v1/question';
 
 declare const api: ApiInterface;
 
-const { toObject, onNodesChange, nodes, edges, findNode }  = useVueFlow({ id: 'main' });
-const projectStore = useProjectStore();
+const { toObject, onNodesChange, nodes, edges }  = useVueFlow({ id: 'main' });
 
 function writeProjectData(): void {
     debounceFunction(500, () => {

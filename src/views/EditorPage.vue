@@ -3,6 +3,7 @@ import TopBar from '@/src/features/topBar/TopBar.vue';
 import EPocFlow from '@/src/features/ePocFlow/ePocFlow.vue';
 import SideBarV0 from '@/src/features/sideBar/SideBarV0.vue';
 import FormPanel from '@/src/features/forms/FormPanel.vue';
+import ValidationModal from '../components/ValidationModal.vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { editorService } from '@/src/shared/services';
 
@@ -14,6 +15,16 @@ function dismissModals() {
     editorStore.dismissModals();
 }
 
+document.body.addEventListener('keydown', function(event) {
+    const key = event.key;
+    if ((key === 'Backspace' || key === 'Delete')) {
+        if((event.target as HTMLElement).className.indexOf('vue-flow') !== -1 || event.target === document.body) {
+            event.stopPropagation();
+            editorStore.deleteValidation();
+        }
+    }
+});
+
 </script>
 
 <template>
@@ -24,6 +35,7 @@ function dismissModals() {
         <Transition>
             <FormPanel v-if="editorStore.formPanel" class="formPanel" />
         </Transition>
+        <ValidationModal v-if="editorStore.validationModal" />
     </div>
 </template>
 
