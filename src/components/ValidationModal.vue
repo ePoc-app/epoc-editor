@@ -30,6 +30,7 @@ const editorStore = useEditorStore();
 }
 
 .modal {
+    user-select: none;
     position: relative;
     padding: 2rem;
     background-color: white;
