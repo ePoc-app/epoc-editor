@@ -1,5 +1,6 @@
 stages:
 - build
+- release
 
 before_script:
 - dpkg --add-architecture i386
@@ -22,3 +23,12 @@ build:
   only:
   - main
   - web
+
+release:
+  stage: release
+  needs: 
+    - build
+  script:
+    - ls
+  only:
+  - tags
