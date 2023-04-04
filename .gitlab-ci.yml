@@ -23,6 +23,7 @@ build:
   only:
   - main
   - web
+  - tags
 
 release:
   stage: release
