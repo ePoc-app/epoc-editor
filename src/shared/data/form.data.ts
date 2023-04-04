@@ -70,6 +70,50 @@ export const videoForm: Form = {
     ]
 };
 
+export const audioForm: Form = {
+    type: 'audio',
+    name: 'Audio',
+    icon: 'icon-audio',
+    fields: [
+        {
+            inputs: [
+                {
+                    id: 'source',
+                    type: 'file',
+                    label: 'Piste audio',
+                    placeholder: 'Ajouter une piste audio',
+                    value: '',
+                    accept: '.mp3',
+                },
+                {
+                    id: 'transcript',
+                    type: 'file',
+                    label: 'Transcription',
+                    value: '',
+                    placeholder: 'Ajouter une transcription',
+                    accept: '.txt,.vtt'
+                },
+                {
+                    id: 'poster',
+                    type: 'file',
+                    label: 'Vignette',
+                    value: '',
+                    placeholder: 'Ajouter une vignette',
+                    accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp'
+                },
+                {
+                    id: 'subtitles',
+                    type: 'file',
+                    label: 'Sous-titres',
+                    value: '',
+                    placeholder: 'Ajouter des sous-titres',
+                    accept: '.vtt'
+                }
+            ]
+        }
+    ]
+};
+
 
 export const chapterForm: Form = {
     type: 'chapter',
@@ -771,7 +815,7 @@ export const listForm: Form = {
     ]
 };
 
-export const formsModel: Form[] = [textForm, videoForm, chapterForm, screenForm, epocForm, qcmForm, swipeForm, reorderForm, listForm, dragDropForm];
+export const formsModel: Form[] = [textForm, videoForm, chapterForm, screenForm, epocForm, qcmForm, swipeForm, reorderForm, listForm, dragDropForm, audioForm];
 
 export const standardScreen: SideAction[] = [
     {
@@ -785,6 +829,12 @@ export const standardScreen: SideAction[] = [
         type: 'video',
         label: 'Vidéo',
         tooltip: 'Glisser/déposer pour ajouter une vidéo'
+    },
+    {
+        icon: 'icon-audio',
+        type: 'audio',
+        label: 'Audio',
+        tooltip: 'Glisser/déposer pour ajouter un audio'
     },
     {
         icon: 'icon-question',
@@ -821,4 +871,3 @@ export const questions: SideAction[] = [
         label: 'Liste déroulantes'
     }
 ];
-
