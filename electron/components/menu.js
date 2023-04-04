@@ -47,15 +47,15 @@ module.exports.setupMenu = function () {
                         })
                     ]
                 },
-                {
-                    label: 'Importer',
-                    click: async function () {
-                        sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportPicked');
-                        const project = await pickEpocToImport();
-                        store.updateState('currentProject', project);
-                        sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportExtracted', project);
-                    }
-                },
+                // {
+                //     label: 'Importer',
+                //     click: async function () {
+                //         sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportPicked');
+                //         const project = await pickEpocToImport();
+                //         store.updateState('currentProject', project);
+                //         sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportExtracted', project);
+                //     }
+                // },
                 {
                     id: 'save',
                     label: 'Sauvegarder',
