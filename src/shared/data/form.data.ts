@@ -250,7 +250,7 @@ export const epocForm: Form = {
 
 export const screenForm: Form = { 
     type: 'screen',
-    name: 'Écran',
+    name: 'Page',
     icon: 'icon-ecran',
     fields: [
         {
