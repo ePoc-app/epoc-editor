@@ -2,15 +2,13 @@ stages:
 - build
 - release
 
-before_script:
-- dpkg --add-architecture i386
-- apt-get update -qy
-- apt-get -y install curl wine32
-
 build:
   image: node:16
   stage: build
   script:
+  - dpkg --add-architecture i386
+  - apt-get update -qy
+  - apt-get -y install curl wine32
   - npm i
   - npm run updatePreview
   - npm run build-all
