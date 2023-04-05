@@ -1,0 +1,177 @@
+<script setup lang="ts">
+import { SideAction } from '@/src/shared/interfaces';
+import { ref } from 'vue';
+import ContentButton from '@/src/components/ContentButton.vue';
+import { useEditorStore } from '@/src/shared/stores';
+
+
+const editorStore = useEditorStore();
+
+const standardContent = editorStore.standardScreens.filter((item) => item.type !== 'condition' && item.type !== 'question');
+const questionContent = editorStore.standardScreens.find((item) => item.type === 'question');
+const conditionContent = editorStore.standardScreens.find((item) => item.type === 'condition');
+
+const dragging = ref(false);
+
+const dragOptions = {
+    group: {
+        name:'node',
+        pull: 'clone',
+        put: false,
+    },
+    disabled: false,
+    sort: false,
+    ghostClass: 'ghost'
+};
+
+const classList = (item: SideAction) => {
+    return {
+        'clickable': item.type === 'question',
+    };
+};
+
+function dragStart(event, sideAction) {
+    event.dataTransfer.dropEffect= 'move';
+    event.dataTransfer.effectAllowed= 'move';
+    event.dataTransfer.setData('sideAction', JSON.stringify(sideAction));
+    dragging.value = true;
+}
+
+function showMenu() {
+    editorStore.floatingMenu = !editorStore.floatingMenu;
+}
+
+</script>
+
+<template>
+    <VueDraggable
+        v-bind="dragOptions"
+        key="draggable"
+        :model-value="standardContent"
+        item-key="index"
+        class="contents-list"
+    >
+        <template #item="{ element, index }">
+            <div>
+                <ContentButton
+                    :key="index"
+                    v-tippy="{content: element.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
+                    :icon="element.icon"
+                    :class-list="{ 'btn-content-blue': true }"
+                    :is-active="false"
+                    :is-draggable="true"
+                    @dragstart="dragStart($event, element)"
+                />
+            </div>
+        </template>
+    </VueDraggable>
+    <div class="question">
+        <ContentButton
+            v-tippy="{content: questionContent.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
+            :icon="questionContent.icon"
+            :class-list="classList(questionContent)"
+            :is-active="editorStore.floatingMenu"
+            :is-draggable="false"
+            @dragstart="dragStart($event, questionContent)"
+            @dragend="dragging = false"
+            @click="showMenu"
+        />
+        <div v-if="editorStore.floatingMenu" class="floating-menu" @click.stop>
+            <div class="arrow-wrapper">
+                <div class="arrow">
+                </div>
+            </div>
+            <VueDraggable
+                v-bind="dragOptions"
+                key="draggable"
+                :model-value="editorStore.questions"
+                item-key="id"
+                class="questions-list"
+            >
+                <template #item="{ element, index }">
+                    <div>
+                        <ContentButton
+                            :key="index"
+                            v-tippy="{content: element.label, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
+                            :icon="element.icon"
+                            :class-list="{ 'btn-content-blue': true }"
+                            :is-active="false"
+                            :is-draggable="true"
+                            @dragstart="dragStart($event, element)"
+                        />
+                    </div>
+                </template>
+            </VueDraggable>
+        </div>
+    </div>
+    <ContentButton
+        v-tippy="{content: conditionContent.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
+        :icon="conditionContent.icon"
+        :class-list="{ 'btn-content-blue': true }"
+        :is-active="false"
+        :is-draggable="true"
+        @dragstart="dragStart($event, conditionContent)"
+        @dragend="dragging = false"
+    />
+</template>
+
+<style scoped lang="scss">
+
+.dragging {
+    transition: opacity .1s ease-in-out;
+    opacity: .5;
+    box-shadow: none;
+}
+
+.active {
+    border: 1px solid var(--editor-blue);
+    color: var(--editor-blue);
+    
+    box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);
+    transition: all .15s ease-in-out;
+}
+
+.questions-list, .contents-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.question {
+    position: relative;
+}
+
+.floating-menu {
+    background-color: white;
+    padding: 1rem;
+    position: absolute;
+    left: 5.5rem;
+    top: 50%;
+    transform: translateY(-50%); 
+    z-index: 1;
+    border-radius: 10px;
+    filter: drop-shadow(0 1px 8px var(--shadow-outer));
+
+    .btn {
+        &:hover {
+            box-shadow: 0 2px 8px 0 var(--shadow-outer);
+        }
+    }
+}
+
+// Modal transition
+.v-enter-active,
+.v-leave-active {
+    transition: opacity 0.15s ease-in-out;
+}
+
+.v-enter-from,
+.v-leave-to {
+    opacity: 0;
+}
+
+.container {
+    position: relative;
+}
+
+</style>

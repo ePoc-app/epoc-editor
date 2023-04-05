@@ -187,7 +187,7 @@ export const useProjectStore = defineStore('project', {
             const isQuestion = questionTypes.includes(type);
             const isCondition = type === 'condition';
             
-            const finalType = isQuestion ? 'question' : (isCondition ? 'condition' : 'template');
+            const finalType = isQuestion ? 'question' : (isCondition ? 'condition' : 'content');
 
 
             const newNode = {
