@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { useEditorStore } from '@/src/shared/stores';
-import SideActionButtonV0 from './components/SideActionButtonV0.vue';
-
-const editorStore = useEditorStore();
+import SideActions from './components/SideActions.vue';
 
 </script>
 
@@ -10,12 +7,7 @@ const editorStore = useEditorStore();
     <div class="side-bar">
         <img src="/img/epoc.svg" alt="logo ePoc" draggable="false">
         <div class="side-bar-actions">
-            <SideActionButtonV0
-                v-for="item of editorStore.standardScreens"
-                :key="item.icon"
-                v-tippy="{content: editorStore.floatingMenu ? null : item.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
-                :side-action="item"
-            />
+            <SideActions />
         </div>
     </div>
 </template>

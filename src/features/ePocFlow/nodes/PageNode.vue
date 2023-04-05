@@ -110,14 +110,16 @@ function drop() {
 }
 
 const isQuestion = ref(node.data.type === 'question');
+const isCondition = ref(node.data.type === 'condition');
+const page = ref(null);
 
 const dragOptions = ref({
     group: {
         name: 'node',
-        put: isQuestion,
+        put: !isCondition.value,
     },
     filter: '.question-item',
-    sort: isQuestion,
+    sort: !isCondition.value,
     ghostClass: 'ghost',
     animation: 200,
 });
@@ -149,10 +151,6 @@ function removeHoverEffect() {
 
 const isSource = computed(() => getConnectedEdges([node], edges.value).some((edge) => edge.source === props.id));
 const isTarget = computed(() => getConnectedEdges([node], edges.value).some((edge) => edge.target === props.id));
-
-const page = ref(null);
-const isCondition = ref(node.data.type === 'condition');
-
 
 </script>
 
