@@ -34,11 +34,10 @@ const onDrop = (event) => {
     const elementData = event.dataTransfer.getData('element');
 
     if(sideActionData) {
-        const isScreen = event.dataTransfer.getData('isScreen');
+        const isTemplate = event.dataTransfer.getData('isTemplate');
         const actions = JSON.parse(sideActionData);
 
-        // not sure if this is better than transfer the isScreen in all the case and use it as a boolean here
-        if(isScreen === 'true') {
+        if(isTemplate === 'true') {
             projectStore.addNode(position, actions);
         } else {
             projectStore.addNode(position, [actions]);
@@ -47,7 +46,7 @@ const onDrop = (event) => {
         const element = JSON.parse(elementData);
         projectStore.createNodeFromElement(position, element);
 
-        const source = JSON.parse(event.dataTransfer.getData('source'));
+        const source = JSON.parse(event.dataTransfer.getData('sourcePage'));
 
         //? Used to prevent removeEventListener error in Vue Draggable
         setTimeout(() => {

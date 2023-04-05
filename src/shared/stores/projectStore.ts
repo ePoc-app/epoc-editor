@@ -182,13 +182,19 @@ export const useProjectStore = defineStore('project', {
             });
 
             //? For the V0 the templates aren't editable
-            const type = questionTypes.includes(elements[0].action.type) ? 'question' : 'template';
+
+            const type = elements[0].action.type;
+            const isQuestion = questionTypes.includes(type);
+            const isCondition = type === 'condition';
+            
+            const finalType = isQuestion ? 'question' : (isCondition ? 'condition' : 'template');
+
 
             const newNode = {
                 id: id,
                 type: 'content',
                 data: {
-                    type: type,
+                    type: finalType,
                     readyToDrop: false,
                     elements: elements,
                     contentId: uid(),

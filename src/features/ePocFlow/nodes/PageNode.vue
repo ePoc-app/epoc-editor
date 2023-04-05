@@ -105,7 +105,7 @@ function dragStart(event, element: NodeElement, index: number) {
     event.dataTransfer.dropEffect= 'move';
     event.dataTransfer.effectAllowed= 'move';
     event.dataTransfer.setData('element', JSON.stringify(element));
-    event.dataTransfer.setData('source', JSON.stringify({ parent: props.id, index: index}));
+    event.dataTransfer.setData('sourcePage', JSON.stringify({ parent: props.id, index: index}));
 }
 
 function closeFormPanel() {
@@ -114,6 +114,9 @@ function closeFormPanel() {
 
 const isSource = computed(() => getConnectedEdges([node], edges.value).some((edge) => edge.source === props.id));
 const isTarget = computed(() => getConnectedEdges([node], edges.value).some((edge) => edge.target === props.id));
+
+const isCondition = ref(node.data.type === 'condition');
+
 
 </script>
 
@@ -165,9 +168,9 @@ const isTarget = computed(() => getConnectedEdges([node], edges.value).some((edg
             </VueDraggable>
             <Handle
                 type="source"
-                :class="{ 'not-connected': !isSource }"
+                :class="{ 'not-connected': !isSource || isCondition }"
                 :position="Position.Right"
-                :connectable="!isSource"
+                :connectable="!isSource || isCondition"
             />
         </div>
     </div>
