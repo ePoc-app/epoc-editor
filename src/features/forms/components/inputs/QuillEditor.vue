@@ -94,6 +94,10 @@ watch(
         font-size: 1rem;
         color: var(--text);
         width: 24rem;
+
+        p {
+            margin-bottom: .5rem;
+        }
     }
 
     &-active {
