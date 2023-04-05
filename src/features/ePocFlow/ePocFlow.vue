@@ -40,9 +40,7 @@ const onDrop = (event) => {
     else if(type === 'nodeElement') {
         projectStore.createNodeFromElement(position, element as NodeElement);
 
-        setTimeout(() => {
-            editorStore.removeElementFromScreen(source.index, source.parentId, true);
-        }, 0);
+        setTimeout(() =>  editorStore.removeElementFromScreen(source.index, source.parentId, true), 0);
     }
 
 };
