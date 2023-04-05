@@ -114,6 +114,32 @@ export const audioForm: Form = {
     ]
 };
 
+export const conditionForm: Form = {
+    type: 'condition',
+    name: 'Conditions',
+    icon: 'icon-condition',
+    fields: [
+        {
+            inputs: [
+                {
+                    id: 'condition1',
+                    type: 'text',
+                    label: '',
+                    value: '',
+                    placeholder: 'Saisissez la condition 1...'
+                },
+                {
+                    id: 'condition2',
+                    type: 'text',
+                    label: '',
+                    value: '',
+                    placeholder: 'Saisissez la condition 2...'
+                }
+            ]
+        }
+    ]
+};
+
 
 export const chapterForm: Form = {
     type: 'chapter',
@@ -815,7 +841,7 @@ export const listForm: Form = {
     ]
 };
 
-export const formsModel: Form[] = [textForm, videoForm, chapterForm, screenForm, epocForm, qcmForm, swipeForm, reorderForm, listForm, dragDropForm, audioForm];
+export const formsModel: Form[] = [textForm, videoForm, chapterForm, screenForm, epocForm, qcmForm, swipeForm, reorderForm, listForm, dragDropForm, audioForm, conditionForm];
 
 export const standardScreen: SideAction[] = [
     {
@@ -842,6 +868,12 @@ export const standardScreen: SideAction[] = [
         label: 'Question',
         tooltip: 'Cliquer pour ajouter une question'
     },
+    {
+        icon: 'icon-condition',
+        type: 'condition',
+        label: 'Conditions',
+        tooltip: 'Glisser/déposer pour ajouter une condition'
+    }
 ];
 
 export const questions: SideAction[] = [
