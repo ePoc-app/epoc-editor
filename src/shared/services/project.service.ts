@@ -67,11 +67,11 @@ function createContentJSON() : EpocV1 {
             objectives: chapterValues.objectives || [],
             contents: []
         });
-        let screenNode = getNextNode(chapter);
-        while (screenNode) {
-            const contentId = newContent(epoc, screenNode);
+        let pageNode = getNextNode(chapter);
+        while (pageNode) {
+            const contentId = newContent(epoc, pageNode);
             epoc.chapters[chapter.data.contentId].contents.push(contentId);
-            screenNode = getNextNode(screenNode);
+            pageNode = getNextNode(pageNode);
         }
     });
 
@@ -79,14 +79,14 @@ function createContentJSON() : EpocV1 {
     return epoc;
 }
 
-function newContent(epoc: EpocV1, screenNode) : string {
+function newContent(epoc: EpocV1, pageNode) : string {
     const baseContent: Content = {
         type: 'unknown',
-        title: screenNode.data.formValues.title || '',
-        subtitle: screenNode.data.formValues.subtitle || ''
+        title: pageNode.data.formValues.title || '',
+        subtitle: pageNode.data.formValues.subtitle || ''
     };
-    if (screenNode.data.type === 'template') {
-        const contentNode = screenNode.data.elements[0];
+    if (pageNode.data.type === 'template') {
+        const contentNode = pageNode.data.elements[0];
         if (contentNode.action.type === 'video') {
             const content: Video = {
                 ...baseContent,
@@ -98,18 +98,18 @@ function newContent(epoc: EpocV1, screenNode) : string {
                 transcript: contentNode.formValues.transcript,
 
             };
-            return epoc.addContent(screenNode.data.contentId, content);
+            return epoc.addContent(pageNode.data.contentId, content);
         } else if (contentNode.action.type === 'html' || contentNode.action.type === 'text') {
             const content: Html = {
                 ...baseContent,
                 type: 'html',
                 html: contentNode.formValues.html
             };
-            return epoc.addContent(screenNode.data.contentId, content);
+            return epoc.addContent(pageNode.data.contentId, content);
         }
     } else {
-        if (screenNode.data.elements.length > 1) {
-            const questions = screenNode.data.elements.reduce((q, questionNode) => {
+        if (pageNode.data.elements.length > 1) {
+            const questions = pageNode.data.elements.reduce((q, questionNode) => {
                 q.push(newQuestion(epoc, questionNode));
                 return q;
             }, []);
@@ -119,14 +119,14 @@ function newContent(epoc: EpocV1, screenNode) : string {
                 summary: '',
                 questions: questions
             };
-            return epoc.addContent(screenNode.data.contentId, content);
+            return epoc.addContent(pageNode.data.contentId, content);
         } else {
             const content: SimpleQuestion = {
                 ...baseContent,
                 type: 'simple-question',
-                question: newQuestion(epoc, screenNode.data.elements[0])
+                question: newQuestion(epoc, pageNode.data.elements[0])
             };
-            return epoc.addContent(screenNode.data.contentId, content);
+            return epoc.addContent(pageNode.data.contentId, content);
         }
     }
 }

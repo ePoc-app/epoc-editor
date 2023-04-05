@@ -88,7 +88,7 @@ export const useProjectStore = defineStore('project', {
                 x: element.position.x + 150,
                 y: element.position.y
             };
-            const screenNode: Node = {
+            const pageNode: Node = {
                 id: contentElements[0].parentId,
                 type: 'content',
                 data: {
@@ -111,9 +111,9 @@ export const useProjectStore = defineStore('project', {
                 style: {stroke: '#384257', strokeWidth: 2.5},
                 markerEnd: {type: MarkerType.ArrowClosed, color: '#384257'}
             };
-            addNodes([screenNode]);
+            addNodes([pageNode]);
             addEdges([edge]);
-            return screenNode;
+            return pageNode;
         },
         createNodeFromElement(position, element: NodeElement) {
 
