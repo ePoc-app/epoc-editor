@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ConnectionMode, useVueFlow, VueFlow } from '@vue-flow/core';
 import { markRaw, onMounted } from 'vue';
-import ScreenNode from './nodes/ScreenNode.vue';
+import PageNode from './nodes/PageNode.vue';
 import CustomConnectContent from './edges/CustomConnectContent.vue';
 import { useEditorStore, useProjectStore } from '@/src/shared/stores';
 import ChapterNode from './nodes/ChapterNode.vue';
@@ -15,7 +15,7 @@ const editorStore = useEditorStore();
 const projectStore = useProjectStore();
 
 const nodeTypes = {
-    content: markRaw(ScreenNode),
+    content: markRaw(PageNode),
     chapter: markRaw(ChapterNode),
     epoc: markRaw(ePocNode),
     add: markRaw(AddChapterNode), 
@@ -118,7 +118,7 @@ function nodeChange(event) {
         @pane-click="editorStore.closeFormPanel()"
     >
         <template #node-custom="{ id, data }">
-            <ScreenNode :id="id" :data="data" />
+            <PageNode :id="id" :data="data" />
         </template>
         <template #node-chapter="{ id, data }">
             <ChapterNode :id="id" :data="data" />
