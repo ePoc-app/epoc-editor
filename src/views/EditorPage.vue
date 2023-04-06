@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TopBar from '@/src/features/topBar/TopBar.vue';
-import EPocFlow from '@/src/features/ePocFlow/ePocFlow.vue';
-import SideBarV0 from '@/src/features/sideBar/SideBarV0.vue';
+import ePocFlow from '@/src/features/ePocFlow/ePocFlow.vue';
+import SideBar from '@/src/features/sideBar/SideBar.vue';
 import FormPanel from '@/src/features/forms/FormPanel.vue';
 import ValidationModal from '../components/ValidationModal.vue';
 import { useEditorStore } from '@/src/shared/stores';
@@ -29,7 +29,7 @@ document.body.addEventListener('keydown', function(event) {
 
 <template>
     <div class="editor-container" @mouseup="dismissModals" @click="dismissModals">
-        <SideBarV0 class="side-bar" />
+        <SideBar class="side-bar" />
         <TopBar class="top-bar" />
         <ePocFlow class="editor-content" />
         <Transition>

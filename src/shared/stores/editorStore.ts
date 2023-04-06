@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ePocProject, Form, FormButton, NodeElement, Screen, SideAction } from '@/src/shared/interfaces';
+import { ePocProject, Form, FormButton, NodeElement, PageModel, Screen, SideAction } from '@/src/shared/interfaces';
 import { nextTick, toRaw, watch } from 'vue';
 import { applyEdgeChanges, applyNodeChanges, useVueFlow } from '@vue-flow/core';
 
@@ -18,6 +18,7 @@ interface EditorState {
     exporting:boolean;
     floatingMenu: boolean;
     modelMenu: boolean;
+    pageModels: PageModel[];
     validationModal: boolean;
     formPanel: Form;
     openedNodeId: uid | null;
@@ -38,6 +39,7 @@ export const useEditorStore = defineStore('editor', {
         exporting: false,
         floatingMenu: false,
         modelMenu: false,
+        pageModels: [],
         validationModal: false,
         formPanel: null,
         openedNodeId: null,
@@ -230,9 +232,11 @@ export const useEditorStore = defineStore('editor', {
             if(this.formPanel.type !== 'epoc') {
                 buttons.push({ label: 'Supprimer',icon: 'icon-supprimer',action: 'delete'});
                 if(this.formPanel.type !== 'chapter') {
-                    if(!this.openedParentId) {
+                    const isChild = Boolean(this.openedParentId);
+                    if(!isChild) {
                         buttons.push({ label: 'Dupliquer la page', icon: 'icon-plus', action: 'duplicate-screen' });
                         buttons.push({ label: 'Lancer l\'aperçu ici', icon: 'icon-play', action: 'launch-preview' });
+                        buttons.push({ label: 'Sauvegarder le modèle', icon: 'icon-modele', action: 'save-model' });
                     } else {
                         buttons.push({ label: 'Revenir à la page', icon: 'icon-ecran', action: 'open-page' });
 
@@ -244,6 +248,12 @@ export const useEditorStore = defineStore('editor', {
                 }
             }
             return buttons;
+        },
+        savePageModel(model: SideAction[]): boolean {
+            const modelExist = this.pageModels.some(pageModel => JSON.stringify(pageModel.actions) === JSON.stringify(model));
+            if(modelExist) return false;
+            this.pageModels.push({ actions: model });
+            return true;
         },
         openPage() {
             const parentNode = findNode(this.openedParentId);
