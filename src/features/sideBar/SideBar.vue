@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import SideActions from './components/SideActions.vue';
+import ModelMenu from './components/ModelMenu.vue';
+import { useEditorStore } from '@/src/shared/stores';
+
+const editorStore = useEditorStore();
 
 </script>
 
@@ -9,6 +13,9 @@ import SideActions from './components/SideActions.vue';
         <div class="side-bar-actions">
             <SideActions />
         </div>
+        <ModelMenu 
+            v-if="editorStore.modelMenu"
+        />
     </div>
 </template>
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TopBar from '@/src/features/topBar/TopBar.vue';
-import EPocFlow from '@/src/features/ePocFlow/ePocFlow.vue';
-import SideBarV0 from '@/src/features/sideBar/SideBarV0.vue';
+import ePocFlow from '@/src/features/ePocFlow/ePocFlow.vue';
+import SideBar from '@/src/features/sideBar/SideBar.vue';
 import FormPanel from '@/src/features/forms/FormPanel.vue';
 import ValidationModal from '../components/ValidationModal.vue';
 import { useEditorStore } from '@/src/shared/stores';
@@ -44,7 +44,7 @@ function onRemoveCursor() {
 
 <template>
     <div class="editor-container" @drop="onRemoveCursor" @dragend="onRemoveCursor" @mouseup="dismissModals" @click="dismissModals">
-        <SideBarV0 class="side-bar" @dragover="onCursorNotAllowed" />
+        <SideBar class="side-bar" @dragover="onCursorNotAllowed" />
         <TopBar class="top-bar" @dragover="onCursorNotAllowed" />
         <ePocFlow class="editor-content" @dragover="onCursorAllowed" />
         <Transition>

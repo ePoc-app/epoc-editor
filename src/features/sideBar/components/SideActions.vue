@@ -7,9 +7,10 @@ import { useEditorStore } from '@/src/shared/stores';
 
 const editorStore = useEditorStore();
 
-const standardContent = editorStore.standardScreens.filter((item) => item.type !== 'condition' && item.type !== 'question');
+const standardContent = editorStore.standardScreens.filter((item) => item.type !== 'condition' && item.type !== 'question' && item.type !== 'model');
 const questionContent = editorStore.standardScreens.find((item) => item.type === 'question');
 const conditionContent = editorStore.standardScreens.find((item) => item.type === 'condition');
+const modelContent = editorStore.standardScreens.find((item) => item.type === 'model');
 
 const dragging = ref(false);
 
@@ -26,7 +27,7 @@ const dragOptions = {
 
 const classList = (item: SideAction) => {
     return {
-        'clickable': item.type === 'question',
+        'clickable': item.type === 'question' || item.type === 'model',
     };
 };
 
@@ -37,8 +38,12 @@ function dragStart(event, sideAction) {
     dragging.value = true;
 }
 
-function showMenu() {
+function showQuestionsMenu() {
     editorStore.floatingMenu = !editorStore.floatingMenu;
+}
+
+function showTemplateMenu() {
+    editorStore.modelMenu = !editorStore.modelMenu;
 }
 
 </script>
@@ -72,9 +77,7 @@ function showMenu() {
             :class-list="classList(questionContent)"
             :is-active="editorStore.floatingMenu"
             :is-draggable="false"
-            @dragstart="dragStart($event, questionContent)"
-            @dragend="dragging = false"
-            @click="showMenu"
+            @click="showQuestionsMenu"
         />
         <div v-if="editorStore.floatingMenu" class="floating-menu" @click.stop>
             <div class="arrow-wrapper">
@@ -113,9 +116,23 @@ function showMenu() {
         @dragstart="dragStart($event, conditionContent)"
         @dragend="dragging = false"
     />
+    <hr>
+    <ContentButton
+        v-tippy="{content: modelContent.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
+        :icon="modelContent.icon"
+        :class-list="classList(modelContent)"
+        :is-active="editorStore.modelMenu"
+        :is-draggable="false"
+        @click="showTemplateMenu"
+    />
 </template>
 
 <style scoped lang="scss">
+
+hr {
+    border-top: 1px solid var(--border);
+    width: 60px;
+}
 
 .dragging {
     transition: opacity .1s ease-in-out;

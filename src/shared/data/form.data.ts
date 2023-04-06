@@ -879,6 +879,12 @@ export const standardScreen: SideAction[] = [
         type: 'condition',
         label: 'Conditions',
         tooltip: 'Glisser/déposer pour ajouter une condition'
+    },
+    {
+        icon: 'icon-modele',
+        type: 'model',
+        label: 'Modèle',
+        tooltip: 'Cliquer pour ajouter un modèle'
     }
 ];
 
