@@ -75,7 +75,8 @@ export const useProjectStore = defineStore('project', {
                 position: {x: 0, y: (chapters.length + 1) * 200},
                 data,
                 draggable: false,
-                deletable: false,
+                deletable: true,
+                selectable: true
             };
 
             addNodes([newChapter]);

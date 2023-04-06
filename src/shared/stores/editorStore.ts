@@ -124,9 +124,21 @@ export const useEditorStore = defineStore('editor', {
             }
             this.closeFormPanel();
         },
+        isNodeDeletable(id: string) {
+            console.log('testing if deletable');
+            return id !== '1' && id !== '2';
+        },
         deleteSelectedNodes(): void {
-            const selectedNodes = nodes.value.filter(node => node.selected);
-            const isChild = this.openedParentId ? true : false;
+            const selectedNodes = nodes.value.filter(node => node.selected && node.id !== '1' && node.id !== '2');
+            const isChild = Boolean(this.openedParentId);
+
+            //? ChapterNode can't be selected but can be active
+            const activeNode = isChild ? findNode(this.openedParentId) : findNode(this.openedNodeId);
+            if (activeNode && (activeNode.id !== '1' && activeNode.id !== '2')) {
+                selectedNodes.push(activeNode);
+            }
+            
+
             for(const node of selectedNodes) {
                 this.deleteElement(node.id);
             }
@@ -136,8 +148,16 @@ export const useEditorStore = defineStore('editor', {
             this.validationModal = false;
         },
         deleteValidation(): void {
-            const selectedNodes = nodes.value.filter(node => node.selected);
-            const isChild = this.openedParentId ? true : false;
+            const selectedNodes = nodes.value.filter(node => node.selected && node.id !== '1' && node.id !== '2');
+            const isChild = Boolean(this.openedParentId);
+            
+            //? ChapterNode can't be selected but can be active
+            const activeNode = isChild ? findNode(this.openedParentId) : findNode(this.openedNodeId);
+            if (activeNode && (activeNode.id !== '1' && activeNode.id !== '2')) {
+                selectedNodes.push(activeNode);
+            }
+            
+
             if(selectedNodes.length > 0 || isChild) {
                 this.validationModal = true;
             } else {
@@ -328,4 +348,3 @@ export const useEditorStore = defineStore('editor', {
         }
     }
 });
-
