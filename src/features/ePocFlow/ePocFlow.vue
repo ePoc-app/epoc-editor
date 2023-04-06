@@ -15,6 +15,7 @@ const { vueFlowRef, project, updateEdge, edges, nodes, findNode }  = useVueFlow(
 
 const editorStore = useEditorStore();
 const graphStore = useGraphStore();
+const undoRedoStore = useUndoRedoStore();
 
 const nodeTypes = {
     activity: markRaw(ActivityNode),
@@ -173,6 +174,10 @@ function nodeDrag(event) {
         @edgeclick="onEdgeclick"
         @pane-click="editorStore.closeFormPanel()"
         @connect="connect"
+        @node-drag-start="nodeDragStart"
+        @node-drag-stop="nodeDragStop"
+        @keydown.meta.z="undo"
+        @keydown.meta.y="redo"
     >
         <template #node-custom="{ id, data }">
             <PageNode :id="id" :data="data" />

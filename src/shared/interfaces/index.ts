@@ -6,3 +6,4 @@ export * from './nodeElement.interface';
 export * from './formButton.interface';
 export * from './field.interface';
 export * from './pageModel.interface';
+export * from './undoRedo.interface';
