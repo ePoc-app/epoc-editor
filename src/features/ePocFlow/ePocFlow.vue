@@ -176,8 +176,6 @@ function nodeDrag(event) {
         @connect="connect"
         @node-drag-start="nodeDragStart"
         @node-drag-stop="nodeDragStop"
-        @keydown.meta.z="undo"
-        @keydown.meta.y="redo"
     >
         <template #node-custom="{ id, data }">
             <PageNode :id="id" :data="data" />

@@ -7,8 +7,10 @@ import ValidationModal from '../components/ValidationModal.vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { editorService } from '@/src/shared/services';
 import { confirmDelete } from '@/src/shared/services/graph';
+import { useUndoRedoStore } from '../shared/stores/undoRedoStore';
 
 const editorStore = useEditorStore();
+const undoRedoStore = useUndoRedoStore();
 
 editorService.setup();
 
@@ -18,6 +20,15 @@ document.body.addEventListener('keydown', function(event) {
         if((event.target as HTMLElement).className.indexOf('vue-flow') !== -1 || event.target === document.body) {
             event.stopPropagation();
             confirmDelete();
+        }
+    }
+
+    if (event.ctrlKey || event.metaKey) {
+        if (event.key === 'z') {
+            undo();
+        }
+        if (event.key === 'y') {
+            redo();
         }
     }
 });
@@ -35,6 +46,12 @@ function onCursorAllowed() {
 
 function onRemoveCursor() {
     document.body.classList.remove('cursor-not-allowed', 'cursor-allowed');
+function undo() {
+    undoRedoStore.undo();
+}
+
+function redo() {
+    undoRedoStore.redo();
 }
 
 </script>

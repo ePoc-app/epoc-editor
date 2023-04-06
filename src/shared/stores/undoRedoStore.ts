@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
-import { UndoRedoAction, NodeMovedAction } from '../interfaces';
-import { useVueFlow } from '@vue-flow/core';
+import { UndoRedoAction, NodeMovedAction, NodeRemovedAction, NodeAddedAction } from '../interfaces';
+import { applyNodeChanges, useVueFlow } from '@vue-flow/core';
 
-const { findNode } = useVueFlow({ id: 'main' });
+const { findNode, addNodes, nodes } = useVueFlow({ id: 'main' });
 
 interface UndoRedoState {
     undoStack: UndoRedoAction[];
@@ -38,10 +38,10 @@ export const useUndoRedoStore = defineStore('epoc', {
                 this.moveNode(action, reverseStack);
                 break;
             case 'nodeRemoved':
-                this.deleteNode(action);
+                this.addNode(action, reverseStack);
                 break;
             case 'nodeAdded':
-                this.addNode(action);
+                this.deleteNode(action, reverseStack);
                 break;
             case 'nodeUpdated':
                 this.updateNode(action);
@@ -72,11 +72,31 @@ export const useUndoRedoStore = defineStore('epoc', {
             };
             reverseStack.push(reverseAction);
         },
-        deleteNode() {
-            return;
+        deleteNode(action: NodeRemovedAction, reverseStack: UndoRedoAction[]) {
+            const node = JSON.parse(action.node);
+
+            applyNodeChanges(
+                [{ id: node.id, type: 'remove' }],
+                nodes.value
+            );
+
+            const reverseAction: NodeRemovedAction = {
+                type: 'nodeRemoved',
+                node: action.node,
+            };
+            reverseStack.push(reverseAction);
         },
-        addNode() {
-            return;
+        addNode(action: NodeAddedAction, reverseStack: UndoRedoAction[]) {
+            const node = JSON.parse(action.node);
+
+            addNodes([node]);
+
+            const reverseAction: NodeAddedAction = {
+                type: 'nodeAdded',
+                node: action.node,
+            };
+            reverseStack.push(reverseAction);
+            
         },
         updateNode() {
             return;

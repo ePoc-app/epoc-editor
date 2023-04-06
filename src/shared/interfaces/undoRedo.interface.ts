@@ -13,13 +13,11 @@ export interface NodeAddedAction extends UndoRedoAction {
     type: 'nodeAdded';
     //TODO: use the type defined by vue flow
     node: any;
-    position: { x: number; y: number };
 }
 
 export interface NodeRemovedAction extends UndoRedoAction {
     type: 'nodeRemoved';
     node: any;
-    position: { x: number; y: number }
 }
 
 export interface NodeUpdatedAction extends UndoRedoAction {
