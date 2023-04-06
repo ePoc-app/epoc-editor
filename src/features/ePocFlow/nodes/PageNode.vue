@@ -89,7 +89,6 @@ function drop() {
     dropped.value = true;
 }
 
-const isQuestion = ref(node.data.type === 'question');
 const isCondition = ref(node.data.type === 'condition');
 
 const dragOptions = ref({
@@ -97,7 +96,7 @@ const dragOptions = ref({
         name: 'node',
         put: !isCondition.value,
     },
-    filter: '.question-item',
+    filter: '.condition',
     sort: !isCondition.value,
     ghostClass: 'ghost',
 });
@@ -148,12 +147,12 @@ const isTarget = computed(() => getConnectedEdges([node], edges.value).some((edg
                 @dragleave="dragLeave($event)"
             >
                 <template #item="{ element, index }">
-                    <div :class="{ 'question-item': !isQuestion }">
+                    <div :class="{ 'condtion': !isCondition }">
                         <ContentButton
                             :key="index"
                             :icon="element.action.icon"
                             :is-active="editorStore.openedNodeId ? editorStore.openedNodeId === element.id : false"
-                            :is-draggable="isQuestion"
+                            :is-draggable="!isCondition"
                             :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true }"
                             @click.exact="openForm(element)"
                             @click.meta="closeFormPanel"
@@ -164,13 +163,13 @@ const isTarget = computed(() => getConnectedEdges([node], edges.value).some((edg
                     </div>
                 </template>
             </VueDraggable>
-            <Handle
-                type="source"
-                :class="{ 'not-connected': !isSource || isCondition }"
-                :position="Position.Right"
-                :connectable="!isSource || isCondition"
-            />
         </div>
+        <Handle
+            type="source"
+            :class="{ 'not-connected': !isSource || isCondition }"
+            :position="Position.Right"
+            :connectable="!isSource || isCondition"
+        />
     </div>
 </template>
 
