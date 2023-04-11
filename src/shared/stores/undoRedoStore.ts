@@ -39,8 +39,6 @@ export const useUndoRedoStore = defineStore('epoc', {
                 this.moveNode(action, reverseStack);
                 break;
             case 'nodeRemoved':
-                console.log('action:', action);
-                console.log('reverseStack:', reverseStack);
                 this.addNode(action, reverseStack);
                 break;
             case 'nodeAdded':
@@ -81,7 +79,7 @@ export const useUndoRedoStore = defineStore('epoc', {
             const reverseAction: NodeRemovedAction = {
                 type: 'nodeRemoved',
                 node: action.node,
-                edges: JSON.stringify(getConnectedEdges([node], edges.value))
+                edges: getConnectedEdges([node], edges.value).map(edge => JSON.stringify(edge))
             };
             
             applyNodeChanges(
@@ -94,14 +92,16 @@ export const useUndoRedoStore = defineStore('epoc', {
             const node = JSON.parse(action.node);
             addNodes([node]);
 
-            let edges = toRaw(action.edges);
+            const edges = [];
+            const rawEdges = toRaw(action.edges);
+
+            rawEdges.forEach((value) => {
+                edges.push(JSON.parse(value));
+            });
 
             if(edges.length > 0) {
-                edges = JSON.parse(action.edges);
-                edges = Array.isArray(edges) ? edges : [edges];
                 addEdges(edges);
             }
-
 
             const reverseAction: NodeAddedAction = {
                 type: 'nodeAdded',
