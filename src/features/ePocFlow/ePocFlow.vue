@@ -102,7 +102,7 @@ function nodeChange(event) {
         :max-zoom="1.5"
         :min-zoom=".4"
         :node-types="nodeTypes"
-        :connection-mode="ConnectionMode.Loose"
+        :connection-mode="ConnectionMode.Strict"
         :connection-radius="50"
         :edge-updater-radius="30"
         :snap-to-grid="true"
