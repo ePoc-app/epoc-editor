@@ -96,7 +96,7 @@ export const useUndoRedoStore = defineStore('epoc', {
 
             let edges = toRaw(action.edges);
 
-            if(edges) {
+            if(edges.length > 0) {
                 edges = JSON.parse(action.edges);
                 edges = Array.isArray(edges) ? edges : [edges];
                 addEdges(edges);

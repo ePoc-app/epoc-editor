@@ -5,8 +5,11 @@ import { useEditorStore } from '@/src/shared/stores';
 import { computed, ref } from 'vue';
 import { editorService } from '@/src/shared/services';
 import { useVueFlow } from '@vue-flow/core';
+import { useUndoRedoStore } from '@/src/shared/stores/undoRedoStore';
 
 const editorStore = useEditorStore();
+const undoRedoStore = useUndoRedoStore();
+
 const { zoomTo, fitView, onViewportChangeEnd }  = useVueFlow({ id: 'main' });
 
 editorStore.$subscribe(() => {
@@ -60,8 +63,8 @@ setInterval(() => {
             <div class="top-bar-actions">
                 <TopActionDropdown icon="icon-chevron" :text="zoomString" position="left" :input-value="zoom" @change="updateZoom" />
                 <hr class="vertical-separator">
-                <TopActionButton icon="icon-arriere" :disabled="editorStore.undoStack.length <= 0" @click="editorStore.undo" />
-                <TopActionButton icon="icon-avant" :disabled="editorStore.redoStack.length <= 0" @click="editorStore.redo" />
+                <TopActionButton icon="icon-arriere" :disabled="undoRedoStore.undoStack.length <= 0" @click="undoRedoStore.undo" />
+                <TopActionButton icon="icon-avant" :disabled="undoRedoStore.redoStack.length <= 0" @click="undoRedoStore.redo" />
                 <hr class="vertical-separator">
                 <TopActionButton icon="icon-save" text="Sauvegarder" position="right" :disabled="editorStore.saving" @click="editorService.saveEpocProject" />
                 <TopActionButton icon="icon-play" text="Aperçu" position="right" :disabled="editorStore.loadingPreview" @click="editorService.runPreviewAtPage()" />
