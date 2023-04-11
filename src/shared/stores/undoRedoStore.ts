@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia';
 import { UndoRedoAction, NodeMovedAction, NodeRemovedAction, NodeAddedAction } from '../interfaces';
-import { applyNodeChanges, useVueFlow } from '@vue-flow/core';
+import { applyNodeChanges, getConnectedEdges, useVueFlow } from '@vue-flow/core';
+import { toRaw } from 'vue';
 
-const { findNode, addNodes, nodes } = useVueFlow({ id: 'main' });
+const { findNode, addNodes, nodes, edges, addEdges } = useVueFlow({ id: 'main' });
 
 interface UndoRedoState {
     undoStack: UndoRedoAction[];
@@ -38,6 +39,8 @@ export const useUndoRedoStore = defineStore('epoc', {
                 this.moveNode(action, reverseStack);
                 break;
             case 'nodeRemoved':
+                console.log('action:', action);
+                console.log('reverseStack:', reverseStack);
                 this.addNode(action, reverseStack);
                 break;
             case 'nodeAdded':
@@ -72,28 +75,38 @@ export const useUndoRedoStore = defineStore('epoc', {
             };
             reverseStack.push(reverseAction);
         },
-        deleteNode(action: NodeRemovedAction, reverseStack: UndoRedoAction[]) {
+        deleteNode(action: NodeRemovedAction, reverseStack: UndoRedoAction[]): void {
             const node = JSON.parse(action.node);
-
-            applyNodeChanges(
-                [{ id: node.id, type: 'remove' }],
-                nodes.value
-            );
 
             const reverseAction: NodeRemovedAction = {
                 type: 'nodeRemoved',
                 node: action.node,
+                edges: JSON.stringify(getConnectedEdges([node], edges.value))
             };
+            
+            applyNodeChanges(
+                [{ id: node.id, type: 'remove' }],
+                nodes.value
+            );
             reverseStack.push(reverseAction);
         },
-        addNode(action: NodeAddedAction, reverseStack: UndoRedoAction[]) {
+        addNode(action: NodeAddedAction, reverseStack: UndoRedoAction[]): void {
             const node = JSON.parse(action.node);
-
             addNodes([node]);
+
+            let edges = toRaw(action.edges);
+
+            if(edges) {
+                edges = JSON.parse(action.edges);
+                edges = Array.isArray(edges) ? edges : [edges];
+                addEdges(edges);
+            }
+
 
             const reverseAction: NodeAddedAction = {
                 type: 'nodeAdded',
                 node: action.node,
+                edges: action.edges
             };
             reverseStack.push(reverseAction);
             
