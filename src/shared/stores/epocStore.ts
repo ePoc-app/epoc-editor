@@ -1,9 +1,9 @@
 // import { defineStore } from 'pinia';
-// import { Screen } from '@/src/shared/interfaces';
+// import { PageModel } from '@/src/shared/interfaces';
 
 // interface EpocState {
 //     screensModel: {
-//         personnal: Screen[],
+//         personnal: PageModel[],
 //         personnalSelected: boolean
 //     },
 // }
@@ -16,10 +16,4 @@
 //             personnal: []
 //         },
 //     }),
-
-//     getters: {
-//         getSelectedScreens() {
-//             return this.screensModel.personnalSelected ? this.screensModel.personnal : this.screensModel.standard;
-//         },
-//     },
 // });

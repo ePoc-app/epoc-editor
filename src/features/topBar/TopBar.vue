@@ -9,11 +9,11 @@ import { useVueFlow } from '@vue-flow/core';
 const editorStore = useEditorStore();
 const { zoomTo, fitView, onViewportChangeEnd }  = useVueFlow({ id: 'main' });
 
-const savedSince = ref(since(editorStore.currentProject.modified));
-
 editorStore.$subscribe(() => {
     savedSince.value = since(editorStore.currentProject.modified);
 });
+
+const savedSince = ref(since(editorStore.currentProject.modified));
 
 const zoom = ref(1);
 const zoomString = computed(() => zoom.value === 0 ? 'Ajuster' : `${Math.round(zoom.value * 100)}%`);
@@ -47,6 +47,7 @@ function since(date) {
 setInterval(() => {
     savedSince.value = since(editorStore.currentProject.modified);
 }, 60000);
+
 </script>
 
 <template>
@@ -57,14 +58,14 @@ setInterval(() => {
                 <small>Dernière sauvegarde : {{ savedSince }}</small>
             </div>
             <div class="top-bar-actions">
-                <TopActionDropdown icon="icon-chevron" :text-before="zoomString" :input-value="zoom" @change="updateZoom" />
+                <TopActionDropdown icon="icon-chevron" :text="zoomString" position="left" :input-value="zoom" @change="updateZoom" />
                 <hr class="vertical-separator">
                 <TopActionButton icon="icon-arriere" :disabled="editorStore.undoStack.length <= 0" @click="editorStore.undo" />
                 <TopActionButton icon="icon-avant" :disabled="editorStore.redoStack.length <= 0" @click="editorStore.redo" />
                 <hr class="vertical-separator">
-                <TopActionButton icon="icon-save" text="Sauvegarder" :disabled="editorStore.saving" @click="editorService.saveEpocProject" />
-                <TopActionButton icon="icon-play" text="Aperçu" :disabled="editorStore.loadingPreview" @click="editorService.runPreview()" />
-                <TopActionButton icon="icon-export" text="Exporter archive" :disabled="editorStore.exporting" @click="editorService.exportProject()" />
+                <TopActionButton icon="icon-save" text="Sauvegarder" position="right" :disabled="editorStore.saving" @click="editorService.saveEpocProject" />
+                <TopActionButton icon="icon-play" text="Aperçu" position="right" :disabled="editorStore.loadingPreview" @click="editorService.runPreview()" />
+                <TopActionButton icon="icon-export" text="Exporter archive" position="right" :disabled="editorStore.exporting" @click="editorService.exportProject()" />
             </div>
         </div>
     </div>

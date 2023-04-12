@@ -171,8 +171,8 @@ function runPreview(): void {
 
 function runPreviewAtPage(): void {
     waitingToast('🔭 Démarrage de la prévisualisation...');
-    const openedNodeId = editorStore.openedParentId ? editorStore.openedParentId : editorStore.openedNodeId;
-    const openedNode = projectStore.elements.find(e => e.id === openedNodeId);
+    const openedElementId = editorStore.openedParentId ? editorStore.openedParentId : editorStore.openedElementId;
+    const openedNode = projectStore.elements.find(e => e.id === openedElementId);
     let contentPath;
     let error;
     if (openedNode) {

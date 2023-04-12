@@ -37,8 +37,6 @@ function dragStart(event, elements) {
                 v-for="(element, index) in elements"
                 :key="index"
                 :icon="element.icon"
-                :class-list="{ 'btn-content-blue': false }"
-                :is-active="false"
                 :is-draggable="false"
             />
         </div>

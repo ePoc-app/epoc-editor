@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Handle, Position, getConnectedEdges, useVueFlow } from '@vue-flow/core';
-import ContentButton from '@/src/components/ContentButton.vue';
 import { computed, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { NodeElement } from '@/src/shared/interfaces';
+import ContentButton from '@/src/components/ContentButton.vue';
 
 const editorStore = useEditorStore();
 
@@ -12,18 +12,37 @@ const props = defineProps<{
     data: {
         type: object;
         required: true;
-        readyToDrop: boolean;
         elements: NodeElement[];
         isSource: boolean;
         isTarget: boolean;
     }
 }>();
 
-
 const { findNode, edges } = useVueFlow({ id: 'main' });
 
-const node = findNode(props.id);
+const currentNode = findNode(props.id);
 const dropped = ref(false);
+
+const isSource = computed(() => getConnectedEdges([currentNode], edges.value).some((edge) => edge.source === props.id));
+const isTarget = computed(() => getConnectedEdges([currentNode], edges.value).some((edge) => edge.target === props.id));
+
+const classList = {
+    'clickable': true,
+    'btn-content-node': true,
+};
+
+const isCondition = ref(currentNode.data.type === 'condition');
+
+const dragOptions = ref({
+    group: {
+        name: 'node',
+        put: !isCondition.value,
+    },
+    filter: '.condition',
+    sort: !isCondition.value,
+    ghostClass: 'ghost',
+});
+
 
 function openForm(element: NodeElement) {
     editorStore.openFormPanel(element.id, element.formType, element.formValues, element.parentId);
@@ -52,54 +71,47 @@ function dragOver(event) {
 }
 
 function change(event) {
-    if(event.added && dropped.value) {
+    const { added, moved, removed } = event;
+    const { data } = currentNode;
+
+    if(added && dropped.value) {
+        const { element } = added;
         let newElement: NodeElement;
-        if(event.added.element.action) {
-            newElement = event.added.element;
-            newElement.parentId = props.id;
+
+        if(element.action) {
+            newElement = { ...element, parentId: props.id };
         } else {
             newElement = {
                 id: editorStore.generateId(),
                 parentId: props.id,
-                action: event.added.element,
-                formType: event.added.element.type,
-                formValues: event.added.element.formValues,
+                action: element,
+                formType: element.type,
+                formValues: element.formValues,
                 contentId: editorStore.generateContentId(),
             };
         }
-        node.data.elements.splice(event.added.newIndex, 0, newElement);
+
+        data.elements.splice(added.newIndex, 0, newElement);
         dropped.value = false;
 
-        const action = event.added.element.action ? event.added.element.action : event.added.element;
+        const action = element.action || element;
+        editorStore.addElementToPage(currentNode.id, action, added.newIndex);
+    }
 
-        editorStore.addElementToScreen(node.id, action, event.added.newIndex);
-
-    } if(event.moved) {
-        const oldIndex = event.moved.oldIndex;
-        const newIndex = event.moved.newIndex;
-        
+    if(moved) {
+        const { oldIndex, newIndex } = moved;
         editorStore.changeElementOrder(oldIndex, newIndex, props.id);
+    }
 
-    } if(event.removed) {
-        editorStore.removeElementFromScreen(event.removed.oldIndex, props.id, true);
+    if(removed) {
+        const { oldIndex } = removed;
+        editorStore.removeElementFromScreen(oldIndex, props.id, true);
     }
 }
 
 function drop() {
     dropped.value = true;
 }
-
-const isCondition = ref(node.data.type === 'condition');
-
-const dragOptions = ref({
-    group: {
-        name: 'node',
-        put: !isCondition.value,
-    },
-    filter: '.condition',
-    sort: !isCondition.value,
-    ghostClass: 'ghost',
-});
 
 function dragStart(event, element: NodeElement, index: number) {
     event.dataTransfer.dropEffect= 'move';
@@ -112,21 +124,18 @@ function closeFormPanel() {
     editorStore.closeFormPanel();
 }
 
-const isSource = computed(() => getConnectedEdges([node], edges.value).some((edge) => edge.source === props.id));
-const isTarget = computed(() => getConnectedEdges([node], edges.value).some((edge) => edge.target === props.id));
-
 </script>
 
 <template>
     <div>
         <div 
             class="container"
-            @click.exact="openPageForm(node.id, node.data.formType, node.data.formValues)"
+            @click.exact="openPageForm(currentNode.id, currentNode.data.formType, currentNode.data.formValues)"
             @click.meta="closeFormPanel"
             @click.ctrl="closeFormPanel"
             @mousedown="closeFormPanel"
         >
-            <p class="node-title" :class="{ 'active': editorStore.openedNodeId ? editorStore.openedNodeId === props.id : false }">{{ node.data.formValues?.title || 'Page' }}</p>
+            <p class="node-title" :class="{ 'active': editorStore.openedElementId ? editorStore.openedElementId === props.id : false }">{{ currentNode.data.formValues?.title || 'Page' }}</p>
             <Handle
                 :class="{ 'not-connected': !isTarget }"
                 type="target"
@@ -139,7 +148,7 @@ const isTarget = computed(() => getConnectedEdges([node], edges.value).some((edg
                 :model-value="data.elements"
                 class="node-list node"
                 item-key="id"
-                :class=" { 'active': editorStore.openedNodeId ? editorStore.openedNodeId === props.id : false }"
+                :class=" { 'active': editorStore.openedElementId ? editorStore.openedElementId === props.id : false }"
                 @change="change($event)"
                 @drop.stop="drop()"
                 @dragenter="dragEnter($event)"
@@ -151,9 +160,9 @@ const isTarget = computed(() => getConnectedEdges([node], edges.value).some((edg
                         <ContentButton
                             :key="index"
                             :icon="element.action.icon"
-                            :is-active="editorStore.openedNodeId ? editorStore.openedNodeId === element.id : false"
                             :is-draggable="!isCondition"
-                            :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true }"
+                            :is-active="editorStore.openedElementId ? editorStore.openedElementId === element.id : false"
+                            :class-list="classList"
                             @click.exact="openForm(element)"
                             @click.meta="closeFormPanel"
                             @click.ctrl="closeFormPanel"

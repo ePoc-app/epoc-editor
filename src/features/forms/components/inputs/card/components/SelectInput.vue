@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useVueFlow } from '@vue-flow/core';
 import { useEditorStore } from '@/src/shared/stores';
 
 const props = defineProps<{
@@ -14,16 +13,13 @@ const emit = defineEmits<{
     (e: 'change', value: string): void;
 }>();
 
-const { findNode } = useVueFlow({ id: 'main' });
 const editorStore = useEditorStore();
 
-const node = editorStore.openedParentId ? findNode(editorStore.openedParentId) : findNode(editorStore.openedNodeId);
-const element = node.data.elements.find(e => e.id === editorStore.openedNodeId);
+const currentNode = editorStore.getCurrentGraphNode;
+const currentElement = currentNode.data.elements.find(e => e.id === editorStore.openedElementId);
 
+const getOptions = () => props.linkedOptions ? currentElement.formValues[props.linkedOptions] : props.options;
 
-function getOptions() {
-    return props.linkedOptions ? element.formValues[props.linkedOptions] : props.options;
-}
 
 </script>
 

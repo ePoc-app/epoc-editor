@@ -18,18 +18,32 @@ const emit = defineEmits<{
 }>();
 
 const toolbar = [
-    ['bold', 'italic', 'underline', { 'list': 'ordered' }, { 'list': 'bullet' }, { 'align': null}, {'align': 'center'}, {'align': 'right'}, 'link', 'image']
+    [
+        'bold',
+        'italic',
+        'underline',
+        { 'list': 'ordered' },
+        { 'list': 'bullet' },
+        { 'align': null},
+        {'align': 'center'},
+        {'align': 'right'}, 
+        'link',
+        'image'
+    ]
 ];
 
 const modules = {
     name: 'imageUploader',
     module: ImageUploader,
     options: {
-        upload: (file) => {
-            return projectService.importFile(file.path);
-        }
+        upload: (file) => projectService.importFile(file.path)
     }
 };
+
+const qlEditor = ref(null);
+
+const content: Ref<string> = ref(null);
+    
 
 function textChange() {
     emit('input', content.value);
@@ -38,10 +52,6 @@ function textChange() {
 function initQuill() {
     content.value = props.inputValue;
 }
-
-const qlEditor = ref(null);
-
-const content: Ref<string> = ref(null);
 
 watch(
     () => props.inputValue,

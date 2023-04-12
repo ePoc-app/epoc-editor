@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import ContentButton from '@/src/components/ContentButton.vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { useVueFlow } from '@vue-flow/core';
+import ContentButton from '@/src/components/ContentButton.vue';
 
 const editorStore = useEditorStore();
 const props = defineProps<{
@@ -14,10 +14,17 @@ const props = defineProps<{
 
 const { findNode } = useVueFlow({ id: 'main' });
 
-const node = findNode(props.id);
+const currentNode = findNode(props.id);
+
+const classList = {
+    'clickable': true,
+    'btn-content-node': true,
+    'btn-content-large': true,
+};
+
 
 function openForm() {
-    editorStore.openFormPanel(node.id, node.data.formType, node.data.formValues);
+    editorStore.openFormPanel(currentNode.id, currentNode.data.formType, currentNode.data.formValues);
 }
 
 </script>
@@ -25,10 +32,10 @@ function openForm() {
 <template>
     <div>
         <ContentButton 
-            :icon="node.data.action.icon"
-            :is-active="editorStore.openedNodeId ? editorStore.openedNodeId === node.id : false"
+            :icon="currentNode.data.action.icon"
             :is-draggable="false"
-            :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true, 'btn-content-large': true }"
+            :class-list="classList"
+            :is-active="editorStore.openedElementId ? editorStore.openedElementId === currentNode.id : false"
             subtitle="ePoc"
             @click="openForm()"
             @mousedown="editorStore.closeFormPanel()"

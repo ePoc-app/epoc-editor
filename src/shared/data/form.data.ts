@@ -720,7 +720,6 @@ export const swipeForm: Form = {
         },
         {
             name: 'Explication',
-            index: 5,
             inputs: [
                 {
                     id: 'explanation',

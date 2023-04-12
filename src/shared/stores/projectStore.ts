@@ -93,7 +93,6 @@ export const useProjectStore = defineStore('project', {
                 type: 'content',
                 data: {
                     elements: contentElements,
-                    readyToDrop: false,
                     formType: 'screen',
                     formValues: {},
                     type: 'template',
@@ -126,7 +125,6 @@ export const useProjectStore = defineStore('project', {
                 type: 'content',
                 data: {
                     elements: [element],
-                    readyToDrop: false,
                     formType: 'screen',
                     formValues: {},
                     type: 'question',
@@ -138,7 +136,7 @@ export const useProjectStore = defineStore('project', {
 
             addNodes([newNode]);
 
-            editorStore.addElementToScreen(id, element.action);
+            editorStore.addElementToPage(id, element.action);
 
             // align node position after drop, so it's centered to the mouse
             nextTick(() => {
@@ -193,7 +191,6 @@ export const useProjectStore = defineStore('project', {
                 type: 'content',
                 data: {
                     type: finalType,
-                    readyToDrop: false,
                     elements: elements,
                     contentId: uid(),
                     formType: 'screen',
@@ -206,7 +203,7 @@ export const useProjectStore = defineStore('project', {
             addNodes([newNode]);
 
             actions.forEach((action) => {
-                editorStore.addElementToScreen(id, action);
+                editorStore.addElementToPage(id, action);
             });
 
             // align node position after drop, so it's centered to the mouse

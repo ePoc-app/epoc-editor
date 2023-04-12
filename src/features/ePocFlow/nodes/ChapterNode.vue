@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import ContentButton from '@/src/components/ContentButton.vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { Handle, useVueFlow, getConnectedEdges } from '@vue-flow/core';
 import { Position } from '@vue-flow/core';
 import { computed } from 'vue';
+import ContentButton from '@/src/components/ContentButton.vue';
 
 const editorStore = useEditorStore();
 
@@ -18,31 +18,40 @@ const props = defineProps<{
 
 const { findNode, nodes, edges } = useVueFlow({ id: 'main' });    
 
-const node = findNode(props.id);
-
-function openForm() {
-    editorStore.openFormPanel(node.id, node.data.formType, node.data.formValues);
-}
+const currentNode = findNode(props.id);
 
 const subtitle = computed(() => {
     const chapters = nodes.value.filter(node => node.type === 'chapter');
     const epocNode = findNode('1');
-    let label = epocNode.data.formValues.chapterParameter ? epocNode.data.formValues.chapterParameter : 'Chapitre';
-    label = label.length > 8 ? label.substring(0, 7) + '...' : label;
-    return `${label} ${chapters.findIndex(chapter => chapter.id === node.id) + 1}`;
+    const chapterParameter = epocNode?.data?.formValues?.chapterParameter || 'Chapitre';
+    const label = chapterParameter.length > 8 ? chapterParameter.substring(0, 7) + '...' : chapterParameter;
+    const chapterIndex = chapters.findIndex(chapter => chapter.id === currentNode.id) + 1;
+
+    return `${label} ${chapterIndex}`;
 });
 
-const isSource = computed(() => getConnectedEdges([node], edges.value).some((edge) => edge.sourceNode.id === props.id));
+const isSource = computed(() => getConnectedEdges([currentNode], edges.value).some((edge) => edge.sourceNode.id === props.id));
+
+const classList = {
+    'clickable': true,
+    'btn-content-node': true,
+    'btn-content-large': true,
+};
+
+
+function openForm() {
+    editorStore.openFormPanel(currentNode.id, currentNode.data.formType, currentNode.data.formValues);
+}
 
 </script>
 
 <template>
     <div>
         <ContentButton 
-            :icon="node.data.action.icon"
-            :is-active="editorStore.openedNodeId ? editorStore.openedNodeId === node.id : false"
+            :icon="currentNode.data.action.icon"
             :is-draggable="false"
-            :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true, 'btn-content-large': true }"
+            :class-list="classList"
+            :is-active="editorStore.openedElementId ? editorStore.openedElementId === currentNode.id : false"
             :subtitle="subtitle"
             @click="openForm()"
             @mousedown="editorStore.closeFormPanel()"

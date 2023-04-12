@@ -3,7 +3,7 @@
 defineProps<{
     icon: string;
     text?: string;
-    textBefore?: string;
+    position?: 'left' | 'right';
     disabled?: boolean;
 }>();
 
@@ -11,9 +11,9 @@ defineProps<{
 
 <template>
     <button class="btn btn-top-bar" :class="{ 'btn-squared': !text }" :disabled="disabled">
-        <span v-if="textBefore" class="text-top-bar zoom-span">{{ textBefore }}</span>
+        <span v-if="position === 'left'" class="text-top-bar zoom-span">{{ text }}</span>
         <i :class="icon" />
-        <span v-if="text" class="text-top-bar">{{ text }}</span>
+        <span v-if="position === 'right'" class="text-top-bar">{{ text }}</span>
     </button>
 </template>
 
