@@ -12,7 +12,11 @@ const emit = defineEmits<{
 </script>
 
 <template>
-    <button class="btn btn-form" :class="{ 'btn-delete' : label === 'Supprimer' }" @click="emit('click')">
+    <button 
+        class="btn btn-form"
+        :class="{ 'btn-delete' : label === 'Supprimer' }"
+        @click="emit('click')"
+    >
         <i :class="icon"></i>
         {{ label }}
     </button>

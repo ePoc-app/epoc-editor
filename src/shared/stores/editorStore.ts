@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
-import { ePocProject, Form, FormButton, NodeElement, PageModel, Screen, SideAction } from '@/src/shared/interfaces';
+import { ePocProject, Form, FormButton, NodeElement, PageModel, SideAction } from '@/src/shared/interfaces';
 import { nextTick, toRaw, watch } from 'vue';
-import { applyEdgeChanges, applyNodeChanges, useVueFlow } from '@vue-flow/core';
+import { applyEdgeChanges, applyNodeChanges, GraphNode, useVueFlow } from '@vue-flow/core';
 
 import { formsModel, questions, standardScreen } from '@/src/shared/data/form.data';
 
@@ -16,12 +16,12 @@ interface EditorState {
     saving: boolean;
     loadingPreview: boolean;
     exporting:boolean;
-    floatingMenu: boolean;
+    questionMenu: boolean;
     modelMenu: boolean;
     pageModels: PageModel[];
     validationModal: boolean;
     formPanel: Form;
-    openedNodeId: uid | null;
+    openedElementId: uid | null;
     openedParentId: uid | null;
     questions: SideAction[];
     standardScreens: SideAction[];
@@ -46,12 +46,12 @@ export const useEditorStore = defineStore('editor', {
         saving: false,
         loadingPreview: false,
         exporting: false,
-        floatingMenu: false,
+        questionMenu: false,
         modelMenu: false,
         pageModels: [],
         validationModal: false,
         formPanel: null,
-        openedNodeId: null,
+        openedElementId: null,
         openedParentId: null,
         questions: questions,
         standardScreens: standardScreen,
@@ -61,42 +61,36 @@ export const useEditorStore = defineStore('editor', {
     }),
     
     getters: {
-        //* These getters are used to place the separator
-        getSideActionsFirstPart(): SideAction[] {
-            return this.sideActions.slice(0, -1);
-        },
-        getSideActionsLastPart(): SideAction[] {
-            return this.sideActions.slice(-1);
-        },
-        //This function is a part of the one used in ePocStore
-        getSelectedScreens(): Screen[] {
-            return this.standardScreens;
-        },
+        getCurrentGraphNode(): GraphNode | null  {
+            const nodeId = this.openedParentId ?? this.openedElementId;
+            return findNode(nodeId);
+        }
     },
     
     actions: {
         dismissModals(): void {
-            this.floatingMenu = false;
+            this.questionMenu = false;
             this.modelMenu = false;
         },
+
         openFormPanel(id: string, formType: string, formValues, parentId?: string): void {
-            this.openedNodeId = id;
+            this.openedElementId = id;
             this.openedParentId = parentId;
-            this.formPanel = null;
+
             //? To be sure the view is notified of closing / reopening
+            this.formPanel = null;
             setTimeout(() => { 
                 this.formPanel = structuredClone(formsModel.find(form => form.type === formType));
             });
-            nodes.value.forEach((node) => {
-                if(node.id !== this.openedNodeId) {
-                    node.selected = false;
-                }
-            });
+
+            nodes.value.forEach(node => node.selected = node.id === this.openedElementId);
         },
+
         closeFormPanel(): void {
             this.formPanel = null;
-            this.openedNodeId = null;
+            this.openedElementId = null;
         },
+
         //generate id of format 'aaaaaaaa'-'aaaa'-'aaaa'-'aaaa'-'aaaaaaaaaaaa'
         generateId(): uid {
             const s4 = () => {
@@ -106,172 +100,177 @@ export const useEditorStore = defineStore('editor', {
             };
             return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
         },
+
         //return a copy of the form linked to the type
         getForm(type: string): Form {
             return structuredClone(toRaw(formsModel.find(form => form.type === type)));
         },
+
         deleteElement(id: string, parentId?: string): void {
             const nodeToDelete = findNode(id);
-            if(parentId || !nodeToDelete){
-                const parentNode = findNode(parentId ? parentId : this.openedParentId);
+
+            if(parentId || !nodeToDelete) {
+                const parentNode = findNode(parentId ?? this.openedParentId);
                 if(parentNode) {
                     parentNode.data.elements.forEach((value, index) => {
                         if(value.id === id) {
-                            this.removeElementFromScreen(index, parentId ? parentId : this.openedParentId);
+                            this.removeElementFromScreen(index, parentId ?? this.openedParentId);
                         }
                     });
                 }
             } else {
-                applyNodeChanges(
-                    [{ id: nodeToDelete.id, type: 'remove' }],
-                    nodes.value
-                );
+                applyNodeChanges([{ id: nodeToDelete.id, type: 'remove' }], nodes.value);
+
                 if(nodeToDelete.type === 'chapter') {
                     const chapters = nodes.value.filter(node => node.type === 'chapter');
-                    for(const chapter of chapters) {
-                        if(chapter.id > nodeToDelete.id) {
-                            chapter.position = {x: 0, y: chapter.position.y - 200};
-                            chapter.data.title = 'Chapitre ' + (Number(chapter.data.title.split(' ')[1]) - 1);
-                        }
-                    }
+                    chapters.forEach(chapter => {
+                        if(chapter.id <= nodeToDelete.id) return;
+                        
+                        chapter.position = { x: 0, y: chapter.position.y - 200 };
+                        chapter.data.title = `Chapitre ${Number(chapter.data.title.split(' ')[1]) - 1}`;
+                    });
                 }
             }
             this.closeFormPanel();
         },
-        isNodeDeletable(id: string) {
-            return id !== '1' && id !== '2';
-        },
-        deleteSelectedNodes(): void {
-            const selectedNodes = nodes.value.filter(node => node.selected && node.id !== '1' && node.id !== '2');
-            const isChild = Boolean(this.openedParentId);
 
-            //? ChapterNode can't be selected but can be active
-            const activeNode = isChild ? findNode(this.openedParentId) : findNode(this.openedNodeId);
-            if (activeNode && (activeNode.id !== '1' && activeNode.id !== '2')) {
-                selectedNodes.push(activeNode);
-            }
+        isNodeDeletable(id: string): boolean {
+            const undeletableIds= ['1', '2'];
+            return !undeletableIds.includes(id);
+        },
+
+        deleteSelectedNodes(): void {
+            const selectedNodes = nodes.value.filter(node => node.selected && this.isNodeDeletable(node.id));
+            const isChild = Boolean(this.openedParentId);
             
+            //? Chapter nodes can't be selected but can be active
+            const activeNode = isChild ? findNode(this.openedParentId) : findNode(this.openedElementId);
+            if(activeNode && this.isNodeDeletable(activeNode.id)) selectedNodes.push(activeNode);
+
             if(isChild) {
-                this.deleteElement(this.openedNodeId, this.openedParentId);
+                this.deleteElement(this.openedElementId, this.openedParentId);
             } else {
-                for(const node of selectedNodes) {
-                    this.deleteElement(node.id);
-                }
+                selectedNodes.forEach(node => this.deleteElement(node.id));
             }
             this.validationModal = false;
         },
+
         deleteValidation(): void {
-            const selectedNodes = nodes.value.filter(node => node.selected && node.id !== '1' && node.id !== '2');
+            const selectedNodes = nodes.value.filter(node => node.selected && this.isNodeDeletable(node.id));
             const isChild = Boolean(this.openedParentId);
-            
-            //? ChapterNode can't be selected but can be active
-            const activeNode = isChild ? findNode(this.openedParentId) : findNode(this.openedNodeId);
-            if (activeNode && (activeNode.id !== '1' && activeNode.id !== '2')) {
-                selectedNodes.push(activeNode);
-            }
-            
+
+            //? Chapter nodes can't be selected but can be active
+            const activeNode = isChild ? findNode(this.openedParentId) : findNode(this.openedElementId);
+            if(activeNode && this.isNodeDeletable(activeNode.id)) selectedNodes.push(activeNode);
+
+            const selectedEdges = edges.value.filter(edge => edge.selected);
 
             if(selectedNodes.length > 0 || isChild) {
                 this.validationModal = true;
-            } else {
-                const selectedEdges = edges.value.filter(edge => edge.selected);
-                for(const edge of selectedEdges) {  
-                    applyEdgeChanges(
-                        [{ id: edge.id, type: 'remove' }],
-                        edges.value
-                    );
-                }
+            } else if(selectedEdges.length > 0) {
+                selectedEdges.forEach(edge => {
+                    applyEdgeChanges([{ id: edge.id, type: 'remove' }], edges.value);
+                });
             }
         },
-        addElementToScreen(nodeId: string, action: SideAction, index?: number) {
+
+        addElementToPage(nodeId: string, action: SideAction, index?: number): void {
             const node = findNode(nodeId);
-            //? can be 0 
+
+            if(!node.data.formValues.components) node.data.formValues.components = [];
+
             if(index !== undefined) {
-                node.data.formValues.components.splice(index, 0, { action: action });
-            }
-            else {
-                if(!node.data.formValues.components) {
-                    node.data.formValues.components = [];
-                }
-                node.data.formValues.components.push({ action: action });
+                node.data.formValues.components.splice(index, 0, { action });
+            } else {
+                node.data.formValues.components.push({ action });
             }
         },
+
         //? The parameter nodeMoved is used when openedParentId is not usable
         removeElementFromScreen(index: number, parentNodeId, nodeMoved?: boolean): void {
             this.closeFormPanel();
+
             const node = findNode(parentNodeId);
-            
             node.data.elements.splice(index, 1);
 
             if(this.openedParentId || nodeMoved) {
                 node.data.formValues.components.splice(index, 1);
             }
 
-            if(node.data.elements.length === 0) {
+            if(!node.data.elements.length) {
                 this.deleteElement(parentNodeId);
             }
         },
+
         changeElementOrder(startIndex: number, finalIndex: number, parentNodeId: string): void {
             const node = findNode(parentNodeId);
 
-            const tmpElem = node.data.elements[startIndex];
-            node.data.elements.splice(startIndex, 1);
+            const [tmpElem] = node.data.elements.splice(startIndex, 1);
             node.data.elements.splice(finalIndex, 0, tmpElem);
 
-            const tmpValues = node.data.formValues.components[startIndex];
-            node.data.formValues.components.splice(startIndex, 1);
+            const [tmpValues] = node.data.formValues.components.splice(startIndex, 1);
             node.data.formValues.components.splice(finalIndex, 0, tmpValues);
         },
+
         undo() {
             // @todo
             console.log('todo undo', this.undoStack.length);
         },
+
         redo() {
             // @todo
             console.log('todo redo');
         },
-        generateContentId() {
+
+        generateContentId(): string {
             const firstNumber = (Math.random() * 46656) | 0;
             const secondNumber = (Math.random() * 46656) | 0;
             const firstPart = ('000' + firstNumber.toString(36)).slice(-3);
             const secondPart = ('000' + secondNumber.toString(36)).slice(-3);
             return firstPart + secondPart;
         },
+
         getFormButtons(): FormButton[] {
             const buttons: FormButton[] = [];
-            if(this.formPanel.type !== 'epoc') {
-                buttons.push({ label: 'Supprimer',icon: 'icon-supprimer',action: 'delete'});
-                if(this.formPanel.type !== 'chapter') {
-                    const isChild = Boolean(this.openedParentId);
-                    if(!isChild) {
-                        buttons.push({ label: 'Dupliquer la page', icon: 'icon-plus', action: 'duplicate-screen' });
-                        buttons.push({ label: 'Lancer l\'aperçu ici', icon: 'icon-play', action: 'launch-preview' });
-                        buttons.push({ label: 'Sauvegarder le modèle', icon: 'icon-modele', action: 'save-model' });
-                    } else {
-                        buttons.push({ label: 'Revenir à la page', icon: 'icon-ecran', action: 'open-page' });
+            
+            if(this.formPanel.type === 'epoc') return buttons;
 
-                        //? This is temporary
-                        if(this.formPanel.type !== 'text' && this.formPanel.type !== 'video') {
-                            buttons.push({ label: 'Dupliquer l\'élément', icon: 'icon-plus', action: 'duplicate-element' });
-                        }
-                    }
-                }
+            buttons.push({ label: 'Supprimer',icon: 'icon-supprimer',action: 'delete' });
+
+            if(this.formPanel.type === 'chapter') return buttons;
+
+            const isChild = Boolean(this.openedParentId);
+
+            if(!isChild) {
+                buttons.push(
+                    { label: 'Dupliquer la page', icon: 'icon-plus', action: 'duplicate-screen' },
+                    { label: 'Lancer l\'aperçu ici', icon: 'icon-play', action: 'launch-preview' },
+                    { label: 'Sauvegarder le modèle', icon: 'icon-modele', action: 'save-model' }
+                );
+            } else {
+                buttons.push(
+                    { label: 'Revenir à la page', icon: 'icon-back', action: 'back-to-screen' },
+                    { label : 'Dupliquer l\'élément', icon: 'icon-plus', action: 'duplicate-element' },
+                );
             }
+
             return buttons;
         },
+
         savePageModel(model: SideAction[]): boolean {
             const modelExist = this.pageModels.some(pageModel => JSON.stringify(pageModel.actions) === JSON.stringify(model));
             if(modelExist) return false;
             this.pageModels.push({ actions: model });
             return true;
         },
-        openPage() {
+
+        openPage(): void {
             const parentNode = findNode(this.openedParentId);
             this.openFormPanel(parentNode.id, parentNode.data.formType, parentNode.data.formValues);
         },
-        duplicateScreen() {
-            const node = findNode(this.openedNodeId);
 
+        duplicateScreen(): void {
+            const node = findNode(this.openedElementId);
             const newElements = [];
 
             const nodeId = this.generateId();
@@ -283,70 +282,57 @@ export const useEditorStore = defineStore('editor', {
                 newElements.push(newElement);
             }
 
-
             const newNode = {
                 id: nodeId,
                 type: node.type,
                 position: { x: node.position.x + 150, y: node.position.y },
                 data: {
                     elements: newElements,
-                    readyToDrop: false,
                     formType: 'screen',
                     formValues: JSON.parse(JSON.stringify(toRaw(node.data.formValues))),
                     type: node.data.type,
                     contentId: this.generateContentId(),
-                    deletable: false
-                },
+                    // deletable: false,
+                }
             };
 
             addNodes([newNode]);
             this.closeFormPanel();
         },
-        duplicateElement() {
+
+        duplicateElement(): void {
             const node = findNode(this.openedParentId);
+            const element = node.data.elements.find(element => element.id === this.openedElementId);
 
-            const element = node.data.elements.find(element => element.id === this.openedNodeId);
-            
-            //! Structured Clone create error 
-            // const newElement = structuredClone(toRaw(element));
             const newElement = JSON.parse(JSON.stringify(toRaw(element)));
-
-            console.log('new Element', newElement);
-
             newElement.id = this.generateId();
             newElement.parentId = node.id;
 
             node.data.elements.push(newElement);
-            this.addElementToScreen(node.id, newElement.action);
+            this.addElementToPage(node.id, newElement.action);
         },
-        addNewPage(type: string, pos: { x: number, y: number }) {
-            const types = standardScreen.concat(questions);
 
-            const elements: NodeElement[] = [];
+        addNewPage(type: string, pos: { x: number, y: number }): void {
+            const types = standardScreen.concat(questions);
             const id = this.generateId();
 
-            elements.push({
+            const elements: NodeElement[] = [{
                 id: this.generateId(),
                 action: types.find((value) => value.type === type),
                 formType: type,
                 formValues: {},
                 parentId: id,
                 contentId: this.generateContentId(),
-            });
+            }];
 
             const { left, top } = vueFlowRef.value.getBoundingClientRect();
-
-            const position = project({
-                x: pos.x - left,
-                y: pos.y - top,
-            });
+            const position = project({ x: pos.x - left, y: pos.y - top });
 
             const newNode = {
-                id: id,
+                id,
                 type: 'content',
-                data: { type: type, readyToDrop: false, elements: elements, formType: 'screen', formValues: {}, contentId: id },
-                position: position,
-                deletable: false
+                position,
+                data: { type, elements, formType: 'screen', formValues: {}, contentId: id } ,
             };
 
             addNodes([newNode]);
@@ -365,7 +351,7 @@ export const useEditorStore = defineStore('editor', {
                 );
             });
 
-            this.addElementToScreen(id, elements[0].action);
+            this.addElementToPage(id, elements[0].action);
         }
     }
 });

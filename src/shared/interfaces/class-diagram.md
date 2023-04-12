@@ -1,5 +1,5 @@
 
-## Data structure in the menu bar
+<!-- ## Data structure in the menu bar
 ```mermaid
 classDiagram
   Screen -- SideAction : 1..*
@@ -28,4 +28,4 @@ classDiagram
   Field -- Card: 0..*
   Card -- Input: 1..*
 
-```
+``` -->

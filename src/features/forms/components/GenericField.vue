@@ -2,7 +2,6 @@
 import { Input } from '@/src/shared/interfaces';
 import GenericInput from './inputs/GenericInput.vue';
 import { useEditorStore } from '@/src/shared/stores';
-import { useVueFlow } from '@vue-flow/core';
 import { projectService } from '@/src/shared/services';
 
 defineProps<{
@@ -12,88 +11,90 @@ defineProps<{
     displayFieldIndex: boolean;
 }>();
 
-const { findNode } = useVueFlow({ id:'main' });
-
 const editorStore = useEditorStore();
 
-const node = editorStore.openedParentId ? findNode(editorStore.openedParentId) : findNode(editorStore.openedNodeId);
+const currentNode = editorStore.getCurrentGraphNode;
 
-function onInput(value, id) {
-    if(editorStore.openedParentId) {
-        const element = node.data.elements.find(element => element.id === editorStore.openedNodeId);
-        element.formValues[id] = value;        
-    } else {
-        node.data.formValues[id] = value;
-    }
-
-    projectService.writeProjectData();
-}
-
-function onRepeatInput(value, id) {
-    let element = null;
-    if(editorStore.openedParentId) {
-        element = node.data.elements.find(element => element.id === editorStore.openedNodeId);
-    }
-
-    if(value.type === 'add') {
-        if(element) {
-            if(!element.formValues[id]) element.formValues[id] = [];
-
-            element.formValues[id].push(value.defaultValues);
-        } else {
-            if(!node.data.formValues[id]) node.data.formValues[id] = [];
-
-            node.data.formValues[id].push(value.defaultValues);
-        }
-    } else if(value.type === 'remove') {
-        element ? element.formValues[id].splice(value.index, 1) : node.data.formValues[id].splice(value.index, 1);
-
-        if (node.data.elements && node.data.elements[value.index] && !editorStore.openedParentId) {
-            const nodeToDelete = node.data.elements[value.index];
-            editorStore.deleteElement( nodeToDelete.id, nodeToDelete.parentId);
-        }
-    } else if(value.type === 'move') {
-        if (node.data.elements && !editorStore.openedParentId) {
-            editorStore.changeElementOrder(value.oldIndex, value.newIndex, node.id);
-        } else {
-            if(element) {
-                const item = element.formValues[id].splice(value.oldIndex, 1);
-                element.formValues[id].splice(value.newIndex, 0, item[0]);
-            } else {
-                const tmp = node.data.formValues[id][value.oldIndex];
-                node.data.formValues[id][value.oldIndex] = node.data.formValues[id][value.newIndex];
-                node.data.formValues[id][value.newIndex] = tmp;
-            }
-        }
-    } else if(value.type === 'change') {
-        if(value.id === '') {
-            element ? element.formValues[id][value.index] = value.value : node.data.formValues[id][value.index] = value.value;
-        } else {
-            if(element) {
-                if(!element.formValues[id]) element.formValues[id] = {};
-                if(!element.formValues[id][value.index]) element.formValues[id][value.index] = {};
-                
-                element.formValues[id][value.index][value.id] = value.value; 
-            } else {
-                if(!node.data.formValues[id][value.index]) node.data.formValues[id][value.index] = {};
+const getInputValue = (input) => {
+    const formValues = editorStore.openedParentId
+        ? (currentNode.data.elements.find(e => e.id === editorStore.openedElementId)?.formValues ?? {})
+        : currentNode.data.formValues;
     
-                node.data.formValues[id][value.index][value.id] = value.value;
-            }
-        }
-    }
+    return formValues[input.id] ?? input.value;
+};
+
+
+function onInput(value: string, id: string) {
+    const element = editorStore.openedParentId
+        ? currentNode.data.elements.find(e => e.id === editorStore.openedElementId)
+        : currentNode.data;
+    
+    element.formValues[id] = value;
     projectService.writeProjectData();
 }
 
-function getInputValue(input) {
-    if(editorStore.openedParentId) {
-        const element = node.data.elements.find(element => element.id === editorStore.openedNodeId);
+function onRepeatInput(value, id: string) {
+    const element = editorStore.openedParentId
+        ? currentNode.data.elements.find(e => e.id === editorStore.openedElementId)
+        : null;
+    
+    
+    switch(value.type) {
 
-        if(!element.formValues) element.formValues = {};
+    case 'add':
+    {
+        const formValues = element ? element.formValues : currentNode.data.formValues;
+        if(!formValues[id]) formValues[id] = [];
+        formValues[id].push(value.defaultValues);
 
-        return element.formValues[input.id] ? element.formValues[input.id] : input.value;
-    } else {
-        return node.data.formValues[input.id] ? node.data.formValues[input.id] : input.value;
+        break;
     }
+
+    case 'remove':
+    {
+        const formValues = element ? element.formValues[id] : currentNode.data.formValues[id];
+        formValues.splice(value.index, 1);
+
+        const currentElement = currentNode.data.elements?.[value.index];
+        if(!editorStore.openedParentId && currentElement) {
+            editorStore.deleteElement(currentElement.id, currentElement.parentId);
+        }
+
+        break;
+    }
+
+    case 'move':
+        if(currentNode.data.elements && !editorStore.openedParentId) {
+            editorStore.changeElementOrder(value.oldIndex, value.newIndex, currentNode.id);
+        } else {
+            const items = element ? element.formValues[id] : currentNode.data.formValues[id];
+            const item = items.splice(value.oldIndex, 1);
+            items.splice(value.newIndex, 0, item[0]);
+        }
+
+        break;
+    
+    case 'change':
+    {
+        const formValues = element ? element.formValues : currentNode.data.formValues;
+
+        if(value.id === '') {
+            formValues[value.index] = value.value;
+        } else {
+            if(!formValues[id]) formValues[id] = {};
+            if(!formValues[id][value.index]) formValues[id][value.id] = {};
+
+            formValues[id][value.index][value.id] = value.value;
+        }
+
+        break;
+    }
+    
+    default: break;
+    }
+
+    projectService.writeProjectData();
+
 }
 
 </script>

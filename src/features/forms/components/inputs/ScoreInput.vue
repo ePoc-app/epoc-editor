@@ -9,13 +9,13 @@ const emit = defineEmits<{
 }>();
 
 function minus(inputValue: string) {
-    const value = parseInt(inputValue) - 1;
-    emit('input', value.toString());
+    const value = Number(inputValue) - 1;
+    emit('input', `${value}`);
 }
 
 function plus(inputValue: string) {
-    const value = parseInt(inputValue) + 1;
-    emit('input', value.toString());
+    const value = Number(inputValue) + 1;
+    emit('input', `${value}`);
 }
 
 </script>

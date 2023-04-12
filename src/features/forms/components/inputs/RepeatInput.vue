@@ -4,8 +4,6 @@ import GenericInput from './GenericInput.vue';
 import AddCard from './card/AddCard.vue';
 import { Input } from '@/src/shared/interfaces';
 import { ref } from 'vue';
-import { useVueFlow } from '@vue-flow/core';
-
 
 const props = defineProps<{
     inputs: Input[];
@@ -19,11 +17,21 @@ const emit = defineEmits<{
     (e: 'change', value: object | string): void;
 }>();
 
-const { findNode } = useVueFlow({ id: 'main' });
 const editorStore = useEditorStore();
 
-const node = editorStore.openedParentId ? findNode(editorStore.openedParentId) : findNode(editorStore.openedNodeId);
-const disabled = node.data.type === 'template';
+const currentNode = editorStore.getCurrentGraphNode;
+const disabled = currentNode.data.type === 'template';
+
+const drag = ref(false);
+
+const dragOptions = {
+    animation: 200,
+    group: 'cards',
+    disabled: false,
+    ghostClass: 'ghost',
+};
+
+const isLast = (index) => props.inputValues.length - 1 === index;
 
 function onInput(value, id, index) {
     emit('change', {
@@ -35,15 +43,16 @@ function onInput(value, id, index) {
 }
 
 function addCard() {
-    emit('change', {
-        type: 'add',
-        defaultValues: props.inputs.length === 1 ? props.inputs[0].value : {
-            ...props.inputs.reduce((defaultValues, input) => {
-                defaultValues[input['id']] = input['type'] === 'hidden' ? editorStore.generateContentId() : input['value'];
-                return defaultValues;
-            }, {})
-        }
-    });
+    const defaultValues = props.inputs.length === 1 
+        ? props.inputs[0].value 
+        : props.inputs.reduce((defaultValues, input) => {
+            defaultValues[input.id] = input.type === 'hidden'
+                ? editorStore.generateContentId()
+                : input.value;
+            return defaultValues;
+        }, {});
+    
+    emit('change', { type: 'add', defaultValues });
 }
 
 function removeCard(index) {
@@ -79,23 +88,12 @@ function onCheck(value, id, index) {
     });
 }
 
-function isLast(index) {
-    return props.inputValues.length - 1 === index;
-}
-
-const dragOptions = {
-    animation: 200,
-    group: 'cards',
-    disabled: false,
-    ghostClass: 'ghost',
-};
-
-const drag = ref(false);
-
 function onClick(index, action) {
-    if (node.data.elements && node.data.elements[index] && action) {
-        const element = node.data.elements[index];
-        editorStore.openFormPanel(element.id, element.formType, element.formValues, element.parentId);
+    const element = currentNode.data.elements?.[index];
+
+    if(element && action) {
+        const { id, formType, formValues, parentId } = element;
+        editorStore.openFormPanel(id, formType, formValues, parentId);
     }
 }
 
@@ -134,7 +132,11 @@ function dragOver(event) {
     >
         <template #item="{ element, index }">
             <div :key="index" class="card draggable-card">
-                <div class="card-header" :class="{ 'border-bottom': inputs.length >= 1, 'clickable': element.action }" @click="onClick(index, element.action)">
+                <div 
+                    class="card-header" 
+                    :class="{ 'border-bottom': inputs.length >= 1, 'clickable': element.action }" 
+                    @click="onClick(index, element.action)"
+                >
                     <div v-if="element.action" class="component-container">
                         <div class="form-icon"><i :class="element.action.icon"></i></div>
                         <h3>{{ element.action.label }}</h3>

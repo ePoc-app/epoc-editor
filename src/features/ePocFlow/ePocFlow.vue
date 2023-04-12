@@ -76,9 +76,9 @@ function update(event) {
 }
 
 function nodeChange(event) {
-    if(event[0].type === 'remove') {
-        editorStore.closeFormPanel();
-    }
+    const { type } = event[0];
+
+    if(type === 'remove') editorStore.closeFormPanel();
 }
 
 function onDragOver() {
@@ -158,9 +158,3 @@ function connect(event) {
         </template>
     </VueFlow>
 </template>
-
-<style scoped lang="scss">
-.node {
-    margin: auto;
-}
-</style>

@@ -4,19 +4,16 @@ import FormButton from './components/FormButton.vue';
 import GenericField from './components/GenericField.vue';
 import { Input } from '@/src/shared/interfaces';
 import { projectService, editorService } from '@/src/shared/services';
-import { useVueFlow } from '@vue-flow/core';
 import { createToaster } from '@meforma/vue-toaster';
+
+const editorStore = useEditorStore();
 
 const toaster = createToaster({
     duration: 1000,
     queue: true
 });
 
-const editorStore = useEditorStore();
-
-const { findNode } = useVueFlow({ id: 'main' });
-
-const node = editorStore.openedParentId ? findNode(editorStore.openedParentId) : findNode(editorStore.openedNodeId);
+const currentNode = editorStore.getCurrentGraphNode;
 
 function actionOnForm(action: string) {
     switch (action) {
@@ -42,7 +39,7 @@ function actionOnForm(action: string) {
         break;
 
     case 'save-model':
-        if(editorStore.savePageModel(node.data.elements.map((element) => element.action))) toaster.success('Modèle sauvegardé 👌');
+        if(editorStore.savePageModel(currentNode.data.elements.map((element) => element.action))) toaster.success('Modèle sauvegardé 👌');
         else toaster.error('Le modèle existe déjà 🤔');
         break;
     }

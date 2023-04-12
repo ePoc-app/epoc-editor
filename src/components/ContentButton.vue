@@ -2,11 +2,10 @@
 
 defineProps<{
     icon: string;
-    classList: object;
-    isActive: boolean;
     isDraggable: boolean;
+    classList?: object;
     subtitle?: string;
-    isBlue?: boolean
+    isActive?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -21,8 +20,8 @@ function click(event) {
 <template>
     <div
         class="btn btn-content"
-        :class="[classList, { active: isActive }, { 'draggable': isDraggable }, { 'btn-content-blue': isBlue }]"
-        :draggable="isDraggable"
+        :class="[classList, { 'draggable': isDraggable }, { 'active': isActive }]"
+        :draggable="isDraggable"    
         @click.stop="click($event)"
     >
         <i :class="icon" />
