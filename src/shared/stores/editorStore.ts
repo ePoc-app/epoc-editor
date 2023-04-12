@@ -102,11 +102,13 @@ export const useEditorStore = defineStore('editor', {
             const nodeToDelete = findNode(id);
             if(parentId || !nodeToDelete){
                 const parentNode = findNode(parentId ? parentId : this.openedParentId);
-                parentNode.data.elements.forEach((value, index) => {
-                    if(value.id === id) {
-                        this.removeElementFromScreen(index, parentId ? parentId : this.openedParentId);
-                    }
-                });
+                if(parentNode) {
+                    parentNode.data.elements.forEach((value, index) => {
+                        if(value.id === id) {
+                            this.removeElementFromScreen(index, parentId ? parentId : this.openedParentId);
+                        }
+                    });
+                }
             } else {
                 applyNodeChanges(
                     [{ id: nodeToDelete.id, type: 'remove' }],
@@ -125,7 +127,6 @@ export const useEditorStore = defineStore('editor', {
             this.closeFormPanel();
         },
         isNodeDeletable(id: string) {
-            console.log('testing if deletable');
             return id !== '1' && id !== '2';
         },
         deleteSelectedNodes(): void {
@@ -138,12 +139,12 @@ export const useEditorStore = defineStore('editor', {
                 selectedNodes.push(activeNode);
             }
             
-
-            for(const node of selectedNodes) {
-                this.deleteElement(node.id);
-            }
             if(isChild) {
                 this.deleteElement(this.openedNodeId, this.openedParentId);
+            } else {
+                for(const node of selectedNodes) {
+                    this.deleteElement(node.id);
+                }
             }
             this.validationModal = false;
         },
