@@ -107,7 +107,6 @@ export const useEditorStore = defineStore('editor', {
             // @todo
             console.log('todo redo');
         },
-
         savePageModel(model: SideAction[]): boolean {
             const modelExist = this.pageModels.some(pageModel => JSON.stringify(pageModel.actions) === JSON.stringify(model));
             if(modelExist) return false;
