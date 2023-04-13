@@ -156,7 +156,7 @@ function closeFormPanel() {
                 @dragleave="dragLeave($event)"
             >
                 <template #item="{ element, index }">
-                    <div :class="{ 'condtion': !isCondition }">
+                    <div :class="{ 'condition': isCondition }">
                         <ContentButton
                             :key="index"
                             :icon="element.action.icon"
