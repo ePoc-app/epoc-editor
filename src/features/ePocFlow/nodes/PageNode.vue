@@ -195,7 +195,7 @@ function removeHoverEffect() {
                 @dragleave="dragLeave"
             >
                 <template #item="{ element, index }">
-                    <div :class="{ 'condtion': !isCondition }">
+                    <div :class="{ 'condition': isCondition }">
                         <ContentButton
                             :key="index"
                             :icon="element.action.icon"
