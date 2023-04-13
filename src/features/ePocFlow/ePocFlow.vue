@@ -8,8 +8,9 @@ import { useEditorStore, useGraphStore } from '@/src/shared/stores';
 import ChapterNode from './nodes/ChapterNode.vue';
 import ePocNode from './nodes/ePocNode.vue';
 import AddChapterNode from './nodes/AddChapterNode.vue';
-import { NodeElement, SideAction } from '@/src/shared/interfaces';
+import { EdgeAction, NodeElement, SideAction } from '@/src/shared/interfaces';
 import { addPage, createPageFromContent, removeContentFromPage } from '@/src/shared/services/graph';
+import { useUndoRedoStore } from '@/src/shared/stores/undoRedoStore';
 
 const { vueFlowRef, project, updateEdge, edges, nodes, findNode }  = useVueFlow({ id: 'main' });
 
@@ -149,6 +150,19 @@ function nodeDrag(event) {
     }
 }
 
+function edgesChange(event) {
+    return;
+    // const { type, item } = event[0];    
+    
+    // if(type === 'add') {
+    //     const edgeAction: EdgeAction = {
+    //         type: 'edgeAdded',
+    //         edge: JSON.stringify(item),
+    //     };
+    //     undoRedoStore.addAction(edgeAction);
+    // }
+}
+
 </script>
 
 <template>
@@ -165,6 +179,7 @@ function nodeDrag(event) {
         :snap-to-grid="true"
         :snap-grid="[16, 16]"
         @edge-update="update"
+        @edges-change="edgesChange"
         @nodes-change="nodeChange"
         @node-drag="nodeDrag"
         @selection-start="selectionStart"
