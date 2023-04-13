@@ -210,7 +210,6 @@ hr {
 }
 
 .node {
-  padding: 1rem;
   min-width: 62px;
   min-height: 62px;
   background-color: var(--node);
@@ -219,6 +218,7 @@ hr {
   transition: all .15s ease-in-out;
   
   &-list {
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     gap: .5rem;

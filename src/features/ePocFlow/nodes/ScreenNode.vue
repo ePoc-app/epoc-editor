@@ -133,41 +133,36 @@ const isTarget = computed(() => getConnectedEdges([node], edges.value).some((edg
                 :position="Position.Left"
                 :connectable="false"
             />
-            <div
+            <VueDraggable
+                v-bind="dragOptions"
                 :id="'node'+ props.id"
+                :model-value="data.elements"
+                class="node-list node"
+                item-key="id"
                 :class=" { 'active': editorStore.openedNodeId ? editorStore.openedNodeId === props.id : false }"
-                class="node"
+                @change="change($event)"
+                @drop.stop="drop()"
+                @dragenter="dragEnter($event)"
                 @dragover="dragOver($event)"
                 @dragleave="dragLeave($event)"
-                @dragenter="dragEnter($event)"
             >
-                <VueDraggable
-                    :model-value="data.elements"
-                    v-bind="dragOptions"
-                    class="node-list"
-                    item-key="id"
-                    @change="change($event)"
-                    @mousedown.stop
-                    @drop.stop="drop()"
-                    @dragenter="dragEnter($event)"
-                >
-                    <template #item="{ element, index }">
-                        <div :class="{ 'question-item': !isQuestion }">
-                            <ContentButton
-                                :key="index"
-                                :icon="element.action.icon"
-                                :is-active="editorStore.openedNodeId ? editorStore.openedNodeId === element.id : false"
-                                :is-draggable="isQuestion"
-                                :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true }"
-                                @click.exact="openForm(element)"
-                                @click.meta="closeFormPanel"
-                                @click.ctrl="closeFormPanel"
-                                @dragstart="dragStart($event, element, index)"
-                            />
-                        </div>
-                    </template>
-                </VueDraggable>
-            </div>
+                <template #item="{ element, index }">
+                    <div :class="{ 'question-item': !isQuestion }">
+                        <ContentButton
+                            :key="index"
+                            :icon="element.action.icon"
+                            :is-active="editorStore.openedNodeId ? editorStore.openedNodeId === element.id : false"
+                            :is-draggable="isQuestion"
+                            :class-list="{ 'btn-content-blue' : false, 'clickable': true, 'btn-content-node': true }"
+                            @click.exact="openForm(element)"
+                            @click.meta="closeFormPanel"
+                            @click.ctrl="closeFormPanel"
+                            @mousedown.stop
+                            @dragstart="dragStart($event, element, index)"
+                        />
+                    </div>
+                </template>
+            </VueDraggable>
             <Handle
                 type="source"
                 :class="{ 'not-connected': !isSource }"
@@ -179,6 +174,12 @@ const isTarget = computed(() => getConnectedEdges([node], edges.value).some((edg
 </template>
 
 <style scoped lang="scss">
+
+.node.hover:has(.ghost) {
+    &.node-list {
+        padding: 1.5rem;
+    }
+}
 
 .vue-flow__handle {
     width: 12px;
