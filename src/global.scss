@@ -234,8 +234,7 @@ hr {
   background-color: var(--node);
   border-radius: 8px;
   border: 1px solid var(--border);
-  transition: all .15s ease-in-out;
-  
+  transition: all .15s ease-in-out;  
   &-list {
     padding: 1rem;
     display: flex;
