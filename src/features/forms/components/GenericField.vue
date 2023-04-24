@@ -77,9 +77,8 @@ function onRepeatInput(value, id: string) {
     case 'change':
     {
         const formValues = element ? element.formValues : currentNode.data.formValues;
-
         if(value.id === '') {
-            formValues[value.index] = value.value;
+            formValues[id][value.index] = value.value;
         } else {
             if(!formValues[id]) formValues[id] = {};
             if(!formValues[id][value.index]) formValues[id][value.id] = {};
