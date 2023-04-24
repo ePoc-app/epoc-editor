@@ -34,6 +34,7 @@ const classList = {
 const isCondition = ref(currentNode.data.type === 'condition');
 
 const dragOptions = ref({
+    animation: 200,
     group: {
         name: 'node',
         put: !isCondition.value,
@@ -156,7 +157,7 @@ function closeFormPanel() {
                 @dragleave="dragLeave($event)"
             >
                 <template #item="{ element, index }">
-                    <div :class="{ 'condition': isCondition }">
+                    <div :key="index" class="node-item" :class="{ 'condition': isCondition }">
                         <ContentButton
                             :key="index"
                             :icon="element.action.icon"
@@ -223,5 +224,10 @@ function closeFormPanel() {
     &.active {
         color: var(--editor-blue);
     }
+}
+
+.node-item {
+    transition: all .2s linear;
+    transition: text .2s linear;
 }
 </style>
