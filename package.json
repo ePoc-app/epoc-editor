@@ -17,6 +17,7 @@
     "build": "vue-tsc --noEmit && cross-env ELECTRON=true vite build && npm run electron:builder",
     "build-all": "npm run build -- -- --linux deb --win nsis --mac zip",
     "test": "vitest",
+    "e2e": "npx playwright test --workers=1",
     "coverage": "vitest --coverage",
     "wdio": "wdio run ./wdio.conf.ts",
     "lint": "npx eslint ./src ./test ./electron/* --ext .ts,.vue,.js",

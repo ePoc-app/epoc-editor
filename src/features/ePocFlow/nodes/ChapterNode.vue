@@ -46,7 +46,7 @@ function openForm() {
 </script>
 
 <template>
-    <div>
+    <div :id="id">
         <ContentButton 
             :icon="currentNode.data.action.icon"
             :is-draggable="false"

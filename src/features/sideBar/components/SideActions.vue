@@ -55,6 +55,7 @@ function showTemplateMenu() {
         <template #item="{ element, index }">
             <div>
                 <ContentButton
+                    :id="element.type"
                     :key="index"
                     v-tippy="{content: element.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
                     :icon="element.icon"

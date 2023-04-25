@@ -70,7 +70,8 @@ export const useProjectStore = defineStore('project', {
                 };
             }
             const newChapter: Node = {
-                id: (nodes.value.length + 1).toString(),
+                //? First 2 are for the epoc and the add button
+                id: (chapters.length + 3).toString(),
                 type: 'chapter',
                 position: {x: 0, y: (chapters.length + 1) * 200},
                 data,

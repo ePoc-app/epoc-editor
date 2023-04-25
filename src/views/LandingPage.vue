@@ -28,11 +28,11 @@ function createProject() {
         </div>
         <div v-if="!editorStore.loading">
             <div class="buttons">
-                <button class="btn btn-outline btn-large" @click="pickProject">
+                <button id="pick-button" class="btn btn-outline btn-large" @click="pickProject">
                     <i class="icon-ouvrir" />
                     Ouvrir un projet existant
                 </button>
-                <button class="btn btn-outline btn-large" @click="createProject">
+                <button id="pick-button" class="btn btn-outline btn-large" @click="createProject">
                     <i class="icon-creer" />
                     Créer un nouveau projet
                 </button>

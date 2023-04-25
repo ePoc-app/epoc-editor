@@ -104,7 +104,7 @@ function onClick(index, action) {
         @end="dragging = false"
     >
         <template #item="{ element, index }">
-            <div :key="index" class="card draggable-card">
+            <div :key="index" class="card draggable-card" :class="label">
                 <div 
                     class="card-header" 
                     :class="{ 'border-bottom': inputs.length >= 1, 'clickable': element.action }" 
