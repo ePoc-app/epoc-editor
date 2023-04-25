@@ -22,11 +22,11 @@ function actionOnForm(action: string) {
         projectService.writeProjectData();
         break;
 
-    case 'duplicate-screen':
+    case 'duplicate-page':
         editorStore.duplicateScreen();
         break;
 
-    case 'open-page':
+    case 'back-to-page':
         editorStore.openPage();
         break;
     

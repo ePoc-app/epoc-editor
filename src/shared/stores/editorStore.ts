@@ -243,13 +243,13 @@ export const useEditorStore = defineStore('editor', {
 
             if(!isChild) {
                 buttons.push(
-                    { label: 'Dupliquer la page', icon: 'icon-plus', action: 'duplicate-screen' },
+                    { label: 'Dupliquer la page', icon: 'icon-plus', action: 'duplicate-page' },
                     { label: 'Lancer l\'aperçu ici', icon: 'icon-play', action: 'launch-preview' },
                     { label: 'Sauvegarder le modèle', icon: 'icon-modele', action: 'save-model' }
                 );
             } else {
                 buttons.push(
-                    { label: 'Revenir à la page', icon: 'icon-back', action: 'back-to-screen' },
+                    { label: 'Revenir à la page', icon: 'icon-ecran', action: 'back-to-page' },
                     { label : 'Dupliquer l\'élément', icon: 'icon-plus', action: 'duplicate-element' },
                 );
             }
