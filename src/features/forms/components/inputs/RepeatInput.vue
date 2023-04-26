@@ -162,6 +162,7 @@ function onClick(index, action) {
     border-radius: 8px;
     margin-bottom: 1rem;
     transition: all .2s linear;
+    transition: text .2s linear;
     &-header {
         padding: 0 .7rem;
         display: flex;

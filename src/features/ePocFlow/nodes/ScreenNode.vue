@@ -99,6 +99,7 @@ const dragOptions = ref({
     filter: '.question-item',
     sort: isQuestion,
     ghostClass: 'ghost',
+    animation: 200,
 });
 
 function dragStart(event, element: NodeElement, index: number) {
@@ -147,7 +148,7 @@ const isTarget = computed(() => getConnectedEdges([node], edges.value).some((edg
                 @dragleave="dragLeave($event)"
             >
                 <template #item="{ element, index }">
-                    <div :class="{ 'question-item': !isQuestion }">
+                    <div class="node-item" :class="{ 'question-item': !isQuestion }">
                         <ContentButton
                             :key="index"
                             :icon="element.action.icon"
@@ -179,6 +180,11 @@ const isTarget = computed(() => getConnectedEdges([node], edges.value).some((edg
     &.node-list {
         padding: 1.5rem;
     }
+}
+
+.node-item {
+    transition: all .2s linear;
+    transition: text .2s linear;
 }
 
 .vue-flow__handle {
