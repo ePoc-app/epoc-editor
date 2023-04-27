@@ -262,7 +262,7 @@ function removeHoverEffect() {
 }
 
 .container {
-    position: relative
+    position: relative;
 }
 .node-title {
     height: 1.5rem;

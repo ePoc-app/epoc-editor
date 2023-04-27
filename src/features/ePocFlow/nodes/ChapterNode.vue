@@ -43,10 +43,18 @@ function openForm() {
     editorStore.openFormPanel(currentNode.id, currentNode.data.formType, currentNode.data.formValues);
 }
 
+function mouseDown() {
+    editorStore.closeFormPanel();
+    const chapters = nodes.value.filter(node => node.type === 'chapter');
+    chapters.forEach((chapter) => {
+        if(chapter.id !== currentNode.id) chapter.selected = false;
+    });
+}
+
 </script>
 
 <template>
-    <div>
+    <div class="node-chapter">
         <ContentButton 
             :icon="currentNode.data.action.icon"
             :is-draggable="false"
@@ -54,7 +62,7 @@ function openForm() {
             :is-active="editorStore.openedElementId ? editorStore.openedElementId === currentNode.id : false"
             :subtitle="subtitle"
             @click="openForm()"
-            @mousedown="editorStore.closeFormPanel()"
+            @mousedown="mouseDown"
         />
     </div>
     <!-- ! mousedown.stop important in vue-flow v1.16.4 on non draggable node -->

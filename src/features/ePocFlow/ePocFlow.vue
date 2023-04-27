@@ -9,7 +9,7 @@ import ePocNode from './nodes/ePocNode.vue';
 import AddChapterNode from './nodes/AddChapterNode.vue';
 import { NodeElement, SideAction } from '@/src/shared/interfaces';
 
-const { vueFlowRef, project, updateEdge, findNode, edges }  = useVueFlow({ id: 'main' });
+const { vueFlowRef, project, updateEdge, edges, nodes, findNode }  = useVueFlow({ id: 'main' });
 
 
 const editorStore = useEditorStore();
@@ -109,6 +109,43 @@ function connect(event) {
     }
 }
 
+function nodeDrag(event) {
+    const { node } = event;
+
+    if(node.type !== 'chapter') return;
+
+    const MIN_DISTANCE = 128;
+    const epocNode = findNode('1');
+    const chapters = nodes.value.filter(n => n.type === 'chapter');
+    const draggedIndex = chapters.findIndex(n => n.id === node.id);
+    const min = epocNode.position.y + epocNode.dimensions.height + 32 + draggedIndex * MIN_DISTANCE;
+
+    node.position.x = 0;
+
+    if(node.position.y < min) node.position.y = min;
+
+    const addChapterNode = findNode('2');
+    
+    if(draggedIndex === chapters.length - 1) addChapterNode.position.y = node.position.y + 125;
+    
+    // Push up the nodes above the dragged node
+    for(let i = draggedIndex - 1; i >= 0; i--) {
+        const prevNode = chapters[i];
+        const nextNodeMinY = node.position.y - MIN_DISTANCE * (draggedIndex - i);
+        if(prevNode.position.y > nextNodeMinY) prevNode.position.y = nextNodeMinY;
+    }
+
+    // Push down the nodes below the dragged node
+    for(let i = draggedIndex + 1; i < chapters.length; i ++) {
+        const nextNode = chapters[i];
+        const nextNodeMaxY = node.position.y + MIN_DISTANCE * (i - draggedIndex);
+
+        if(nextNode.position.y < nextNodeMaxY) nextNode.position.y = nextNodeMaxY;
+
+        if(i === chapters.length - 1) addChapterNode.position.y = nextNode.position.y + 125;
+    }
+}
+
 </script>
 
 <template>
@@ -126,6 +163,7 @@ function connect(event) {
         :snap-grid="[16, 16]"
         @edge-update="update"
         @nodes-change="nodeChange"
+        @node-drag="nodeDrag"
         @selection-start="selectionStart"
         @drop="onDrop"
         @dragover.prevent="onDragOver"

@@ -69,14 +69,15 @@ export const useProjectStore = defineStore('project', {
                     objectives: chapter.objectives
                 };
             }
+            const newYPos = chapters.length > 0 ? chapters[chapters.length - 1].position.y + 200 : 200;
             const newChapter: Node = {
                 id: (nodes.value.length + 1).toString(),
                 type: 'chapter',
-                position: {x: 0, y: (chapters.length + 1) * 200},
+                position: { x: 0, y: newYPos },
                 data,
-                draggable: false,
+                draggable: true,
                 deletable: true,
-                selectable: true
+                selectable: false
             };
 
             addNodes([newChapter]);
@@ -269,10 +270,11 @@ function uid() {
 // Update position of add chapter button based on number of chapters
 const projectStore = useProjectStore();
 projectStore.$subscribe(() => {
-    const chapters = projectStore.elements.filter(node => node.type === 'chapter');
+    const chapters = nodes.value.filter(node => node.type === 'chapter');
+    const addPositionY = chapters.length > 0 ? chapters[chapters.length - 1].position.y + 128 : 128;
     const addNode = findNode('2');
     if (addNode) {
-        addNode.position.y = 200 * chapters.length + 125;
+        addNode.position.y = addPositionY;
     }
 });
 
