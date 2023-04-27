@@ -38,7 +38,7 @@ async function runPreview(workdir, contentPath) {
 
         zip.extractAllTo(previewPath, true);
         fs.mkdirSync(previewEpocPath, {recursive: true});
-        fs.symlinkSync(workdir, ePocRootFolder);
+        fs.symlinkSync(workdir, ePocRootFolder, 'junction');
         previewInitialized = true;
     }
 
