@@ -49,6 +49,7 @@ function dragStart(event, elements) {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    padding: 1rem;
 
     &.dragging {
         cursor: grabbing;
@@ -61,6 +62,7 @@ function dragStart(event, elements) {
 .page-title {
     margin: 0;
     padding: .2rem;
+    margin: 0 1rem;
     max-width: calc(60px + 1.8rem);
     overflow-x: hidden;
     white-space: nowrap;
