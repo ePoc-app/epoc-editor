@@ -163,6 +163,28 @@ function edgesChange(event) {
     // }
 }
 
+let initialNodePos = {
+    x: 0,
+    y: 0,
+};
+
+function nodeDragStart(event) {
+    const { node } = event;
+
+    initialNodePos = node.position;
+}
+
+function nodeDragStop(event) {
+    const { node } = event;
+
+    const undoRedoAction: NodeMovedAction = {
+        type: 'nodeMoved',
+        nodeId: node.id,
+        deltaMovement: { x: node.position.x - initialNodePos.x, y: node.position.y - initialNodePos.y }
+    };
+    undoRedoStore.addAction(undoRedoAction);
+}
+
 </script>
 
 <template>
