@@ -125,19 +125,17 @@ export const useUndoRedoStore = defineStore('epoc', {
         addEdge(action: EdgeAction, reverseStack: UndoRedoAction[]): void {
 
             const edge = JSON.parse(action.edge);
+            edge.data = {
+                undoRedo: true
+            };
             addEdges([edge]);
+            console.log('adding edge');
 
             const reverseAction: EdgeAction = {
                 type: 'edgeAdded',
                 edge: action.edge
             };
             reverseStack.push(reverseAction);
-
-            //! Can cause bugs, edgesChange event is always triggered after addEdges so pop the stack when using reverseStack;
-            // if(JSON.stringify(reverseStack[reverseStack.length -1]) === JSON.stringify(this.undoStack[this.undoStack.length -1])) {
-            //     this.undoStack.pop();
-            //     console.log('popping');
-            // }
         },
 
         updateEdge(action: EdgeAction, reverseStack: UndoRedoAction[]): void {            
@@ -159,7 +157,6 @@ export const useUndoRedoStore = defineStore('epoc', {
                 edge: action.edge
             };
             reverseStack.push(reverseAction);
-            console.log('reverseAction', reverseAction);
         }
     }
 });

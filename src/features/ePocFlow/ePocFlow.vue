@@ -151,16 +151,18 @@ function nodeDrag(event) {
 }
 
 function edgesChange(event) {
-    return;
-    // const { type, item } = event[0];    
+    const { type, item } = event[0];    
     
-    // if(type === 'add') {
-    //     const edgeAction: EdgeAction = {
-    //         type: 'edgeAdded',
-    //         edge: JSON.stringify(item),
-    //     };
-    //     undoRedoStore.addAction(edgeAction);
-    // }
+    if(type === 'add') {
+        const edgeAction: EdgeAction = {
+            type: 'edgeAdded',
+            edge: JSON.stringify(item),
+        };
+        // Prevents adding the action to the undoRedoStore when it's already in there
+        if(item?.data.undoRedo) return;
+
+        undoRedoStore.addAction(edgeAction);
+    }
 }
 
 let initialNodePos = {
