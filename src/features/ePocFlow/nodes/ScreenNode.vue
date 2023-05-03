@@ -113,18 +113,31 @@ function closeFormPanel() {
     editorStore.closeFormPanel();
 }
 
+function addHoverEffect() {
+    page.value.classList.add('hover');
+}
+
+function removeHoverEffect() {
+    page.value.classList.remove('hover');
+}
+
 const isSource = computed(() => getConnectedEdges([node], edges.value).some((edge) => edge.source === props.id));
 const isTarget = computed(() => getConnectedEdges([node], edges.value).some((edge) => edge.target === props.id));
+
+const page = ref(null);
 
 </script>
 
 <template>
     <div>
         <div 
+            ref="page"
             class="container"
             @click.exact="openPageForm(node.id, node.data.formType, node.data.formValues)"
             @click.meta="closeFormPanel"
             @click.ctrl="closeFormPanel"
+            @mouseenter="addHoverEffect"
+            @mouseleave="removeHoverEffect"
             @mousedown="closeFormPanel"
         >
             <p class="node-title" :class="{ 'active': editorStore.openedNodeId ? editorStore.openedNodeId === props.id : false }">{{ node.data.formValues?.title || 'Page' }}</p>
@@ -159,6 +172,8 @@ const isTarget = computed(() => getConnectedEdges([node], edges.value).some((edg
                             @click.meta="closeFormPanel"
                             @click.ctrl="closeFormPanel"
                             @mousedown.stop
+                            @mouseenter="removeHoverEffect"
+                            @mouseleave="addHoverEffect"
                             @dragstart="dragStart($event, element, index)"
                         />
                     </div>
@@ -179,6 +194,13 @@ const isTarget = computed(() => getConnectedEdges([node], edges.value).some((edg
 .node.hover:has(.ghost) {
     &.node-list {
         padding: 1.5rem;
+    }
+}
+
+.container.hover {
+    .node {
+        transition: all .2s ease-in-out;
+        background-color: var(--node-hover);
     }
 }
 

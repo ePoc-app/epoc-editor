@@ -85,7 +85,6 @@ const dragOptions = {
         </template>
         <template v-else>
             <ContentButton
-                class="question"
                 :class="{ 'dragging' : dragging }"
                 :icon="sideAction.icon"
                 :class-list="classList"
@@ -108,12 +107,14 @@ const dragOptions = {
     box-shadow: none;
 }
 
-.active {
-    border: 1px solid var(--editor-blue);
-    color: var(--editor-blue);
-    
-    box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);
-    transition: all .15s ease-in-out;
+.question {
+    &.active, &:hover {
+        border: 1px solid var(--editor-blue);
+        color: var(--editor-blue);
+        
+        box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);
+        transition: all .15s ease-in-out;
+    }
 }
 
 .questions-list {
