@@ -8,7 +8,9 @@ const { wait } = require('./utils');
 const Store = require('electron-store');
 const store = new Store();
 
-const recentFiles = store.get('recentFiles', []);
+const recentFiles = store.get('recentFiles', []).filter((r) => {
+    return fs.existsSync(r.filepath);
+});
 
 /**
  * Get the list of recently opened ePoc projects
@@ -151,6 +153,8 @@ const saveAsEpocProject = async function (project) {
     });
 
     if(!files) return null;
+
+    updateRecent(project);
 
     return zipEpocProject(project.workdir, files);
 };
