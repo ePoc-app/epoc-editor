@@ -3,14 +3,14 @@ import { Handle, Position, getConnectedEdges, useVueFlow } from '@vue-flow/core'
 import ContentButton from '@/src/components/ContentButton.vue';
 import { computed, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
-import { NodeElement } from '@/src/shared/interfaces';
+import { NodeElement, SideAction } from '@/src/shared/interfaces';
 
 const editorStore = useEditorStore();
 
 const props = defineProps<{
     id: string;
     data: {
-        type: object;
+        type: string;
         required: true;
         readyToDrop: boolean;
         elements: NodeElement[];
@@ -44,11 +44,23 @@ function dragLeave(event) {
 function dragEnter(event) {
     event.preventDefault();
     counter ++;
+    if(props.data.type === 'question') {
+        event.target.classList.add('hover');
+    }
 }
 
-function dragOver(event) {
+function dragOver() {
     counter = 1;
-    event.target.classList.add('hover');
+    const { element, type } = editorStore.draggedElement; 
+    const isQuestion = type === 'nodeElement' ? true : !['video', 'text'].includes((element as SideAction[])[0].type);
+
+    if(props.data.type === 'template' || !isQuestion) {
+        document.body.classList.remove('cursor-allowed');
+        document.body.classList.add('cursor-not-allowed');
+    } else if(props.data.type === 'question') {
+        document.body.classList.remove('cursor-not-allowed');
+        document.body.classList.add('cursor-allowed');
+    }
 }
 
 function change(event) {
@@ -87,6 +99,7 @@ function change(event) {
 
 function drop() {
     dropped.value = true;
+    document.body.classList.remove('cursor-not-allowed', 'cursor-allowed');
 }
 
 const isQuestion = ref(node.data.type === 'question');
@@ -103,10 +116,17 @@ const dragOptions = ref({
 });
 
 function dragStart(event, element: NodeElement, index: number) {
-    event.dataTransfer.dropEffect= 'move';
-    event.dataTransfer.effectAllowed= 'move';
-    event.dataTransfer.setData('element', JSON.stringify(element));
-    event.dataTransfer.setData('source', JSON.stringify({ parent: props.id, index: index}));
+
+    editorStore.draggedElement = {
+        type: 'nodeElement',
+        element: element,
+        source: {
+            parentId: props.id,
+            index: index,
+        }
+    };
+    editorStore.draggedElement.type = 'nodeElement';
+    editorStore.draggedElement.element = element;
 }
 
 function closeFormPanel() {
@@ -154,11 +174,11 @@ const page = ref(null);
                 class="node-list node"
                 item-key="id"
                 :class=" { 'active': editorStore.openedNodeId ? editorStore.openedNodeId === props.id : false }"
-                @change="change($event)"
-                @drop.stop="drop()"
-                @dragenter="dragEnter($event)"
-                @dragover="dragOver($event)"
-                @dragleave="dragLeave($event)"
+                @change="change"
+                @drop.stop="drop"
+                @dragenter="dragEnter"
+                @dragover.stop="dragOver"
+                @dragleave="dragLeave"
             >
                 <template #item="{ element, index }">
                     <div class="node-item" :class="{ 'question-item': !isQuestion }">

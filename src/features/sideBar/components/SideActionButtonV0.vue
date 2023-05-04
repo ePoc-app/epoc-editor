@@ -15,9 +15,10 @@ const classList = { 'clickable': props.sideAction.type === 'question' };
 const dragging = ref(false);
 
 function dragStart(event, sideAction) {
-    event.dataTransfer.dropEffect= 'move';
-    event.dataTransfer.effectAllowed= 'move';
-    event.dataTransfer.setData('sideAction', JSON.stringify(sideAction));
+    editorStore.draggedElement = {
+        type: 'sideAction',
+        element: [sideAction]
+    };
     dragging.value = true;
 }
 

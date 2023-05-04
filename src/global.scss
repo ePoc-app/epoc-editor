@@ -24,6 +24,18 @@ body,
   flex-direction: column;
 }
 
+.cursor-not-allowed {
+  * {
+    cursor: no-drop !important;
+  }
+}
+
+.cursor-allowed {
+  * {
+    cursor: copy !important;
+  }
+}
+
 .btn {
   border: none;
   cursor: pointer;

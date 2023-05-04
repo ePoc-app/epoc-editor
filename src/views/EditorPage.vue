@@ -25,15 +25,30 @@ document.body.addEventListener('keydown', function(event) {
     }
 });
 
+
+function onCursorNotAllowed() {
+    document.body.classList.remove('cursor-allowed');
+    document.body.classList.add('cursor-not-allowed');
+}
+
+function onCursorAllowed() {
+    document.body.classList.remove('cursor-not-allowed');
+    document.body.classList.add('cursor-allowed');
+}
+
+function onRemoveCursor() {
+    document.body.classList.remove('cursor-not-allowed', 'cursor-allowed');
+}
+
 </script>
 
 <template>
-    <div class="editor-container" @mouseup="dismissModals" @click="dismissModals">
-        <SideBarV0 class="side-bar" />
-        <TopBar class="top-bar" />
-        <ePocFlow class="editor-content" />
+    <div class="editor-container" @dragend="onRemoveCursor" @mouseup="dismissModals" @click="dismissModals">
+        <SideBarV0 class="side-bar" @dragover="onCursorNotAllowed" />
+        <TopBar class="top-bar" @dragover="onCursorNotAllowed" />
+        <ePocFlow class="editor-content" @dragover="onCursorAllowed" />
         <Transition>
-            <FormPanel v-if="editorStore.formPanel" class="formPanel" />
+            <FormPanel v-if="editorStore.formPanel" class="formPanel" @dragover="onCursorAllowed" />
         </Transition>
         <ValidationModal v-if="editorStore.validationModal" />
     </div>

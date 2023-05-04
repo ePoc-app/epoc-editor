@@ -7,6 +7,7 @@ import { useEditorStore, useProjectStore } from '@/src/shared/stores';
 import ChapterNode from './nodes/ChapterNode.vue';
 import ePocNode from './nodes/ePocNode.vue';
 import AddChapterNode from './nodes/AddChapterNode.vue';
+import { NodeElement, SideAction } from '@/src/shared/interfaces';
 
 const { vueFlowRef, project, updateEdge }  = useVueFlow({ id: 'main' });
 
@@ -23,6 +24,8 @@ const nodeTypes = {
 
 const onDrop = (event) => {
 
+    document.body.classList.remove('cursor-allowed', 'cursor-not-allowed');
+
     const { left, top } = vueFlowRef.value.getBoundingClientRect();
 
     const position = project({
@@ -30,28 +33,16 @@ const onDrop = (event) => {
         y: event.clientY - top,
     });
 
-    const sideActionData = event.dataTransfer.getData('sideAction');
-    const elementData = event.dataTransfer.getData('element');
+    const { element, type, source } = editorStore.draggedElement;
 
-    if(sideActionData) {
-        const isScreen = event.dataTransfer.getData('isScreen');
-        const actions = JSON.parse(sideActionData);
 
-        // not sure if this is better than transfer the isScreen in all the case and use it as a boolean here
-        if(isScreen === 'true') {
-            projectStore.addNode(position, actions);
-        } else {
-            projectStore.addNode(position, [actions]);
-        }
-    } else if(elementData) {
-        const element = JSON.parse(elementData);
-        projectStore.createNodeFromElement(position, element);
 
-        const source = JSON.parse(event.dataTransfer.getData('source'));
+    if(type === 'sideAction') projectStore.addNode(position, element as SideAction[]);
+    else if(type === 'nodeElement') {
+        projectStore.createNodeFromElement(position, element as NodeElement);
 
-        //? Used to prevent removeEventListener error in Vue Draggable
         setTimeout(() => {
-            editorStore.removeElementFromScreen(source.index, source.parent);
+            editorStore.removeElementFromScreen(source.index, source.parentId);
         }, 0);
     }
 
@@ -93,6 +84,10 @@ function nodeChange(event) {
     }
 }
 
+function onDragOver() {
+    document.body.classList.add('cursor-allowed');
+}
+
 </script>
 
 <template>
@@ -112,9 +107,9 @@ function nodeChange(event) {
         @nodes-change="nodeChange"
         @selection-start="selectionStart"
         @drop="onDrop"
-        @dragover.prevent
+        @dragover.prevent="onDragOver"
         @dragenter.prevent
-        @edge-click="onEdgeclick"
+        @edgeclick="onEdgeclick"
         @pane-click="editorStore.closeFormPanel()"
     >
         <template #node-custom="{ id, data }">

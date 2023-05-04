@@ -26,6 +26,15 @@ interface EditorState {
     standardScreens: SideAction[];
     undoStack: [];
     redoStack: [];
+    draggedElement: {
+        type?: 'nodeElement' | 'sideAction';
+        //? SideAction as an array to manage the template the same way
+        element?: NodeElement | SideAction[];
+        source?: {
+            parentId: string,
+            index: number
+        }
+    };
 }
 
 export const useEditorStore = defineStore('editor', {
@@ -46,6 +55,7 @@ export const useEditorStore = defineStore('editor', {
         standardScreens: standardScreen,
         undoStack: [],
         redoStack: [],
+        draggedElement: {},
     }),
     
     getters: {
