@@ -1,6 +1,7 @@
 stages:
   - build
   - release
+  - autorelease
 
 build:
   image: node:16
@@ -53,7 +54,6 @@ autorelease:
     - git push origin --tags
   rules:
     - if: $RELEASE_NAME != null
+      when: manual
     - if: $PERSONAL_ACCESS_TOKEN != null
-  only:
-    - web
 
