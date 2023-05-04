@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { QuillEditor } from '@vueup/vue-quill';
+import { QuillEditor, Quill } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
-//@ts-ignore
-import ImageUploader from 'quill-image-uploader';
+import ImageUploader from 'quill-image-uploader/src/quill.imageUploader';
 import { Ref, ref, watch } from 'vue';
 import { projectService } from '@/src/shared/services';
 
@@ -20,6 +19,12 @@ const emit = defineEmits<{
 const toolbar = [
     ['bold', 'italic', 'underline', { 'list': 'ordered' }, { 'list': 'bullet' }, { 'align': null}, {'align': 'center'}, {'align': 'right'}, 'link', 'image']
 ];
+
+const image = Quill.import('formats/image');
+
+image.sanitize = function(url) {
+    return url;
+};
 
 const modules = {
     name: 'imageUploader',
@@ -41,7 +46,7 @@ function initQuill() {
 
 const qlEditor = ref(null);
 
-const content: Ref<string> = ref(null);
+const content: Ref<string> = ref('');
 
 watch(
     () => props.inputValue,
