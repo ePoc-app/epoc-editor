@@ -1,25 +1,46 @@
 stages:
-- build
-
-before_script:
-  - dpkg --add-architecture i386
-  - apt-get update -qy
-  - apt-get -y install curl wine32
-  - npm i
+  - build
+  - release
 
 build:
   image: node:16
   stage: build
   script:
+    - dpkg --add-architecture i386
+    - apt-get update -qy
+    - apt-get -y install curl wine32
+    - npm i
     - npm run updatePreview
-    - npm run build-all 
+    - npm run build-all
   artifacts:
-    expire_in: 1 yr
+    expire_in: 1 week
     paths:
-    - dist_electron/*.zip
-    - dist_electron/*.deb
-    - dist_electron/*.exe
+      - dist_electron/*.zip
+      - dist_electron/*.deb
+      - dist_electron/*.exe
   only:
     - main
     - web
-    - tags
+
+release:
+  stage: release
+  needs:
+    - build
+  script:
+    - ls
+    - if [ -z $RELEASE_NAME]; then echo "MISSING RELEASE NAME"; exit 1; fi
+    - git remote remove origin
+    - git remote add origin https://oauth2:${PERSONAL_ACCESS_TOKEN}@gitlab.inria.fr/learninglab/epoc/epoc-editor.git
+    - git config --global user.name "${GITLAB_USER_NAME}"
+    - git config --global user.email "${GITLAB_USER_EMAIL}"
+    - git tag $RELEASE_NAME
+    - git push origin $tag
+  artifacts:
+    expire_in: 1 yr
+    paths:
+      - dist_electron/*.zip
+      - dist_electron/*.deb
+      - dist_electron/*.exe
+  only:
+    - web
+
