@@ -19,10 +19,11 @@ build:
       - dist_electron/*.zip
       - dist_electron/*.deb
       - dist_electron/*.exe
-  only:
-    - main
-    - web
-    - tags
+  
+  rules:
+    - if: $RELEASE_NAME == null
+      when: manual
+    - if: '$CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_TAG'
 
 release:
   stage: release
@@ -36,8 +37,8 @@ release:
       - dist_electron/*.zip
       - dist_electron/*.deb
       - dist_electron/*.exe
-  only:
-    - tags
+  rules:
+    - if: '$CI_COMMIT_TAG'
 
 autorelease:
   image: node:16
