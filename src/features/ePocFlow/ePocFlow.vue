@@ -35,14 +35,12 @@ const onDrop = (event) => {
 
     const { element, type, source } = editorStore.draggedElement;
 
-
-
     if(type === 'sideAction') projectStore.addNode(position, element as SideAction[]);
     else if(type === 'nodeElement') {
         projectStore.createNodeFromElement(position, element as NodeElement);
 
         setTimeout(() => {
-            editorStore.removeElementFromScreen(source.index, source.parentId);
+            editorStore.removeElementFromScreen(source.index, source.parentId, true);
         }, 0);
     }
 
