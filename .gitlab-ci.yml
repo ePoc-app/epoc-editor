@@ -28,7 +28,6 @@ release:
     - build
   script:
     - ls
-    - if [ -z $RELEASE_NAME]; then echo "MISSING RELEASE NAME"; exit 1; fi
     - git remote remove origin
     - git remote add origin https://oauth2:${PERSONAL_ACCESS_TOKEN}@gitlab.inria.fr/learninglab/epoc/epoc-editor.git
     - git config --global user.name "${GITLAB_USER_NAME}"
@@ -41,6 +40,9 @@ release:
       - dist_electron/*.zip
       - dist_electron/*.deb
       - dist_electron/*.exe
+  rules:
+    - if: $RELEASE_NAME != null
+    - if: $PERSONAL_ACCESS_TOKEN != null
   only:
     - web
 
