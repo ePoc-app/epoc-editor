@@ -52,7 +52,5 @@ autorelease:
     - git tag v$RELEASE_NAME
     - git push origin --tags
   rules:
-    - if: $RELEASE_NAME != null
-      when: manual
-    - if: $PERSONAL_ACCESS_TOKEN != null
+    - if: $RELEASE_NAME != null && $PERSONAL_ACCESS_TOKEN != null
 
