@@ -42,6 +42,8 @@ function dragLeave(event) {
 }
 
 function dragEnter(event) {
+    if(!editorStore.draggedElement) return;
+
     event.preventDefault();
     counter ++;
     if(props.data.type === 'question') {
@@ -50,7 +52,10 @@ function dragEnter(event) {
 }
 
 function dragOver() {
+    if(!editorStore.draggedElement) return;
+
     counter = 1;
+
     const { element, type } = editorStore.draggedElement; 
     const isQuestion = type === 'nodeElement' ? true : !['video', 'text'].includes((element as SideAction[])[0].type);
 
@@ -64,6 +69,8 @@ function dragOver() {
 }
 
 function change(event) {
+    if(!editorStore.draggedElement) return;
+
     if(event.added && dropped.value) {
         let newElement: NodeElement;
         if(event.added.element.action) {
@@ -116,7 +123,6 @@ const dragOptions = ref({
 });
 
 function dragStart(event, element: NodeElement, index: number) {
-
     editorStore.draggedElement = {
         type: 'nodeElement',
         element: element,

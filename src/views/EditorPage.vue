@@ -48,7 +48,7 @@ function onRemoveCursor() {
         <TopBar class="top-bar" @dragover="onCursorNotAllowed" />
         <ePocFlow class="editor-content" @dragover="onCursorAllowed" />
         <Transition>
-            <FormPanel v-if="editorStore.formPanel" class="formPanel" @dragover="onCursorAllowed" />
+            <FormPanel v-if="editorStore.formPanel" class="formPanel" @dragover="onCursorNotAllowed" />
         </Transition>
         <ValidationModal v-if="editorStore.validationModal" />
     </div>

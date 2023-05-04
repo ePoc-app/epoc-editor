@@ -23,8 +23,9 @@ const nodeTypes = {
 };
 
 const onDrop = (event) => {
-
     document.body.classList.remove('cursor-allowed', 'cursor-not-allowed');
+
+    if(!editorStore.draggedElement) return;
 
     const { left, top } = vueFlowRef.value.getBoundingClientRect();
 

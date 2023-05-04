@@ -53,7 +53,12 @@ function removeCard(index) {
     });
 }
 
-function moveCard(oldIndex, newIndex) {
+
+function moveCard(event) {
+    if(!event.moved) return;
+
+    const { oldIndex, newIndex } = event.moved;
+
     emit('change', {
         type: 'move',
         oldIndex,
@@ -90,20 +95,38 @@ function onClick(index, action) {
     }
 }
 
+function start() {
+    drag.value = true;
+    editorStore.draggedElement = null;
+    document.body.classList.remove('cursor-not-allowed', 'cursor-allowed');
+}
+
+function end() {
+    drag.value = false;
+    document.body.classList.remove('cursor-not-allowed', 'cursor-allowed', 'cursor-move');
+}
+
+function dragOver(event) {
+    if(editorStore.draggedElement) return;
+    event.preventDefault();
+    document.body.classList.add('cursor-move');
+}
+
 </script>
 
 <template>
     <VueDraggable
         key="draggable"
+        v-bind="dragOptions"
         :model-value="inputValues"
         item-key="index"
         handle=".card-header"
-        v-bind="dragOptions"
         filter=".fixed"
         :disabled="disabled"
-        @change="moveCard($event.moved.oldIndex, $event.moved.newIndex)"
-        @start="drag = true"
-        @end="drag = false"
+        @change="moveCard"
+        @start="start"
+        @dragover="dragOver"
+        @end="end"
     >
         <template #item="{ element, index }">
             <div :key="index" class="card draggable-card">

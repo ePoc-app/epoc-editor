@@ -36,6 +36,12 @@ body,
   }
 }
 
+.cursor-move {
+  * {
+    cursor: move !important;
+  }
+}
+
 .btn {
   border: none;
   cursor: pointer;
