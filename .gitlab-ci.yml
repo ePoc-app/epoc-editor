@@ -21,6 +21,7 @@ build:
   only:
     - main
     - web
+    - tags
 
 release:
   stage: release
@@ -28,18 +29,28 @@ release:
     - build
   script:
     - ls
-    - git remote remove origin
-    - git remote add origin https://oauth2:${PERSONAL_ACCESS_TOKEN}@gitlab.inria.fr/learninglab/epoc/epoc-editor.git
-    - git config --global user.name "${GITLAB_USER_NAME}"
-    - git config --global user.email "${GITLAB_USER_EMAIL}"
-    - git tag $RELEASE_NAME
-    - git push origin $tag
   artifacts:
     expire_in: 1 yr
     paths:
       - dist_electron/*.zip
       - dist_electron/*.deb
       - dist_electron/*.exe
+  only:
+    - tags
+
+autorelease:
+  image: node:16
+  stage: autorelease
+  script:
+    - git remote remove origin
+    - git remote add origin https://oauth2:${PERSONAL_ACCESS_TOKEN}@gitlab.inria.fr/learninglab/epoc/epoc-editor.git
+    - git config --global user.name "${GITLAB_USER_NAME}"
+    - git config --global user.email "${GITLAB_USER_EMAIL}"
+    - npm version "$RELEASE_NAME-beta"
+    - git add package.json
+    - git commit -m "Bump version"
+    - git tag v$RELEASE_NAME
+    - git push origin --tags
   rules:
     - if: $RELEASE_NAME != null
     - if: $PERSONAL_ACCESS_TOKEN != null
