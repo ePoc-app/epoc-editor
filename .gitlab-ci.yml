@@ -49,7 +49,7 @@ autorelease:
     - npm version "$RELEASE_NAME-beta" --allow-same-version=true --git-tag-version=false
     - git add package.json package-lock.json
     - git commit -m "Bump version"
-    - git tag v$RELEASE_NAME
+    - git tag -f v$RELEASE_NAME
     - git push origin v$RELEASE_NAME
   rules:
     - if: $RELEASE_NAME != null && $PERSONAL_ACCESS_TOKEN != null
