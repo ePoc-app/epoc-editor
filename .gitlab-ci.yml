@@ -50,7 +50,7 @@ autorelease:
     - git add package.json package-lock.json
     - git commit -m "Bump version"
     - git tag v$RELEASE_NAME
-    - git push origin --tags
+    - git push origin v$RELEASE_NAME
   rules:
     - if: $RELEASE_NAME != null && $PERSONAL_ACCESS_TOKEN != null
 
