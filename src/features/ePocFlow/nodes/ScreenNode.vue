@@ -227,6 +227,7 @@ const page = ref(null);
     .node {
         transition: all .2s ease-in-out;
         background-color: var(--node-hover);
+        box-shadow: 0 2px 5px 0 var(--shadow-outer);
     }
 }
 
