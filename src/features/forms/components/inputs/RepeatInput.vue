@@ -54,10 +54,14 @@ function removeCard(index) {
 }
 
 
-function moveCard(event) {
-    if(!event.moved) return;
+function moveCard(event, oldIndex?: number, newIndex?: number) {
 
-    const { oldIndex, newIndex } = event.moved;
+    if(!oldIndex && !newIndex) {
+        if(!event.moved) return;
+
+        oldIndex = event.moved.oldIndex;
+        newIndex = event.moved.newIndex;
+    }
 
     emit('change', {
         type: 'move',
@@ -139,8 +143,8 @@ function dragOver(event) {
                     <div class="card-header-icon">
                         <i class="icon-supprimer delete" @click.stop="removeCard(index)"></i>
                         <hr v-if="!(isLast(index) && index === 0)" class="vertical-separator">
-                        <i v-if="!isLast(index)" class="icon-bas" @click.stop="moveCard(index, index + 1)"></i>
-                        <i v-if="index !== 0" class="icon-haut" @click.stop="moveCard(index, index - 1)"></i>
+                        <i v-if="!isLast(index)" class="icon-bas" @click.stop="moveCard($event, index, index + 1)"></i>
+                        <i v-if="index !== 0" class="icon-haut" @click.stop="moveCard($event, index, index - 1)"></i>
                         <hr v-if="!disabled" class="vertical-separator">
                         <i v-if="!disabled" class="icon-glisser"></i>
                     </div>
