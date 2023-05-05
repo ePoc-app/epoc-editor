@@ -236,6 +236,12 @@ export const epocForm: Form = {
             name: 'Paramètres :',
             inputs : [
                 {
+                    id: 'certificateScore',
+                    type: 'score',
+                    label: 'Score pour obtenir l\'attestation',
+                    value: 10
+                },
+                {
                     id: 'chapterParameter',
                     type: 'text',
                     label: 'Label des chapitres',
