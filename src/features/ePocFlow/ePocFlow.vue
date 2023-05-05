@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ConnectionMode, useVueFlow, VueFlow } from '@vue-flow/core';
+import { ConnectionMode, useVueFlow, VueFlow, getConnectedEdges, applyEdgeChanges } from '@vue-flow/core';
 import { markRaw, onMounted } from 'vue';
 import ScreenNode from './nodes/ScreenNode.vue';
 import CustomConnectContent from './edges/CustomConnectContent.vue';
@@ -9,7 +9,7 @@ import ePocNode from './nodes/ePocNode.vue';
 import AddChapterNode from './nodes/AddChapterNode.vue';
 import { NodeElement, SideAction } from '@/src/shared/interfaces';
 
-const { vueFlowRef, project, updateEdge }  = useVueFlow({ id: 'main' });
+const { vueFlowRef, project, updateEdge, findNode, edges }  = useVueFlow({ id: 'main' });
 
 
 const editorStore = useEditorStore();
@@ -87,6 +87,30 @@ function onDragOver() {
     document.body.classList.add('cursor-allowed');
 }
 
+function connect(event) {
+    const targetNode = findNode(event.target);
+    const sourceNode = findNode(event.source);
+
+    if(event.source === event.target) {
+        const currentEdge = edges.value.find((edge) => edge.target === targetNode.id && edge.source === sourceNode.id);
+        applyEdgeChanges(
+            [{ id: currentEdge.id, type: 'remove' }],
+            edges.value
+        );
+        return false;
+    }
+
+    const otherEdge = getConnectedEdges([targetNode], edges.value).find((edge) => edge.target === targetNode.id && edge.source !== sourceNode.id);
+
+
+    if(otherEdge) {
+        applyEdgeChanges(
+            [{ id: otherEdge.id, type: 'remove' }],
+            edges.value
+        );
+    }
+}
+
 </script>
 
 <template>
@@ -110,6 +134,7 @@ function onDragOver() {
         @dragenter.prevent
         @edgeclick="onEdgeclick"
         @pane-click="editorStore.closeFormPanel()"
+        @connect="connect"
     >
         <template #node-custom="{ id, data }">
             <ScreenNode :id="id" :data="data" />
