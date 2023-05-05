@@ -267,7 +267,7 @@ export const useEditorStore = defineStore('editor', {
             const nodeId = this.generateId();
 
             for(const element of node.data.elements) {
-                const newElement = structuredClone(toRaw(element));
+                const newElement = JSON.parse(JSON.stringify(toRaw(element)));
                 newElement.id = this.generateId();
                 newElement.parentId = nodeId;
                 newElements.push(newElement);
@@ -282,7 +282,7 @@ export const useEditorStore = defineStore('editor', {
                     elements: newElements,
                     readyToDrop: false,
                     formType: 'screen',
-                    formValues: structuredClone(toRaw(node.data.formValues)),
+                    formValues: JSON.parse(JSON.stringify(toRaw(node.data.formValues))),
                     type: node.data.type,
                     contentId: this.generateContentId(),
                     deletable: false
