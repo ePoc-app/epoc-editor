@@ -1,3 +1,5 @@
+import { GraphEdge } from '@vue-flow/core';
+
 export interface UndoRedoAction {
     type: 'nodeMoved' | 'nodeAdded' | 'nodeRemoved' | 'nodeUpdated' | 'edgeAdded' | 'edgeUpdated' | 'edgeRemoved';
 }
@@ -23,4 +25,10 @@ export interface NodeUpdatedAction extends UndoRedoAction {
 export interface EdgeAction extends UndoRedoAction {
     type: 'edgeAdded' | 'edgeUpdated' | 'edgeRemoved';
     edge: string;
+}
+
+export interface EdgeUpdatedAction extends UndoRedoAction {
+    type: 'edgeUpdated';
+    newEdge: GraphEdge;
+    oldEdge: GraphEdge
 }

@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
-import { UndoRedoAction, NodeMovedAction, NodeMutatedAction, EdgeAction } from '../interfaces';
+import { UndoRedoAction, NodeMovedAction, NodeMutatedAction, EdgeAction, EdgeUpdatedAction } from '../interfaces';
 import { applyEdgeChanges, applyNodeChanges, getConnectedEdges, useVueFlow } from '@vue-flow/core';
 import { toRaw } from 'vue';
 
-const { findNode, addNodes, nodes, edges, addEdges } = useVueFlow({ id: 'main' });
+const { findNode, addNodes, nodes, edges, addEdges, updateEdge } = useVueFlow({ id: 'main' });
 
 interface UndoRedoState {
     undoStack: UndoRedoAction[];
@@ -54,7 +54,7 @@ export const useUndoRedoStore = defineStore('epoc', {
                 this.deleteEdge(action, reverseStack);
                 break;
             case 'edgeUpdated':
-                this.updateEdge(action, reverseStack);
+                this.updateEdgeAction(action, reverseStack);
                 break;
             case 'edgeRemoved':
                 this.addEdge(action, reverseStack);
@@ -138,12 +138,20 @@ export const useUndoRedoStore = defineStore('epoc', {
             reverseStack.push(reverseAction);
         },
 
-        updateEdge(action: EdgeAction, reverseStack: UndoRedoAction[]): void {            
-            const edge = JSON.parse(action.edge);
+        updateEdgeAction(action: EdgeUpdatedAction, reverseStack: UndoRedoAction[]): void {            
+            const { newEdge, oldEdge } = action; 
+
+            const reverseNewEdge = updateEdge(newEdge, {
+                source: oldEdge.source,
+                target: oldEdge.target
+            }, false);
+
+            if(!reverseNewEdge) return;
             
-            const reverseAction: EdgeAction = {
+            const reverseAction: EdgeUpdatedAction = {
                 type: 'edgeUpdated',
-                edge: action.edge
+                newEdge: reverseNewEdge,
+                oldEdge: newEdge
             };
             reverseStack.push(reverseAction);
         },

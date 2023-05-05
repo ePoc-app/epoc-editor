@@ -8,7 +8,7 @@ import { useEditorStore, useGraphStore } from '@/src/shared/stores';
 import ChapterNode from './nodes/ChapterNode.vue';
 import ePocNode from './nodes/ePocNode.vue';
 import AddChapterNode from './nodes/AddChapterNode.vue';
-import { EdgeAction, NodeElement, SideAction } from '@/src/shared/interfaces';
+import { EdgeAction, EdgeUpdatedAction, NodeMovedAction, NodeElement, SideAction } from '@/src/shared/interfaces';
 import { addPage, createPageFromContent, removeContentFromPage } from '@/src/shared/services/graph';
 import { useUndoRedoStore } from '@/src/shared/stores/undoRedoStore';
 
@@ -73,10 +73,21 @@ function selectionStart() {
 }
 
 function update(event) {
-    updateEdge(event.edge, {
-        source: event.connection.source,
-        target: event.connection.target,
-    });
+    const { edge, connection } = event;
+
+    const newEdge = updateEdge(edge, {
+        source: connection.source,
+        target: connection.target,
+    }, false);
+
+    if(!newEdge) return;
+
+    const undoRedoAction: EdgeUpdatedAction = {
+        type: 'edgeUpdated',
+        newEdge,
+        oldEdge: edge
+    };
+    undoRedoStore.addAction(undoRedoAction);
 }
 
 function nodeChange(event) {
