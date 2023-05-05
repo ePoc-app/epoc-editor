@@ -6,7 +6,7 @@ const projectStore = useProjectStore();
 </script>
 
 <template>
-    <div class="add-chapter" @click="projectStore.addChapter()">
+    <div class="add-chapter" @mousedown="projectStore.addChapter()">
         <button class="add-btn"><i class="icon-plus"></i></button>
     </div>
 </template>
