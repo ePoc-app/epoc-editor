@@ -43,7 +43,7 @@ function onRemoveCursor() {
 </script>
 
 <template>
-    <div class="editor-container" @dragend="onRemoveCursor" @mouseup="dismissModals" @click="dismissModals">
+    <div class="editor-container" @drop="onRemoveCursor" @dragend="onRemoveCursor" @mouseup="dismissModals" @click="dismissModals">
         <SideBarV0 class="side-bar" @dragover="onCursorNotAllowed" />
         <TopBar class="top-bar" @dragover="onCursorNotAllowed" />
         <ePocFlow class="editor-content" @dragover="onCursorAllowed" />
