@@ -58,12 +58,20 @@ app.whenReady().then(() => {
 
     // Intercept all url starting with assets/ and redirect it to custom protocol (wysiwyg/quill)
     const filter = {
-        urls: ['*://*/assets/*', '*://*/images/*', '*://*/videos/*']
+        urls: [
+            'http://localhost:8000/assets/*',
+            'http://localhost:8000/images/*',
+            'http://localhost:8000/videos/*',
+            `file://${encodeURI(path.join(__dirname, '../dist/assets/'))}*`,
+            `file://${encodeURI(path.join(__dirname, '../dist/images/'))}*`,
+            `file://${encodeURI(path.join(__dirname, '../dist/videos/'))}*`
+        ]
     };
 
     session.defaultSession.webRequest.onBeforeRequest(filter, (details, callback) => {
         const assetsFolder = ['assets/', 'images/', 'videos/'].find(folder => details.url.includes(folder));
-        if (mainWindow.webContents.id === details.webContents.id && assetsFolder) {
+        const isAppFile = ['.js', '.css', '.html', '.ttf'].some(ext => details.url.includes(ext));
+        if (mainWindow.webContents.id === details.webContents.id && !isAppFile && assetsFolder) {
             const filepath = details.url.split(assetsFolder)[1];
             return callback({ redirectURL: `assets://${assetsFolder}${filepath}` });
         }
