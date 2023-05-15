@@ -35,7 +35,6 @@ const isCondition = ref(currentNode.data.type === 'condition');
 const page = ref(null);
 
 const dragOptions = ref({
-    animation: 200,
     group: {
         name: 'node',
         put: !isCondition.value,
@@ -68,9 +67,9 @@ function dragEnter(event) {
 
     event.preventDefault();
     counter ++;
-    if(props.data.type === 'question') {
+    if(props.data.type === 'question' || props.data.type === 'element') {
         event.target.classList.add('hover');
-    }
+    } 
 }
 
 function dragOver() {
