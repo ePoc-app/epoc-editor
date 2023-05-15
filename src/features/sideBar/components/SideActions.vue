@@ -27,7 +27,7 @@ const dragOptions = {
 
 const classList = (item: SideAction) => ({ 'clickable': item.type === 'question' || item.type === 'model' });
 
-function dragStart(event, sideAction) {
+function dragStart(sideAction) {
     editorStore.draggedElement = {
         type: 'sideAction',
         element: [sideAction]
@@ -61,7 +61,7 @@ function showTemplateMenu() {
                     :icon="element.icon"
                     :is-draggable="true"
                     :class-list="{ 'btn-content-blue': true }"
-                    @dragstart="dragStart($event, element)"
+                    @dragstart="dragStart(element)"
                 />
             </div>
         </template>

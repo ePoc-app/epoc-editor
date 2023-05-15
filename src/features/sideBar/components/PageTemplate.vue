@@ -2,21 +2,24 @@
 import { SideAction } from '@/src/shared/interfaces';
 import ContentButton from '@/src/components/ContentButton.vue';
 import { ref } from 'vue';
+import { useEditorStore } from '@/src/shared/stores';
 
 defineProps<{
     elements: SideAction[];
     name: string;
 }>();
 
+const editorStore = useEditorStore();
+
 const templateTooltip = 'Glisser/déposer pour ajouter un modèle';
 
 const dragging = ref(false);
 
-function dragStart(event, elements) {
-    event.dataTransfer.dropEffect= 'move';
-    event.dataTransfer.effectAllowed= 'move';
-    event.dataTransfer.setData('sideAction', JSON.stringify(elements));
-    event.dataTransfer.setData('isTemplate', 'true');
+function dragStart(elements) {
+    editorStore.draggedElement = {
+        type: 'sideAction',
+        element: elements
+    };
     dragging.value = true;
 }
 
@@ -30,7 +33,7 @@ function dragStart(event, elements) {
             class="page-template node"
             :draggable="true"
             :class="{ 'dragging': dragging }"
-            @dragstart="dragStart($event, elements)"
+            @dragstart="dragStart(elements)"
             @dragend="dragging = false"
         >
             <ContentButton 
