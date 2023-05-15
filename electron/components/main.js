@@ -13,7 +13,7 @@ module.exports.createMainWindow = function () {
         icon: 'favicon.png',
         width: 1500,
         height: 1200,
-        'minHeight': 800,
+        'minHeight': 400,
         'minWidth': 800,
         webPreferences: {
             nodeIntegration: false,
