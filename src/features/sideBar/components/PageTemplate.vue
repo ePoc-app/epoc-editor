@@ -15,7 +15,7 @@ const templateTooltip = 'Glisser/déposer pour ajouter un modèle';
 
 const dragging = ref(false);
 
-function dragStart(elements) {
+function dragStart($event, elements) {
     editorStore.draggedElement = {
         type: 'sideAction',
         element: elements
@@ -33,7 +33,7 @@ function dragStart(elements) {
             class="page-template node"
             :draggable="true"
             :class="{ 'dragging': dragging }"
-            @dragstart="dragStart(elements)"
+            @dragstart="dragStart($event, elements)"
             @dragend="dragging = false"
         >
             <ContentButton 
