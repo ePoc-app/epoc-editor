@@ -1,4 +1,4 @@
-import { Chapter, Content, Epoc, html, Parameters, uid, Video } from '@epoc/epoc-types/dist/v1';
+import { Chapter, Content, Epoc, html, Parameters, uid } from '@epoc/epoc-types/dist/v1';
 import { Question } from '@epoc/epoc-types/dist/v1/question';
 import { Author } from '@epoc/epoc-types/dist/v1/author';
 
@@ -11,6 +11,7 @@ export class EpocV1 implements Epoc {
     teaser: string;
     thumbnail: string;
     version: string;
+    edition: string;
     certificateScore: number;
     download: string;
     lastModif: string;
@@ -24,9 +25,10 @@ export class EpocV1 implements Epoc {
 
     constructor(
         id: string, title: string, image: string, objectives: string[], summary: html, teaser: string,
-        thumbnail: string, version: string, certificateScore: number, authors: Author[],
-        chapterParameter: string
+        thumbnail: string, edition: string, certificateScore: number, authors: Author[],
+        chapterParameter: string, lastModif: string
     ) {
+        this.version = '1';
         this.id = id;
         this.title = title;
         this.image = image;
@@ -34,7 +36,7 @@ export class EpocV1 implements Epoc {
         this.summary = summary;
         this.teaser = teaser;
         this.thumbnail = thumbnail;
-        this.version = version;
+        this.edition = edition;
         this.certificateScore = certificateScore;
         this.authors = authors;
         this.parameters = {
@@ -43,9 +45,7 @@ export class EpocV1 implements Epoc {
         this.chapters = {};
         this.contents = {};
         this.questions = {};
-        this.chaptersCount = 0;
-        this.assessmentsCount = 0;
-        this.download = '';
+        this.lastModif = lastModif;
     }
 
     addChapter(id: uid, chapter: Chapter) {
@@ -61,20 +61,4 @@ export class EpocV1 implements Epoc {
         this.questions[id] = question;
         return id;
     }
-}
-
-export class VideoContent implements Video {
-
-    constructor(content: Video) {
-        
-    }
-
-    type: 'video';
-    id: uid;
-    poster: string;
-    source: string;
-    subtitles: { label: string; lang: string; src: string }[];
-    summary: html;
-    title: string;
-    transcript: string;
 }

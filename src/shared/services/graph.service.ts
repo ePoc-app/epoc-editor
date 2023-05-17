@@ -3,6 +3,7 @@ import { getConnectedEdges, GraphNode, useVueFlow } from '@vue-flow/core';
 import { EpocV1 } from '@/src/shared/classes/epoc-v1';
 import { Assessment, Content, Html, SimpleQuestion, uid, Video } from '@epoc/epoc-types/dist/v1';
 import { Question } from '@epoc/epoc-types/dist/v1/question';
+import { standardPages } from '@/src/shared/data';
 
 declare const api: ApiInterface;
 
@@ -54,10 +55,11 @@ function createContentJSON() : EpocV1 {
         ePocValues.summary || '',
         ePocValues.teaser || '',
         ePocValues.thumbnail || '',
-        ePocValues.version || new Date().getFullYear(),
+        ePocValues.edition || new Date().getFullYear(),
         ePocValues.certificateScore || 0,
         ePocValues.authors || {},
-        ePocValues.chapterParameter
+        ePocValues.chapterParameter,
+        new Date().toISOString()
     );
 
     chapterNodes.forEach(chapter => {
@@ -85,7 +87,7 @@ function newContent(epoc: EpocV1, pageNode) : string {
         title: pageNode.data.formValues.title || '',
         subtitle: pageNode.data.formValues.subtitle || ''
     };
-    if (pageNode.data.type === 'template') {
+    if (pageNode.data.elements.every(elem => standardPages.find(s => s.type === elem.formType))) {
         const contentNode = pageNode.data.elements[0];
         if (contentNode.action.type === 'video') {
             const content: Video = {
@@ -219,7 +221,7 @@ function getNodeById(id) : GraphNode {
     return nodes.value.find((node) => { return node.id === id; });
 }
 
-export const projectService = {
+export const graphService = {
     importFile,
     writeProjectData,
     getPreviousNode,

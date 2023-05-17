@@ -59,15 +59,42 @@ export const videoForm: Form = {
                     value: '',
                     placeholder: 'Ajouter une vignette',
                     accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp'
-                },
+                }
+            ]
+        },
+        {
+            name: 'Sous-titres',
+            inputs: [
                 {
                     id: 'subtitles',
-                    type: 'file',
                     label: 'Sous-titres',
+                    type: 'repeat',
                     value: '',
-                    placeholder: 'Ajouter des sous-titres',
-                    accept: '.vtt'
-                },
+                    inputs: [
+                        {
+                            id: 'label',
+                            type: 'text',
+                            label: 'Nom de la langue',
+                            value: '',
+                            placeholder: 'English'
+                        },
+                        {
+                            id: 'lang',
+                            type: 'text',
+                            label: 'Code de langue',
+                            value: '',
+                            placeholder: 'en',
+                        },
+                        {
+                            id: 'src',
+                            type: 'file',
+                            label: 'Fichier',
+                            value: '',
+                            placeholder: 'Ajouter des sous-titres',
+                            accept: '.vtt'
+                        }
+                    ]
+                }
             ]
         }
     ]

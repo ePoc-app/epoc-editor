@@ -5,9 +5,9 @@ import { ePocProject } from '@/src/shared/interfaces';
 import { createToaster } from '@meforma/vue-toaster';
 import { EpocV1 } from '@/src/shared/classes/epoc-v1';
 import { Assessment, SimpleQuestion } from '@epoc/epoc-types/dist/v1';
-import { projectService } from '@/src/shared/services/graph.service';
 import { addNewPage, setEpocNodeData, addChapter, createLinkedPage } from './graph';
-import { generateContentId, generateId } from '@/src/shared/services/graph.service';
+import { standardPages, questions } from '@/src/shared/data';
+import { generateId, graphService } from '@/src/shared/services/graph.service';
 
 const toaster = createToaster({
     duration: 1000,
@@ -183,9 +183,9 @@ function runPreviewAtPage(): void {
         } else if (openedNode.type === 'chapter') {
             contentPath = openedNode.data.contentId;
         } else {
-            let prevNode = projectService.getPreviousNode(openedNode);
+            let prevNode = graphService.getPreviousNode(openedNode);
             while (prevNode && prevNode.type !== 'chapter') {
-                prevNode = projectService.getPreviousNode(prevNode);
+                prevNode = graphService.getPreviousNode(prevNode);
             }
             if (prevNode) {
                 contentPath = `${prevNode.data.contentId}/content/${openedNode.data.contentId}`;
@@ -218,67 +218,80 @@ function generateFlowEpocFromData(epoc: EpocV1) {
             const id = generateId();
             const action = {
                 icon: '',
-                type: ''
+                type: '',
+                label: ''
             };
             const mapType = {
-                'video': 'video',
-                'html': 'text',
-                'multiple-choice': 'qcm',
-                'choice': 'qcm',
-                'drag-and-drop': 'dragdrop',
-                'dropdown-list': 'list',
-                'swipe': 'swipe',
-                'reorder': 'reorder'
-            };
-            const mapIcon = {
-                'video': 'icon-video',
-                'html': 'icon-texte',
-                'multiple-choice': 'icon-qcm',
-                'choice': 'icon-qcm',
-                'drag-and-drop': 'icon-dragdrop',
-                'dropdown-list': 'icon-liste',
-                'swipe': 'icon-swipe',
-                'reorder': 'icon-reorder'
+                'video': standardPages.find(s => s.type === 'video'),
+                'html': standardPages.find(s => s.type === 'text'),
+                'multiple-choice': questions.find(s => s.type === 'qcm'),
+                'choice': questions.find(s => s.type === 'qcm'),
+                'drag-and-drop': questions.find(s => s.type === 'dragdrop'),
+                'dropdown-list': questions.find(s => s.type === 'list'),
+                'swipe': questions.find(s => s.type === 'swipe'),
+                'reorder': questions.find(s => s.type === 'reorder')
             };
             const contentElements = [];
             const contentElement = {
                 id: generateId(),
                 action: action,
-                formType: mapType[content.type],
-                formValues: {},
+                formType: mapType[content.type]?.type,
+                formValues: {
+                    ...content
+                },
                 parentId: id,
-                contentId: generateContentId()
+                contentId
             };
+            const title = content.title;
+            const subtitle = content.subtitle;
             if (content.type === 'assessment') {
                 (content as Assessment).questions.forEach((qid) => {
                     const question = epoc.questions[qid];
                     const contentElement = {
                         id: generateId(),
                         action: {
-                            icon:mapIcon[question.type],
-                            type:mapType[question.type]
+                            icon:mapType[question.type].icon,
+                            type:mapType[question.type].type,
+                            label:mapType[question.type].label
                         },
-                        formType: mapType[question.type],
-                        formValues: {},
+                        formType: mapType[question.type].type,
+                        formValues: {
+                            ...setQuestionData(question)
+                        },
                         parentId: id,
-                        contentId: generateContentId()
+                        contentId: qid
                     };
                     contentElements.push(contentElement);
                 });
             } else if (content.type === 'simple-question') {
                 const question = epoc.questions[(content as SimpleQuestion).question];
-                contentElement.formType = mapType[question.type];
-                contentElement.action.type = mapType[question.type];
-                contentElement.action.icon = mapIcon[question.type];
+                contentElement.formType = mapType[question.type].type;
+                contentElement.action.type = mapType[question.type].type;
+                contentElement.action.icon = mapType[question.type].icon;
+                contentElement.action.label = mapType[question.type].label;
                 contentElements.push(contentElement);
             } else {
-                contentElement.action.type = mapType[content.type];
-                contentElement.action.icon = mapIcon[content.type];
+                contentElement.action.type = mapType[content.type].type;
+                contentElement.action.icon = mapType[content.type].icon;
+                contentElement.action.label = mapType[content.type].label;
                 contentElements.push(contentElement);
             }
-            currentNode = createLinkedPage(currentNode, contentElements);
+            currentNode = createLinkedPage(currentNode, contentElements, title, subtitle, id);
         }
     }
+}
+
+function setQuestionData(question) {
+    const questionData = {
+        label: question.label,
+        statement: question.statement,
+        explanation: question.explanation,
+        score: question.score
+    };
+
+    // Todo : WIP set question data
+
+    return questionData;
 }
 
 export const editorService = {

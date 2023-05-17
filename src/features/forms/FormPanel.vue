@@ -3,7 +3,7 @@ import { useEditorStore } from '../../shared/stores';
 import FormButton from './components/FormButton.vue';
 import GenericField from './components/GenericField.vue';
 import { Input } from '@/src/shared/interfaces';
-import { projectService, editorService } from '@/src/shared/services';
+import { graphService, editorService } from '@/src/shared/services';
 import { createToaster } from '@meforma/vue-toaster';
 import { confirmDelete, duplicatePage, duplicateContent } from '@/src/shared/services/graph';
 
@@ -20,7 +20,7 @@ function actionOnForm(action: string) {
     switch (action) {
     case 'delete':
         confirmDelete();
-        projectService.writeProjectData();
+        graphService.writeProjectData();
         break;
 
     case 'duplicate-page':

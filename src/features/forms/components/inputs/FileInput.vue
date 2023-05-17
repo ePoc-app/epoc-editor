@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
-import { projectService } from '@/src/shared/services';
+import { graphService } from '@/src/shared/services';
 
 const props = defineProps<{
     inputValue: string;
@@ -28,7 +28,7 @@ async function changeImage(e) {
     const file = e.target.files[0];
     if (!file) return;
     fileInput.value.value = '';
-    url.value = await projectService.importFile(file.path);
+    url.value = await graphService.importFile(file.path);
     emit('input', url.value);
 }
 

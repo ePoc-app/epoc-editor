@@ -2,7 +2,7 @@
 import { Input } from '@/src/shared/interfaces';
 import GenericInput from './inputs/GenericInput.vue';
 import { useEditorStore } from '@/src/shared/stores';
-import { projectService } from '@/src/shared/services';
+import { graphService } from '@/src/shared/services';
 import { deleteElement, changeContentOrder } from '@/src/shared/services/graph';
 
 const editorStore = useEditorStore();
@@ -31,7 +31,7 @@ function onInput(value: string, id: string) {
         : currentNode.data;
     
     element.formValues[id] = value;
-    projectService.writeProjectData();
+    graphService.writeProjectData();
 }
 
 function onRepeatInput(value, id: string) {
@@ -93,7 +93,7 @@ function onRepeatInput(value, id: string) {
     default: break;
     }
 
-    projectService.writeProjectData();
+    graphService.writeProjectData();
 
 }
 

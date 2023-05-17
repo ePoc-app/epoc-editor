@@ -3,7 +3,7 @@ import { QuillEditor, Quill } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import ImageUploader from 'quill-image-uploader/src/quill.imageUploader';
 import { Ref, ref, watch } from 'vue';
-import { projectService } from '@/src/shared/services';
+import { graphService } from '@/src/shared/services';
 
 const props = defineProps<{
     label: string;
@@ -41,7 +41,7 @@ const modules = {
     name: 'imageUploader',
     module: ImageUploader,
     options: {
-        upload: (file) => projectService.importFile(file.path)
+        upload: (file) => graphService.importFile(file.path)
     }
 };
 

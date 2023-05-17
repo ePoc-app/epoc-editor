@@ -62,40 +62,44 @@ export function addChapter(chapterId?: string, chapter?: Chapter) {
     return newChapter;
 }
 
-export function createLinkedPage(element, contentElements) {
+export function createLinkedPage(sourcePage, contentElements, title, subtitle, id) {
     const position = {
-        x: element.position.x + 150,
-        y: element.position.y
+        x: sourcePage.position.x + 150,
+        y: sourcePage.position.y
     };
-
-    const pageNode: Node = {
-        id: contentElements[0].id,
+    const newPage: Node = {
+        id: id,
         type: 'content',
         data: {
             elements: contentElements,
+            readyToDrop: false,
             formType: 'page',
-            formValues: {},
+            formValues: {
+                title,
+                subtitle,
+                components: contentElements.map(c => {
+                    return { action: c.action };
+                })
+            },
             type: 'template',
-            contentId: generateContentId(),
+            contentId: contentElements[0]?.contentId
         },
-        position,
+        position: position,
         deletable: false
     };
 
-    const edge: Edge = {
+    const newEdge : Edge = {
         id: generateId(),
-        source: element.id,
-        target: contentElements[0].parentId,
+        source: sourcePage.id,
+        target: newPage.id,
         type: 'default',
         updatable: true,
-        style: { stroke: '#384257', strokeWidth: 2.5 },
-        markerEnd: { type: MarkerType.ArrowClosed, color: '#384257' }
+        style: {stroke: '#384257', strokeWidth: 2.5},
+        markerEnd: {type: MarkerType.ArrowClosed, color: '#384257'}
     };
-
-    addNodes([pageNode]);
-    addEdges([edge]);
-
-    return pageNode;
+    addNodes([newPage]);
+    addEdges([newEdge]);
+    return newPage;
 }
 
 export function createPageFromContent(position, element: NodeElement) {

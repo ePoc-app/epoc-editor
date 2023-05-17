@@ -21,7 +21,7 @@ build:
       - dist_electron/*.exe
   
   rules:
-    - if: $RELEASE_NAME == null && ('$CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_TAG')
+    - if: $RELEASE_NAME == null && ($CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_TAG)
 
 release:
   stage: release
