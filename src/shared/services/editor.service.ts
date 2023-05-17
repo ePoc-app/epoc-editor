@@ -1,11 +1,13 @@
 import { ApiInterface } from '@/src/shared/interfaces/api.interface';
 import { router } from '@/src/router';
-import { useEditorStore, useProjectStore } from '@/src/shared/stores';
+import { useEditorStore, useGraphStore } from '@/src/shared/stores';
 import { ePocProject } from '@/src/shared/interfaces';
 import { createToaster } from '@meforma/vue-toaster';
 import { EpocV1 } from '@/src/shared/classes/epoc-v1';
 import { Assessment, SimpleQuestion } from '@epoc/epoc-types/dist/v1';
-import { projectService } from '@/src/shared/services/project.service';
+import { projectService } from '@/src/shared/services/graph.service';
+import { addNewPage, setEpocNodeData, addChapter, createLinkedPage } from './graph';
+import { generateContentId, generateId } from '@/src/shared/services/graph.service';
 
 const toaster = createToaster({
     duration: 1000,
@@ -15,7 +17,7 @@ const toaster = createToaster({
 declare const api: ApiInterface;
 
 const editorStore = useEditorStore();
-const projectStore = useProjectStore();
+const graphStore = useGraphStore();
 let initialized = false;
 let currentToastStartTime;
 let currentToast;
@@ -79,7 +81,7 @@ const setup = function () {
         editorStore.closeFormPanel();
         editorStore.currentProject = ePocProject;
 
-        projectStore.setFlow(parsedData.flow);
+        graphStore.setFlow(parsedData.flow);
 
         router.push('/editor').then(() => {
             editorStore.loading = false;
@@ -93,7 +95,7 @@ const setup = function () {
 
     api.receive('epocImportExtracted', (data: string) => {
         const importedEpoc =  JSON.parse(data);
-        projectStore.setFlow(null);
+        graphStore.setFlow(null);
         router.push('/editor').then(() => {
             editorStore.loading = false;
             if (!importedEpoc || !importedEpoc.workdir) return;
@@ -125,7 +127,7 @@ const setup = function () {
 
     api.receive('addPage', (data: string) => {
         const page = JSON.parse(data);
-        editorStore.addNewPage(page.type, page.pos);
+        addNewPage(page.type, page.pos);
     });
 
     initialized = true;
@@ -171,8 +173,8 @@ function runPreview(): void {
 
 function runPreviewAtPage(): void {
     waitingToast('🔭 Démarrage de la prévisualisation...');
-    const openedElementId = editorStore.openedParentId ? editorStore.openedParentId : editorStore.openedElementId;
-    const openedNode = projectStore.elements.find(e => e.id === openedElementId);
+    const openedNodeId = editorStore.openedNodeId ?? editorStore.openedElementId;
+    const openedNode = graphStore.elements.find(e => e.id === openedNodeId);
     let contentPath;
     let error;
     if (openedNode) {
@@ -208,13 +210,12 @@ function exportProject(): void {
 }
 
 function generateFlowEpocFromData(epoc: EpocV1) {
-    console.log(epoc);
-    projectStore.setEpocNodeData(epoc);
+    setEpocNodeData(epoc);
     for (const [chapterId, chapter] of Object.entries(epoc.chapters)) {
-        let currentNode = projectStore.addChapter(chapterId, chapter);
+        let currentNode = addChapter(chapterId, chapter);
         for (const contentId of chapter.contents) {
             const content = epoc.contents[contentId];
-            const id = editorStore.generateId();
+            const id = generateId();
             const action = {
                 icon: '',
                 type: ''
@@ -241,18 +242,18 @@ function generateFlowEpocFromData(epoc: EpocV1) {
             };
             const contentElements = [];
             const contentElement = {
-                id: editorStore.generateId(),
+                id: generateId(),
                 action: action,
                 formType: mapType[content.type],
                 formValues: {},
                 parentId: id,
-                contentId: editorStore.generateContentId()
+                contentId: generateContentId()
             };
             if (content.type === 'assessment') {
                 (content as Assessment).questions.forEach((qid) => {
                     const question = epoc.questions[qid];
                     const contentElement = {
-                        id: editorStore.generateId(),
+                        id: generateId(),
                         action: {
                             icon:mapIcon[question.type],
                             type:mapType[question.type]
@@ -260,7 +261,7 @@ function generateFlowEpocFromData(epoc: EpocV1) {
                         formType: mapType[question.type],
                         formValues: {},
                         parentId: id,
-                        contentId: editorStore.generateContentId()
+                        contentId: generateContentId()
                     };
                     contentElements.push(contentElement);
                 });
@@ -275,7 +276,7 @@ function generateFlowEpocFromData(epoc: EpocV1) {
                 contentElement.action.icon = mapIcon[content.type];
                 contentElements.push(contentElement);
             }
-            currentNode = projectStore.createNodeLinkedNextNode(currentNode, contentElements);
+            currentNode = createLinkedPage(currentNode, contentElements);
         }
     }
 }

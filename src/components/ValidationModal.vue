@@ -1,11 +1,11 @@
 <script setup lang='ts'>
 import { onMounted, ref } from 'vue';
 import { useEditorStore } from '../shared/stores';
+import { deleteSelectedNodes } from '../shared/services/graph';
 
 const editorStore = useEditorStore();
 
 const modalScreen = ref(null);
-
 
 onMounted(() => {
     modalScreen.value.focus();
@@ -19,13 +19,13 @@ onMounted(() => {
         ref="modalScreen"
         class="modal-backdrop"
         tabindex="0"
-        @keyup.enter="editorStore.deleteSelectedNodes"
+        @keyup.enter="deleteSelectedNodes"
         @keyup.escape="editorStore.validationModal = false"
     >
         <div class="modal">
             <h3>Souhaitez-vous vraiment supprimer cet élément ?</h3>
             <button class="btn btn-close" @click="editorStore.validationModal = false"><i class="icon-x"></i></button>
-            <button class="btn-choice accept" @click="editorStore.deleteSelectedNodes">OUI, SUPPRIMER</button>
+            <button class="btn-choice accept" @click="deleteSelectedNodes">OUI, SUPPRIMER</button>
             <button class="btn-choice cancel" @click="editorStore.validationModal = false">NON, NE PAS SUPPRIMER</button>
         </div>
     </div>

@@ -4,6 +4,7 @@ import { useVueFlow } from '@vue-flow/core';
 import ContentButton from '@/src/components/ContentButton.vue';
 
 const editorStore = useEditorStore();
+
 const props = defineProps<{
     id: string;
     data: {

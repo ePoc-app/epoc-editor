@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { useProjectStore } from '@/src/shared/stores';
-
-const projectStore = useProjectStore();
+import { addChapter } from '@/src/shared/services/graph';
 
 </script>
 
 <template>
-    <div class="add-chapter" @mousedown="projectStore.addChapter()">
+    <div class="add-chapter" @mousedown="addChapter()">
         <button class="add-btn"><i class="icon-plus"></i></button>
     </div>
 </template>

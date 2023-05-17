@@ -2,7 +2,6 @@
 import { useEditorStore } from '@/src/shared/stores';
 import { editorService } from '@/src/shared/services';
 
-
 const editorStore = useEditorStore();
 
 editorService.setup();

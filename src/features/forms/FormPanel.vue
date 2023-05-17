@@ -5,6 +5,7 @@ import GenericField from './components/GenericField.vue';
 import { Input } from '@/src/shared/interfaces';
 import { projectService, editorService } from '@/src/shared/services';
 import { createToaster } from '@meforma/vue-toaster';
+import { confirmDelete, duplicatePage, duplicateContent } from '@/src/shared/services/graph';
 
 const editorStore = useEditorStore();
 
@@ -18,12 +19,12 @@ const currentNode = editorStore.getCurrentGraphNode;
 function actionOnForm(action: string) {
     switch (action) {
     case 'delete':
-        editorStore.deleteValidation();
+        confirmDelete();
         projectService.writeProjectData();
         break;
 
     case 'duplicate-page':
-        editorStore.duplicateScreen();
+        duplicatePage();
         break;
 
     case 'back-to-page':
@@ -31,7 +32,7 @@ function actionOnForm(action: string) {
         break;
     
     case 'duplicate-element':
-        editorStore.duplicateElement();
+        duplicateContent();
         break;
 
     case 'launch-preview':
@@ -57,7 +58,7 @@ function actionOnForm(action: string) {
         </div>
         <div class="buttons">
             <FormButton
-                v-for="button in editorStore.getFormButtons()"
+                v-for="button in editorStore.formPanel.buttons"
                 :key="button.label"
                 :label="button.label"
                 :icon="button.icon"

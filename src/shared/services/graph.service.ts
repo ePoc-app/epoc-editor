@@ -1,7 +1,7 @@
 import { ApiInterface } from '@/src/shared/interfaces/api.interface';
 import { getConnectedEdges, GraphNode, useVueFlow } from '@vue-flow/core';
 import { EpocV1 } from '@/src/shared/classes/epoc-v1';
-import { Assessment, Content, Html, SimpleQuestion, Video } from '@epoc/epoc-types/dist/v1';
+import { Assessment, Content, Html, SimpleQuestion, uid, Video } from '@epoc/epoc-types/dist/v1';
 import { Question } from '@epoc/epoc-types/dist/v1/question';
 
 declare const api: ApiInterface;
@@ -41,10 +41,10 @@ onNodesChange(() => {
 
 function createContentJSON() : EpocV1 {
 
-    const epocNode = nodes.value.find((node) => { return node.type === 'epoc'; });
+    const ePocNode = nodes.value.find((node) => { return node.type === 'epoc'; });
     const chapterNodes = nodes.value.filter((node) => { return node.type === 'chapter'; });
 
-    const ePocValues = epocNode.data.formValues;
+    const ePocValues = ePocNode.data.formValues;
 
     const epoc = new EpocV1(
         ePocValues.id || 'E000XX',
@@ -225,3 +225,21 @@ export const projectService = {
     getPreviousNode,
     getNextNode
 };
+
+export function generateContentId(): string {
+    const firstNumber = (Math.random() * 46656) | 0;
+    const secondNumber = (Math.random() * 46656) | 0;
+    const firstPart = ('000' + firstNumber.toString(36)).slice(-3);
+    const secondPart = ('000' + secondNumber.toString(36)).slice(-3);
+    return firstPart + secondPart;
+}
+
+//generate id of format 'aaaaaaaa'-'aaaa'-'aaaa'-'aaaa'-'aaaaaaaaaaaa'
+export function generateId(): uid {
+    const s4 = () => {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    };
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}

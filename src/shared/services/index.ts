@@ -1,2 +1,2 @@
 export * from './editor.service';
-export * from './project.service';
+export * from './graph.service';

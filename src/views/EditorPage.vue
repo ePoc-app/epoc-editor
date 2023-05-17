@@ -6,21 +6,18 @@ import FormPanel from '@/src/features/forms/FormPanel.vue';
 import ValidationModal from '../components/ValidationModal.vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { editorService } from '@/src/shared/services';
+import { confirmDelete } from '@/src/shared/services/graph';
 
 const editorStore = useEditorStore();
 
 editorService.setup();
-
-function dismissModals() {
-    editorStore.dismissModals();
-}
 
 document.body.addEventListener('keydown', function(event) {
     const key = event.key;
     if ((key === 'Backspace' || key === 'Delete')) {
         if((event.target as HTMLElement).className.indexOf('vue-flow') !== -1 || event.target === document.body) {
             event.stopPropagation();
-            editorStore.deleteValidation();
+            confirmDelete();
         }
     }
 });
@@ -43,7 +40,7 @@ function onRemoveCursor() {
 </script>
 
 <template>
-    <div class="editor-container" @drop="onRemoveCursor" @dragend="onRemoveCursor" @mouseup="dismissModals" @click="dismissModals">
+    <div class="editor-container" @drop="onRemoveCursor" @dragend="onRemoveCursor" @mouseup="editorStore.dismissModals" @click="editorStore.dismissModals">
         <SideBar class="side-bar" @dragover="onCursorNotAllowed" />
         <TopBar class="top-bar" @dragover="onCursorNotAllowed" />
         <ePocFlow class="editor-content" @dragover="onCursorAllowed" />

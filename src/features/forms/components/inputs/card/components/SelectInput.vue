@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useEditorStore } from '@/src/shared/stores';
 
+const editorStore = useEditorStore();
+
 const props = defineProps<{
     label: string;
     inputValue: string;
@@ -13,12 +15,11 @@ const emit = defineEmits<{
     (e: 'change', value: string): void;
 }>();
 
-const editorStore = useEditorStore();
 
 const currentNode = editorStore.getCurrentGraphNode;
-const currentElement = currentNode.data.elements.find(e => e.id === editorStore.openedElementId);
+const currentContent = currentNode.data.elements.find(e => e.id === editorStore.openedElementId);
 
-const getOptions = () => props.linkedOptions ? currentElement.formValues[props.linkedOptions] : props.options;
+const getOptions = () => props.linkedOptions ? currentContent.formValues[props.linkedOptions] : props.options;
 
 
 </script>

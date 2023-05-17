@@ -3,6 +3,9 @@ import { Input } from '@/src/shared/interfaces';
 import GenericInput from './inputs/GenericInput.vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { projectService } from '@/src/shared/services';
+import { deleteElement, changeContentOrder } from '@/src/shared/services/graph';
+
+const editorStore = useEditorStore();
 
 defineProps<{
     inputs: Input[];
@@ -11,12 +14,10 @@ defineProps<{
     displayFieldIndex: boolean;
 }>();
 
-const editorStore = useEditorStore();
-
 const currentNode = editorStore.getCurrentGraphNode;
 
 const getInputValue = (input) => {
-    const formValues = editorStore.openedParentId
+    const formValues = editorStore.openedNodeId
         ? (currentNode.data.elements.find(e => e.id === editorStore.openedElementId)?.formValues ?? {})
         : currentNode.data.formValues;
     
@@ -25,7 +26,7 @@ const getInputValue = (input) => {
 
 
 function onInput(value: string, id: string) {
-    const element = editorStore.openedParentId
+    const element = editorStore.openedNodeId
         ? currentNode.data.elements.find(e => e.id === editorStore.openedElementId)
         : currentNode.data;
     
@@ -34,7 +35,7 @@ function onInput(value: string, id: string) {
 }
 
 function onRepeatInput(value, id: string) {
-    const element = editorStore.openedParentId
+    const element = editorStore.openedNodeId
         ? currentNode.data.elements.find(e => e.id === editorStore.openedElementId)
         : null;
     
@@ -56,16 +57,16 @@ function onRepeatInput(value, id: string) {
         formValues.splice(value.index, 1);
 
         const currentElement = currentNode.data.elements?.[value.index];
-        if(!editorStore.openedParentId && currentElement) {
-            editorStore.deleteElement(currentElement.id, currentElement.parentId);
+        if(!editorStore.openedNodeId && currentElement) {
+            deleteElement(currentElement.id, currentElement.parentId);
         }
 
         break;
     }
 
     case 'move':
-        if(currentNode.data.elements && !editorStore.openedParentId) {
-            editorStore.changeElementOrder(value.oldIndex, value.newIndex, currentNode.id);
+        if(currentNode.data.elements && !editorStore.openedNodeId) {
+            changeContentOrder(value.oldIndex, value.newIndex, currentNode.id);
         } else {
             const items = element ? element.formValues[id] : currentNode.data.formValues[id];
             const item = items.splice(value.oldIndex, 1);

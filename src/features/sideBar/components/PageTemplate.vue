@@ -15,7 +15,7 @@ const templateTooltip = 'Glisser/déposer pour ajouter un modèle';
 
 const dragging = ref(false);
 
-function dragStart($event, elements) {
+function dragStart(event, elements) {
     editorStore.draggedElement = {
         type: 'sideAction',
         element: elements

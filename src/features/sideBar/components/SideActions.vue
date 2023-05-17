@@ -6,11 +6,10 @@ import { useEditorStore } from '@/src/shared/stores';
 
 const editorStore = useEditorStore();
 
-const { standardScreens } = editorStore;
-const standardContent = standardScreens.filter(({ type }) => !['condition', 'question', 'model'].includes(type));
-const questionContent = standardScreens.find(({ type }) => type === 'question');
-const conditionContent = standardScreens.find(({ type }) => type === 'condition');
-const modelContent = standardScreens.find(({ type }) => type === 'model');
+const standardContent = editorStore.standardPages.filter(({ type }) => !['condition', 'question', 'model'].includes(type));
+const questionContent = editorStore.standardPages.find(({ type }) => type === 'question');
+const conditionContent = editorStore.standardPages.find(({ type }) => type === 'condition');
+const modelContent = editorStore.standardPages.find(({ type }) => type === 'model');
 
 const dragging = ref(false);
 

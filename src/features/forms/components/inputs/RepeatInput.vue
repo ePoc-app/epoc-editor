@@ -4,6 +4,7 @@ import GenericInput from './GenericInput.vue';
 import AddCard from './card/AddCard.vue';
 import { Input } from '@/src/shared/interfaces';
 import { ref } from 'vue';
+import { generateContentId } from '@/src/shared/services/graph.service';
 
 const props = defineProps<{
     inputs: Input[];
@@ -47,7 +48,7 @@ function addCard() {
         ? props.inputs[0].value 
         : props.inputs.reduce((defaultValues, input) => {
             defaultValues[input.id] = input.type === 'hidden'
-                ? editorStore.generateContentId()
+                ? generateContentId()
                 : input.value;
             return defaultValues;
         }, {});

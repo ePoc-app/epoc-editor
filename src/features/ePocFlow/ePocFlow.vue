@@ -3,17 +3,17 @@ import { ConnectionMode, useVueFlow, VueFlow, getConnectedEdges, applyEdgeChange
 import { markRaw, onMounted } from 'vue';
 import PageNode from './nodes/PageNode.vue';
 import CustomConnectContent from './edges/CustomConnectContent.vue';
-import { useEditorStore, useProjectStore } from '@/src/shared/stores';
+import { useEditorStore, useGraphStore } from '@/src/shared/stores';
 import ChapterNode from './nodes/ChapterNode.vue';
 import ePocNode from './nodes/ePocNode.vue';
 import AddChapterNode from './nodes/AddChapterNode.vue';
 import { NodeElement, SideAction } from '@/src/shared/interfaces';
+import { addPage, createPageFromContent, removeContentFromPage } from '@/src/shared/services/graph';
 
 const { vueFlowRef, project, updateEdge, edges, nodes, findNode }  = useVueFlow({ id: 'main' });
 
-
 const editorStore = useEditorStore();
-const projectStore = useProjectStore();
+const graphStore = useGraphStore();
 
 const nodeTypes = {
     content: markRaw(PageNode),
@@ -36,17 +36,17 @@ const onDrop = (event) => {
 
     const { element, type, source } = editorStore.draggedElement;
 
-    if(type === 'sideAction') projectStore.addNode(position, element as SideAction[]);
+    if(type === 'sideAction') addPage(position, element as SideAction[]);
     else if(type === 'nodeElement') {
-        projectStore.createNodeFromElement(position, element as NodeElement);
+        createPageFromContent(position, element as NodeElement);
 
-        setTimeout(() =>  editorStore.removeElementFromScreen(source.index, source.parentId, true), 0);
+        setTimeout(() => removeContentFromPage(source.index, source.parentId, true), 0);
     }
 
 };
 
 onMounted(() => {
-    projectStore.restore();
+    graphStore.restore();
 });
 
 
@@ -150,7 +150,7 @@ function nodeDrag(event) {
 
 <template>
     <VueFlow
-        v-model="projectStore.elements"
+        v-model="graphStore.elements"
         auto-connect
         :default-zoom=".75"
         :max-zoom="1.5"

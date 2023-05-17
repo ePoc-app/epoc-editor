@@ -4,6 +4,8 @@ import { computed, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { NodeElement, SideAction } from '@/src/shared/interfaces';
 import ContentButton from '@/src/components/ContentButton.vue';
+import { addContentToPage, removeContentFromPage, changeContentOrder } from '@/src/shared/services/graph';
+import { generateContentId, generateId } from '@/src/shared/services/graph.service';
 
 const editorStore = useEditorStore();
 
@@ -44,7 +46,6 @@ const dragOptions = ref({
     ghostClass: 'ghost',
     animation: 200,
 });
-
 
 function openForm(element: NodeElement) {
     editorStore.openFormPanel(element.id, element.formType, element.formValues, element.parentId);
@@ -103,12 +104,12 @@ function change(event) {
             newElement = { ...element, parentId: props.id };
         } else {
             newElement = {
-                id: editorStore.generateId(),
+                id: generateId(),
                 parentId: props.id,
                 action: element,
                 formType: element.type,
                 formValues: element.formValues,
-                contentId: editorStore.generateContentId(),
+                contentId: generateContentId(),
             };
         }
 
@@ -116,17 +117,17 @@ function change(event) {
         dropped.value = false;
 
         const action = element.action || element;
-        editorStore.addElementToPage(currentNode.id, action, added.newIndex);
+        addContentToPage(currentNode.id, action, added.newIndex);
     }
 
     if(moved) {
         const { oldIndex, newIndex } = moved;
-        editorStore.changeElementOrder(oldIndex, newIndex, props.id);
+        changeContentOrder(oldIndex, newIndex, props.id);
     }
 
     if(removed) {
         const { oldIndex } = removed;
-        editorStore.removeElementFromScreen(oldIndex, props.id, true);
+        removeContentFromPage(oldIndex, props.id, true);
     }
 }
 
