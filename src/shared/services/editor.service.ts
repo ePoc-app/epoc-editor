@@ -81,6 +81,8 @@ const setup = function () {
         editorStore.closeFormPanel();
         editorStore.currentProject = ePocProject;
 
+        parsedData.flow = changeScreenToPage(parsedData.flow);
+
         graphStore.setFlow(parsedData.flow);
 
         router.push('/editor').then(() => {
@@ -304,3 +306,13 @@ export const editorService = {
     runPreviewAtPage,
     exportProject
 };
+
+
+//TODO: delete backward support for old page form
+function changeScreenToPage(flow) {
+    const pages = flow.nodes.filter(node => node.type === 'content');
+    for(const page of pages) {
+        if(page.data.formType === 'screen') page.data.formType = 'page';
+    }
+    return flow;
+}
