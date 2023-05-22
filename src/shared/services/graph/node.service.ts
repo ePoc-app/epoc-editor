@@ -1,16 +1,18 @@
 import { Chapter } from '@epoc/epoc-types/dist/v1';
 import { EpocV1 } from '../../classes/epoc-v1';
 import { useEditorStore, useGraphStore } from '../../stores';
-import { useVueFlow, Node, MarkerType, Edge } from '@vue-flow/core';
-import { NodeElement, SideAction } from '../../interfaces';
+import { useVueFlow, Node, MarkerType, Edge, getConnectedEdges } from '@vue-flow/core';
+import { NodeElement, NodeMutatedAction, SideAction } from '../../interfaces';
 import { nextTick, toRaw, watch } from 'vue';
 
 import { addContentToPage, deleteContent } from './content.service';
 import { generateContentId, generateId } from '../graph.service';
+import { useUndoRedoStore } from '../../stores/undoRedoStore';
 
 const { nodes, edges, addNodes, addEdges, findNode, applyEdgeChanges, applyNodeChanges } = useVueFlow({ id: 'main' });
 
 const editorStore = useEditorStore();
+const undoRedoStore = useUndoRedoStore();
 
 const questionTypes = ['choice', 'drag-and-drop', 'reorder', 'swipe', 'dropdown-list'];
 
@@ -170,6 +172,14 @@ export function addPage(position: { x: number, y: number }, actions: SideAction[
 
     alignNode(newPageNode.id);
 
+    //TODO: make a addNode function that redirects to either addPage or addChapter
+    const undoRedoAction: NodeMutatedAction = {
+        type: 'nodeAdded',
+        node: JSON.stringify(newPageNode),
+        edges: [],
+    };
+    undoRedoStore.addAction(undoRedoAction);
+
     //? Conflicts with vue draggable on node edge
     document.querySelectorAll('.node .ghost').forEach((ghost) => {
         ghost.remove();
@@ -214,6 +224,7 @@ export function duplicatePage(): void {
     };
 
     addNodes([newPage]);
+
     editorStore.closeFormPanel();
 }
 
@@ -278,8 +289,18 @@ export function confirmDelete(): void {
     }
 }
 
-export function deleteNode(nodeId: string): void {
+export function deleteNode(nodeId: string, ignoreUndo?: boolean): void {
     const nodeToDelete = findNode(nodeId);
+
+    if(!ignoreUndo) {
+        const undoRedoAction: NodeMutatedAction = {
+            type: 'nodeRemoved',
+            node: JSON.stringify(nodeToDelete),
+            edges: getConnectedEdges([nodeToDelete], edges.value).map(edge => JSON.stringify(edge)),
+        };
+        undoRedoStore.addAction(undoRedoAction);
+    }
+
     applyNodeChanges([{ id:nodeToDelete.id, type: 'remove'}]);
 
     if(nodeToDelete.type === 'chapter') moveNextChapter(nodeToDelete.id);
@@ -309,4 +330,20 @@ export function isFormButtonDisabled(isDisabledFunction: (node) => boolean): boo
     const isChild = Boolean(editorStore.openedNodeId);
     const nodeData = isChild ? findNode(editorStore.openedNodeId).data.elements.find(e => e.id === editorStore.openedElementId) : findNode(editorStore.openedElementId).data;
     return isDisabledFunction(nodeData);
+}
+
+// These functions are only used by undo redo for the moment
+
+export function moveNode(nodeId: string, delta: { x: number, y: number }): void {
+    const node = findNode(nodeId);
+    node.position.x -= delta.x;
+    node.position.y -= delta.y;
+}
+
+export function createNodeFromJSON(node: string) {
+    console.log('creating node from JSON');
+    const newNode = JSON.parse(node);
+    addNodes([newNode]);
+
+    alignNode(newNode.id);
 }

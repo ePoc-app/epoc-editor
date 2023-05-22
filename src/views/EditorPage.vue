@@ -46,6 +46,8 @@ function onCursorAllowed() {
 
 function onRemoveCursor() {
     document.body.classList.remove('cursor-not-allowed', 'cursor-allowed');
+}
+
 function undo() {
     undoRedoStore.undo();
 }

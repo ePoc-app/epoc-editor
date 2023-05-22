@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia';
 import { UndoRedoAction, NodeMovedAction, NodeMutatedAction, EdgeAction, EdgeUpdatedAction } from '../interfaces';
-import { applyEdgeChanges, applyNodeChanges, getConnectedEdges, useVueFlow } from '@vue-flow/core';
+import { applyEdgeChanges, getConnectedEdges, useVueFlow } from '@vue-flow/core';
 import { toRaw } from 'vue';
+import { moveNode, deleteNode, createNodeFromJSON } from '@/src/shared/services/graph';
 
-const { findNode, addNodes, nodes, edges, addEdges, updateEdge } = useVueFlow({ id: 'main' });
+const { edges, addEdges, updateEdge } = useVueFlow({ id: 'main' });
 
 interface UndoRedoState {
     undoStack: UndoRedoAction[];
@@ -39,33 +40,35 @@ export const useUndoRedoStore = defineStore('epoc', {
         executeAction(action: UndoRedoAction, reverseStack: UndoRedoAction[]): void {
             switch(action.type) {
             case 'nodeMoved':
-                this.moveNode(action, reverseStack);
+                this.moveNodeAction(action, reverseStack);
                 break;
             case 'nodeRemoved':
-                this.addNode(action, reverseStack);
+                this.addNodeAction(action, reverseStack);
                 break;
             case 'nodeAdded':
-                this.deleteNode(action, reverseStack);
+                this.deleteNodeAction(action, reverseStack);
                 break;
             case 'nodeUpdated':
-                this.updateNode(action);
+                this.updateNodeAction(action);
                 break;
             case 'edgeAdded':
-                this.deleteEdge(action, reverseStack);
+                this.deleteEdgeAction(action, reverseStack);
                 break;
             case 'edgeUpdated':
                 this.updateEdgeAction(action, reverseStack);
                 break;
             case 'edgeRemoved':
-                this.addEdge(action, reverseStack);
+                this.addEdgeAction(action, reverseStack);
                 break;
             }
         },
 
-        moveNode(action: NodeMovedAction, reverseStack: UndoRedoAction[]): void {
-            const node = findNode(action.nodeId);
-            node.position.x -= action.deltaMovement.x;
-            node.position.y -= action.deltaMovement.y;
+        //TODO: Should we create a undo redo service ?
+
+        moveNodeAction(action: NodeMovedAction, reverseStack: UndoRedoAction[]): void {
+            if(action.deltaMovement.x === 0 && action.deltaMovement.y === 0) return;            
+
+            moveNode(action.nodeId, action.deltaMovement);
             
             const reverseAction: NodeMovedAction = {
                 type: 'nodeMoved',
@@ -78,7 +81,7 @@ export const useUndoRedoStore = defineStore('epoc', {
             reverseStack.push(reverseAction);
         },
 
-        deleteNode(action: NodeMutatedAction, reverseStack: UndoRedoAction[]): void {
+        deleteNodeAction(action: NodeMutatedAction, reverseStack: UndoRedoAction[]): void {
             const node = JSON.parse(action.node);
 
             const reverseAction: NodeMutatedAction = {
@@ -86,17 +89,15 @@ export const useUndoRedoStore = defineStore('epoc', {
                 node: action.node,
                 edges: getConnectedEdges([node], edges.value).map(edge => JSON.stringify(edge))
             };
+
+            deleteNode(node.id, true);
             
-            applyNodeChanges(
-                [{ id: node.id, type: 'remove' }],
-                nodes.value
-            );
             reverseStack.push(reverseAction);
         },
 
-        addNode(action: NodeMutatedAction, reverseStack: UndoRedoAction[]): void {
-            const node = JSON.parse(action.node);
-            addNodes([node]);
+        addNodeAction(action: NodeMutatedAction, reverseStack: UndoRedoAction[]): void {
+
+            createNodeFromJSON(action.node);
 
             const edges = [];
             const rawEdges = toRaw(action.edges);
@@ -118,18 +119,18 @@ export const useUndoRedoStore = defineStore('epoc', {
             
         },
 
-        updateNode() {
+        updateNodeAction() {
             return;
         },
 
-        addEdge(action: EdgeAction, reverseStack: UndoRedoAction[]): void {
+        addEdgeAction(action: EdgeAction, reverseStack: UndoRedoAction[]): void {
 
             const edge = JSON.parse(action.edge);
             edge.data = {
                 undoRedo: true
             };
+
             addEdges([edge]);
-            console.log('adding edge');
 
             const reverseAction: EdgeAction = {
                 type: 'edgeAdded',
@@ -156,7 +157,7 @@ export const useUndoRedoStore = defineStore('epoc', {
             reverseStack.push(reverseAction);
         },
 
-        deleteEdge(action: EdgeAction, reverseStack: UndoRedoAction[]): void {
+        deleteEdgeAction(action: EdgeAction, reverseStack: UndoRedoAction[]): void {
             const edge = JSON.parse(action.edge);
             applyEdgeChanges([{ id: edge.id, type: 'remove' }], edges.value);
 

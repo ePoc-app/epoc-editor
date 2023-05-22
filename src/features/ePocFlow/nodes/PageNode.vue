@@ -37,7 +37,6 @@ const isCondition = ref(currentNode.data.type === 'condition');
 const page = ref(null);
 
 const dragOptions = ref({
-    animation: 200,
     group: {
         name: 'node',
         put: !isCondition.value,
