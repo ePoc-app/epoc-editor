@@ -310,6 +310,8 @@ export const editorService = {
 
 //TODO: delete backward support for old page form
 function changeScreenToPage(flow) {
+    if(!flow) return;
+
     const pages = flow.nodes.filter(node => node.type === 'content');
     for(const page of pages) {
         if(page.data.formType === 'screen') page.data.formType = 'page';
