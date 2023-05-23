@@ -1,8 +1,9 @@
 import { useVueFlow } from '@vue-flow/core';
 import { useEditorStore } from '../../stores';
-import { SideAction } from '../../interfaces';
+import {NodeElement, SideAction} from '../../interfaces';
 import { deleteNode } from './node.service';
-import { generateId } from '../graph.service';
+import {generateContentId, generateId} from '../graph.service';
+import * as forms from '@/src/shared/data/forms';
 
 const { findNode } = useVueFlow({ id: 'main' });
 
@@ -59,18 +60,36 @@ export function removeContentFromPage(index: number, pageId: string, pageMoved?:
     }
 }
 
-export function addContentToPage(pageId: string, action: SideAction, index?: number): void {
+export function addContentToPage(pageId: string, content: SideAction | NodeElement, index?: number): void {
     const pageNode = findNode(pageId);
 
     if(!pageNode.data.formValues.components) pageNode.data.formValues.components = [];
 
-    const { formValues } = pageNode.data;
-
-    if(!formValues.components) formValues.components = [];
-
-    if(index !== undefined) {
-        formValues.components.splice(index, 0, { action });
+    // Déplacement d'un contenu existant (depuis une autre page)
+    if ('action' in content) {
+        pageNode.data.elements.splice(index, 0, { ...content, parentId: pageId });
+        pageNode.data.formValues.components.splice(index, 0, { action: content.action });
+    // Ajout d'un nouveau contenu depuis la sidebar
     } else {
-        formValues.components.push({ action });
+        pageNode.data.elements.push({
+            id: generateId(),
+            action: content,
+            formType: content.type,
+            formValues: getContentDefaultValues(content.type),
+            parentId: pageId,
+            contentId: generateContentId(),
+        });
+        pageNode.data.formValues.components.push({ action: content });
     }
+}
+
+export function getContentDefaultValues(type) {
+    const form = [...forms.questionForms, ...forms.elementForms].find(f => f.type === type);
+
+    return form.fields.reduce((acc, field) => {
+        const keyValues = field.inputs.reduce((acc2, i) => {
+            return {[i.id] : i.value};
+        }, {});
+        return {...acc, ...keyValues};
+    }, {});
 }

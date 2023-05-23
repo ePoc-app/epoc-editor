@@ -42,12 +42,12 @@ export const standardPages: SideAction[] = [
 export const questions: SideAction[] = [
     {
         icon: 'icon-qcm',
-        type: 'qcm',
+        type: 'choice',
         label: 'QCM'
     },
     {
         icon: 'icon-dragdrop',
-        type: 'dragdrop',
+        type: 'drag-and-drop',
         label: 'Drag & Drop'
     },
     {
@@ -62,7 +62,7 @@ export const questions: SideAction[] = [
     },
     {
         icon: 'icon-liste',
-        type: 'list',
+        type: 'dropdown-list',
         label: 'Liste déroulantes'
     }
 ];

@@ -2,7 +2,7 @@ import { Form } from '@/src/shared/interfaces';
 import { contentButtons } from './formButtons.data';
 
 export const qcmForm: Form = {
-    type: 'qcm',
+    type: 'choice',
     name: 'QCM',
     icon: 'icon-qcm',
     displayFieldIndex: true,
@@ -45,7 +45,7 @@ export const qcmForm: Form = {
                     id: 'responses',
                     label: 'Réponse',
                     type: 'repeat',
-                    value: '',
+                    value: [],
                     inputs: [
                         {
                             id: 'label',
@@ -87,7 +87,7 @@ export const qcmForm: Form = {
 };
 
 export const dragDropForm: Form = {
-    type: 'dragdrop',
+    type: 'drag-and-drop',
     name: 'Drag & Drop',
     icon: 'icon-dragdrop',
     displayFieldIndex: true,
@@ -130,7 +130,7 @@ export const dragDropForm: Form = {
                     id: 'categories',
                     label: 'Catégorie',
                     type: 'repeat',
-                    value: '',
+                    value: [],
                     inputs: [
                         {
                             id: '',
@@ -150,7 +150,7 @@ export const dragDropForm: Form = {
                     id: 'responses',
                     label: 'Réponse',
                     type: 'repeat',
-                    value: '',
+                    value: [],
                     inputs: [
                         {
                             id: 'label',
@@ -167,7 +167,7 @@ export const dragDropForm: Form = {
                             value: ''
                         },
                         {
-                            id: 'choice',
+                            id: 'category',
                             type: 'select',
                             label: '',
                             placeholder: '',
@@ -238,7 +238,7 @@ export const reorderForm: Form = {
                     id: 'responses',
                     label: 'Réponse',
                     type: 'repeat',
-                    value: '',
+                    value: [],
                     inputs: [
                         {
                             id: 'label',
@@ -314,18 +314,20 @@ export const swipeForm: Form = {
             name: 'Catégories de choix proposées',
             inputs: [
                 {
-                    id: 'left',
-                    type: 'text',
-                    label: 'Choix gauche',
-                    value: '',
-                    placeholder: 'Saisissez une réponse...'
-                },
-                {
-                    id: 'right',
-                    type: 'text',
-                    label: 'Choix droite',
-                    value: '',
-                    placeholder: 'Saisissez une réponse...'
+                    id: 'categories',
+                    label: 'Choix',
+                    type: 'repeat',
+                    value: ['Gauche', 'Droite'],
+                    addButton: false,
+                    inputs: [
+                        {
+                            id: '',
+                            type: 'text',
+                            label: '',
+                            placeholder: 'Saisissez une réponse...',
+                            value: ''
+                        }
+                    ]
                 }
             ]
         },
@@ -336,7 +338,7 @@ export const swipeForm: Form = {
                     id: 'responses',
                     label: 'Carte',
                     type: 'repeat',
-                    value: '',
+                    value: [],
                     inputs: [
                         {
                             id: 'label',
@@ -353,10 +355,13 @@ export const swipeForm: Form = {
                             value: ''
                         },
                         {
-                            id:  'correctReponse',
-                            type: 'radio-group',
-                            label: 'Réponse',
-                            value: 0
+                            id: 'category',
+                            type: 'select',
+                            label: '',
+                            placeholder: '',
+                            value: '',
+                            options: [],
+                            linkedOptions: 'categories'
                         }
 
                     ]
@@ -379,7 +384,7 @@ export const swipeForm: Form = {
 };
 
 export const listForm: Form = {
-    type: 'list',
+    type: 'dropdown-list',
     name: 'Listes déroulantes',
     icon: 'icon-liste',
     displayFieldIndex: true,
@@ -422,7 +427,7 @@ export const listForm: Form = {
                     id: 'categories',
                     label: 'Choix',
                     type: 'repeat',
-                    value: '',
+                    value: [],
                     inputs: [
                         {
                             id: '',
@@ -442,7 +447,7 @@ export const listForm: Form = {
                     id: 'responses',
                     label: 'Carte',
                     type: 'repeat',
-                    value: '',
+                    value: [],
                     inputs: [
                         {
                             id: 'label',
@@ -459,7 +464,7 @@ export const listForm: Form = {
                             value: ''
                         },
                         {
-                            id: 'choice',
+                            id: 'category',
                             type: 'select',
                             label: '',
                             placeholder: '',

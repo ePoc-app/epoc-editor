@@ -2,7 +2,7 @@ export interface Input {
     id: string;
     type: string;
     label: string;
-    value: string|boolean|number;
+    value: string|boolean|number|string[];
     placeholder?: string;
     accept?: string;
     icon?: string;

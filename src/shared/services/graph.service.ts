@@ -138,14 +138,8 @@ function newQuestion(epoc: EpocV1, questionNode) : string {
     let responses = [];
     let correctResponse = [];
 
-    const mapType = {
-        dragdrop: 'drag-and-drop',
-        list: 'dropdown-list',
-        swipe: 'swipe'
-    };
-
     if (questionNode.formValues && questionNode.formValues.responses) {
-        if (questionNode.formType === 'qcm') {
+        if (questionNode.formType === 'choice') {
             responses = questionNode.formValues.responses.map(r => {
                 return {
                     label: r.label,
@@ -163,7 +157,7 @@ function newQuestion(epoc: EpocV1, questionNode) : string {
             });
             correctResponse = questionNode.formValues.responses.reduce((acc, r) => acc+r.value, '');
             type = 'reorder';
-        } else if (['dragdrop', 'list'].includes(questionNode.formType)) {
+        } else if (['drag-and-drop', 'dropdown-list'].includes(questionNode.formType)) {
             responses = questionNode.formValues.responses.map(r => {
                 return {
                     label: r.label,
@@ -176,7 +170,7 @@ function newQuestion(epoc: EpocV1, questionNode) : string {
                     values: questionNode.formValues.responses.filter(r => r.choice === cat).map(r => r.value)
                 };
             });
-            type = mapType[questionNode.formType];
+            type = questionNode.formType;
         } else if (questionNode.formType === 'swipe') {
             responses = questionNode.formValues.responses.map(r => {
                 return {
@@ -192,7 +186,7 @@ function newQuestion(epoc: EpocV1, questionNode) : string {
                 label: questionNode.formValues.left,
                 values: questionNode.formValues.responses.filter(r => r.correctReponse === '1').map(r => r.value)
             }];
-            type = mapType[questionNode.formType];
+            type = questionNode.formType;
         }
     }
     const question : Question = {

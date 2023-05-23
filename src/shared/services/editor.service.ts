@@ -5,7 +5,7 @@ import { ePocProject } from '@/src/shared/interfaces';
 import { createToaster } from '@meforma/vue-toaster';
 import { EpocV1 } from '@/src/shared/classes/epoc-v1';
 import { Assessment, SimpleQuestion } from '@epoc/epoc-types/dist/v1';
-import { addNewPage, setEpocNodeData, addChapter, createLinkedPage } from './graph';
+import { setEpocNodeData, addChapter, createLinkedPage } from './graph';
 import { standardPages, questions } from '@/src/shared/data';
 import { generateId, graphService } from '@/src/shared/services/graph.service';
 
@@ -127,11 +127,6 @@ const setup = function () {
         editorStore.exporting = false;
     });
 
-    api.receive('addPage', (data: string) => {
-        const page = JSON.parse(data);
-        addNewPage(page.type, page.pos);
-    });
-
     initialized = true;
 };
 function newEpocProject(): void {
@@ -226,10 +221,10 @@ function generateFlowEpocFromData(epoc: EpocV1) {
             const mapType = {
                 'video': standardPages.find(s => s.type === 'video'),
                 'html': standardPages.find(s => s.type === 'text'),
-                'multiple-choice': questions.find(s => s.type === 'qcm'),
-                'choice': questions.find(s => s.type === 'qcm'),
-                'drag-and-drop': questions.find(s => s.type === 'dragdrop'),
-                'dropdown-list': questions.find(s => s.type === 'list'),
+                'multiple-choice': questions.find(s => s.type === 'choice'),
+                'choice': questions.find(s => s.type === 'choice'),
+                'drag-and-drop': questions.find(s => s.type === 'drag-and-drop'),
+                'dropdown-list': questions.find(s => s.type === 'dropdown-list'),
                 'swipe': questions.find(s => s.type === 'swipe'),
                 'reorder': questions.find(s => s.type === 'reorder')
             };
@@ -258,7 +253,7 @@ function generateFlowEpocFromData(epoc: EpocV1) {
                         },
                         formType: mapType[question.type].type,
                         formValues: {
-                            ...setQuestionData(question)
+                            ...setQuestionData(mapType[question.type].type, question)
                         },
                         parentId: id,
                         contentId: qid
@@ -283,13 +278,33 @@ function generateFlowEpocFromData(epoc: EpocV1) {
     }
 }
 
-function setQuestionData(question) {
+function setQuestionData(type, question) {
     const questionData = {
         label: question.label,
         statement: question.statement,
         explanation: question.explanation,
-        score: question.score
+        score: question.score,
+        responses: []
     };
+
+    if (type === 'choice') {
+        questionData.responses = question.responses.map(r => {
+            return {
+                ...r,
+                isCorrect: question.correctResponse.includes(r.value)
+            };
+        });
+    } else if (type === 'swipe') {
+        // todo
+    } else if (type === 'drag-and-drop') {
+        // todo
+    } else if (type === 'dropdown-list') {
+        // todo
+    } else if (type === 'reorder') {
+        questionData.responses = question.responses;
+    }
+
+    console.log(JSON.stringify(question, null, 2));
 
     // Todo : WIP set question data
 

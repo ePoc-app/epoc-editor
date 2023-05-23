@@ -69,7 +69,7 @@ export const videoForm: Form = {
                     id: 'subtitles',
                     label: 'Sous-titres',
                     type: 'repeat',
-                    value: '',
+                    value: [],
                     inputs: [
                         {
                             id: 'label',

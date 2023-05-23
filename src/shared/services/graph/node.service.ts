@@ -4,12 +4,11 @@ import { useEditorStore, useGraphStore } from '../../stores';
 import { useVueFlow, Node, MarkerType, Edge } from '@vue-flow/core';
 import { NodeElement, SideAction } from '../../interfaces';
 import { nextTick, toRaw, watch } from 'vue';
-import { questions, standardPages } from '../../data';
 
 import { addContentToPage, deleteContent } from './content.service';
 import { generateContentId, generateId } from '../graph.service';
 
-const { nodes, edges, vueFlowRef, addNodes, addEdges, findNode, project, applyEdgeChanges, applyNodeChanges } = useVueFlow({ id: 'main' });
+const { nodes, edges, addNodes, addEdges, findNode, applyEdgeChanges, applyNodeChanges } = useVueFlow({ id: 'main' });
 
 const editorStore = useEditorStore();
 
@@ -27,7 +26,7 @@ export function setEpocNodeData(epoc: EpocV1) {
     ePocValues.version = epoc.version;
     ePocValues.certificateScore = epoc.certificateScore;
     ePocValues.authors = Object.values(epoc.authors);
-    ePocValues.chapterParameter = epoc.parameters.chapterParameter;
+    ePocValues.chapterParameter = epoc.parameters?.chapterParameter;
 }
 
 export function addChapter(chapterId?: string, chapter?: Chapter): Node {
@@ -110,7 +109,7 @@ export function createPageFromContent(position: { x: number, y: number }, elemen
         id,
         type: 'content',
         data: {
-            elements: [element],
+            elements: [],
             formType: 'page',
             formValues: {},
             type: 'question',
@@ -122,7 +121,7 @@ export function createPageFromContent(position: { x: number, y: number }, elemen
 
     addNodes([newPageNode]);
 
-    addContentToPage(id, element.action);
+    addContentToPage(id, element);
 
     alignNode(newPageNode.id);
 
@@ -132,24 +131,12 @@ export function createPageFromContent(position: { x: number, y: number }, elemen
 }
 
 export function addPage(position: { x: number, y: number }, actions: SideAction[]): void {
-    const questionTypes = ['qcm', 'dragdrop', 'reorder', 'swipe', 'list'];
-    const elements: NodeElement[] = [];
+    const questionTypes = ['choice', 'drag-and-drop', 'reorder', 'swipe', 'dropdown-list'];
 
     const id = generateId();
 
-    actions.forEach((action) => {
-        elements.push({
-            id: generateId(),
-            action,
-            formType: action.type,
-            formValues: {},
-            parentId: id,
-            contentId: generateContentId(),
-        });
-    });
-
     //! see if correct in v1
-    const type = elements[0].action.type;
+    const type = actions[0].type;
     const isQuestion = questionTypes.includes(type);
     const isCondition = type === 'condition';
 
@@ -160,7 +147,7 @@ export function addPage(position: { x: number, y: number }, actions: SideAction[
         type: 'content',
         data: {
             type: finalType,
-            elements,
+            elements: [],
             contentId: generateContentId(),
             formType: 'page',
             formValues: {},
@@ -188,7 +175,6 @@ export function duplicatePage(): void {
     const pageNode = findNode(editorStore.openedElementId);
     const newElements = [];
 
-    console.log('duplicatePage', editorStore.openedElementId);
     const nodeId = generateId();
 
     for(const elements of pageNode.data.elements) {
@@ -213,36 +199,6 @@ export function duplicatePage(): void {
 
     addNodes([newPage]);
     editorStore.closeFormPanel();
-}
-
-export function addNewPage(type: string, pos: {x: number, y: number}): void {
-    const types = standardPages.concat(questions);
-    const id = generateId();
-
-    const elements: NodeElement[] = [{
-        id: generateId(),
-        action: types.find(value => value.type === type),
-        formType: type,
-        formValues: {},
-        parentId: id,
-        contentId: generateId(),
-    }];
-
-    const { left, top } = vueFlowRef.value.getBoundingClientRect();
-    const position = project({ x: pos.x - left, y: pos.y - top });
-
-    const newPage: Node = {
-        id,
-        type: 'content',
-        position,
-        data: { type, elements, formType: 'page', formValues: {}, contentId: id},
-    };
-
-    addNodes([newPage]);
-
-    alignNode(newPage.id);
-
-    addContentToPage(id, elements[0].action);
 }
 
 export function getSelectedNodes(isChild: boolean): Node[] {

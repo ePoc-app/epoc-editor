@@ -143,7 +143,7 @@ function dragOver(event) {
                         <h3>{{ element.action.label }}</h3>
                     </div>
                     <h3 v-else>{{ label }} {{ index + 1 }}</h3>
-                    <div class="card-header-icon">
+                    <div v-if="addButton !== false" class="card-header-icon">
                         <i class="icon-supprimer delete" @click.stop="removeCard(index)"></i>
                         <hr v-if="!(isLast(index) && index === 0)" class="vertical-separator">
                         <i v-if="!isLast(index)" class="icon-bas" @click.stop="moveCard($event, index, index + 1)"></i>

@@ -5,7 +5,6 @@ import { useEditorStore } from '@/src/shared/stores';
 import { NodeElement, SideAction } from '@/src/shared/interfaces';
 import ContentButton from '@/src/components/ContentButton.vue';
 import { addContentToPage, removeContentFromPage, changeContentOrder } from '@/src/shared/services/graph';
-import { generateContentId, generateId } from '@/src/shared/services/graph.service';
 
 const editorStore = useEditorStore();
 
@@ -94,30 +93,10 @@ function change(event) {
     if(!editorStore.draggedElement) return;
 
     const { added, moved, removed } = event;
-    const { data } = currentNode;
 
     if(added && dropped.value) {
-        const { element } = added;
-        let newElement: NodeElement;
-
-        if(element.action) {
-            newElement = { ...element, parentId: props.id };
-        } else {
-            newElement = {
-                id: generateId(),
-                parentId: props.id,
-                action: element,
-                formType: element.type,
-                formValues: element.formValues,
-                contentId: generateContentId(),
-            };
-        }
-
-        data.elements.splice(added.newIndex, 0, newElement);
         dropped.value = false;
-
-        const action = element.action || element;
-        addContentToPage(currentNode.id, action, added.newIndex);
+        addContentToPage(currentNode.id, added.element, added.newIndex);
     }
 
     if(moved) {

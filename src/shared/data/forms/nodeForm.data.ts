@@ -53,7 +53,7 @@ export const chapterForm: Form = {
                     id: 'objectives',
                     label: 'Objectif',
                     type: 'repeat',
-                    value: '',
+                    value: [],
                     inputs: [
                         {
                             id: '',
@@ -137,7 +137,7 @@ export const epocForm: Form = {
                     id: 'authors',
                     label: 'Auteur',
                     type: 'repeat',
-                    value: '',
+                    value: [],
                     inputs: [
                         {
                             id: 'name',
@@ -179,7 +179,7 @@ export const epocForm: Form = {
                     id: 'objectives',
                     label: 'Objectif',
                     type: 'repeat',
-                    value: '',
+                    value: [],
                     inputs: [
                         {
                             id: '',
@@ -214,7 +214,7 @@ export const epocForm: Form = {
     ],
 };
 
-export const pageForm: Form = { 
+export const pageForm: Form = {
     type: 'page',
     name: 'Page',
     icon: 'icon-ecran',
@@ -245,7 +245,7 @@ export const pageForm: Form = {
                     id: 'components',
                     label: 'Composants',
                     type: 'repeat',
-                    value: '',
+                    value: [],
                     addButton: false,
                     inputs: []
                 }
