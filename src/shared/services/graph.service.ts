@@ -207,12 +207,12 @@ function newQuestion(epoc: EpocV1, questionNode) : string {
     return epoc.addQuestion(questionNode.contentId, question);
 }
 
-function getNextNode(node: GraphNode): GraphNode | null {
+function getNextNode(node): GraphNode | null {
     const edge = getConnectedEdges([node], edges.value).filter((edge) => edge.source === node.id)[0];
     return edge ? getNodeById(edge.target) : null;
 }
 
-function getPreviousNode(node: GraphNode): GraphNode | null {
+function getPreviousNode(node): GraphNode | null {
     const edge = getConnectedEdges([node], edges.value).filter((edge) => edge.target === node.id)[0];
     return edge ? getNodeById(edge.source) : null;
 }
