@@ -30,7 +30,7 @@ export function setEpocNodeData(epoc: EpocV1) {
     ePocValues.chapterParameter = epoc.parameters.chapterParameter;
 }
 
-export function addChapter(chapterId?: string, chapter?: Chapter) {
+export function addChapter(chapterId?: string, chapter?: Chapter): Node {
     const chapters = nodes.value.filter(node => node.type === 'chapter');
     const data = {
         action: {icon: 'icon-chapitre', type: 'chapter'},
@@ -62,7 +62,7 @@ export function addChapter(chapterId?: string, chapter?: Chapter) {
     return newChapter;
 }
 
-export function createLinkedPage(sourcePage, contentElements, title, subtitle, id) {
+export function createLinkedPage(sourcePage: Node, contentElements: NodeElement[], title: string, subtitle: string, id: string): Node {
     const position = {
         x: sourcePage.position.x + 150,
         y: sourcePage.position.y
@@ -102,7 +102,7 @@ export function createLinkedPage(sourcePage, contentElements, title, subtitle, i
     return newPage;
 }
 
-export function createPageFromContent(position, element: NodeElement) {
+export function createPageFromContent(position: { x: number, y: number }, element: NodeElement): void {
     const id = generateId();
     element.parentId = id;
 
@@ -131,7 +131,7 @@ export function createPageFromContent(position, element: NodeElement) {
     });
 }
 
-export function addPage(position, actions: SideAction[]) {
+export function addPage(position: { x: number, y: number }, actions: SideAction[]): void {
     const questionTypes = ['qcm', 'dragdrop', 'reorder', 'swipe', 'list'];
     const elements: NodeElement[] = [];
 
@@ -185,9 +185,10 @@ export function addPage(position, actions: SideAction[]) {
 
 
 export function duplicatePage(): void {
-    const pageNode = findNode(editorStore.openedNodeId);
+    const pageNode = findNode(editorStore.openedElementId);
     const newElements = [];
 
+    console.log('duplicatePage', editorStore.openedElementId);
     const nodeId = generateId();
 
     for(const elements of pageNode.data.elements) {
@@ -255,7 +256,7 @@ export function getSelectedNodes(isChild: boolean): Node[] {
     return selectedNodes;
 }
 
-export function alignNode(nodeId) {
+export function alignNode(nodeId: string): void {
     nextTick(() => {
         const node = findNode(nodeId);
         const stop = watch(
@@ -305,7 +306,7 @@ export function confirmDelete(): void {
     }
 }
 
-export function deleteNode(nodeId) {
+export function deleteNode(nodeId: string): void {
     const nodeToDelete = findNode(nodeId);
     applyNodeChanges([{ id:nodeToDelete.id, type: 'remove'}]);
 
@@ -321,7 +322,7 @@ export function deleteElement(id: string, pageId?: string): void {
     editorStore.closeFormPanel();
 }
 
-export function moveNextChapter(chapterId: string) {
+export function moveNextChapter(chapterId: string): void {
     const chapters = nodes.value.filter(node => node.type === 'chapter');
 
     for(const chapter of chapters) {

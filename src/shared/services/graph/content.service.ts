@@ -8,7 +8,7 @@ const { findNode } = useVueFlow({ id: 'main' });
 
 const editorStore = useEditorStore();
 
-export function deleteContent(pageId, id) {
+export function deleteContent(pageId: string, id: string): void {
     const pageNode = findNode(pageId);
     if(pageNode) {
         pageNode.data.elements.forEach((value, index) => {
@@ -44,7 +44,7 @@ export function changeContentOrder(startIndex: number, finalIndex: number, pageI
 }
 
 //? The parameter pageMoved is used when openedParentId is not usable
-export function removeContentFromPage(index: number, pageId, pageMoved?: boolean): void {
+export function removeContentFromPage(index: number, pageId: string, pageMoved?: boolean): void {
     editorStore.closeFormPanel();
 
     const pageNode = findNode(pageId);

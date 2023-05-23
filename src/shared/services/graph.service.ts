@@ -18,7 +18,7 @@ function writeProjectData(): void {
     });
 }
 
-function importFile(filepath): Promise<string> {
+function importFile(filepath: string): Promise<string> {
     api.send('importFile', filepath);
 
     return new Promise((resolve) => {
@@ -81,7 +81,7 @@ function createContentJSON() : EpocV1 {
     return epoc;
 }
 
-function newContent(epoc: EpocV1, pageNode) : string {
+function newContent(epoc: EpocV1, pageNode: GraphNode) : string {
     const baseContent: Content = {
         type: 'unknown',
         title: pageNode.data.formValues.title || '',
@@ -207,17 +207,17 @@ function newQuestion(epoc: EpocV1, questionNode) : string {
     return epoc.addQuestion(questionNode.contentId, question);
 }
 
-function getNextNode(node) {
+function getNextNode(node: GraphNode): GraphNode | null {
     const edge = getConnectedEdges([node], edges.value).filter((edge) => edge.source === node.id)[0];
     return edge ? getNodeById(edge.target) : null;
 }
 
-function getPreviousNode(node) {
+function getPreviousNode(node: GraphNode): GraphNode | null {
     const edge = getConnectedEdges([node], edges.value).filter((edge) => edge.target === node.id)[0];
     return edge ? getNodeById(edge.source) : null;
 }
 
-function getNodeById(id) : GraphNode {
+function getNodeById(id: string) : GraphNode {
     return nodes.value.find((node) => { return node.id === id; });
 }
 
