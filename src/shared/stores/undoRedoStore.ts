@@ -63,19 +63,19 @@ export const useUndoRedoStore = defineStore('epoc', {
             }
         },
 
-        //TODO: Should we create a undo redo service ?
-
         moveNodeAction(action: NodeMovedAction, reverseStack: UndoRedoAction[]): void {
-            if(action.deltaMovement.x === 0 && action.deltaMovement.y === 0) return;            
+            const { nodeId, deltaMovement } = action;
+
+            if(deltaMovement.x === 0 && deltaMovement.y === 0) return;            
 
             moveNode(action.nodeId, action.deltaMovement);
             
             const reverseAction: NodeMovedAction = {
                 type: 'nodeMoved',
-                nodeId: action.nodeId,
+                nodeId: nodeId,
                 deltaMovement: {
-                    x: -action.deltaMovement.x,
-                    y: -action.deltaMovement.y
+                    x: - deltaMovement.x,
+                    y: - deltaMovement.y
                 }
             };
             reverseStack.push(reverseAction);
@@ -96,7 +96,6 @@ export const useUndoRedoStore = defineStore('epoc', {
         },
 
         addNodeAction(action: NodeMutatedAction, reverseStack: UndoRedoAction[]): void {
-
             createNodeFromJSON(action.node);
 
             const edges = [];
@@ -124,7 +123,6 @@ export const useUndoRedoStore = defineStore('epoc', {
         },
 
         addEdgeAction(action: EdgeAction, reverseStack: UndoRedoAction[]): void {
-
             const edge = JSON.parse(action.edge);
             edge.data = {
                 undoRedo: true
