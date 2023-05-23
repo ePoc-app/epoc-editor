@@ -278,7 +278,6 @@ async function generateFlowEpocFromData(epoc: EpocV1) {
             }
             currentNode = createLinkedPage(currentNode, contentElements, title, subtitle, id, hidden, contentId);
             maxContentHeight = (contentElements.length - 1) * 60;
-            await new Promise(resolve => setTimeout(resolve, 10));
         }
     }
 }
