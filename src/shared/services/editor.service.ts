@@ -206,10 +206,12 @@ function exportProject(): void {
     api.send('exportProject');
 }
 
-function generateFlowEpocFromData(epoc: EpocV1) {
+async function generateFlowEpocFromData(epoc: EpocV1) {
     setEpocNodeData(epoc);
+    let maxContentHeight = 0;
     for (const [chapterId, chapter] of Object.entries(epoc.chapters)) {
-        let currentNode = addChapter(chapterId, chapter);
+        let currentNode = addChapter(chapterId, chapter, maxContentHeight);
+        maxContentHeight = 0;
         for (const contentId of chapter.contents) {
             const content = epoc.contents[contentId];
             const id = generateId();
@@ -274,12 +276,21 @@ function generateFlowEpocFromData(epoc: EpocV1) {
                 contentElements.push(contentElement);
             }
             currentNode = createLinkedPage(currentNode, contentElements, title, subtitle, id);
+            maxContentHeight = (contentElements.length - 1) * 60;
+            await new Promise(resolve => setTimeout(resolve, 10));
         }
     }
 }
 
 function setQuestionData(type, question) {
-    const questionData = {
+    const questionData : {
+        label: string,
+        statement: string,
+        explanation: string,
+        score: number,
+        responses: {label:string, value: string, category?:string, isCorrect?:boolean}[],
+        categories?: string[]
+    } = {
         label: question.label,
         statement: question.statement,
         explanation: question.explanation,
@@ -294,19 +305,19 @@ function setQuestionData(type, question) {
                 isCorrect: question.correctResponse.includes(r.value)
             };
         });
-    } else if (type === 'swipe') {
-        // todo
-    } else if (type === 'drag-and-drop') {
-        // todo
-    } else if (type === 'dropdown-list') {
-        // todo
+    } else if (type === 'swipe' || type === 'drag-and-drop' || type === 'dropdown-list') {
+        questionData.responses = question.responses.map((response) => {
+            return {
+                ...response,
+                category: question.correctResponse.find(cat => cat.values.includes(response.value)).label
+            };
+        });
+        questionData.categories = question.correctResponse.map((cat) => {
+            return cat.label;
+        });
     } else if (type === 'reorder') {
         questionData.responses = question.responses;
     }
-
-    console.log(JSON.stringify(question, null, 2));
-
-    // Todo : WIP set question data
 
     return questionData;
 }

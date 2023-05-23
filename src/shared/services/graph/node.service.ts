@@ -29,7 +29,7 @@ export function setEpocNodeData(epoc: EpocV1) {
     ePocValues.chapterParameter = epoc.parameters?.chapterParameter;
 }
 
-export function addChapter(chapterId?: string, chapter?: Chapter): Node {
+export function addChapter(chapterId?: string, chapter?: Chapter, offsetY?: number): Node {
     const chapters = nodes.value.filter(node => node.type === 'chapter');
     const data = {
         action: {icon: 'icon-chapitre', type: 'chapter'},
@@ -45,7 +45,7 @@ export function addChapter(chapterId?: string, chapter?: Chapter): Node {
             objectives: chapter.objectives
         };
     }
-    const newYPos = chapters.length > 0 ? chapters[chapters.length - 1].position.y + 200 : 200;
+    const newYPos = chapters.length > 0 ? chapters[chapters.length - 1].position.y + 200 + offsetY : 200 + offsetY;
     const newChapter: Node = {
         id: (nodes.value.length + 1).toString(),
         type: 'chapter',
