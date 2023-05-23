@@ -58,6 +58,7 @@ function createContentJSON() : EpocV1 {
         ePocValues.edition || new Date().getFullYear(),
         ePocValues.certificateScore || 0,
         ePocValues.authors || {},
+        ePocValues.plugins,
         ePocValues.chapterParameter,
         new Date().toISOString()
     );
@@ -85,7 +86,8 @@ function newContent(epoc: EpocV1, pageNode: GraphNode) : string {
     const baseContent: Content = {
         type: 'unknown',
         title: pageNode.data.formValues.title || '',
-        subtitle: pageNode.data.formValues.subtitle || ''
+        ...(pageNode.data.formValues.subtitle && { subtitle: pageNode.data.formValues.subtitle }),
+        ...(pageNode.data.formValues.hidden && { hidden: pageNode.data.formValues.hidden })
     };
     if (pageNode.data.elements.every(elem => standardPages.find(s => s.type === elem.formType))) {
         const contentNode = pageNode.data.elements[0];
@@ -177,7 +179,7 @@ function newQuestion(epoc: EpocV1, questionNode) : string {
         type,
         label: questionNode.formValues?.label || '',
         statement: questionNode.formValues?.statement || '',
-        score: questionNode.formValues?.explanation || 0,
+        score: questionNode.formValues?.score || 0,
         responses,
         correctResponse,
         explanation: questionNode.formValues?.explanation || '',

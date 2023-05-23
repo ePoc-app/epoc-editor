@@ -193,6 +193,27 @@ export const epocForm: Form = {
             ]
         },
         {
+            name: 'Plugins',
+            inputs: [
+                {
+                    id: 'plugins',
+                    label: 'Plugin',
+                    type: 'repeat',
+                    value: [],
+                    inputs: [
+                        {
+                            id: '',
+                            type: 'file',
+                            label: 'Fichier de plugin',
+                            placeholder: 'Ajouter un plugin',
+                            value: '',
+                            accept: '.js'
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             name: 'Paramètres :',
             inputs : [
                 {
@@ -235,6 +256,12 @@ export const pageForm: Form = {
                     label: 'Sous-titre',
                     value: '',
                     placeholder: 'Saisissez...'
+                },
+                {
+                    id:'hidden',
+                    type: 'checkbox',
+                    label: 'Caché dans la table des matières',
+                    value: false
                 }
             ]
         },

@@ -243,6 +243,7 @@ async function generateFlowEpocFromData(epoc: EpocV1) {
             };
             const title = content.title;
             const subtitle = content.subtitle;
+            const hidden = content.hidden;
             if (content.type === 'assessment') {
                 (content as Assessment).questions.forEach((qid) => {
                     const question = epoc.questions[qid];
@@ -275,7 +276,7 @@ async function generateFlowEpocFromData(epoc: EpocV1) {
                 contentElement.action.label = mapType[content.type].label;
                 contentElements.push(contentElement);
             }
-            currentNode = createLinkedPage(currentNode, contentElements, title, subtitle, id);
+            currentNode = createLinkedPage(currentNode, contentElements, title, subtitle, id, hidden, contentId);
             maxContentHeight = (contentElements.length - 1) * 60;
             await new Promise(resolve => setTimeout(resolve, 10));
         }

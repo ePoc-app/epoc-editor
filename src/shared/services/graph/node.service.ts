@@ -27,6 +27,7 @@ export function setEpocNodeData(epoc: EpocV1) {
     ePocValues.certificateScore = epoc.certificateScore;
     ePocValues.authors = Object.values(epoc.authors);
     ePocValues.chapterParameter = epoc.parameters?.chapterParameter;
+    ePocValues.plugins = epoc.plugins;
 }
 
 export function addChapter(chapterId?: string, chapter?: Chapter, offsetY?: number): Node {
@@ -61,7 +62,7 @@ export function addChapter(chapterId?: string, chapter?: Chapter, offsetY?: numb
     return newChapter;
 }
 
-export function createLinkedPage(sourcePage: Node, contentElements: NodeElement[], title: string, subtitle: string, id: string): Node {
+export function createLinkedPage(sourcePage: Node, contentElements: NodeElement[], title: string, subtitle: string, id: string, hidden: boolean, contentId: string): Node {
     const position = {
         x: sourcePage.position.x + 150,
         y: sourcePage.position.y
@@ -74,6 +75,7 @@ export function createLinkedPage(sourcePage: Node, contentElements: NodeElement[
             readyToDrop: false,
             formType: 'page',
             formValues: {
+                hidden,
                 title,
                 subtitle,
                 components: contentElements.map(c => {
@@ -81,7 +83,7 @@ export function createLinkedPage(sourcePage: Node, contentElements: NodeElement[
                 })
             },
             type: 'template',
-            contentId: contentElements[0]?.contentId
+            contentId: contentId
         },
         position: position,
         deletable: false

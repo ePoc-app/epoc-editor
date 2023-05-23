@@ -19,6 +19,7 @@ export class EpocV1 implements Epoc {
     assessmentsCount: number;
     authors:Author[];
     parameters: Parameters;
+    plugins: string[];
     chapters: Record<uid, Chapter>;
     contents: Record<uid, Content>;
     questions: Record<uid, Question>;
@@ -26,7 +27,7 @@ export class EpocV1 implements Epoc {
     constructor(
         id: string, title: string, image: string, objectives: string[], summary: html, teaser: string,
         thumbnail: string, edition: string, certificateScore: number, authors: Author[],
-        chapterParameter: string, lastModif: string
+        plugins: string[], chapterParameter: string, lastModif: string
     ) {
         this.version = '1';
         this.id = id;
@@ -39,6 +40,7 @@ export class EpocV1 implements Epoc {
         this.edition = edition;
         this.certificateScore = certificateScore;
         this.authors = authors;
+        this.plugins = plugins;
         this.parameters = {
             chapterParameter
         };

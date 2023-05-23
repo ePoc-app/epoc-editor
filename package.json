@@ -24,7 +24,7 @@
     "debug-mac": "'./dist_electron/mac-arm64/ePoc Editor.app/Contents/MacOS/ePoc Editor' --remote-debugging-port=8315"
   },
   "dependencies": {
-    "@epoc/epoc-types": "^2.0.0-beta.0",
+    "@epoc/epoc-types": "^2.0.0-beta.2",
     "@meforma/vue-toaster": "^1.3.0",
     "@vue-flow/additional-components": "^1.3.3",
     "@vue-flow/core": "^1.16.4",
