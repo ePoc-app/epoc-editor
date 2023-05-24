@@ -1,7 +1,7 @@
 import { ApiInterface } from '@/src/shared/interfaces/api.interface';
 import { getConnectedEdges, GraphNode, useVueFlow } from '@vue-flow/core';
 import { EpocV1 } from '@/src/shared/classes/epoc-v1';
-import { Assessment, Content, Html, SimpleQuestion, uid, Video } from '@epoc/epoc-types/dist/v1';
+import {Assessment, ChoiceCondition, Content, Html, SimpleQuestion, uid, Video} from '@epoc/epoc-types/dist/v1';
 import { Question } from '@epoc/epoc-types/dist/v1/question';
 import { standardPages } from '@/src/shared/data';
 
@@ -87,7 +87,8 @@ function newContent(epoc: EpocV1, pageNode: GraphNode) : string {
         type: 'unknown',
         title: pageNode.data.formValues.title || '',
         ...(pageNode.data.formValues.subtitle && { subtitle: pageNode.data.formValues.subtitle }),
-        ...(pageNode.data.formValues.hidden && { hidden: pageNode.data.formValues.hidden })
+        ...(pageNode.data.formValues.hidden && { hidden: pageNode.data.formValues.hidden }),
+        ...(pageNode.data.formValues.conditional && { conditional: pageNode.data.formValues.conditional })
     };
     if (pageNode.data.elements.every(elem => standardPages.find(s => s.type === elem.formType))) {
         const contentNode = pageNode.data.elements[0];
@@ -110,7 +111,32 @@ function newContent(epoc: EpocV1, pageNode: GraphNode) : string {
                 html: contentNode.formValues.html
             };
             return epoc.addContent(pageNode.data.contentId, content);
+        } else if (contentNode.action.type === 'legacy-condition') {
+            console.log(contentNode.formValues);
+            const content: ChoiceCondition = {
+                ...baseContent,
+                type: 'choice',
+                conditionResolver: {
+                    type: 'choice',
+                    label: contentNode.formValues.label,
+                    choices: contentNode.formValues.choices.map(c => {
+                        return {label: c, value: c};
+                    }),
+                    conditionalFlag: contentNode.formValues.choices.map(c => {
+                        return {
+                            value: c,
+                            flags: contentNode.formValues.conditionalFlag.reduce((arr, f) => {
+                                if (f.choice === c) arr.push(f.id);
+                                return arr;
+                            }, [])
+                        };
+                    })
+                }
+            };
+            console.log(content.conditionResolver);
+            return epoc.addContent(pageNode.data.contentId, content);
         }
+        console.log(contentNode.action.type);
     } else {
         if (pageNode.data.elements.length > 1) {
             const questions = pageNode.data.elements.reduce((q, questionNode) => {

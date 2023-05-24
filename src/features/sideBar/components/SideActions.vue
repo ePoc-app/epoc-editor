@@ -6,7 +6,7 @@ import { useEditorStore } from '@/src/shared/stores';
 
 const editorStore = useEditorStore();
 
-const standardContent = editorStore.standardPages.filter(({ type }) => !['condition', 'question', 'model'].includes(type));
+const standardContent = editorStore.standardPages.filter(({ type }) => !['legacy-condition', 'condition', 'question', 'model'].includes(type));
 const questionContent = editorStore.standardPages.find(({ type }) => type === 'question');
 const conditionContent = editorStore.standardPages.find(({ type }) => type === 'condition');
 const modelContent = editorStore.standardPages.find(({ type }) => type === 'model');

@@ -84,7 +84,7 @@ export function addContentToPage(pageId: string, content: SideAction | NodeEleme
 }
 
 export function getContentDefaultValues(type) {
-    const form = [...forms.questionForms, ...forms.elementForms].find(f => f.type === type);
+    const form = [...forms.questionForms, ...forms.elementForms, ...forms.nodeForms].find(f => f.type === type);
 
     return form.fields.reduce((acc, field) => {
         const keyValues = field.inputs.reduce((acc2, i) => {

@@ -32,6 +32,12 @@ export const standardPages: SideAction[] = [
         tooltip: 'Glisser/déposer pour ajouter une condition'
     },
     {
+        icon: 'icon-condition-legacy',
+        type: 'legacy-condition',
+        label: 'Conditions (legacy)',
+        tooltip: 'Glisser/déposer pour ajouter une condition'
+    },
+    {
         icon: 'icon-modele',
         type: 'model',
         label: 'Modèle',

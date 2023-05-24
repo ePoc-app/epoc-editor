@@ -28,6 +28,75 @@ export const conditionForm: Form = {
     ]
 };
 
+export const legacyConditionForm: Form = {
+    type: 'legacy-condition',
+    name: 'Conditions (legacy)',
+    icon: 'icon-condition',
+    buttons: baseButtons,
+    fields: [
+        {
+            inputs: [
+                {
+                    id: 'label',
+                    type: 'text',
+                    label: 'Label',
+                    value: '',
+                    placeholder: 'Saisissez...'
+                }
+            ],
+        },
+        {
+            name: 'Choix',
+            inputs: [
+                {
+                    id: 'choices',
+                    label: 'Choix',
+                    type: 'repeat',
+                    value: ['Parcours A', 'Parcours B'],
+                    inputs: [
+                        {
+                            id: '',
+                            type: 'text',
+                            label: '',
+                            placeholder: 'Parcours X',
+                            value: ''
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            name: 'Contenus conditionnels',
+            inputs: [
+                {
+                    id: 'conditionalFlag',
+                    label: 'Contenu',
+                    type: 'repeat',
+                    value: [],
+                    inputs: [
+                        {
+                            id: 'id',
+                            type: 'text',
+                            label: '',
+                            placeholder: 'Contenu',
+                            value: '',
+                        },
+                        {
+                            id: 'choice',
+                            type: 'select',
+                            label: '',
+                            placeholder: '',
+                            value: '',
+                            options: [],
+                            linkedOptions: 'choices'
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+};
+
 
 export const chapterForm: Form = {
     type: 'chapter',
@@ -262,6 +331,12 @@ export const pageForm: Form = {
                     type: 'checkbox',
                     label: 'Caché dans la table des matières',
                     value: false
+                },
+                {
+                    id:'conditional',
+                    type: 'checkbox',
+                    label: 'Ne s\'affiche qu\'a certaines conditions',
+                    value: false
                 }
             ]
         },
@@ -281,4 +356,4 @@ export const pageForm: Form = {
     ]
 };
 
-export const nodeForms: Form[] = [chapterForm, pageForm, epocForm, conditionForm];
+export const nodeForms: Form[] = [chapterForm, pageForm, epocForm, conditionForm, legacyConditionForm];

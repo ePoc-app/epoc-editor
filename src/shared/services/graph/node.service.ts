@@ -63,7 +63,7 @@ export function addChapter(chapterId?: string, chapter?: Chapter, offsetY?: numb
     return newChapter;
 }
 
-export function createLinkedPage(sourcePage: Node, contentElements: NodeElement[], title: string, subtitle: string, id: string, hidden: boolean, contentId: string): Node {
+export function createLinkedPage(sourcePage: Node, contentElements: NodeElement[], title: string, subtitle: string, id: string, hidden: boolean, conditional: boolean, contentId: string): Node {
     const position = {
         x: sourcePage.position.x + 150,
         y: sourcePage.position.y
@@ -76,6 +76,7 @@ export function createLinkedPage(sourcePage: Node, contentElements: NodeElement[
             readyToDrop: false,
             formType: 'page',
             formValues: {
+                conditional,
                 hidden,
                 title,
                 subtitle,
