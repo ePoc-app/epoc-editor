@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { QuillEditor, Quill } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
-import htmlEditButton from 'quill-html-edit-button';
 import ImageUploader from 'quill-image-uploader/src/quill.imageUploader';
 import { Ref, ref, watch } from 'vue';
 import { graphService } from '@/src/shared/services';
+//@ts-ignore
+import htmlEditButton from 'quill-html-edit-button';
 
 const props = defineProps<{
     label: string;
