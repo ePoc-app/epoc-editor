@@ -277,7 +277,8 @@ async function generateFlowEpocFromData(epoc: EpocV1) {
                 contentElements.push(contentElement);
             }
             currentNode = createLinkedPage(currentNode, contentElements, title, subtitle, id, hidden, contentId);
-            maxContentHeight = (contentElements.length - 1) * 60;
+            const contentHeight = (contentElements.length - 1) * 60;
+            maxContentHeight =  contentHeight > maxContentHeight ? contentHeight : maxContentHeight;
         }
     }
 }

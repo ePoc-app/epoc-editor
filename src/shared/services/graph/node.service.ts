@@ -46,6 +46,7 @@ export function addChapter(chapterId?: string, chapter?: Chapter, offsetY?: numb
             objectives: chapter.objectives
         };
     }
+    offsetY = offsetY ? offsetY : 0;
     const newYPos = chapters.length > 0 ? chapters[chapters.length - 1].position.y + 200 + offsetY : 200 + offsetY;
     const newChapter: Node = {
         id: (nodes.value.length + 1).toString(),
