@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { QuillEditor, Quill } from '@vueup/vue-quill';
+import { Quill, QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import ImageUploader from 'quill-image-uploader/src/quill.imageUploader';
 import { Ref, ref, watch } from 'vue';
 import { graphService } from '@/src/shared/services';
 //@ts-ignore
 import htmlEditButton from 'quill-html-edit-button';
-
 
 const props = defineProps<{
     label: string;
@@ -62,30 +61,6 @@ const qlEditor = ref(null);
 const content: Ref<string> = ref('');
     
 
-
-
-const toolbarOptions = [
-    ['bold', 'italic', 'underline', 'strike'],
-    [{ details: 'details' }], // add the details button
-];
-
-const quillOptions = {
-    theme: 'snow',
-    sanitize: false
-};
-
-function insertDetails() {
-    const quill = qlEditor.value.getQuill();
-    const detailsTag = '<details><summary>Details</summary>Content goes here</details>';
-    console.log(quill);
-    quill.clipboard.dangerouslyPasteHTML(detailsTag);
-    // const quill = qlEditor.value.getQuill();
-    // const range = quill.getSelection(true);
-    // const content = quill.getSelection().toString() || 'Details';
-    // quill.insertEmbed(range.index, 'details', content);
-    // quill.setSelection(range.index + 1, Quill.sources.USER);
-}
-
 function textChange() {
     emit('input', content.value);
 }
@@ -105,28 +80,15 @@ watch(
 
 <template>
     <label for="ql-editor">{{ label }}</label>
-    <div id="my-toolbar">
-        <button class="ql-bold"></button>
-        <button class="ql-italic"></button>
-        <button class="ql-underline"></button>
-        <button class="ql-list" value="ordered"></button>
-        <button class="ql-list" value="bullet"></button>
-        <button class="ql-align"></button>
-        <button class="ql-align" value="center"></button>
-        <button class="ql-align" value="right"></button>
-        <button class="ql-link"></button>
-        <button class="ql-image"></button>
-        <button class="ql-accordion" @click="insertDetails">C</button>
-    </div>
     <QuillEditor
         id="ql-editor"
         ref="qlEditor"
         v-model:content="content"
         content-type="html"
-        :toolbar="toolbarOptions"
+        theme="snow"
         :class="{ 'ql-card': insideCard }"
         :modules="modules"
-        :options="quillOptions"
+        :toolbar="toolbar"
         :placeholder="placeholder"
         @text-change="textChange"
         @ready="initQuill"
