@@ -2,10 +2,11 @@
 import { Quill, QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import ImageUploader from 'quill-image-uploader/src/quill.imageUploader';
-import { Ref, ref, watch } from 'vue';
+import { Ref, reactive, ref, watch } from 'vue';
 import { graphService } from '@/src/shared/services';
 //@ts-ignore
 import htmlEditButton from 'quill-html-edit-button';
+import './accordionBlots';
 
 const props = defineProps<{
     label: string;
@@ -17,21 +18,6 @@ const props = defineProps<{
 const emit = defineEmits<{
     (e: 'input', value: string): void;
 }>();
-
-const toolbar = [
-    [
-        'bold',
-        'italic',
-        'underline',
-        { 'list': 'ordered' },
-        { 'list': 'bullet' },
-        { 'align': null},
-        {'align': 'center'},
-        {'align': 'right'}, 
-        'link',
-        'image'
-    ]
-];
 
 const image = Quill.import('formats/image');
 
@@ -59,7 +45,13 @@ const modules = [
 const qlEditor = ref(null);
 
 const content: Ref<string> = ref('');
-    
+
+const accordionInput = reactive({
+    title: 'Title',
+    content: 'Content',
+});
+const accordionForm = ref(false);
+
 
 function textChange() {
     emit('input', content.value);
@@ -67,6 +59,15 @@ function textChange() {
 
 function initQuill() {
     content.value = props.inputValue;
+}
+
+function addAccordion() {
+    const value = { title: accordionInput.title, content: accordionInput.content };
+    const quill = qlEditor.value.getQuill();
+    quill.insertEmbed(0, 'accordion', value);
+    accordionForm.value = false;
+    accordionInput.title = 'Title';
+    accordionInput.content = 'Content';
 }
 
 watch(
@@ -80,6 +81,19 @@ watch(
 
 <template>
     <label for="ql-editor">{{ label }}</label>
+    <div id="toolbar">
+        <button class="ql-bold"></button>
+        <button class="ql-italic"></button>
+        <button class="ql-underline"></button>
+        <button class="ql-list" value="ordered"></button>
+        <button class="ql-list" value="bullet"></button>
+        <button class="ql-align"></button>
+        <button class="ql-align" value="center"></button>
+        <button class="ql-align" value="right"></button>
+        <button class="ql-link"></button>
+        <button class="ql-image"></button>
+        <button class="ql-accordion" @click="accordionForm = true"></button>
+    </div>
     <QuillEditor
         id="ql-editor"
         ref="qlEditor"
@@ -88,11 +102,18 @@ watch(
         theme="snow"
         :class="{ 'ql-card': insideCard }"
         :modules="modules"
-        :toolbar="toolbar"
+        toolbar="#toolbar"
         :placeholder="placeholder"
         @text-change="textChange"
         @ready="initQuill"
     />
+    <div v-if="accordionForm" class="accordion-form">
+        <label for="title">Titre</label>
+        <input id="title" v-model="accordionInput.title" type="text">
+        <label for="content">Contenu</label>
+        <input id="content" v-model="accordionInput.content" type="text">
+        <button @click="addAccordion">Valider</button>
+    </div>
 </template>
 
 <style lang="scss">
@@ -186,5 +207,10 @@ watch(
             box-shadow: 0 1px 8px 0 var(--shadow-outer);
         }
     }
+}
+
+summary {
+    border-bottom: 1px solid lightgray;
+    padding: 1em;
 }
 </style>

@@ -3,7 +3,7 @@ import TextInput from './TextInput.vue';
 import TextAreaInput from './TextAreaInput.vue';
 import FileInput from './FileInput.vue';
 import ScoreInput from './ScoreInput.vue';
-import QuillEditor from './QuillEditor.vue';
+import QuillEditor from './Quill/QuillEditor.vue';
 
 import CheckBoxInput from './card/components/CheckBoxInput.vue';
 import RadioInput from './card/components/RadioInput.vue';
