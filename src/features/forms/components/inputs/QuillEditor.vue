@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { QuillEditor, Quill } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
+import htmlEditButton from 'quill-html-edit-button';
 import ImageUploader from 'quill-image-uploader/src/quill.imageUploader';
 import { Ref, ref, watch } from 'vue';
 import { graphService } from '@/src/shared/services';
@@ -37,13 +38,22 @@ image.sanitize = function(url) {
     return url;
 };
 
-const modules = {
-    name: 'imageUploader',
-    module: ImageUploader,
-    options: {
-        upload: (file) => graphService.importFile(file.path)
+const modules = [
+    {
+        name: 'imageUploader',
+        module: ImageUploader,
+        options: {
+            upload: (file) => graphService.importFile(file.path)
+        }, 
+    },
+    {
+        name: 'htmlEditButton',
+        module: htmlEditButton,
+        option: {
+            debug: true,
+        }
     }
-};
+];
 
 const qlEditor = ref(null);
 
@@ -152,4 +162,28 @@ watch(
     left: 0.5rem !important;
 }
 
+// Quill Edit button
+
+.ql-html {
+    &-textContainer {
+        background: white;
+    }
+    
+    &-textArea {
+        border: 1px solid var(--border);
+    }
+
+    &-buttonOk, &-buttonCancel {
+        border: none;
+        cursor: pointer;
+        color: var(--text);
+        border-radius: 6px;
+        transition: box-shadow .2s ease-in-out;
+        padding: .5rem 1rem;
+        
+        &:hover {
+            box-shadow: 0 1px 8px 0 var(--shadow-outer);
+        }
+    }
+}
 </style>
