@@ -3,7 +3,7 @@
 defineProps<{
     label: string;
     icon: string;
-    disabled: { type: boolean, required: false, default: false };
+    disabled: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -16,7 +16,7 @@ const emit = defineEmits<{
     <button 
         class="btn btn-form"
         :class="{ 'btn-delete' : label === 'Supprimer' }"
-        :disabled="disabled"
+        :disabled="!!disabled"
         @click="emit('click')"
     >
         <i :class="icon"></i>

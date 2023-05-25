@@ -57,7 +57,7 @@ function actionOnForm(action: string) {
 
 }
 
-function checkIfDisabled(disabledProp) {
+function checkIfDisabled(disabledProp): boolean {
     if (typeof disabledProp === 'boolean') {
         return disabledProp;
     } else if (typeof disabledProp === 'function') {

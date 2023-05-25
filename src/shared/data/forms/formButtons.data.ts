@@ -11,7 +11,7 @@ export const pageButtons: FormButton[] = [
 export const activityButtons: FormButton[] = [
     ...baseButtons,
     { label: 'Dupliquer l\'activité', icon: 'icon-plus', action: 'duplicate-page' },
-    { label: 'Sauvegarder le modèle', icon: 'icon-modele', action: 'save-model', disabled: true},
+    { label: 'Sauvegarder le modèle', icon: 'icon-modele', action: 'save-model'},
     { label: 'Question simple', icon: 'icon-question', action: 'simple-question', disabled: (data) => { return data.elements.length > 1; } }
 ];
 
