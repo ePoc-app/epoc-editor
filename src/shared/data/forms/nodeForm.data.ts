@@ -192,7 +192,7 @@ export const epocForm: Form = {
                 },
                 {
                     id: 'summary',
-                    type: 'ql-editor',
+                    type: 'html',
                     label: 'Présentation',
                     value: '',
                     placeholder: 'Saisissez une présentation de l\'ePoc...'
@@ -232,7 +232,7 @@ export const epocForm: Form = {
                         },
                         {
                             id: 'description',
-                            type: 'ql-editor',
+                            type: 'html',
                             label: 'Description',
                             placeholder: 'Saisissez une description...',
                             value: ''

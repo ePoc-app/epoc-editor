@@ -76,7 +76,7 @@ export const qcmForm: Form = {
             inputs: [
                 {
                     id: 'explanation',
-                    type: 'ql-editor',
+                    type: 'html',
                     label: '',
                     value: '',
                     placeholder: 'Saisissez une explication'
@@ -184,7 +184,7 @@ export const dragDropForm: Form = {
             inputs: [
                 {
                     id: 'explanation',
-                    type: 'ql-editor',
+                    type: 'html',
                     label: '',
                     value: '',
                     placeholder: 'Saisissez une explication'
@@ -263,7 +263,7 @@ export const reorderForm: Form = {
             inputs: [
                 {
                     id: 'explanation',
-                    type: 'ql-editor',
+                    type: 'html',
                     label: '',
                     value: '',
                     placeholder: 'Saisissez une explication...'
@@ -373,7 +373,7 @@ export const swipeForm: Form = {
             inputs: [
                 {
                     id: 'explanation',
-                    type: 'ql-editor',
+                    type: 'html',
                     label: '',
                     value: '',
                     placeholder: 'Saisissez une explication...'
@@ -481,7 +481,7 @@ export const listForm: Form = {
             inputs: [
                 {
                     id: 'explanation',
-                    type: 'ql-editor',
+                    type: 'html',
                     label: '',
                     value: '',
                     placeholder: 'Saisissez une explication...'

@@ -1,3 +1,5 @@
+<!-- TODO: Delete this legacy component -->
+
 <script setup lang="ts">
 import { QuillEditor, Quill } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
