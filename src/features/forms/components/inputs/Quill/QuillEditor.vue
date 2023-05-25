@@ -62,12 +62,15 @@ function initQuill() {
 }
 
 function addAccordion() {
-    const value = { title: accordionInput.title, content: accordionInput.content };
+    // const value = { title: accordionInput.title, content: accordionInput.content };
     const quill = qlEditor.value.getQuill();
-    quill.insertEmbed(0, 'accordion', value);
-    accordionForm.value = false;
-    accordionInput.title = 'Title';
-    accordionInput.content = 'Content';
+    // quill.insertEmbed(0, 'accordion', value);
+    // accordionForm.value = false;
+    // accordionInput.title = 'Title';
+    // accordionInput.content = 'Content';
+    const range = quill.getSelection(true);
+    // quill.insertText(range, ' ', 'accordion', true);
+    quill.insertEmbed(range, 'accordion', value);
 }
 
 watch(
@@ -92,7 +95,7 @@ watch(
         <button class="ql-align" value="right"></button>
         <button class="ql-link"></button>
         <button class="ql-image"></button>
-        <button class="ql-accordion" @click="accordionForm = true"></button>
+        <button class="ql-accordion" @click="addAccordion"></button>
     </div>
     <QuillEditor
         id="ql-editor"
@@ -209,8 +212,5 @@ watch(
     }
 }
 
-summary {
-    border-bottom: 1px solid lightgray;
-    padding: 1em;
-}
+
 </style>
