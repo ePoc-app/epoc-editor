@@ -80,7 +80,7 @@ export const useEditorStore = defineStore('editor', {
             //? To be sure the view is notified of closing / reopening
             this.formPanel = null;
             setTimeout(() => { 
-                this.formPanel = structuredClone(formsModel.find(form => form.type === formType));
+                this.formPanel = formsModel.find(form => form.type === formType);
             });
 
             nodes.value.forEach(node => node.selected = node.id === this.openedElementId);
@@ -89,11 +89,6 @@ export const useEditorStore = defineStore('editor', {
         closeFormPanel(): void {
             this.formPanel = null;
             this.openedElementId = null;
-        },
-
-        //return a copy of the form linked to the type
-        getForm(type: string): Form {
-            return structuredClone(toRaw(formsModel.find(form => form.type === type)));
         },
 
         closeValidationModal(): void {

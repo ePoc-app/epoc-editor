@@ -88,7 +88,6 @@ export function createGraphEpocFromData(epoc: EpocV1) {
                     parentId: id,
                     contentId
                 };
-                console.log(contentId);
                 contentElements.push(contentElement);
             } else {
                 contentElement.action.type = mapType[content.type].type;

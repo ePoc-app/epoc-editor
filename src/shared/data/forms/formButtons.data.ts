@@ -5,8 +5,14 @@ export const baseButtons = [{ label: 'Supprimer', icon: 'icon-supprimer', action
 export const pageButtons: FormButton[] = [
     ...baseButtons,
     { label: 'Dupliquer la page', icon: 'icon-plus', action: 'duplicate-page' },
-    { label: 'Lancer l\'aperçu ici', icon: 'icon-play', action: 'launch-preview' },
-    { label: 'Sauvegarder le modèle', icon: 'icon-modele', action: 'save-model' }
+    { label: 'Sauvegarder le modèle', icon: 'icon-modele', action: 'save-model' },
+];
+
+export const activityButtons: FormButton[] = [
+    ...baseButtons,
+    { label: 'Dupliquer l\'activité', icon: 'icon-plus', action: 'duplicate-page' },
+    { label: 'Sauvegarder le modèle', icon: 'icon-modele', action: 'save-model', disabled: true},
+    { label: 'Question simple', icon: 'icon-question', action: 'simple-question', disabled: (data) => { return data.elements.length > 1; } }
 ];
 
 export const contentButtons: FormButton[] = [

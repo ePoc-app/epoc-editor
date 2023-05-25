@@ -12,6 +12,8 @@ const { nodes, edges, addNodes, addEdges, findNode, applyEdgeChanges, applyNodeC
 
 const editorStore = useEditorStore();
 
+const questionTypes = ['choice', 'drag-and-drop', 'reorder', 'swipe', 'dropdown-list'];
+
 export function setEpocNodeData(epoc: EpocV1) {
     const { elements } = useGraphStore();
 
@@ -70,7 +72,7 @@ export function createLinkedPage(sourcePage: Node, contentElements: NodeElement[
     };
     const newPage: Node = {
         id: id,
-        type: 'content',
+        type: 'page',
         data: {
             elements: contentElements,
             readyToDrop: false,
@@ -107,16 +109,17 @@ export function createLinkedPage(sourcePage: Node, contentElements: NodeElement[
 
 export function createPageFromContent(position: { x: number, y: number }, element: NodeElement): void {
     const id = generateId();
+    const oldPageNode = findNode(element.parentId);
     element.parentId = id;
 
     const newPageNode: Node = {
         id,
-        type: 'content',
+        type: oldPageNode.type,
         data: {
+            type: oldPageNode.data.type,
             elements: [],
-            formType: 'page',
+            formType: oldPageNode.data.formType,
             formValues: {},
-            type: 'question',
             contentId: generateContentId(),
         },
         position,
@@ -135,8 +138,6 @@ export function createPageFromContent(position: { x: number, y: number }, elemen
 }
 
 export function addPage(position: { x: number, y: number }, actions: SideAction[]): void {
-    const questionTypes = ['choice', 'drag-and-drop', 'reorder', 'swipe', 'dropdown-list'];
-
     const id = generateId();
 
     //! see if correct in v1
@@ -148,12 +149,12 @@ export function addPage(position: { x: number, y: number }, actions: SideAction[
 
     const newPageNode: Node = {
         id,
-        type: 'content',
+        type: isQuestion ? 'activity' : 'page',
         data: {
             type: finalType,
             elements: [],
             contentId: generateContentId(),
-            formType: 'page',
+            formType: isQuestion ? 'activity' : 'page',
             formValues: {},
         },
         position,
@@ -172,6 +173,16 @@ export function addPage(position: { x: number, y: number }, actions: SideAction[
     document.querySelectorAll('.node .ghost').forEach((ghost) => {
         ghost.remove();
     });
+}
+
+export function transformActivityToPage(): void {
+    const pageNode = findNode(editorStore.openedElementId);
+    if (pageNode.data.elements.length > 1) return;
+    pageNode.type = 'page';
+    pageNode.data.formType = 'page';
+    delete pageNode.data.formValues.summary;
+    editorStore.closeFormPanel();
+    editorStore.openFormPanel(pageNode.id, pageNode.data.formType, pageNode.data.formValues);
 }
 
 
@@ -291,4 +302,10 @@ export function moveNextChapter(chapterId: string): void {
         chapter.position = { x: 0, y: chapter.position.y - 200 };
         chapter.data.title = `Chapitre ${Number(chapter.data.title.split(' ')[1] - 1)}`;
     }
+}
+
+export function isFormButtonDisabled(isDisabledFunction: (node) => boolean): boolean {
+    const isChild = Boolean(editorStore.openedNodeId);
+    const nodeData = isChild ? findNode(editorStore.openedNodeId).data.elements.find(e => e.id === editorStore.openedElementId) : findNode(editorStore.openedElementId).data;
+    return isDisabledFunction(nodeData);
 }

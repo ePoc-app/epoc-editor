@@ -112,7 +112,6 @@ function newContent(epoc: EpocV1, pageNode: GraphNode) : string {
             };
             return epoc.addContent(pageNode.data.contentId, content);
         } else if (contentNode.action.type === 'legacy-condition') {
-            console.log(contentNode.formValues);
             const content: ChoiceCondition = {
                 ...baseContent,
                 type: 'choice',
@@ -133,10 +132,8 @@ function newContent(epoc: EpocV1, pageNode: GraphNode) : string {
                     })
                 }
             };
-            console.log(content.conditionResolver);
             return epoc.addContent(pageNode.data.contentId, content);
         }
-        console.log(contentNode.action.type);
     } else {
         if (pageNode.data.elements.length > 1) {
             const questions = pageNode.data.elements.reduce((q, questionNode) => {

@@ -64,7 +64,7 @@ setInterval(() => {
                 <TopActionButton icon="icon-avant" :disabled="editorStore.redoStack.length <= 0" @click="editorStore.redo" />
                 <hr class="vertical-separator">
                 <TopActionButton icon="icon-save" text="Sauvegarder" position="right" :disabled="editorStore.saving" @click="editorService.saveEpocProject" />
-                <TopActionButton icon="icon-play" text="Aperçu" position="right" :disabled="editorStore.loadingPreview" @click="editorService.runPreview()" />
+                <TopActionButton icon="icon-play" text="Aperçu" position="right" :disabled="editorStore.loadingPreview" @click="editorService.runPreviewAtPage()" />
                 <TopActionButton icon="icon-export" text="Exporter archive" position="right" :disabled="editorStore.exporting" @click="editorService.exportProject()" />
             </div>
         </div>

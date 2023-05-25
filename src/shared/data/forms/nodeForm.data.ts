@@ -1,5 +1,5 @@
 import { Form } from '@/src/shared/interfaces';
-import { baseButtons, pageButtons } from './formButtons.data';
+import {activityButtons, baseButtons, pageButtons} from './formButtons.data';
 
 export const conditionForm: Form = {
     type: 'condition',
@@ -356,4 +356,63 @@ export const pageForm: Form = {
     ]
 };
 
-export const nodeForms: Form[] = [chapterForm, pageForm, epocForm, conditionForm, legacyConditionForm];
+export const activityForm: Form = {
+    type: 'activity',
+    name: 'Activité',
+    icon: 'icon-ecran',
+    buttons: activityButtons,
+    fields: [
+        {
+            inputs: [
+                {
+                    id:'title',
+                    type: 'text',
+                    label: 'Titre',
+                    value: '',
+                    placeholder: 'Saisissez...'
+                },
+                {
+                    id:'subtitle',
+                    type: 'text',
+                    label: 'Sous-titre',
+                    value: '',
+                    placeholder: 'Saisissez...'
+                },
+                {
+                    id:'summary',
+                    type: 'textarea',
+                    label: 'Résumé',
+                    value: '',
+                    placeholder: 'Saisissez...'
+                },
+                {
+                    id:'hidden',
+                    type: 'checkbox',
+                    label: 'Caché dans la table des matières',
+                    value: false
+                },
+                {
+                    id:'conditional',
+                    type: 'checkbox',
+                    label: 'Ne s\'affiche qu\'a certaines conditions',
+                    value: false
+                }
+            ]
+        },
+        {
+            name: 'Composants',
+            inputs: [
+                {
+                    id: 'components',
+                    label: 'Composants',
+                    type: 'repeat',
+                    value: [],
+                    addButton: false,
+                    inputs: []
+                }
+            ]
+        }
+    ]
+};
+
+export const nodeForms: Form[] = [chapterForm, pageForm, epocForm, conditionForm, legacyConditionForm, activityForm];

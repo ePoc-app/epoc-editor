@@ -5,7 +5,13 @@ import GenericField from './components/GenericField.vue';
 import { Input } from '@/src/shared/interfaces';
 import { graphService, editorService } from '@/src/shared/services';
 import { createToaster } from '@meforma/vue-toaster';
-import { confirmDelete, duplicatePage, duplicateContent } from '@/src/shared/services/graph';
+import {
+    confirmDelete,
+    duplicatePage,
+    duplicateContent,
+    transformActivityToPage,
+    isFormButtonDisabled
+} from '@/src/shared/services/graph';
 
 const editorStore = useEditorStore();
 
@@ -43,8 +49,22 @@ function actionOnForm(action: string) {
         if(editorStore.savePageModel(currentNode.data.elements.map((element) => element.action))) toaster.success('Modèle sauvegardé 👌');
         else toaster.error('Le modèle existe déjà 🤔');
         break;
+
+    case 'simple-question':
+        transformActivityToPage();
+        break;
     }
 
+}
+
+function checkIfDisabled(disabledProp) {
+    if (typeof disabledProp === 'boolean') {
+        return disabledProp;
+    } else if (typeof disabledProp === 'function') {
+        return isFormButtonDisabled(disabledProp);
+    } else {
+        return false;
+    }
 }
 
 </script>
@@ -62,6 +82,7 @@ function actionOnForm(action: string) {
                 :key="button.label"
                 :label="button.label"
                 :icon="button.icon"
+                :disabled="checkIfDisabled(button.disabled)"
                 @click="actionOnForm(button.action)"
             />
         </div>

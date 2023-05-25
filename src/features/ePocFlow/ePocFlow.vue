@@ -2,6 +2,7 @@
 import { ConnectionMode, useVueFlow, VueFlow, getConnectedEdges, applyEdgeChanges } from '@vue-flow/core';
 import { markRaw, onMounted } from 'vue';
 import PageNode from './nodes/PageNode.vue';
+import ActivityNode from './nodes/ActivityNode.vue';
 import CustomConnectContent from './edges/CustomConnectContent.vue';
 import { useEditorStore, useGraphStore } from '@/src/shared/stores';
 import ChapterNode from './nodes/ChapterNode.vue';
@@ -16,7 +17,8 @@ const editorStore = useEditorStore();
 const graphStore = useGraphStore();
 
 const nodeTypes = {
-    content: markRaw(PageNode),
+    activity: markRaw(ActivityNode),
+    page: markRaw(PageNode),
     chapter: markRaw(ChapterNode),
     epoc: markRaw(ePocNode),
     add: markRaw(AddChapterNode), 

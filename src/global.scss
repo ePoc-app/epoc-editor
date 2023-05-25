@@ -233,7 +233,7 @@ hr {
   min-height: 62px;
   background-color: var(--node);
   border-radius: 8px;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   transition: all .15s ease-in-out;  
   &-list {
     padding: 1rem;
@@ -478,7 +478,18 @@ g.selected {
 
 .vue-flow__node.selected {
   .node {
-    border: 1px solid var(--editor-blue);
+    border: 2px solid var(--editor-blue);
     box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);  
   }
+}
+
+::-webkit-resizer {
+  border: 2px solid yellow;
+  background: blue;
+  box-shadow: 0 0 2px 5px red;
+  outline: 2px dashed green;
+
+  /*size does not work it seems*/
+  width: 150px;
+  height: 150px;
 }
