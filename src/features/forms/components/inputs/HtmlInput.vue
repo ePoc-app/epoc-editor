@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import Editor from '@tinymce/tinymce-vue';
-import { getTinymce } from '@tinymce/tinymce-vue/lib/cjs/main/ts/TinyMCE';
 import { Ref, ref, watch } from 'vue';
-import {graphService} from '@/src/shared/services';
 
 const props = defineProps<{
     label: string;
@@ -19,6 +17,7 @@ const editor = ref(null);
 const content: Ref<string> = ref('');
 
 function textChange() {
+    console.log('textChange');
     emit('input', content.value);
 }
 
@@ -36,8 +35,8 @@ watch(
     }
 );
 
-const plugins = 'image link lists template code';
-const toolbar = 'bold italic alignleft aligncenter alignright link image bullist numlist outdent indent template code';
+const plugins = 'bold italic underline lists align link image searchreplace visualblocks preview wordcount code fullscreen media table template help textpattern';
+const toolbar = 'undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | link image | help | template | code';
 
 const template = `
     <details style="border: 1px solid lightgray; border-radius: 4px; padding: .5em .5em 0 .5em">
@@ -51,26 +50,8 @@ function init() {
     content.value = props.inputValue;
 }
 
-async function drop(event) {
-    const file = event.dataTransfer.files[0];
-    if (!file) return;
-    const url = await graphService.importFile(file.path);
-    const editor = getTinymce().activeEditor;
-    editor.setContent(editor.getContent() + `<img alt="" src="${url}"/>`);
-}
-
-function handleFilePicker(callback) {
-    const input = document.createElement('input');
-    input.type = 'file';
-    document.body.appendChild(input);
-    input.click();
-    input.addEventListener('change', async (e: any) => {
-        const fileInput = e.target as HTMLInputElement;
-        const file = fileInput.files[0];
-        if (!file) return;
-        const url = await graphService.importFile(file.path);
-        callback(url);
-    });
+function drop(event) {
+    console.log('drop', event);
 }
 
 </script>
@@ -84,18 +65,16 @@ function handleFilePicker(callback) {
         :plugins="plugins"
         :toolbar="toolbar"
         :init="{
-            menubar: false,
-            statusbar: false,
+            menubar: 'file edit view insert custom',
             templates: [
-                { title: 'Plier/déplier', content: template, description: 'Plier/déplier avec titre et contenu' }
+                { title: 'title 1', content: template, description: 'this is a test template' }
             ],
-            file_picker_types: 'image',
-            file_picker_callback: handleFilePicker,
-            link_default_target: '_blank',
-            link_target_list: false,
-            paste_data_images: false
+            file_picker_callback:(callback, value, meta) => {
+                console.log('file_picker_callback', callback, value, meta);
+                drop(value);
+            }
         }"
         @init="init"
-        @drop.stop.prevent="drop"
+        @drop="drop"
     />
 </template>

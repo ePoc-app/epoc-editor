@@ -37,7 +37,7 @@ const emit = defineEmits<{
         :inside-card="insideCard"
         @input="emit('input', $event)"
     />
-    <HtmlInput 
+    <HtmlInput
         v-if="input.type === 'html'"
         :label="input.label"
         :placeholder="input.placeholder"
