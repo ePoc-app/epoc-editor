@@ -2,9 +2,10 @@
 import { Handle, Position, getConnectedEdges, useVueFlow } from '@vue-flow/core';
 import { computed, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
-import { NodeElement, SideAction } from '@/src/shared/interfaces';
+import { NodeElement } from '@/src/shared/interfaces';
 import ContentButton from '@/src/components/ContentButton.vue';
 import { addContentToPage, removeContentFromPage, changeContentOrder } from '@/src/shared/services/graph';
+import { questions } from '@/src/shared/data';
 
 const editorStore = useEditorStore();
 
@@ -40,10 +41,10 @@ const dragOptions = ref({
         name: 'node',
         put: !isCondition.value,
     },
-    filter: '.condition',
+    disabled: false,
     sort: !isCondition.value,
     ghostClass: 'ghost',
-    animation: 200,
+    animation: 200
 });
 
 function openForm(element: NodeElement) {
@@ -54,38 +55,36 @@ function openPageForm(id, formType, formValues) {
     editorStore.openFormPanel(id, formType, formValues);
 }
 
-let counter = 0;
+let leaveTimeout = null;
 
 function dragLeave(event) {
-    counter --;
-    if (counter > 0) return;
-    event.target.classList.remove('hover');
+    // Reset timeout to prevent flickering
+    leaveTimeout = setTimeout(() => {
+        event.target.classList.remove('hover');
+        dragOptions.value.disabled = false;
+        leaveTimeout = null;
+    }, 300);
 }
 
-function dragEnter(event) {
+function dragOver(event) {
     if(!editorStore.draggedElement) return;
+    if(leaveTimeout) {
+        // Reset timeout to prevent flickering
+        clearTimeout(leaveTimeout);
+        leaveTimeout = null;
+    }
 
-    event.preventDefault();
-    counter ++;
-    if(props.data.type === 'question' || props.data.type === 'element') {
-        event.target.classList.add('hover');
-    } 
-}
+    event.target.classList.add('hover');
 
-function dragOver() {
-    if(!editorStore.draggedElement) return;
+    const { element } = editorStore.draggedElement;
 
-    counter = 1;
-
-    const { element, type } = editorStore.draggedElement; 
-    const isQuestion = type === 'nodeElement' ? true : !['video', 'text'].includes((element as SideAction[])[0].type);
-
-    if(props.data.type === 'template' || !isQuestion) {
-        document.body.classList.remove('cursor-allowed');
-        document.body.classList.add('cursor-not-allowed');
-    } else if(props.data.type === 'question') {
+    if(canBeDrop(element)) {
         document.body.classList.remove('cursor-not-allowed');
         document.body.classList.add('cursor-allowed');
+    } else {
+        document.body.classList.remove('cursor-allowed');
+        document.body.classList.add('cursor-not-allowed');
+        dragOptions.value.disabled = true;
     }
 }
 
@@ -96,7 +95,10 @@ function change(event) {
 
     if(added && dropped.value) {
         dropped.value = false;
-        addContentToPage(currentNode.id, added.element, added.newIndex);
+        if (canBeDrop(added.element)) {
+            addContentToPage(currentNode.id, added.element, added.newIndex);
+        }
+        // todo handle when the drop is rejected not deleting the moved content from another page
     }
 
     if(moved) {
@@ -108,6 +110,15 @@ function change(event) {
         const { oldIndex } = removed;
         removeContentFromPage(oldIndex, props.id, true);
     }
+}
+
+function canBeDrop (elem) : boolean {
+    const type = elem.type ? elem.type : Array.isArray(elem) ? elem[0].type : elem.action.type;
+    const currentNode = findNode(props.id);
+    const isQuestion = questions.some(q => q.type === type);
+    return !isQuestion || (isQuestion && !currentNode.data.elements.some(e => {
+        return questions.some(q => q.type === e.action.type);
+    }));
 }
 
 function drop() {
@@ -170,7 +181,6 @@ function removeHoverEffect() {
                 :class=" { 'active': editorStore.openedElementId ? editorStore.openedElementId === props.id : false }"
                 @change="change"
                 @drop.stop="drop"
-                @dragenter="dragEnter"
                 @dragover.stop="dragOver"
                 @dragleave="dragLeave"
             >
