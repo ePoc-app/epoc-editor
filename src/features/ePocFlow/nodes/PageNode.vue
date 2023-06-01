@@ -5,7 +5,7 @@ import { useEditorStore } from '@/src/shared/stores';
 import { NodeElement } from '@/src/shared/interfaces';
 import ContentButton from '@/src/components/ContentButton.vue';
 import { addContentToPage, removeContentFromPage, changeContentOrder } from '@/src/shared/services/graph';
-import { questions } from '@/src/shared/data';
+import {moveGuard} from '@/src/shared/utils/draggable';
 
 const editorStore = useEditorStore();
 
@@ -44,7 +44,8 @@ const dragOptions = ref({
     disabled: false,
     sort: !isCondition.value,
     ghostClass: 'ghost',
-    animation: 200
+    animation: 200,
+    move: moveGuard
 });
 
 function openForm(element: NodeElement) {
@@ -55,39 +56,6 @@ function openPageForm(id, formType, formValues) {
     editorStore.openFormPanel(id, formType, formValues);
 }
 
-let leaveTimeout = null;
-
-function dragLeave(event) {
-    // Reset timeout to prevent flickering
-    leaveTimeout = setTimeout(() => {
-        event.target.classList.remove('hover');
-        dragOptions.value.disabled = false;
-        leaveTimeout = null;
-    }, 300);
-}
-
-function dragOver(event) {
-    if(!editorStore.draggedElement) return;
-    if(leaveTimeout) {
-        // Reset timeout to prevent flickering
-        clearTimeout(leaveTimeout);
-        leaveTimeout = null;
-    }
-
-    event.target.classList.add('hover');
-
-    const { element } = editorStore.draggedElement;
-
-    if(canBeDrop(element)) {
-        document.body.classList.remove('cursor-not-allowed');
-        document.body.classList.add('cursor-allowed');
-    } else {
-        document.body.classList.remove('cursor-allowed');
-        document.body.classList.add('cursor-not-allowed');
-        dragOptions.value.disabled = true;
-    }
-}
-
 function change(event) {
     if(!editorStore.draggedElement) return;
 
@@ -95,10 +63,7 @@ function change(event) {
 
     if(added && dropped.value) {
         dropped.value = false;
-        if (canBeDrop(added.element)) {
-            addContentToPage(currentNode.id, added.element, added.newIndex);
-        }
-        // todo handle when the drop is rejected not deleting the moved content from another page
+        addContentToPage(currentNode.id, added.element, added.newIndex);
     }
 
     if(moved) {
@@ -112,14 +77,7 @@ function change(event) {
     }
 }
 
-function canBeDrop (elem) : boolean {
-    const type = elem.type ? elem.type : Array.isArray(elem) ? elem[0].type : elem.action.type;
-    const currentNode = findNode(props.id);
-    const isQuestion = questions.some(q => q.type === type);
-    return !isQuestion || (isQuestion && !currentNode.data.elements.some(e => {
-        return questions.some(q => q.type === e.action.type);
-    }));
-}
+
 
 function drop() {
     dropped.value = true;
@@ -176,13 +134,11 @@ function removeHoverEffect() {
                 v-bind="dragOptions"
                 :id="'node'+ props.id"
                 :model-value="data.elements"
-                class="node-list node"
+                class="node-list page-node node hover"
                 item-key="id"
                 :class=" { 'active': editorStore.openedElementId ? editorStore.openedElementId === props.id : false }"
                 @change="change"
                 @drop.stop="drop"
-                @dragover.stop="dragOver"
-                @dragleave="dragLeave"
             >
                 <template #item="{ element, index }">
                     <div :key="index" class="node-item" :class="{ 'condition': isCondition }">

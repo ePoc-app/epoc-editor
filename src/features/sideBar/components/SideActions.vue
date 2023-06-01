@@ -3,6 +3,7 @@ import { SideAction } from '@/src/shared/interfaces';
 import { ref } from 'vue';
 import ContentButton from '@/src/components/ContentButton.vue';
 import { useEditorStore } from '@/src/shared/stores';
+import { moveGuard } from '@/src/shared/utils/draggable';
 
 const editorStore = useEditorStore();
 
@@ -21,7 +22,8 @@ const dragOptions = {
     },
     disabled: false,
     sort: false,
-    ghostClass: 'ghost'
+    ghostClass: 'ghost',
+    move: moveGuard
 };
 
 const classList = (item: SideAction) => ({ 'clickable': item.type === 'question' || item.type === 'model' });
