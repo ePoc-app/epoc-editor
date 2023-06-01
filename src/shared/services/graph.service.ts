@@ -3,7 +3,7 @@ import { getConnectedEdges, GraphNode, useVueFlow } from '@vue-flow/core';
 import { EpocV1 } from '@/src/shared/classes/epoc-v1';
 import {Assessment, ChoiceCondition, Content, Html, SimpleQuestion, uid, Video} from '@epoc/epoc-types/dist/v1';
 import { Question } from '@epoc/epoc-types/dist/v1/question';
-import { standardPages } from '@/src/shared/data';
+import {questions, standardPages} from '@/src/shared/data';
 
 declare const api: ApiInterface;
 
@@ -90,7 +90,7 @@ function newContent(epoc: EpocV1, pageNode: GraphNode) : string {
         ...(pageNode.data.formValues.hidden && { hidden: pageNode.data.formValues.hidden }),
         ...(pageNode.data.formValues.conditional && { conditional: pageNode.data.formValues.conditional })
     };
-    if (pageNode.data.elements.every(elem => standardPages.find(s => s.type === elem.formType))) {
+    if (pageNode.type === 'page') {
         const contentNode = pageNode.data.elements[0];
         if (contentNode.action.type === 'video') {
             const content: Video = {
@@ -133,28 +133,26 @@ function newContent(epoc: EpocV1, pageNode: GraphNode) : string {
                 }
             };
             return epoc.addContent(pageNode.data.contentId, content);
-        }
-    } else {
-        if (pageNode.data.elements.length > 1) {
-            const questions = pageNode.data.elements.reduce((q, questionNode) => {
-                q.push(newQuestion(epoc, questionNode));
-                return q;
-            }, []);
-            const content: Assessment = {
-                ...baseContent,
-                type: 'assessment',
-                summary: '',
-                questions: questions
-            };
-            return epoc.addContent(pageNode.data.contentId, content);
-        } else {
+        } else if (questions.some(q => q.type === contentNode.action.type)) {
             const content: SimpleQuestion = {
                 ...baseContent,
                 type: 'simple-question',
-                question: newQuestion(epoc, pageNode.data.elements[0])
+                question: newQuestion(epoc, contentNode)
             };
             return epoc.addContent(pageNode.data.contentId, content);
         }
+    } else if (pageNode.type === 'activity') {
+        const questions = pageNode.data.elements.reduce((q, questionNode) => {
+            q.push(newQuestion(epoc, questionNode));
+            return q;
+        }, []);
+        const content: Assessment = {
+            ...baseContent,
+            type: 'assessment',
+            ...(pageNode.data.formValues.summary && { summary: pageNode.data.formValues.summary }),
+            questions: questions
+        };
+        return epoc.addContent(pageNode.data.contentId, content);
     }
 }
 

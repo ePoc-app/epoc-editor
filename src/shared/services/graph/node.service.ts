@@ -65,23 +65,24 @@ export function addChapter(chapterId?: string, chapter?: Chapter, offsetY?: numb
     return newChapter;
 }
 
-export function createLinkedPage(sourcePage: Node, contentElements: NodeElement[], title: string, subtitle: string, id: string, hidden: boolean, conditional: boolean, contentId: string): Node {
+export function createLinkedPage(sourcePage: Node, type: 'activity'|'page', contentElements: NodeElement[], title: string, subtitle: string, id: string, hidden: boolean, conditional: boolean, contentId: string, summary?: string): Node {
     const position = {
         x: sourcePage.position.x + 150,
         y: sourcePage.position.y
     };
     const newPage: Node = {
         id: id,
-        type: 'page',
+        type: type,
         data: {
             elements: contentElements,
             readyToDrop: false,
-            formType: 'page',
+            formType: type,
             formValues: {
                 conditional,
                 hidden,
                 title,
                 subtitle,
+                summary,
                 components: contentElements.map(c => {
                     return { action: c.action };
                 })

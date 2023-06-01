@@ -2,7 +2,18 @@ import { EpocV1 } from '@/src/shared/classes/epoc-v1';
 import { addChapter, createLinkedPage, setEpocNodeData } from '@/src/shared/services/graph';
 import { generateId } from '@/src/shared/services/graph.service';
 import { questions, standardPages } from '@/src/shared/data';
-import {Assessment, ChoiceCondition, SimpleQuestion} from '@epoc/epoc-types/dist/v1';
+import { Assessment, ChoiceCondition, SimpleQuestion } from '@epoc/epoc-types/dist/v1';
+
+const mapType = {
+    'video': standardPages.find(s => s.type === 'video'),
+    'html': standardPages.find(s => s.type === 'text'),
+    'multiple-choice': questions.find(s => s.type === 'choice'),
+    'choice': questions.find(s => s.type === 'choice'),
+    'drag-and-drop': questions.find(s => s.type === 'drag-and-drop'),
+    'dropdown-list': questions.find(s => s.type === 'dropdown-list'),
+    'swipe': questions.find(s => s.type === 'swipe'),
+    'reorder': questions.find(s => s.type === 'reorder')
+};
 
 export function createGraphEpocFromData(epoc: EpocV1) {
     setEpocNodeData(epoc);
@@ -11,22 +22,13 @@ export function createGraphEpocFromData(epoc: EpocV1) {
         let currentNode = addChapter(chapterId, chapter, maxContentHeight);
         maxContentHeight = 0;
         for (const contentId of chapter.contents) {
+            let type : 'activity'|'page' = 'page';
             const content = epoc.contents[contentId];
             const id = generateId();
             const action = {
                 icon: '',
                 type: '',
                 label: ''
-            };
-            const mapType = {
-                'video': standardPages.find(s => s.type === 'video'),
-                'html': standardPages.find(s => s.type === 'text'),
-                'multiple-choice': questions.find(s => s.type === 'choice'),
-                'choice': questions.find(s => s.type === 'choice'),
-                'drag-and-drop': questions.find(s => s.type === 'drag-and-drop'),
-                'dropdown-list': questions.find(s => s.type === 'dropdown-list'),
-                'swipe': questions.find(s => s.type === 'swipe'),
-                'reorder': questions.find(s => s.type === 'reorder')
             };
             const contentElements = [];
             const contentElement = {
@@ -43,31 +45,16 @@ export function createGraphEpocFromData(epoc: EpocV1) {
             const subtitle = content.subtitle;
             const hidden = content.hidden;
             const conditional = content.conditional;
+            const summary = (content as Assessment).summary;
             if (content.type === 'assessment') {
+                type = 'activity';
                 (content as Assessment).questions.forEach((qid) => {
-                    const question = epoc.questions[qid];
-                    const contentElement = {
-                        id: generateId(),
-                        action: {
-                            icon:mapType[question.type].icon,
-                            type:mapType[question.type].type,
-                            label:mapType[question.type].label
-                        },
-                        formType: mapType[question.type].type,
-                        formValues: {
-                            ...setQuestionData(mapType[question.type].type, question)
-                        },
-                        parentId: id,
-                        contentId: qid
-                    };
+                    const contentElement = newQuestion(epoc, id, qid);
                     contentElements.push(contentElement);
                 });
             } else if (content.type === 'simple-question') {
-                const question = epoc.questions[(content as SimpleQuestion).question];
-                contentElement.formType = mapType[question.type].type;
-                contentElement.action.type = mapType[question.type].type;
-                contentElement.action.icon = mapType[question.type].icon;
-                contentElement.action.label = mapType[question.type].label;
+                const qid = (content as SimpleQuestion).question;
+                const contentElement = newQuestion(epoc, id, qid);
                 contentElements.push(contentElement);
             } else if (content.type === 'choice') {
                 const action = standardPages.find(s => s.type === 'legacy-condition');
@@ -95,11 +82,29 @@ export function createGraphEpocFromData(epoc: EpocV1) {
                 contentElement.action.label = mapType[content.type].label;
                 contentElements.push(contentElement);
             }
-            currentNode = createLinkedPage(currentNode, contentElements, title, subtitle, id, hidden, conditional, contentId);
+            currentNode = createLinkedPage(currentNode, type, contentElements, title, subtitle, id, hidden, conditional, contentId, summary);
             const contentHeight = (contentElements.length - 1) * 60;
             maxContentHeight =  contentHeight > maxContentHeight ? contentHeight : maxContentHeight;
         }
     }
+}
+
+function newQuestion(epoc, id, qid) {
+    const question = epoc.questions[qid];
+    return {
+        id: generateId(),
+        action: {
+            icon:mapType[question.type].icon,
+            type:mapType[question.type].type,
+            label:mapType[question.type].label
+        },
+        formType: mapType[question.type].type,
+        formValues: {
+            ...setQuestionData(mapType[question.type].type, question)
+        },
+        parentId: id,
+        contentId: qid
+    };
 }
 
 function setQuestionData(type, question) {
