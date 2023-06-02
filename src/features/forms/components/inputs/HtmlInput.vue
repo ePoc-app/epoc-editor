@@ -1,0 +1,101 @@
+<script setup lang="ts">
+import Editor from '@tinymce/tinymce-vue';
+import { getTinymce } from '@tinymce/tinymce-vue/lib/cjs/main/ts/TinyMCE';
+import { Ref, ref, watch } from 'vue';
+import {graphService} from '@/src/shared/services';
+
+const props = defineProps<{
+    label: string;
+    inputValue: string;
+    placeholder?: string;
+    insideCard?: boolean;
+}>();
+
+const emit = defineEmits<{
+    (e: 'input', value: string): void;
+}>();
+
+const editor = ref(null);
+const content: Ref<string> = ref('');
+
+function textChange() {
+    emit('input', content.value);
+}
+
+watch(
+    () => props.inputValue,
+    () => {
+        content.value = props.inputValue;
+    }
+);
+
+watch(
+    () => content.value,
+    () => {
+        textChange();
+    }
+);
+
+const plugins = 'image link lists template code';
+const toolbar = 'bold italic alignleft aligncenter alignright link image bullist numlist outdent indent template code';
+
+const template = `
+    <details style="border: 1px solid lightgray; border-radius: 4px; padding: .5em .5em 0 .5em">
+        <summary style="font-weight: bold; border-bottom: 1px solid lightgray; padding 1em;">Titre</summary>
+        <div>content</div>    
+    </details>
+    <p></p>
+`;
+
+function init() {
+    content.value = props.inputValue;
+}
+
+async function drop(event) {
+    const file = event.dataTransfer.files[0];
+    if (!file) return;
+    const url = await graphService.importFile(file.path);
+    const editor = getTinymce().activeEditor;
+    editor.setContent(editor.getContent() + `<img alt="" src="${url}"/>`);
+}
+
+function handleFilePicker(callback) {
+    const input = document.createElement('input');
+    input.type = 'file';
+    document.body.appendChild(input);
+    input.click();
+    input.addEventListener('change', async (e: any) => {
+        const fileInput = e.target as HTMLInputElement;
+        const file = fileInput.files[0];
+        if (!file) return;
+        const url = await graphService.importFile(file.path);
+        callback(url);
+    });
+}
+
+</script>
+
+<template>
+    <label for="editor">{{ label }}</label>
+    <Editor 
+        ref="editor"
+        v-model="content"
+        api-key="no-api-key"
+        :plugins="plugins"
+        :toolbar="toolbar"
+        :init="{
+            menubar: false,
+            statusbar: false,
+            templates: [
+                { title: 'Plier/déplier', content: template, description: 'Plier/déplier avec titre et contenu' }
+            ],
+            file_picker_types: 'image',
+            file_picker_callback: handleFilePicker,
+            link_default_target: '_blank',
+            link_target_list: false,
+            paste_data_images: false
+        }"
+        @init="init"
+        @drop.stop.prevent="drop"
+    />
+</template>

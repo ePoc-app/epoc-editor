@@ -3,12 +3,12 @@ import TextInput from './TextInput.vue';
 import TextAreaInput from './TextAreaInput.vue';
 import FileInput from './FileInput.vue';
 import ScoreInput from './ScoreInput.vue';
-import QuillEditor from './QuillEditor.vue';
 
 import CheckBoxInput from './card/components/CheckBoxInput.vue';
 import RadioInput from './card/components/RadioInput.vue';
 import SelectInput from './card/components/SelectInput.vue';
 import RepeatInput from './RepeatInput.vue';
+import HtmlInput from './HtmlInput.vue';
 import { Input } from '@/src/shared/interfaces';
 
 defineProps<{
@@ -37,14 +37,14 @@ const emit = defineEmits<{
         :inside-card="insideCard"
         @input="emit('input', $event)"
     />
-    <QuillEditor
-        v-if="input.type === 'ql-editor'"
-        :inside-card="insideCard"
+    <HtmlInput 
+        v-if="input.type === 'html'"
         :label="input.label"
         :placeholder="input.placeholder"
         :input-value="inputValue"
-        @input="emit('input', $event)"    
-    />  
+        :inside-card="insideCard"
+        @input="emit('input', $event)"
+    />
     <TextAreaInput 
         v-if="input.type === 'textarea'"
         :label="input.label"

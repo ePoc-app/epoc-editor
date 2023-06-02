@@ -11,7 +11,7 @@ export const textForm: Form = {
             inputs: [
                 {
                     id: 'html',
-                    type: 'ql-editor',
+                    type: 'html',
                     label: 'Résumé',
                     value: '',
                     placeholder: 'Saisissez un résumé...'
@@ -39,7 +39,7 @@ export const videoForm: Form = {
                 },
                 {
                     id: 'summary',
-                    type: 'ql-editor',
+                    type: 'html',
                     label: 'Résumé',
                     value: '',
                     placeholder: 'Saisissez...'
