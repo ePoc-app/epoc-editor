@@ -37,14 +37,6 @@ const emit = defineEmits<{
         :inside-card="insideCard"
         @input="emit('input', $event)"
     />
-    <!-- <QuillEditor
-        v-if="input.type === 'ql-editor'"
-        :inside-card="insideCard"
-        :label="input.label"
-        :placeholder="input.placeholder"
-        :input-value="inputValue"
-        @input="emit('input', $event)"    
-    />   -->
     <HtmlInput 
         v-if="input.type === 'html'"
         :label="input.label"
