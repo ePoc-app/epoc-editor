@@ -120,6 +120,7 @@ function removeHoverEffect() {
             @mouseenter="addHoverEffect"
             @mouseleave="removeHoverEffect"
             @mousedown="closeFormPanel"
+            @dragover.stop
         >
             <p class="node-title" :class="{ 'active': editorStore.openedElementId ? editorStore.openedElementId === props.id : false }">{{ currentNode.data.formValues?.title || 'Activité' }}</p>
             <Handle

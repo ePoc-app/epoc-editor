@@ -4,10 +4,15 @@ import { ref } from 'vue';
 import ContentButton from '@/src/components/ContentButton.vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { moveGuard } from '@/src/shared/utils/draggable';
+import env from '@/src/shared/utils/env';
 
 const editorStore = useEditorStore();
 
-const standardContent = editorStore.standardPages.filter(({ type }) => !['legacy-condition', 'condition', 'question', 'model'].includes(type));
+const standardContent = editorStore.standardPages.filter(({ type }) => {
+    const filteredPages = ['legacy-condition', 'condition', 'question', 'model'];
+    const prodFilteredPages = env.isDev ? []:['audio'];
+    return ![...filteredPages, ...prodFilteredPages].includes(type);
+});
 const questionContent = editorStore.standardPages.find(({ type }) => type === 'question');
 const conditionContent = editorStore.standardPages.find(({ type }) => type === 'condition');
 const modelContent = editorStore.standardPages.find(({ type }) => type === 'model');
@@ -104,6 +109,7 @@ function showTemplateMenu() {
         </div>
     </div>
     <ContentButton
+        v-if="env.isDev"
         v-tippy="{content: conditionContent.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
         :icon="conditionContent.icon"
         :class-list="{ 'btn-content-blue': true }"
@@ -113,6 +119,7 @@ function showTemplateMenu() {
     />
     <hr>
     <ContentButton
+        v-if="env.isDev"
         v-tippy="{content: modelContent.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
         :icon="modelContent.icon"
         :is-draggable="false"

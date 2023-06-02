@@ -28,3 +28,7 @@ contextBridge.exposeInMainWorld('api', {
         ipcRenderer.once(channel, (event, ...args) => func(...args));
     }
 });
+
+contextBridge.exposeInMainWorld('env', {
+    isDev: process.env.IS_DEV === 'true'
+});
