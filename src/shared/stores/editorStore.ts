@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import { ePocProject, Form, NodeElement, PageModel, SideAction } from '@/src/shared/interfaces';
-import { toRaw } from 'vue';
 import { GraphNode, useVueFlow } from '@vue-flow/core';
 
 import { formsModel, questions, standardPages } from '@/src/shared/data';
@@ -117,7 +116,7 @@ export const useEditorStore = defineStore('editor', {
         },
 
         openPage(): void {
-            const parentNode = findNode(this.openedParentId);
+            const parentNode = findNode(this.openedNodeId);
             this.openFormPanel(parentNode.id, parentNode.data.formType, parentNode.data.formValues);
         },
     }
