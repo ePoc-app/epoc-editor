@@ -11,6 +11,12 @@ export function moveGuard(event) {
     } else {
         document.body.classList.remove('cursor-not-allowed');
         document.body.classList.add('cursor-allowed');
+        event.to.classList.add('hover');
+        event.to.addEventListener('dragleave', (e) => {
+            if (e.relatedTarget.closest('.node-list') !== event.to) {
+                event.to.classList.remove('hover');
+            }
+        });
     }
     return allowed;
 }
