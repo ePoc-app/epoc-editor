@@ -24,6 +24,7 @@ const emit = defineEmits<{
     (e: 'input', value: string): void;
     (e: 'repeatInput', value): void;
     (e: 'check', value: boolean): void;
+    (e: 'add-undo-action', value: { oldValue: string, newValue: string }): void;
 }>();
 
 </script>
@@ -36,6 +37,7 @@ const emit = defineEmits<{
         :input-value="inputValue"
         :inside-card="insideCard"
         @input="emit('input', $event)"
+        @add-undo-action="emit('add-undo-action', $event)"
     />
     <HtmlInput
         v-if="input.type === 'html'"
@@ -44,6 +46,7 @@ const emit = defineEmits<{
         :input-value="inputValue"
         :inside-card="insideCard"
         @input="emit('input', $event)"
+        @add-undo-action="emit('add-undo-action', $event)"
     />
     <TextAreaInput 
         v-if="input.type === 'textarea'"
@@ -52,6 +55,7 @@ const emit = defineEmits<{
         :input-value="inputValue"
         :inside-card="insideCard"
         @input="emit('input', $event)"
+        @add-undo-action="emit('add-undo-action', $event)"
     />
     <FileInput 
         v-if="input.type === 'file'"
@@ -66,6 +70,7 @@ const emit = defineEmits<{
         :label="input.label"
         :input-value="inputValue"
         @input="emit('input', $event)"
+        @add-undo-action="emit('add-undo-action', $event)"
     />
     <CheckBoxInput
         v-if="input.type === 'checkbox'"

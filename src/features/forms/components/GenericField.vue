@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { Input } from '@/src/shared/interfaces';
+import { FormUpdatedAction, Input } from '@/src/shared/interfaces';
 import GenericInput from './inputs/GenericInput.vue';
-import { useEditorStore } from '@/src/shared/stores';
+import { useEditorStore, useUndoRedoStore } from '@/src/shared/stores';
 import { graphService } from '@/src/shared/services';
 import { deleteElement, changeContentOrder } from '@/src/shared/services/graph';
 
 const editorStore = useEditorStore();
+const undoRedoStore = useUndoRedoStore();
 
 defineProps<{
     inputs: Input[];
@@ -125,6 +126,20 @@ function onCheck(value: boolean, id:string) {
     graphService.writeProjectData();
 }
 
+function addUndoAction(event: { oldValue: string, newValue: string }, id: string) {
+    const { oldValue, newValue } = event;
+    
+    const action: FormUpdatedAction = {
+        type: 'formUpdated',
+        nodeId: currentNode.id,
+        elementId: editorStore.openedElementId,
+        oldValue,
+        newValue,
+        formValueId: id
+    };
+    undoRedoStore.addAction(action);
+}
+
 </script>
 
 <template>
@@ -139,6 +154,7 @@ function onCheck(value: boolean, id:string) {
         @input="onInput($event, input.id)"
         @check="onCheck($event, input.id)"
         @repeat-input="onRepeatInput($event, input.id)"
+        @add-undo-action="addUndoAction($event, input.id)"
     />
 </template>
 

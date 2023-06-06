@@ -15,7 +15,8 @@ const undoRedoStore = useUndoRedoStore();
 editorService.setup();
 
 document.body.addEventListener('keydown', function(event) {
-    const key = event.key;
+    const { key, ctrlKey, metaKey }= event;
+
     if ((key === 'Backspace' || key === 'Delete')) {
         if((event.target as HTMLElement).className.indexOf('vue-flow') !== -1 || event.target === document.body) {
             event.stopPropagation();
@@ -23,11 +24,15 @@ document.body.addEventListener('keydown', function(event) {
         }
     }
 
-    if (event.ctrlKey || event.metaKey) {
+    if (ctrlKey || metaKey) {
         if (key === 'z') {
+            event.preventDefault();
+            event.stopPropagation();
             undo();
         }
         if (key === 'y') {
+            event.preventDefault();
+            event.stopPropagation();
             redo();
         }
     }

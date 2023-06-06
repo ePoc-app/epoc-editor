@@ -14,6 +14,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: 'input', value: string): void;
+    (e: 'add-undo-action', value: { oldValue: string, newValue: string }): void;
 }>();
 
 const editor = ref(null);
@@ -74,6 +75,14 @@ function handleFilePicker(callback) {
     });
 }
 
+let initialValue = null;
+
+function addUndoAction() {
+    if(initialValue !== props.inputValue) {
+        emit('add-undo-action', { oldValue: initialValue, newValue: props.inputValue });
+    }
+}
+
 </script>
 
 <template>
@@ -98,6 +107,8 @@ function handleFilePicker(callback) {
         }"
         @init="init"
         @drop.stop.prevent="drop"
+        @focus="initialValue = content"
+        @blur="addUndoAction"
         @keydown="ignoreUndoRedoOnFocus"
     />
 </template>

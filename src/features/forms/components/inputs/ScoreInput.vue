@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ignoreUndoRedoOnFocus } from '@/src/shared/stores/undoRedo/functions';
 
-defineProps<{
+const props = defineProps<{
     inputValue: string;
 }>();
 
 const emit = defineEmits<{
     (e: 'input', value: string): void;
+    (e: 'add-undo-action', value: { oldValue: string, newValue: string }): void;
 }>();
 
 function minus(inputValue: string) {
@@ -19,6 +20,14 @@ function plus(inputValue: string) {
     emit('input', `${value}`);
 }
 
+let initialValue = null;
+
+function addUndoAction() {
+    if(initialValue !== props.inputValue) {
+        emit('add-undo-action', { oldValue: initialValue, newValue: props.inputValue });
+    }
+}
+
 </script>
 
 <template>
@@ -29,6 +38,8 @@ function plus(inputValue: string) {
             type="number"
             :value="inputValue"
             @input="emit('input', ($event.target as HTMLInputElement).value)"
+            @focus="initialValue = inputValue"
+            @blur="addUndoAction"
             @keydown="ignoreUndoRedoOnFocus"
         >
         <button @click="plus(inputValue)"><i class="icon-plus-circle"></i></button>

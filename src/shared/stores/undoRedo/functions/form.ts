@@ -1,9 +1,17 @@
-import { UndoRedoAction } from '@/src/shared/interfaces';
+import { FormUpdatedAction, UndoRedoAction } from '@/src/shared/interfaces';
+import { updateElementValue } from '@/src/shared/services/graph';
 
-export function formUpdated(action: UndoRedoAction, reverseStack: UndoRedoAction[]): void {
-    const reverseAction: UndoRedoAction = {
-        type: action.type,
+export function formUpdatedAction(action: FormUpdatedAction, reverseStack: UndoRedoAction[]): void {
+    const { elementId, nodeId, formValueId, oldValue, newValue } = action;
+    
+    updateElementValue(elementId, nodeId, formValueId, oldValue);
+    
+    const reverseAction: FormUpdatedAction = {
+        ...action,
+        oldValue: newValue,
+        newValue: oldValue,
     };
+
     reverseStack.push(reverseAction);
 }
 

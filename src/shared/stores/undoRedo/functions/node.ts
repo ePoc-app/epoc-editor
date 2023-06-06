@@ -39,7 +39,6 @@ export function addNodeAction(action: NodeMutatedAction, reverseStack: UndoRedoA
         edges: action.edges
     };
     reverseStack.push(reverseAction);
-    
 }
 
 export function updateNodeAction(): void {

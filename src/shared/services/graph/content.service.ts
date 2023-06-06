@@ -94,3 +94,8 @@ export function getContentDefaultValues(type) {
         return {...acc, ...keyValues};
     }, {});
 }
+
+export function updateElementValue(elementId: string, nodeId: string, valueId: string, value: string): void {
+    const node = findNode(nodeId);
+    node.data.formValues[valueId] = value;
+}
