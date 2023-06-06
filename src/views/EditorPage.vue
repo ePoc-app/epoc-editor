@@ -7,7 +7,7 @@ import ValidationModal from '../components/ValidationModal.vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { editorService } from '@/src/shared/services';
 import { confirmDelete } from '@/src/shared/services/graph';
-import { useUndoRedoStore } from '../shared/stores/undoRedoStore';
+import { useUndoRedoStore } from '../shared/stores/undoRedo/undoRedoStore';
 
 const editorStore = useEditorStore();
 const undoRedoStore = useUndoRedoStore();
@@ -24,10 +24,10 @@ document.body.addEventListener('keydown', function(event) {
     }
 
     if (event.ctrlKey || event.metaKey) {
-        if (event.key === 'z') {
+        if (key === 'z') {
             undo();
         }
-        if (event.key === 'y') {
+        if (key === 'y') {
             redo();
         }
     }

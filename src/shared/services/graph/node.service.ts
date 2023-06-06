@@ -7,12 +7,11 @@ import { nextTick, toRaw, watch } from 'vue';
 
 import { addContentToPage, deleteContent } from './content.service';
 import { generateContentId, generateId } from '../graph.service';
-import { useUndoRedoStore } from '../../stores/undoRedoStore';
+import { useUndoRedoStore } from '../../stores/undoRedo/undoRedoStore';
 
 const { nodes, edges, addNodes, addEdges, findNode, applyEdgeChanges, applyNodeChanges } = useVueFlow({ id: 'main' });
 
 const editorStore = useEditorStore();
-const undoRedoStore = useUndoRedoStore();
 
 const questionTypes = ['choice', 'drag-and-drop', 'reorder', 'swipe', 'dropdown-list'];
 
@@ -171,6 +170,8 @@ export function addPage(position: { x: number, y: number }, actions: SideAction[
     });
 
     alignNode(newPageNode.id);
+    
+    const undoRedoStore = useUndoRedoStore();
 
     //TODO: make a addNode function that redirects to either addPage or addChapter
     const undoRedoAction: NodeMutatedAction = {
@@ -291,6 +292,8 @@ export function confirmDelete(): void {
 
 export function deleteNode(nodeId: string, ignoreUndo?: boolean): void {
     const nodeToDelete = findNode(nodeId);
+    
+    const undoRedoStore = useUndoRedoStore();
 
     if(!ignoreUndo) {
         const undoRedoAction: NodeMutatedAction = {
@@ -333,7 +336,6 @@ export function isFormButtonDisabled(isDisabledFunction: (node) => boolean): boo
 }
 
 // These functions are only used by undo redo for the moment
-
 export function moveNode(nodeId: string, delta: { x: number, y: number }): void {
     const node = findNode(nodeId);
     node.position.x -= delta.x;

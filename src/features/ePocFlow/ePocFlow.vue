@@ -8,9 +8,9 @@ import { useEditorStore, useGraphStore } from '@/src/shared/stores';
 import ChapterNode from './nodes/ChapterNode.vue';
 import ePocNode from './nodes/ePocNode.vue';
 import AddChapterNode from './nodes/AddChapterNode.vue';
-import { EdgeAction, EdgeUpdatedAction, NodeMovedAction, NodeElement, SideAction } from '@/src/shared/interfaces';
+import { EdgeMutatedAction, EdgeUpdatedAction, NodeMovedAction, NodeElement, SideAction } from '@/src/shared/interfaces';
 import { addPage, createPageFromContent, removeContentFromPage } from '@/src/shared/services/graph';
-import { useUndoRedoStore } from '@/src/shared/stores/undoRedoStore';
+import { useUndoRedoStore } from '@/src/shared/stores/undoRedo/undoRedoStore';
 
 const { vueFlowRef, project, updateEdge, edges, nodes, findNode }  = useVueFlow({ id: 'main' });
 
@@ -165,7 +165,7 @@ function edgesChange(event) {
     const { type, item } = event[0];    
     
     if(type === 'add') {
-        const edgeAction: EdgeAction = {
+        const edgeAction: EdgeMutatedAction = {
             type: 'edgeAdded',
             edge: JSON.stringify(item),
         };

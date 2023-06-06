@@ -22,8 +22,8 @@ export interface NodeUpdatedAction extends UndoRedoAction {
     node: string;
 }
 
-export interface EdgeAction extends UndoRedoAction {
-    type: 'edgeAdded' | 'edgeUpdated' | 'edgeRemoved';
+export interface EdgeMutatedAction extends UndoRedoAction {
+    type: 'edgeAdded' | 'edgeRemoved';
     edge: string;
 }
 

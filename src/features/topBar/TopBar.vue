@@ -5,7 +5,7 @@ import { useEditorStore } from '@/src/shared/stores';
 import { computed, ref } from 'vue';
 import { editorService } from '@/src/shared/services';
 import { useVueFlow } from '@vue-flow/core';
-import { useUndoRedoStore } from '@/src/shared/stores/undoRedoStore';
+import { useUndoRedoStore } from '@/src/shared/stores/undoRedo/undoRedoStore';
 
 const editorStore = useEditorStore();
 const undoRedoStore = useUndoRedoStore();
