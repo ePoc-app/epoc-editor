@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ignoreUndoRedoOnFocus } from '@/src/shared/stores/undoRedo/functions';
 
 defineProps<{
     inputValue: string;
@@ -28,6 +29,7 @@ function plus(inputValue: string) {
             type="number"
             :value="inputValue"
             @input="emit('input', ($event.target as HTMLInputElement).value)"
+            @keydown="ignoreUndoRedoOnFocus"
         >
         <button @click="plus(inputValue)"><i class="icon-plus-circle"></i></button>
     </div>

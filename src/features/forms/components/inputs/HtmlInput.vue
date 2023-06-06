@@ -2,7 +2,8 @@
 import Editor from '@tinymce/tinymce-vue';
 import { getTinymce } from '@tinymce/tinymce-vue/lib/cjs/main/ts/TinyMCE';
 import { Ref, ref, watch } from 'vue';
-import {graphService} from '@/src/shared/services';
+import { graphService } from '@/src/shared/services';
+import { ignoreUndoRedoOnFocus } from '@/src/shared/stores/undoRedo/functions';
 
 const props = defineProps<{
     label: string;
@@ -97,5 +98,6 @@ function handleFilePicker(callback) {
         }"
         @init="init"
         @drop.stop.prevent="drop"
+        @keydown="ignoreUndoRedoOnFocus"
     />
 </template>

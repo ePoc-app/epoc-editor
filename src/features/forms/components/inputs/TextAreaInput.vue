@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ignoreUndoRedoOnFocus } from '@/src/shared/stores/undoRedo/functions';
 
 defineProps<{
     label: string;
@@ -23,5 +24,6 @@ const emit = defineEmits<{
         :placeholder="placeholder"
         :value="inputValue"
         @input="emit('input', ($event.target as HTMLInputElement).value)"
+        @keydown="ignoreUndoRedoOnFocus"
     ></textarea>
 </template>
