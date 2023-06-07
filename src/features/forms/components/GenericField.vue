@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FormRepeatChangeAction, FormRepeatMoveAction, FormUpdatedAction, Input } from '@/src/shared/interfaces';
+import { FormRepeatChangeAction, FormRepeatMoveAction, FormRepeatMutateAction, FormUpdatedAction, Input } from '@/src/shared/interfaces';
 import GenericInput from './inputs/GenericInput.vue';
 import { useEditorStore, useUndoRedoStore } from '@/src/shared/stores';
 import { graphService } from '@/src/shared/services';
@@ -77,6 +77,9 @@ function onRepeatInput(value, id: string) {
 }
 
 function handleAddRepeatInput(element, value, id: string): void {
+    
+    addRepeatAddUndoAction(id, value.defaultValues);
+
     const formValues = element ? element.formValues : currentNode.data.formValues;
     if(!formValues[id]) formValues[id] = [];
     formValues[id].push(value.defaultValues);
@@ -84,9 +87,15 @@ function handleAddRepeatInput(element, value, id: string): void {
 
 function handleRemoveRepeatInput(element, value, id: string): void {
     const formValues = element ? element.formValues[id] : currentNode.data.formValues[id];
+    
+
+    const savedInput = JSON.stringify(formValues[value.index]);
+    addRepeatRemoveUndoAction(id, value.index, savedInput);
+
     formValues.splice(value.index, 1);
     
     const currentElement = currentNode.data.elements?.[value.index];
+
     if(!editorStore.openedNodeId && currentElement) {
         deleteElement(currentElement.id, currentElement.parentId);
     }
@@ -94,7 +103,7 @@ function handleRemoveRepeatInput(element, value, id: string): void {
 
 function handleMoveRepeatInput(element, value, id: string): void {
     
-    onAddMoveUndoAction(id, value.oldIndex, value.newIndex);
+    addRepeatMoveUndoAction(id, value.oldIndex, value.newIndex);
 
     if(currentNode.data.elements && !editorStore.openedNodeId) {
         changeContentOrder(value.oldIndex, value.newIndex, currentNode.id);
@@ -118,7 +127,7 @@ function handleChangeRepeatInput(element, value, id: string): void {
     }
 }
 
-function onAddChangeUndoAction(repeatEvent, formValueId: string): void  {
+function addRepeatChangeUndoAction(repeatEvent, formValueId: string): void  {
     const { type, value, index, id } = repeatEvent;
     
     const action: FormRepeatChangeAction = {
@@ -136,7 +145,7 @@ function onAddChangeUndoAction(repeatEvent, formValueId: string): void  {
     undoRedoStore.addAction(action);  
 }
 
-function onAddMoveUndoAction(formValueId: string, oldIndex: number, newIndex: number): void {
+function addRepeatMoveUndoAction(formValueId: string, oldIndex: number, newIndex: number): void {
 
     const action: FormRepeatMoveAction = {
         type: 'formRepeatUpdated',
@@ -150,6 +159,36 @@ function onAddMoveUndoAction(formValueId: string, oldIndex: number, newIndex: nu
     
     undoRedoStore.addAction(action);
 }
+
+function addRepeatAddUndoAction(id, defaultValues): void {
+    const action: FormRepeatMutateAction = {
+        type: 'formRepeatUpdated',
+        nodeId: currentNode.id,
+        elementId: editorStore.openedElementId,
+        formValueId: id,
+        updateType: 'add',
+        value: defaultValues,
+        index: -1
+    };
+    
+    undoRedoStore.addAction(action);
+}
+
+function addRepeatRemoveUndoAction(id, index, value): void {
+    const action: FormRepeatMutateAction = {
+        type: 'formRepeatUpdated',
+        nodeId: currentNode.id,
+        elementId: editorStore.openedElementId,
+        formValueId: id,
+        updateType: 'remove',
+        value,
+        index
+    };
+    
+    undoRedoStore.addAction(action);
+}
+
+
 // Repeat Input end
 
 function onCheck(value: boolean, id:string) {
@@ -190,7 +229,7 @@ function onAddUndoAction(value: { oldValue: string, newValue: string }, id: stri
         @check="onCheck($event, input.id)"
         @repeat-input="onRepeatInput($event, input.id)"
         @add-undo-action="onAddUndoAction($event, input.id)"
-        @add-repeat-undo-action="onAddChangeUndoAction($event, input.id)"
+        @add-repeat-undo-action="addRepeatChangeUndoAction($event, input.id)"
     />
 </template>
 

@@ -34,7 +34,9 @@ export function addRepeatElement(elementId: string, nodeId: string, formValueId:
     
     verifyAndOpenFormPanel(id, formType, formValues, nodeId);
     
-    formValues[formValueId].splice(index, 0, repeatElement);
+    repeatElement = JSON.parse(repeatElement);
+    
+    index === -1 ? formValues[formValueId].push(repeatElement) : formValues[formValueId].splice(index, 0, repeatElement);
 }
 
 export function moveRepeatElement(elementId: string, nodeId: string, formValueId: string, oldIndex: number, newIndex: number): void {
