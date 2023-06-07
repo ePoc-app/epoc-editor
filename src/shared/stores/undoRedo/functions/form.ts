@@ -15,7 +15,7 @@ export function formUpdatedAction(action: FormUpdatedAction, reverseStack: UndoR
     reverseStack.push(reverseAction);
 }
 
-export function ignoreUndoRedoOnFocus(event): void {
+export function ignoreUndoRedoOnFocus(event: KeyboardEvent): void {
     const { key, ctrlKey, metaKey } = event;
     if(ctrlKey || metaKey) {
         if(key === 'z' || key === 'Z') {
