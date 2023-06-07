@@ -26,7 +26,7 @@ const getInputValue = (input) => {
 };
 
 
-function onInput(value: string, id: string) {
+function onInput(value: string | boolean, id: string) {
     const element = editorStore.openedNodeId
         ? currentNode.data.elements.find(e => e.id === editorStore.openedElementId)
         : currentNode.data;
@@ -192,15 +192,12 @@ function addRepeatRemoveUndoAction(id, index, value): void {
 // Repeat Input end
 
 function onCheck(value: boolean, id:string) {
-    const element = editorStore.openedNodeId
-        ? currentNode.data.elements.find(e => e.id === editorStore.openedElementId)
-        : currentNode.data;
-    
-    element.formValues[id] = value;
-    graphService.writeProjectData();
+    onInput(value, id);
+    onAddUndoAction({ oldValue: !value, newValue: value }, id);
 }
 
-function onAddUndoAction(value: { oldValue: string, newValue: string }, id: string) {
+
+function onAddUndoAction(value: { oldValue: string | boolean, newValue: string | boolean }, id: string) {
     const { oldValue, newValue } = value;
     
     const action: FormUpdatedAction = {

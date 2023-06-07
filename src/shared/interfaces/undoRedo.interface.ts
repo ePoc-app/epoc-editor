@@ -40,8 +40,8 @@ export interface FormUpdatedAction extends UndoRedoAction {
     nodeId: string;
     elementId: string;
     formValueId: string;
-    oldValue: string;
-    newValue: string;
+    oldValue: string | boolean;
+    newValue: string | boolean;
 }
 
 export interface FormRepeatUpdatedAction extends UndoRedoAction {
