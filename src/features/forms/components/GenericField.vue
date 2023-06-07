@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FormRepeatChangeAction, FormUpdatedAction, Input } from '@/src/shared/interfaces';
+import { FormRepeatChangeAction, FormRepeatMoveAction, FormUpdatedAction, Input } from '@/src/shared/interfaces';
 import GenericInput from './inputs/GenericInput.vue';
 import { useEditorStore, useUndoRedoStore } from '@/src/shared/stores';
 import { graphService } from '@/src/shared/services';
@@ -93,6 +93,9 @@ function handleRemoveRepeatInput(element, value, id: string): void {
 }
 
 function handleMoveRepeatInput(element, value, id: string): void {
+    
+    onAddMoveUndoAction(id, value.oldIndex, value.newIndex);
+
     if(currentNode.data.elements && !editorStore.openedNodeId) {
         changeContentOrder(value.oldIndex, value.newIndex, currentNode.id);
     } else {
@@ -115,7 +118,7 @@ function handleChangeRepeatInput(element, value, id: string): void {
     }
 }
 
-function onAddRepeatUndoAction(repeatEvent, formValueId: string): void  {
+function onAddChangeUndoAction(repeatEvent, formValueId: string): void  {
     const { type, value, index, id } = repeatEvent;
     
     const action: FormRepeatChangeAction = {
@@ -131,6 +134,21 @@ function onAddRepeatUndoAction(repeatEvent, formValueId: string): void  {
     };
     
     undoRedoStore.addAction(action);  
+}
+
+function onAddMoveUndoAction(formValueId: string, oldIndex: number, newIndex: number): void {
+
+    const action: FormRepeatMoveAction = {
+        type: 'formRepeatUpdated',
+        nodeId: currentNode.id,
+        elementId: editorStore.openedElementId,
+        formValueId,
+        updateType: 'move',
+        oldIndex,
+        newIndex
+    };
+    
+    undoRedoStore.addAction(action);
 }
 // Repeat Input end
 
@@ -172,7 +190,7 @@ function onAddUndoAction(value: { oldValue: string, newValue: string }, id: stri
         @check="onCheck($event, input.id)"
         @repeat-input="onRepeatInput($event, input.id)"
         @add-undo-action="onAddUndoAction($event, input.id)"
-        @add-repeat-undo-action="onAddRepeatUndoAction($event, input.id)"
+        @add-repeat-undo-action="onAddChangeUndoAction($event, input.id)"
     />
 </template>
 

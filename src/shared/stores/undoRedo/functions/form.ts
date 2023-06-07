@@ -1,5 +1,5 @@
-import { FormRepeatChangeAction, FormUpdatedAction, UndoRedoAction } from '@/src/shared/interfaces';
-import { updateElementValue, updateRepeatElementValue } from '@/src/shared/services/graph';
+import { FormRepeatChangeAction, FormRepeatMoveAction, FormRepeatMutateAction, FormRepeatUpdatedAction, FormUpdatedAction, UndoRedoAction } from '@/src/shared/interfaces';
+import { addRepeatElement, moveRepeatElement, removeRepeatElement, updateElementValue, updateRepeatElementValue } from '@/src/shared/services/graph';
 
 export function updateFormAction(action: FormUpdatedAction, reverseStack: UndoRedoAction[]): void {
     const { elementId, nodeId, formValueId, oldValue, newValue } = action;
@@ -15,7 +15,29 @@ export function updateFormAction(action: FormUpdatedAction, reverseStack: UndoRe
     reverseStack.push(reverseAction);
 }
 
-export function updateRepeatFormAction(action: FormRepeatChangeAction, reverseStack: UndoRedoAction[]): void {
+export function updateRepeatFormAction(action: FormRepeatUpdatedAction, reverseStack: UndoRedoAction[]): void {
+    const { updateType } = action;
+    
+    switch(updateType) {
+    case 'change':
+        handleRepeatChangeAction(action as FormRepeatChangeAction, reverseStack);
+        break;
+
+    case 'add':
+        handleRepeatAddAction(action as FormRepeatMutateAction, reverseStack);
+        break;
+
+    case 'remove':
+        handleRepeatRemoveAction(action as FormRepeatMutateAction, reverseStack);
+        break;
+
+    case 'move':
+        handleRepeatMoveAction(action as FormRepeatMoveAction, reverseStack);
+        break;
+    }
+}
+
+function handleRepeatChangeAction(action: FormRepeatChangeAction, reverseStack: UndoRedoAction[]): void {
     const { elementId, nodeId, formValueId, oldValue, newValue, index, repeatId } = action;
 
     updateRepeatElementValue(elementId, nodeId, formValueId, oldValue, index, repeatId);
@@ -28,6 +50,48 @@ export function updateRepeatFormAction(action: FormRepeatChangeAction, reverseSt
     
     reverseStack.push(reverseAction);
 }
+
+function handleRepeatAddAction(action: FormRepeatMutateAction, reverseStack: UndoRedoAction[]): void {
+    const { elementId, nodeId, formValueId, index } = action;
+
+    removeRepeatElement(elementId, nodeId, formValueId, index);
+    
+    const reverseAction: FormRepeatMutateAction = {
+        ...action,
+        updateType: 'remove',
+    };
+    
+    reverseStack.push(reverseAction);
+}
+
+function handleRepeatRemoveAction(action: FormRepeatMutateAction, reverseStack: UndoRedoAction[]): void {
+    const { elementId, nodeId, formValueId, value, index} = action;
+    
+    addRepeatElement(elementId, nodeId, formValueId, value, index);
+    
+    const reverseAction: FormRepeatMutateAction = {
+        ...action,
+        updateType: 'add',
+    };
+    reverseStack.push(reverseAction);
+}
+
+function handleRepeatMoveAction(action: FormRepeatMoveAction, reverseStack: UndoRedoAction[]): void {
+    const { elementId, nodeId, formValueId, oldIndex, newIndex } = action;
+    
+    console.log('handling repeat move action');
+    
+    moveRepeatElement(elementId, nodeId, formValueId, oldIndex, newIndex);
+    
+    const reverseAction: FormRepeatMoveAction = {
+        ...action,
+        oldIndex: newIndex,
+        newIndex: oldIndex,
+    };
+    
+    reverseStack.push(reverseAction);
+}
+
 
 export function ignoreUndoRedoOnFocus(event: KeyboardEvent): void {
     const { key, ctrlKey, metaKey } = event;

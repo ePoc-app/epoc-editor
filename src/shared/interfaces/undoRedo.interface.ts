@@ -49,7 +49,6 @@ export interface FormRepeatUpdatedAction extends UndoRedoAction {
     nodeId: string;
     elementId: string;
     formValueId: string;
-    repeatId: string;
     updateType: 'change' | 'add' | 'remove' | 'move';
 }
 
@@ -58,11 +57,12 @@ export interface FormRepeatChangeAction extends FormRepeatUpdatedAction {
     oldValue: string;
     newValue: string;
     index: number;
+    repeatId: string;
 }
 
 export interface FormRepeatMutateAction extends FormRepeatUpdatedAction {
     updateType: 'add' | 'remove';
-    value: string;
+    value: any;
     index: number;
 }
 
