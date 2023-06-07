@@ -100,7 +100,8 @@ export function updateElementValue(elementId: string, nodeId: string, valueId: s
     
     let id, formType, formValues;
     if(nodeId === elementId) {
-        ({id, formType, formValues} = node.data);
+        id = node.id;
+        ({formType, formValues} = node.data);
     } else {
         const element = node.data.elements.find(e => e.id === elementId);
         ({id, formType, formValues} = element);
