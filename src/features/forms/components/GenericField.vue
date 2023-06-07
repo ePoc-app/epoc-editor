@@ -116,6 +116,14 @@ function handleChangeRepeatInput(element, value, id: string): void {
 
 // Repeat Input end
 
+function onCheck(value: boolean, id:string) {
+    const element = editorStore.openedNodeId
+        ? currentNode.data.elements.find(e => e.id === editorStore.openedElementId)
+        : currentNode.data;
+    
+    element.formValues[id] = value;
+    graphService.writeProjectData();
+}
 
 </script>
 
@@ -129,6 +137,7 @@ function handleChangeRepeatInput(element, value, id: string): void {
         :field-index="fieldIndex"
         :input-value="getInputValue(input)"
         @input="onInput($event, input.id)"
+        @check="onCheck($event, input.id)"
         @repeat-input="onRepeatInput($event, input.id)"
     />
 </template>
