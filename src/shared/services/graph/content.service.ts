@@ -97,5 +97,19 @@ export function getContentDefaultValues(type) {
 
 export function updateElementValue(elementId: string, nodeId: string, valueId: string, value: string): void {
     const node = findNode(nodeId);
-    node.data.formValues[valueId] = value;
+    
+    let id, formType, formValues;
+    if(nodeId === elementId) {
+        ({id, formType, formValues} = node.data);
+    } else {
+        const element = node.data.elements.find(e => e.id === elementId);
+        ({id, formType, formValues} = element);
+    }
+    
+    if(editorStore.openedElementId !== id) {
+        const parentId = nodeId !== elementId ? nodeId : null;
+        editorStore.openFormPanel(id, formType, formValues, parentId);
+    }
+
+    formValues[valueId] = value;
 }
