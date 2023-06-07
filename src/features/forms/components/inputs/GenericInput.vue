@@ -25,6 +25,7 @@ const emit = defineEmits<{
     (e: 'repeatInput', value): void;
     (e: 'check', value: boolean): void;
     (e: 'add-undo-action', value: { oldValue: string, newValue: string }): void;
+    (e: 'add-repeat-undo-action', value): void; 
 }>();
 
 </script>
@@ -105,5 +106,6 @@ const emit = defineEmits<{
         :field-index="fieldIndex"
         :add-button="input.addButton"
         @change="emit('repeatInput', $event)"
+        @add-undo-action="emit('add-repeat-undo-action', $event)"
     />
 </template>

@@ -1,7 +1,7 @@
-import { FormUpdatedAction, UndoRedoAction } from '@/src/shared/interfaces';
-import { updateElementValue } from '@/src/shared/services/graph';
+import { FormRepeatChangeAction, FormUpdatedAction, UndoRedoAction } from '@/src/shared/interfaces';
+import { updateElementValue, updateRepeatElementValue } from '@/src/shared/services/graph';
 
-export function formUpdatedAction(action: FormUpdatedAction, reverseStack: UndoRedoAction[]): void {
+export function updateFormAction(action: FormUpdatedAction, reverseStack: UndoRedoAction[]): void {
     const { elementId, nodeId, formValueId, oldValue, newValue } = action;
     
     updateElementValue(elementId, nodeId, formValueId, oldValue);
@@ -12,6 +12,20 @@ export function formUpdatedAction(action: FormUpdatedAction, reverseStack: UndoR
         newValue: oldValue,
     };
 
+    reverseStack.push(reverseAction);
+}
+
+export function updateRepeatFormAction(action: FormRepeatChangeAction, reverseStack: UndoRedoAction[]): void {
+    const { elementId, nodeId, formValueId, oldValue, newValue, index, repeatId } = action;
+
+    updateRepeatElementValue(elementId, nodeId, formValueId, oldValue, index, repeatId);
+
+    const reverseAction: FormRepeatChangeAction = {
+        ...action,
+        oldValue: newValue,
+        newValue: oldValue,
+    };
+    
     reverseStack.push(reverseAction);
 }
 

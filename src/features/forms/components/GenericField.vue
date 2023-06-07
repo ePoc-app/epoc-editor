@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FormUpdatedAction, Input } from '@/src/shared/interfaces';
+import { FormRepeatChangeAction, FormUpdatedAction, Input } from '@/src/shared/interfaces';
 import GenericInput from './inputs/GenericInput.vue';
 import { useEditorStore, useUndoRedoStore } from '@/src/shared/stores';
 import { graphService } from '@/src/shared/services';
@@ -115,6 +115,23 @@ function handleChangeRepeatInput(element, value, id: string): void {
     }
 }
 
+function onAddRepeatUndoAction(repeatEvent, formValueId: string): void  {
+    const { type, value, index, id } = repeatEvent;
+    
+    const action: FormRepeatChangeAction = {
+        type: 'formRepeatUpdated',
+        nodeId: currentNode.id,
+        elementId: editorStore.openedElementId,
+        formValueId,
+        repeatId: id,
+        updateType: type,
+        oldValue: value.oldValue,
+        newValue: value.newValue,
+        index: index
+    };
+    
+    undoRedoStore.addAction(action);  
+}
 // Repeat Input end
 
 function onCheck(value: boolean, id:string) {
@@ -126,8 +143,8 @@ function onCheck(value: boolean, id:string) {
     graphService.writeProjectData();
 }
 
-function addUndoAction(event: { oldValue: string, newValue: string }, id: string) {
-    const { oldValue, newValue } = event;
+function onAddUndoAction(value: { oldValue: string, newValue: string }, id: string) {
+    const { oldValue, newValue } = value;
     
     const action: FormUpdatedAction = {
         type: 'formUpdated',
@@ -154,7 +171,8 @@ function addUndoAction(event: { oldValue: string, newValue: string }, id: string
         @input="onInput($event, input.id)"
         @check="onCheck($event, input.id)"
         @repeat-input="onRepeatInput($event, input.id)"
-        @add-undo-action="addUndoAction($event, input.id)"
+        @add-undo-action="onAddUndoAction($event, input.id)"
+        @add-repeat-undo-action="onAddRepeatUndoAction($event, input.id)"
     />
 </template>
 

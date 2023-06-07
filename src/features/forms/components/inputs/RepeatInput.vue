@@ -2,7 +2,7 @@
 import { useEditorStore } from '@/src/shared/stores';
 import GenericInput from './GenericInput.vue';
 import AddCard from './card/AddCard.vue';
-import { Input } from '@/src/shared/interfaces';
+import { Input, SideAction } from '@/src/shared/interfaces';
 import { ref } from 'vue';
 import { generateContentId } from '@/src/shared/services/graph.service';
 
@@ -16,6 +16,12 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: 'change', value: object | string): void;
+    (e: 'add-undo-action', value: { 
+        type: string, 
+        id: string,
+        index: number,
+        value: { oldValue: string, newValue: string }
+    })
 }>();
 
 const editorStore = useEditorStore();
@@ -34,7 +40,7 @@ const dragOptions = {
 
 const isLast = (index) => props.inputValues.length - 1 === index;
 
-function onInput(value, id, index) {
+function onInput(value, id: string, index: number) {
     emit('change', {
         type: 'change',
         value,
@@ -56,7 +62,7 @@ function addCard() {
     emit('change', { type: 'add', defaultValues });
 }
 
-function removeCard(index) {
+function removeCard(index: number) {
     emit('change', {
         type: 'remove',
         index
@@ -80,7 +86,7 @@ function moveCard(event, oldIndex?: number, newIndex?: number) {
     });
 }
 
-function onCheck(value, id, index) {
+function onCheck(value, id: string, index: number) {
     emit('change', {
         type: 'change',
         value,
@@ -89,13 +95,22 @@ function onCheck(value, id, index) {
     });
 }
 
-function onClick(index, action) {
+function onClick(index: number, action: SideAction | null) {
     const element = currentNode.data.elements?.[index];
 
     if(element && action) {
         const { id, formType, formValues, parentId } = element;
         editorStore.openFormPanel(id, formType, formValues, parentId);
     }
+}
+
+function onAddUndoAction(value: { oldValue: string, newValue: string }, id: string, index: number) {
+    emit('add-undo-action', {
+        type: 'change',
+        value,
+        id,
+        index
+    });
 }
 
 function start() {
@@ -109,7 +124,7 @@ function end() {
     document.body.classList.remove('cursor-not-allowed', 'cursor-allowed', 'cursor-move');
 }
 
-function dragOver(event) {
+function dragOver(event: DragEvent) {
     if(editorStore.draggedElement) return;
     event.preventDefault();
     document.body.classList.add('cursor-move');
@@ -163,6 +178,7 @@ function dragOver(event) {
                         :pos="index"
                         @input="onInput($event, input.id, index)"
                         @check="onCheck($event, input.id, index)"
+                        @add-undo-action="onAddUndoAction($event, input.id, index)"
                     />
                 </div>
             </div>

@@ -96,16 +96,7 @@ export function getContentDefaultValues(type) {
 }
 
 export function updateElementValue(elementId: string, nodeId: string, valueId: string, value: string): void {
-    const node = findNode(nodeId);
-
-    let id, formType, formValues;
-    if(nodeId === elementId) {
-        id = node.id;
-        ({formType, formValues} = node.data);
-    } else {
-        const element = node.data.elements.find(e => e.id === elementId);
-        ({id, formType, formValues} = element);
-    }
+    const { id, formType, formValues } = getElementInfo(elementId, nodeId);
     
     if(editorStore.openedElementId !== id) {
         const parentId = nodeId !== elementId ? nodeId : null;
@@ -113,4 +104,31 @@ export function updateElementValue(elementId: string, nodeId: string, valueId: s
     }
 
     formValues[valueId] = value;
+}
+
+export function updateRepeatElementValue(elementId: string, nodeId: string, valueId: string, value: string, repeatIndex: number, repeatId: string): void {
+    const { id, formType, formValues } = getElementInfo(elementId, nodeId);
+    
+    if(editorStore.openedElementId !== id) {
+        const parentId = nodeId !== elementId ? nodeId : null;
+        editorStore.openFormPanel(id, formType, formValues, parentId);
+    }
+
+    const repeatInput = formValues[valueId][repeatIndex];
+    repeatInput[repeatId] = value;
+}
+
+function getElementInfo(elementId: string, nodeId: string): {id: string, formType: string, formValues: any} {
+    const node = findNode(nodeId);
+
+    let id, formType, formValues;
+    if(nodeId === elementId) {
+        id = node.id;
+        ({ formType, formValues } = node.data);
+    } else {
+        const element = node.data.elements.find(e => e.id === elementId);
+        ({ id, formType, formValues } = element);
+    }
+    
+    return { id, formType, formValues };
 }
