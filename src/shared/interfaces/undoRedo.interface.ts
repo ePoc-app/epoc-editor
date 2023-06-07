@@ -1,7 +1,8 @@
 import { GraphEdge } from '@vue-flow/core';
+import { Form } from './form.interface';
 
 export interface UndoRedoAction {
-    type: 'nodeMoved' | 'nodeAdded' | 'nodeRemoved' | 'nodeUpdated' | 'edgeAdded' | 'edgeUpdated' | 'edgeRemoved' | 'formUpdated';
+    type: 'nodeMoved' | 'nodeAdded' | 'nodeRemoved' | 'nodeUpdated' | 'edgeAdded' | 'edgeUpdated' | 'edgeRemoved' | 'formUpdated' | 'formRepeatUpdated';
 }
 
 export interface NodeMovedAction extends UndoRedoAction {
@@ -40,4 +41,32 @@ export interface FormUpdatedAction extends UndoRedoAction {
     formValueId: string;
     oldValue: string;
     newValue: string;
+}
+
+export interface FormRepeatUpdatedAction  {
+    type: 'formRepeatUpdated';
+    nodeId: string;
+    elementId: string;
+    formValueId: string;
+    repeatId: string;
+    updateType: 'change' | 'add' | 'remove' | 'move';
+}
+
+export interface FormRepeatChangeAction extends FormRepeatUpdatedAction {
+    updateType: 'change'; 
+    oldValue: string;
+    newValue: string;
+    index: number;
+}
+
+export interface FormRepeatMutateAction extends FormRepeatUpdatedAction {
+    updateType: 'add' | 'remove';
+    value: string;
+    index: number;
+}
+
+export interface FormRepeatMoveAction extends FormRepeatUpdatedAction {
+    updateType: 'move';
+    oldIndex: number;
+    newIndex: number;
 }
