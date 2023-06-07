@@ -64,6 +64,7 @@ const emit = defineEmits<{
         :input-value="inputValue"
         :placeholder="input.placeholder"
         @input="emit('input', $event)"
+        @add-undo-action="emit('add-undo-action', $event)" 
     />
     <ScoreInput
         v-if="input.type === 'score'"

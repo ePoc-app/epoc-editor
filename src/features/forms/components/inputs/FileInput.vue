@@ -11,6 +11,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: 'input', value: string): void;
+    (e: 'add-undo-action', value: { oldValue: string, newValue: string }): void;
 }>();
 
 const url = ref('');
@@ -29,6 +30,10 @@ async function changeImage(e) {
     if (!file) return;
     fileInput.value.value = '';
     url.value = await graphService.importFile(file.path);
+    
+    const oldValue = props.inputValue;
+
+    emit('add-undo-action', { oldValue, newValue: url.value });
     emit('input', url.value);
 }
 

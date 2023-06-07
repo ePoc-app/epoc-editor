@@ -97,7 +97,7 @@ export function getContentDefaultValues(type) {
 
 export function updateElementValue(elementId: string, nodeId: string, valueId: string, value: string): void {
     const node = findNode(nodeId);
-    
+
     let id, formType, formValues;
     if(nodeId === elementId) {
         id = node.id;
