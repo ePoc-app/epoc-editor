@@ -34,6 +34,9 @@ function onInput(value: string, id: string) {
     graphService.writeProjectData();
 }
 
+
+//Repeat Input
+
 function onRepeatInput(value, id: string) {
     const element = editorStore.openedNodeId
         ? currentNode.data.elements.find(e => e.id === editorStore.openedElementId)
@@ -44,49 +47,25 @@ function onRepeatInput(value, id: string) {
 
     case 'add':
     {
-        const formValues = element ? element.formValues : currentNode.data.formValues;
-        if(!formValues[id]) formValues[id] = [];
-        formValues[id].push(value.defaultValues);
-
+        handleAddRepeatInput(element, value, id);
         break;
     }
 
     case 'remove':
     {
-        const formValues = element ? element.formValues[id] : currentNode.data.formValues[id];
-        formValues.splice(value.index, 1);
-
-        const currentElement = currentNode.data.elements?.[value.index];
-        if(!editorStore.openedNodeId && currentElement) {
-            deleteElement(currentElement.id, currentElement.parentId);
-        }
-
+        handleRemoveRepeatInput(element, value, id);
         break;
     }
 
     case 'move':
-        if(currentNode.data.elements && !editorStore.openedNodeId) {
-            changeContentOrder(value.oldIndex, value.newIndex, currentNode.id);
-        } else {
-            const items = element ? element.formValues[id] : currentNode.data.formValues[id];
-            const item = items.splice(value.oldIndex, 1);
-            items.splice(value.newIndex, 0, item[0]);
-        }
-
+    {
+        handleMoveRepeatInput(element, value, id);
         break;
-    
+    }
+
     case 'change':
     {
-        const formValues = element ? element.formValues : currentNode.data.formValues;
-        if(value.id === '') {
-            formValues[id][value.index] = value.value;
-        } else {
-            if(!formValues[id]) formValues[id] = {};
-            if(!formValues[id][value.index]) formValues[id][value.id] = {};
-
-            formValues[id][value.index][value.id] = value.value;
-        }
-
+        handleChangeRepeatInput(element, value, id);
         break;
     }
     
@@ -94,8 +73,49 @@ function onRepeatInput(value, id: string) {
     }
 
     graphService.writeProjectData();
-
 }
+
+function handleAddRepeatInput(element, value, id: string): void {
+    const formValues = element ? element.formValues : currentNode.data.formValues;
+    if(!formValues[id]) formValues[id] = [];
+    formValues[id].push(value.defaultValues);
+}
+
+function handleRemoveRepeatInput(element, value, id: string): void {
+    const formValues = element ? element.formValues[id] : currentNode.data.formValues[id];
+    formValues.splice(value.index, 1);
+    
+    const currentElement = currentNode.data.elements?.[value.index];
+    if(!editorStore.openedNodeId && currentElement) {
+        deleteElement(currentElement.id, currentElement.parentId);
+    }
+}
+
+function handleMoveRepeatInput(element, value, id: string): void {
+    if(currentNode.data.elements && !editorStore.openedNodeId) {
+        changeContentOrder(value.oldIndex, value.newIndex, currentNode.id);
+    } else {
+        const items = element ? element.formValues[id] : currentNode.data.formValues[id];
+        const item = items.splice(value.oldIndex, 1);
+        items.splice(value.newIndex, 0, item[0]);
+    }
+}
+
+function handleChangeRepeatInput(element, value, id: string): void {
+    const formValues = element ? element.formValues : currentNode.data.formValues;
+
+    if(value.id === '') {
+        formValues[id][value.index] = value.value;
+    } else {
+        if(!formValues[id]) formValues[id] = {};
+        if(!formValues[id][value.index]) formValues[id][value.id] = {};
+
+        formValues[id][value.index][value.id] = value.value;
+    }
+}
+
+// Repeat Input end
+
 
 </script>
 
