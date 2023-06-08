@@ -71,15 +71,16 @@ export function addContentToPage(pageId: string, content: SideAction | NodeEleme
         pageNode.data.formValues.components.splice(index, 0, { action: content.action });
     // Ajout d'un nouveau contenu depuis la sidebar
     } else {
-        pageNode.data.elements.push({
+        const newContent = {
             id: generateId(),
             action: content,
             formType: content.type,
             formValues: getContentDefaultValues(content.type),
             parentId: pageId,
             contentId: generateContentId(),
-        });
-        pageNode.data.formValues.components.push({ action: content });
+        };
+        pageNode.data.elements.splice(index, 0, newContent);
+        pageNode.data.formValues.components.splice(index, 0, { action: content });
     }
 }
 
