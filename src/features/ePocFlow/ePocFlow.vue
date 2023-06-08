@@ -189,11 +189,16 @@ function nodeDragStart(event) {
 
 function nodeDragStop(event) {
     const { node } = event;
+    
+    const deltaX = node.position.x - initialNodePos.x;
+    const deltaY = node.position.y - initialNodePos.y;
+    
+    if(deltaX === 0 && deltaY === 0) return;
 
     const undoRedoAction: NodeMovedAction = {
         type: 'nodeMoved',
         nodeId: node.id,
-        deltaMovement: { x: node.position.x - initialNodePos.x, y: node.position.y - initialNodePos.y }
+        deltaMovement: { x: deltaX, y: deltaY },
     };
     undoRedoStore.addAction(undoRedoAction);
 }
