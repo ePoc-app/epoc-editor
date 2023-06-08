@@ -30,7 +30,7 @@ document.body.addEventListener('keydown', function(event) {
             event.stopPropagation();
             undo();
         }
-        if (key === 'y') {
+        if (key === 'y' || key === 'Z') {
             event.preventDefault();
             event.stopPropagation();
             redo();
