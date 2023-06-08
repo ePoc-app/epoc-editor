@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { Handle, Position, getConnectedEdges, useVueFlow } from '@vue-flow/core';
 import { computed, ref } from 'vue';
-import { useEditorStore } from '@/src/shared/stores';
-import { NodeElement } from '@/src/shared/interfaces';
+import { useEditorStore, useUndoRedoStore } from '@/src/shared/stores';
+import { NodeElement, ContentMutatedAction  } from '@/src/shared/interfaces';
 import ContentButton from '@/src/components/ContentButton.vue';
 import { addContentToPage, removeContentFromPage, changeContentOrder } from '@/src/shared/services/graph';
 import {moveGuard} from '@/src/shared/utils/draggable';
 
 const editorStore = useEditorStore();
+const undoRedoStore = useUndoRedoStore();
 
 const props = defineProps<{
     id: string;
@@ -63,6 +64,15 @@ function change(event) {
 
     if(added && dropped.value) {
         dropped.value = false;
+        
+        const action: ContentMutatedAction = {
+            type: 'contentAdded',
+            pageId: currentNode.id,
+            content: added.element,
+            index: added.index
+        };
+        undoRedoStore.addAction(action);
+
         addContentToPage(currentNode.id, added.element, added.newIndex);
     }
 
@@ -73,6 +83,15 @@ function change(event) {
 
     if(removed) {
         const { oldIndex } = removed;
+        
+        const action: ContentMutatedAction = {
+            type: 'contentRemoved',
+            pageId: currentNode.id,
+            content: removed.element,
+            index: removed.oldIndex
+        };
+        undoRedoStore.addAction(action);
+
         removeContentFromPage(oldIndex, props.id, true);
     }
 }
