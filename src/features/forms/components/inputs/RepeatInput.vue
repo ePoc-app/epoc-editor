@@ -20,7 +20,7 @@ const emit = defineEmits<{
         type: string, 
         id: string,
         index: number,
-        value: { oldValue: string, newValue: string }
+        value: { oldValue: string | boolean, newValue: string | boolean }
     })
 }>();
 
@@ -93,6 +93,16 @@ function onCheck(value, id: string, index: number) {
         id,
         index
     });
+    
+    emit('add-undo-action', {
+        type: 'change',
+        value: {
+            oldValue: !value,
+            newValue: value
+        },
+        id,
+        index
+    });
 }
 
 function onClick(index: number, action: SideAction | null) {
@@ -104,7 +114,7 @@ function onClick(index: number, action: SideAction | null) {
     }
 }
 
-function onAddUndoAction(value: { oldValue: string, newValue: string }, id: string, index: number) {
+function onAddUndoAction(value: { oldValue: string | boolean, newValue: string | boolean }, id: string, index: number) {
     emit('add-undo-action', {
         type: 'change',
         value,
