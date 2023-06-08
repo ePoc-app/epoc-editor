@@ -4,7 +4,7 @@ import { useVueFlow } from '@vue-flow/core';
 const editorStore = useEditorStore();
 const { findNode } = useVueFlow({ id: 'main' });
 
-export function updateElementValue(elementId: string, nodeId: string, valueId: string, value: string): void {
+export function updateElementValue(elementId: string, nodeId: string, valueId: string, value: string | boolean): void {
     const { id, formType, formValues } = getElementInfo(elementId, nodeId);
     
     verifyAndOpenFormPanel(id, formType, formValues, nodeId);
