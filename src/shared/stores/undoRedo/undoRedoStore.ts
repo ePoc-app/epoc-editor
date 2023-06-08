@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import { UndoRedoAction, NodeMovedAction, NodeMutatedAction, EdgeUpdatedAction, EdgeMutatedAction, FormUpdatedAction, FormRepeatChangeAction, ContentMutatedAction } from '../../interfaces';
-import { addEdgeAction, addNodeAction, deleteEdgeAction, deleteNodeAction, updateFormAction, moveNodeAction, updateEdgeAction, updateNodeAction, updateRepeatFormAction, addContentAction, removeContentAction } from './functions';
+import { UndoRedoAction, NodeMovedAction, NodeMutatedAction, EdgeUpdatedAction, EdgeMutatedAction, FormUpdatedAction, FormRepeatChangeAction, ContentMutatedAction, ContentMovedAction } from '../../interfaces';
+import { addEdgeAction, addNodeAction, deleteEdgeAction, deleteNodeAction, updateFormAction, moveNodeAction, updateEdgeAction, updateNodeAction, updateRepeatFormAction, addContentAction, removeContentAction, moveContentAction } from './functions';
 
 interface UndoRedoState {
     undoStack: UndoRedoAction[];
@@ -68,6 +68,9 @@ export const useUndoRedoStore = defineStore('epoc', {
                 break;
             case 'contentRemoved':
                 addContentAction(action as ContentMutatedAction, reverseStack);
+                break;
+            case 'contentMoved':
+                moveContentAction(action as ContentMovedAction, reverseStack);
                 break;
             }
         },

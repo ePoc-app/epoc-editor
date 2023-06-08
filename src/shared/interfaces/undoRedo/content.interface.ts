@@ -8,3 +8,10 @@ export interface ContentMutatedAction extends UndoRedoAction {
     content: SideAction | NodeElement;
     index: number;
 }
+
+export interface ContentMovedAction extends UndoRedoAction {
+    type: 'contentMoved';
+    pageId: string;
+    oldIndex: number;
+    newIndex: number;
+}
