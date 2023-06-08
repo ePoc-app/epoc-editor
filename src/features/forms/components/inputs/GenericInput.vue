@@ -97,6 +97,7 @@ const emit = defineEmits<{
         :options="input.options"
         :linked-options="input.linkedOptions"
         @change="emit('input', $event)"
+        @add-undo-action="emit('add-undo-action', $event)"
     />
     <RepeatInput
         v-if="input.type === 'repeat'"

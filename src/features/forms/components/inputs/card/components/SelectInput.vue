@@ -13,6 +13,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: 'change', value: string): void;
+    (e: 'add-undo-action', value: {oldValue: string, newValue: string}): void
 }>();
 
 
@@ -21,6 +22,13 @@ const currentContent = currentNode.data.elements.find(e => e.id === editorStore.
 
 const getOptions = () => props.linkedOptions ? currentContent.formValues[props.linkedOptions] : props.options;
 
+function onChange(value: string) {
+    const oldValue = props.inputValue;
+
+    emit('change', value);
+    
+    emit('add-undo-action', {oldValue, newValue: value});
+}
 
 </script>
 
@@ -31,7 +39,7 @@ const getOptions = () => props.linkedOptions ? currentContent.formValues[props.l
             id="select-box"
             :value="inputValue"
             class="select-box"
-            @change="emit('change', ($event.target as HTMLInputElement).value)"
+            @change="onChange(($event.target as HTMLInputElement).value)"
         >
             <option value="">Sélectionnez</option>
             <option v-for="(option, index) in getOptions()" :key="index" :value="option">{{ option }}</option>
