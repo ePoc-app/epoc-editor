@@ -65,6 +65,7 @@ function getElementInfo(elementId: string, nodeId: string): {id: string, formTyp
 
 function verifyAndOpenFormPanel(id: string, formType: string, formValues, parentId: string): void {
     if(editorStore.openedElementId !== id) {
-        editorStore.openFormPanel(id, formType, formValues, parentId);
+        if(id === parentId) editorStore.openFormPanel(id, formType, formValues);
+        else editorStore.openFormPanel(id, formType, formValues, parentId);
     }
 }

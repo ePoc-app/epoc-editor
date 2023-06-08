@@ -307,6 +307,8 @@ export function deleteNode(nodeId: string, ignoreUndo?: boolean): void {
     applyNodeChanges([{ id:nodeToDelete.id, type: 'remove'}]);
 
     if(nodeToDelete.type === 'chapter') moveNextChapter(nodeToDelete.id);
+    
+    editorStore.closeFormPanel();
 }
 
 export function deleteElement(id: string, pageId?: string): void {

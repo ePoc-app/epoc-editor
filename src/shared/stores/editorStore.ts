@@ -73,6 +73,7 @@ export const useEditorStore = defineStore('editor', {
         },
 
         openFormPanel(id: string, formType: string, formValues, nodeId?: string): void {
+
             this.openedElementId = id;
             this.openedNodeId = nodeId;
 
