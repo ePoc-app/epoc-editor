@@ -15,3 +15,12 @@ export interface ContentMovedAction extends UndoRedoAction {
     oldIndex: number;
     newIndex: number;
 }
+
+export interface ContentChangedListAction extends UndoRedoAction {
+    type: 'contentChangedList';
+    oldPageId: string;
+    newPageId: string;
+    oldIndex: number;
+    newIndex: number;
+    content: SideAction | NodeElement;
+}

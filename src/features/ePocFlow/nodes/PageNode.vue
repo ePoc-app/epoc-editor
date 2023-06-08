@@ -2,7 +2,7 @@
 import { Handle, Position, getConnectedEdges, useVueFlow } from '@vue-flow/core';
 import { computed, ref } from 'vue';
 import { useEditorStore, useUndoRedoStore } from '@/src/shared/stores';
-import { NodeElement, ContentMutatedAction, ContentMovedAction  } from '@/src/shared/interfaces';
+import { NodeElement, ContentMutatedAction, ContentMovedAction, ContentChangedListAction  } from '@/src/shared/interfaces';
 import ContentButton from '@/src/components/ContentButton.vue';
 import { addContentToPage, removeContentFromPage, changeContentOrder } from '@/src/shared/services/graph';
 import {moveGuard} from '@/src/shared/utils/draggable';
@@ -93,11 +93,15 @@ function change(event) {
     if(removed) {
         const { oldIndex } = removed;
         
-        const action: ContentMutatedAction = {
-            type: 'contentRemoved',
-            pageId: currentNode.id,
-            content: removed.element,
-            index: oldIndex
+        const addedContent = undoRedoStore.undoStack.pop() as ContentMutatedAction;
+        
+        const action: ContentChangedListAction = {
+            type: 'contentChangedList',
+            oldPageId: currentNode.id, 
+            newPageId: addedContent.pageId,
+            oldIndex: oldIndex,
+            newIndex: addedContent.index,
+            content: removed.element
         };
         undoRedoStore.addAction(action);
 

@@ -1,4 +1,4 @@
-import { ContentMovedAction, ContentMutatedAction } from '@/src/shared/interfaces';
+import { ContentChangedListAction, ContentMovedAction, ContentMutatedAction } from '@/src/shared/interfaces';
 import { addContentToPage, changeContentOrder, removeContentFromPage } from '@/src/shared/services/graph';
 
 export function addContentAction(action: ContentMutatedAction, reverseStack): void {
@@ -6,7 +6,7 @@ export function addContentAction(action: ContentMutatedAction, reverseStack): vo
     
     addContentToPage(pageId, content, index);
     
-    const reverseAction = {
+    const reverseAction: ContentMutatedAction = {
         ...action,
         type: 'contentAdded',
     };
@@ -19,7 +19,7 @@ export function removeContentAction(action: ContentMutatedAction, reverseStack):
     
     removeContentFromPage(index, pageId);
     
-    const reverseAction = {
+    const reverseAction: ContentMutatedAction = {
         ...action,
         type: 'contentRemoved',
     };
@@ -32,10 +32,27 @@ export function moveContentAction(action: ContentMovedAction, reverseStack): voi
     
     changeContentOrder(oldIndex, newIndex, pageId);
 
-    const reverseAction = {
+    const reverseAction: ContentMovedAction = {
         ...action,
         oldIndex: newIndex,
         newIndex: oldIndex,
     };
+    reverseStack.push(reverseAction);
+}
+
+export function changeListAction(action: ContentChangedListAction, reverseStack): void {
+    const { newPageId, oldPageId, oldIndex, newIndex, content }  = action;
+    
+    addContentToPage(oldPageId, content, oldIndex);
+    removeContentFromPage(newIndex, newPageId, true);
+    
+    const reverseAction = {
+        ...action,
+        newPageId: oldPageId,
+        oldPageId: newPageId, 
+        oldIndex: newIndex,
+        newIndex: oldIndex,
+    };
+    
     reverseStack.push(reverseAction);
 }
