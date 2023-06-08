@@ -8,7 +8,15 @@ defineProps<{
 
 const emit = defineEmits<{
     (e: 'change', value: string): void;
+    (e: 'add-undo-action', value: {oldValue: string, newValue: string}): void;
 }>();
+
+function onChange(value: string) {
+    emit('change', value);
+    
+    const oldValue = value === '1' ? '2' : '1';
+    emit('add-undo-action', {oldValue, newValue: value});
+}
 
 </script>
 
@@ -23,7 +31,7 @@ const emit = defineEmits<{
                     type="radio"
                     class="radio-input"
                     :checked="inputValue === '1'"
-                    @change="emit('change', '1')"
+                    @change="onChange('1')"
                 >
                 <label :for="'left-' + String(pos)">Choix gauche</label>
             </div>
@@ -34,7 +42,7 @@ const emit = defineEmits<{
                     type="radio"
                     class="radio-input"
                     :checked="inputValue === '2'"
-                    @change="emit('change', '2')"
+                    @change="onChange('2')"
                 >
                 <label :for="'right-' + String(pos)">Choix droite</label>
             </div>

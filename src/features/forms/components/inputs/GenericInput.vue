@@ -87,6 +87,7 @@ const emit = defineEmits<{
         :input-value="inputValue"
         :pos="pos"
         @change="emit('input', $event)"
+        @add-undo-action="emit('add-undo-action', $event)"
     />
     <SelectInput 
         v-if="input.type === 'select'"
