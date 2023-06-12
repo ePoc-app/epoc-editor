@@ -3,6 +3,7 @@ import Editor from '@tinymce/tinymce-vue';
 import { getTinymce } from '@tinymce/tinymce-vue/lib/cjs/main/ts/TinyMCE';
 import { Ref, ref, watch } from 'vue';
 import {graphService} from '@/src/shared/services';
+import { getCurrentState } from '@/src/shared/services/undoRedo.service';
 
 const props = defineProps<{
     label: string;
@@ -13,6 +14,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: 'input', value: string): void;
+    (e: 'saveGivenState', state: string): void;
 }>();
 
 const editor = ref(null);
@@ -73,6 +75,21 @@ function handleFilePicker(callback) {
     });
 }
 
+
+// Undo Redo
+let savedState = '';
+let startValue = '';
+
+function onFocus() {
+    console.log('content', content.value);
+    startValue = content.value; 
+    savedState = getCurrentState(true);
+}
+
+function onBlur() {
+    if(startValue !== content.value) emit('saveGivenState', savedState);
+}
+
 </script>
 
 <template>
@@ -97,5 +114,7 @@ function handleFilePicker(callback) {
         }"
         @init="init"
         @drop.stop.prevent="drop"
+        @focus="onFocus"
+        @blur="onBlur"
     />
 </template>

@@ -10,8 +10,10 @@ import ePocNode from './nodes/ePocNode.vue';
 import AddChapterNode from './nodes/AddChapterNode.vue';
 import { NodeElement, SideAction } from '@/src/shared/interfaces';
 import { addPage, createPageFromContent, removeContentFromPage } from '@/src/shared/services/graph';
+import { saveState, saveGivenState, getCurrentState } from '@/src/shared/services/undoRedo.service';
 
 const { vueFlowRef, project, updateEdge, edges, nodes, findNode }  = useVueFlow({ id: 'main' });
+
 
 const editorStore = useEditorStore();
 const graphStore = useGraphStore();
@@ -37,6 +39,8 @@ const onDrop = (event) => {
     });
 
     const { element, type, source } = editorStore.draggedElement;
+
+    saveState();
 
     if(type === 'sideAction') addPage(position, element as SideAction[]);
     else if(type === 'nodeElement') {
@@ -148,6 +152,28 @@ function nodeDrag(event) {
     }
 }
 
+let startPos = { x: 0, y: 0 };
+let savedState = '';
+function onDragStart(event) {
+    const { x, y } = event.event;
+    startPos = { x, y };
+    
+    const state = getCurrentState();
+
+    savedState = JSON.stringify(state);
+}
+
+function onDragEnd(event) {
+    const { x, y } = event.event;
+
+    if(startPos.x === x && startPos.y === y) return;
+    
+    saveGivenState(savedState);
+
+    savedState = '';
+    startPos = { x: 0, y: 0 };
+}
+
 </script>
 
 <template>
@@ -165,6 +191,8 @@ function nodeDrag(event) {
         :snap-grid="[16, 16]"
         @edge-update="update"
         @nodes-change="nodeChange"
+        @node-drag-start="onDragStart"
+        @node-drag-stop="onDragEnd"
         @node-drag="nodeDrag"
         @selection-start="selectionStart"
         @drop="onDrop"

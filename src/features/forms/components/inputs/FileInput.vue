@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
 import { graphService } from '@/src/shared/services';
+import { getCurrentState } from '@/src/shared/services/undoRedo.service';
 
 const props = defineProps<{
     inputValue: string;
@@ -11,6 +12,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: 'input', value: string): void;
+    (e: 'saveGivenState', state: string): void;
 }>();
 
 const url = ref('');
@@ -25,15 +27,24 @@ const filetype = computed(() => {
 
 //! This function have to fetch the image from the back
 async function changeImage(e) {
+
+    savedState = getCurrentState(true);
+
     const file = e.target.files[0];
     if (!file) return;
     fileInput.value.value = '';
     url.value = await graphService.importFile(file.path);
+
     emit('input', url.value);
+    emit('saveGivenState', savedState);
 }
 
 function deleteFile() {
+    savedState = getCurrentState(true);
+
     url.value = '';
+    
+    emit('saveGivenState', savedState);
 }
 
 function openFile() {
@@ -50,6 +61,8 @@ watch(
         url.value = props.inputValue;
     }
 );
+
+let savedState = '';
 
 </script>
 

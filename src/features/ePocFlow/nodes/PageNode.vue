@@ -22,18 +22,18 @@ const props = defineProps<{
 
 const { findNode, edges } = useVueFlow({ id: 'main' });
 
-const currentNode = findNode(props.id);
+const currentNode = computed(() => findNode(props.id));
 const dropped = ref(false);
 
-const isSource = computed(() => getConnectedEdges([currentNode], edges.value).some((edge) => edge.source === props.id));
-const isTarget = computed(() => getConnectedEdges([currentNode], edges.value).some((edge) => edge.target === props.id));
+const isSource = computed(() => getConnectedEdges([currentNode.value], edges.value).some((edge) => edge.source === props.id));
+const isTarget = computed(() => getConnectedEdges([currentNode.value], edges.value).some((edge) => edge.target === props.id));
 
 const classList = {
     'clickable': true,
     'btn-content-node': true,
 };
 
-const isCondition = ref(currentNode.data.type === 'condition');
+const isCondition = ref(currentNode.value.data.type === 'condition');
 const page = ref(null);
 
 const dragOptions = ref({
@@ -49,11 +49,11 @@ const dragOptions = ref({
 });
 
 function openForm(element: NodeElement) {
-    editorStore.openFormPanel(element.id, element.formType, element.formValues, element.parentId);
+    editorStore.openFormPanel(element.id, element.formType, element.parentId);
 }
 
-function openPageForm(id, formType, formValues) {
-    editorStore.openFormPanel(id, formType, formValues);
+function openPageForm(id, formType) {
+    editorStore.openFormPanel(id, formType);
 }
 
 function change(event) {
@@ -63,7 +63,7 @@ function change(event) {
 
     if(added && dropped.value) {
         dropped.value = false;
-        addContentToPage(currentNode.id, added.element, added.newIndex);
+        addContentToPage(currentNode.value.id, added.element, added.newIndex);
     }
 
     if(moved) {
@@ -116,7 +116,7 @@ function removeHoverEffect() {
         <div 
             ref="page"
             class="container"
-            @click.exact="openPageForm(currentNode.id, currentNode.data.formType, currentNode.data.formValues)"
+            @click.exact="openPageForm(currentNode.id, currentNode.data.formType)"
             @click.meta="closeFormPanel"
             @click.ctrl="closeFormPanel"
             @mouseenter="addHoverEffect"

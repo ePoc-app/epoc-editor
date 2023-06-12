@@ -183,7 +183,7 @@ export function transformActivityToPage(): void {
     pageNode.data.formType = 'page';
     delete pageNode.data.formValues.summary;
     editorStore.closeFormPanel();
-    editorStore.openFormPanel(pageNode.id, pageNode.data.formType, pageNode.data.formValues);
+    editorStore.openFormPanel(pageNode.id, pageNode.data.formType);
 }
 
 

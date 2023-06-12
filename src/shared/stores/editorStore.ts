@@ -63,6 +63,9 @@ export const useEditorStore = defineStore('editor', {
         getCurrentGraphNode(): GraphNode | null  {
             const nodeId = this.openedNodeId ?? this.openedElementId;
             return nodeId ? findNode(nodeId) : null;
+        },
+        openedFormType(): string | null {
+            return this.formPanel?.type ?? null;
         }
     },
 
@@ -72,7 +75,7 @@ export const useEditorStore = defineStore('editor', {
             this.modelMenu = false;
         },
 
-        openFormPanel(id: string, formType: string, formValues, nodeId?: string): void {
+        openFormPanel(id: string, formType: string, nodeId?: string, scrollPosY?: number): void {
             this.openedElementId = id;
             this.openedNodeId = nodeId;
 
@@ -82,7 +85,27 @@ export const useEditorStore = defineStore('editor', {
                 this.formPanel = formsModel.find(form => form.type === formType);
             });
 
+            if(scrollPosY) this.scrollFormPanel(scrollPosY);
+
             nodes.value.forEach(node => node.selected = node.id === this.openedElementId);
+        },
+        
+        scrollFormPanel(posY: number): void {
+            const checkIfPanelReady = (): Promise<void> => {
+                return new Promise((resolve) => {
+                    const checkInterval = setInterval(() => {
+                        if (document.querySelector('.formPanel')) {
+                            clearInterval(checkInterval);
+                            resolve();
+                        }
+                    }, 100);
+                });
+            };
+            
+            checkIfPanelReady().then(() => {
+                const formPanel = document.querySelector('.formPanel');
+                if(formPanel) formPanel.scrollTop = posY;
+            });
         },
 
         closeFormPanel(): void {
@@ -96,16 +119,6 @@ export const useEditorStore = defineStore('editor', {
 
         openValidationModal(): void {
             this.validationModal = true;
-        },
-
-        undo() {
-            // @todo
-            console.log('todo undo', this.undoStack.length);
-        },
-
-        redo() {
-            // @todo
-            console.log('todo redo');
         },
 
         savePageModel(model: SideAction[]): boolean {

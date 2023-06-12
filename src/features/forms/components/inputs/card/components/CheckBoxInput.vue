@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { getCurrentState } from '@/src/shared/services/undoRedo.service';
 
 defineProps<{
     inputValue: boolean;
@@ -9,7 +10,16 @@ defineProps<{
 
 const emit = defineEmits<{
     (e: 'change', value: boolean): void;
+    (e: 'saveGivenState', state: string): void;
 }>();
+
+function onChange(event) {
+    const value = event.target.checked;
+    const state = getCurrentState(true);
+    
+    emit('change', value);
+    emit('saveGivenState', state);
+}
 
 </script>
 
@@ -20,7 +30,7 @@ const emit = defineEmits<{
             class="checkbox-input"
             type="checkbox"
             :checked="inputValue"
-            @change="emit('change', ($event.target as HTMLInputElement).checked)"
+            @change="onChange"
         >
         <label :for="'Checkbox' + String(pos)">{{ label }}</label>
     </div>

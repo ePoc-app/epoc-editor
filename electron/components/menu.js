@@ -108,8 +108,22 @@ module.exports.setupMenu = function () {
         }, {
             label: 'Édition',
             submenu: [
-                {label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:'},
-                {label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:'},
+                {
+                    label: 'Undo',
+                    accelerator: 'CmdOrCtrl+Z',
+                    selector: 'undo:',
+                    click: function() {
+                        sendToFrontend(BrowserWindow.getFocusedWindow(), 'undo');
+                    }
+                },
+                {
+                    label: 'Redo',
+                    accelerator: process.platform === 'darwin' ? 'Shift+CmdOrCtrl+Z' : 'CmdOrCtrl+Y',
+                    selector: 'redo:',
+                    click: function() {
+                        sendToFrontend(BrowserWindow.getFocusedWindow(), 'redo');
+                    }
+                },
                 {type: 'separator'},
                 {label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:'},
                 {label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:'},

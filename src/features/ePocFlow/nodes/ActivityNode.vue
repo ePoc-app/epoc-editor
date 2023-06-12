@@ -49,11 +49,11 @@ const dragOptions = reactive({
 });
 
 function openForm(element: NodeElement) {
-    editorStore.openFormPanel(element.id, element.formType, element.formValues, element.parentId);
+    editorStore.openFormPanel(element.id, element.formType, element.parentId);
 }
 
-function openPageForm(id, formType, formValues) {
-    editorStore.openFormPanel(id, formType, formValues);
+function openPageForm(id, formType) {
+    editorStore.openFormPanel(id, formType);
 }
 
 function change(event) {
@@ -114,7 +114,7 @@ function removeHoverEffect() {
         <div 
             ref="page"
             class="container"
-            @click.exact="openPageForm(currentNode.id, currentNode.data.formType, currentNode.data.formValues)"
+            @click.exact="openPageForm(currentNode.id, currentNode.data.formType)"
             @click.meta="closeFormPanel"
             @click.ctrl="closeFormPanel"
             @mouseenter="addHoverEffect"

@@ -40,7 +40,7 @@ const classList = {
 
 
 function openForm() {
-    editorStore.openFormPanel(currentNode.id, currentNode.data.formType, currentNode.data.formValues);
+    editorStore.openFormPanel(currentNode.id, currentNode.data.formType);
 }
 
 function mouseDown() {

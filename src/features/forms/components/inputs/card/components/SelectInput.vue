@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { getCurrentState } from '@/src/shared/services/undoRedo.service';
 import { useEditorStore } from '@/src/shared/stores';
 
 const editorStore = useEditorStore();
@@ -13,6 +14,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: 'change', value: string): void;
+    (e: 'saveGivenState', state: string): void;
 }>();
 
 
@@ -21,6 +23,13 @@ const currentContent = currentNode.data.elements.find(e => e.id === editorStore.
 
 const getOptions = () => props.linkedOptions ? currentContent.formValues[props.linkedOptions] : props.options;
 
+function onChange(event) {
+    const value = event.target.value;
+    const state = getCurrentState(true);
+
+    emit('change', value);
+    emit('saveGivenState', state);
+}
 
 </script>
 
@@ -31,7 +40,7 @@ const getOptions = () => props.linkedOptions ? currentContent.formValues[props.l
             id="select-box"
             :value="inputValue"
             class="select-box"
-            @change="emit('change', ($event.target as HTMLInputElement).value)"
+            @change="onChange"
         >
             <option value="">Sélectionnez</option>
             <option v-for="(option, index) in getOptions()" :key="index" :value="option">{{ option }}</option>

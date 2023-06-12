@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { addChapter } from '@/src/shared/services/graph';
+import { saveState } from '@/src/shared/services/undoRedo.service';
 
+function onClick() {
+    saveState();
+    addChapter();
+}
 </script>
 
 <template>
-    <div class="add-chapter" @mousedown="addChapter()">
+    <div class="add-chapter" @mousedown="onClick()">
         <button class="add-btn"><i class="icon-plus"></i></button>
     </div>
 </template>

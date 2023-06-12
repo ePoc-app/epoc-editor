@@ -16,6 +16,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: 'change', value: object | string): void;
+    (e: 'saveGivenState', state: string): void;
 }>();
 
 const editorStore = useEditorStore();
@@ -93,8 +94,8 @@ function onClick(index, action) {
     const element = currentNode.data.elements?.[index];
 
     if(element && action) {
-        const { id, formType, formValues, parentId } = element;
-        editorStore.openFormPanel(id, formType, formValues, parentId);
+        const { id, formType, parentId } = element;
+        editorStore.openFormPanel(id, formType, parentId);
     }
 }
 
@@ -163,6 +164,7 @@ function dragOver(event) {
                         :pos="index"
                         @input="onInput($event, input.id, index)"
                         @check="onCheck($event, input.id, index)"
+                        @save-given-state="emit('saveGivenState', $event)"
                     />
                 </div>
             </div>

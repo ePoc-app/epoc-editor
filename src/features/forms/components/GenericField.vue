@@ -4,6 +4,7 @@ import GenericInput from './inputs/GenericInput.vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { graphService } from '@/src/shared/services';
 import { deleteElement, changeContentOrder } from '@/src/shared/services/graph';
+import { getCurrentState, saveGivenState } from '@/src/shared/services/undoRedo.service';
 
 const editorStore = useEditorStore();
 
@@ -38,6 +39,8 @@ function onInput(value: string, id: string) {
 //Repeat Input
 
 function onRepeatInput(value, id: string) {
+    const state = getCurrentState(true);
+
     const element = editorStore.openedNodeId
         ? currentNode.data.elements.find(e => e.id === editorStore.openedElementId)
         : null;
@@ -73,6 +76,7 @@ function onRepeatInput(value, id: string) {
     }
 
     graphService.writeProjectData();
+    onSaveGivenState(state);
 }
 
 function handleAddRepeatInput(element, value, id: string): void {
@@ -125,6 +129,10 @@ function onCheck(value: boolean, id:string) {
     graphService.writeProjectData();
 }
 
+function onSaveGivenState(state: string) {
+    saveGivenState(state);
+}
+
 </script>
 
 <template>
@@ -139,6 +147,7 @@ function onCheck(value: boolean, id:string) {
         @input="onInput($event, input.id)"
         @check="onCheck($event, input.id)"
         @repeat-input="onRepeatInput($event, input.id)"
+        @save-given-state="onSaveGivenState"
     />
 </template>
 

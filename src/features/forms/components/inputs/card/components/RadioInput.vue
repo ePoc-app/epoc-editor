@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { getCurrentState } from '@/src/shared/services/undoRedo.service';
+
 
 defineProps<{
    inputValue: string;
@@ -8,7 +10,15 @@ defineProps<{
 
 const emit = defineEmits<{
     (e: 'change', value: string): void;
+    (e: 'saveGivenState', state: string): void
 }>();
+
+function onChange(value: 'string') {
+    const savedState = getCurrentState(true);
+
+    emit('change', value);
+    emit('saveGivenState', savedState);
+}
 
 </script>
 
@@ -23,7 +33,7 @@ const emit = defineEmits<{
                     type="radio"
                     class="radio-input"
                     :checked="inputValue === '1'"
-                    @change="emit('change', '1')"
+                    @change="onChange('1')"
                 >
                 <label :for="'left-' + String(pos)">Choix gauche</label>
             </div>
@@ -34,7 +44,7 @@ const emit = defineEmits<{
                     type="radio"
                     class="radio-input"
                     :checked="inputValue === '2'"
-                    @change="emit('change', '2')"
+                    @change="onChange('2')"
                 >
                 <label :for="'right-' + String(pos)">Choix droite</label>
             </div>

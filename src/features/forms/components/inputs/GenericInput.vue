@@ -24,6 +24,7 @@ const emit = defineEmits<{
     (e: 'input', value: string): void;
     (e: 'repeatInput', value): void;
     (e: 'check', value: boolean): void;
+    (e: 'saveGivenState', state: string): void;
 }>();
 
 </script>
@@ -36,6 +37,7 @@ const emit = defineEmits<{
         :input-value="inputValue"
         :inside-card="insideCard"
         @input="emit('input', $event)"
+        @save-given-state="emit('saveGivenState', $event)"
     />
     <HtmlInput
         v-if="input.type === 'html'"
@@ -44,6 +46,7 @@ const emit = defineEmits<{
         :input-value="inputValue"
         :inside-card="insideCard"
         @input="emit('input', $event)"
+        @save-given-state="emit('saveGivenState', $event)"
     />
     <TextAreaInput 
         v-if="input.type === 'textarea'"
@@ -52,6 +55,7 @@ const emit = defineEmits<{
         :input-value="inputValue"
         :inside-card="insideCard"
         @input="emit('input', $event)"
+        @save-given-state="emit('saveGivenState', $event)"
     />
     <FileInput 
         v-if="input.type === 'file'"
@@ -60,12 +64,14 @@ const emit = defineEmits<{
         :input-value="inputValue"
         :placeholder="input.placeholder"
         @input="emit('input', $event)"
+        @save-given-state="emit('saveGivenState', $event)"
     />
     <ScoreInput
         v-if="input.type === 'score'"
         :label="input.label"
         :input-value="inputValue"
         @input="emit('input', $event)"
+        @save-given-state="emit('saveGivenState', $event)"
     />
     <CheckBoxInput
         v-if="input.type === 'checkbox'"
@@ -73,6 +79,7 @@ const emit = defineEmits<{
         :input-value="inputValue"
         :pos="pos"
         @change="emit('check', $event)"
+        @save-given-state="emit('saveGivenState', $event)"
     />
     <RadioInput
         v-if="input.type === 'radio-group'"
@@ -80,6 +87,7 @@ const emit = defineEmits<{
         :input-value="inputValue"
         :pos="pos"
         @change="emit('input', $event)"
+        @save-given-state="emit('saveGivenState', $event)"
     />
     <SelectInput 
         v-if="input.type === 'select'"
@@ -89,6 +97,7 @@ const emit = defineEmits<{
         :options="input.options"
         :linked-options="input.linkedOptions"
         @change="emit('input', $event)"
+        @save-given-state="emit('saveGivenState', $event)"
     />
     <RepeatInput
         v-if="input.type === 'repeat'"
@@ -99,5 +108,6 @@ const emit = defineEmits<{
         :field-index="fieldIndex"
         :add-button="input.addButton"
         @change="emit('repeatInput', $event)"
+        @save-given-state="emit('saveGivenState', $event)"
     />
 </template>

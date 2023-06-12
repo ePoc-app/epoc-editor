@@ -1,21 +1,46 @@
 <script setup lang="ts">
+import { getCurrentState } from '@/src/shared/services/undoRedo.service';
 
-defineProps<{
+
+const props = defineProps<{
     inputValue: string;
 }>();
 
 const emit = defineEmits<{
     (e: 'input', value: string): void;
+    (e: 'saveGivenState', state: string): void;
 }>();
 
 function minus(inputValue: string) {
+    savedValue = getCurrentState(true);
     const value = Number(inputValue) - 1;
+
     emit('input', `${value}`);
+    emit('saveGivenState', savedValue);
 }
 
 function plus(inputValue: string) {
+    savedValue = getCurrentState(true);
     const value = Number(inputValue) + 1;
+
     emit('input', `${value}`);
+    emit('saveGivenState', savedValue);
+}
+
+
+// Undo Redo
+let savedState = '';
+let savedValue = '';
+
+function onFocus() {
+    savedValue = props.inputValue;
+    savedState = getCurrentState(true);
+}
+
+function onBlur() {
+    if (savedValue !== props.inputValue) {
+        emit('saveGivenState', savedState);
+    }
 }
 
 </script>
@@ -28,6 +53,8 @@ function plus(inputValue: string) {
             type="number"
             :value="inputValue"
             @input="emit('input', ($event.target as HTMLInputElement).value)"
+            @focus="onFocus"
+            @blur="onBlur"
         >
         <button @click="plus(inputValue)"><i class="icon-plus-circle"></i></button>
     </div>

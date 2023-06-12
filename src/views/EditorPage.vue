@@ -7,21 +7,27 @@ import ValidationModal from '../components/ValidationModal.vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { editorService } from '@/src/shared/services';
 import { confirmDelete } from '@/src/shared/services/graph';
+import { setupUndo } from '../shared/services/undoRedo.service';
 
 const editorStore = useEditorStore();
 
 editorService.setup();
 
-document.body.addEventListener('keydown', function(event) {
-    const key = event.key;
+function addDeleteEvent(event) {
+    const { key } = event;
+
     if ((key === 'Backspace' || key === 'Delete')) {
         if((event.target as HTMLElement).className.indexOf('vue-flow') !== -1 || event.target === document.body) {
             event.stopPropagation();
             confirmDelete();
         }
     }
-});
+}
 
+document.body.removeEventListener('keydown', addDeleteEvent);
+document.body.addEventListener('keydown', addDeleteEvent);
+
+setupUndo();
 
 function onCursorNotAllowed() {
     document.body.classList.remove('cursor-allowed');
