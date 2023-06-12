@@ -32,7 +32,6 @@ function onInput(value: string, id: string) {
         : currentNode.data;
     
     element.formValues[id] = value;
-    graphService.writeProjectData();
 }
 
 
@@ -75,7 +74,6 @@ function onRepeatInput(value, id: string) {
     default: break;
     }
 
-    graphService.writeProjectData();
     onSaveGivenState(state);
 }
 
@@ -126,7 +124,6 @@ function onCheck(value: boolean, id:string) {
         : currentNode.data;
     
     element.formValues[id] = value;
-    graphService.writeProjectData();
 }
 
 function onSaveGivenState(state: string) {

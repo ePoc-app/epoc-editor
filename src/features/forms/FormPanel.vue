@@ -26,7 +26,6 @@ function actionOnForm(action: string) {
     switch (action) {
     case 'delete':
         confirmDelete();
-        graphService.writeProjectData();
         break;
 
     case 'duplicate-page':

@@ -35,9 +35,6 @@ const debounceFunction = function (delay, cb) {
     timerId = setTimeout(cb, delay);
 };
 
-onNodesChange(() => {
-    writeProjectData();
-});
 
 
 function createContentJSON() : EpocV1 {

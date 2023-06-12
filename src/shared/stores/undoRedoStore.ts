@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { revertToState } from '../services/undoRedo.service';
+import { graphService } from '@/src/shared/services';
 
 interface UndoRedoState {
     undoStack: string[];
@@ -38,6 +39,7 @@ export const useUndoRedoStore = defineStore('undoRedo', {
             this.redoStack = [];
 
             if(this.undoStack.length > 100) this.undoStack.shift();
+            graphService.writeProjectData();
         }
     }
 });
