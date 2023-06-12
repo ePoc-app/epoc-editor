@@ -167,7 +167,7 @@ const zipEpocProject = async function (workdir, filepath) {
     if (!filepath || !workdir) return null;
 
     const zip = new AdmZip();
-    zip.addLocalFolder(workdir, '/', (entry) => {
+    zip.addLocalFolder(workdir, '', (entry) => {
         const excluded = ['.DS_Store', '__MACOSX', '.git'];
         return excluded.every(e => entry.indexOf(e) === -1) ;
     });
