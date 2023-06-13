@@ -272,7 +272,7 @@ export function confirmDelete(): void {
     if(selectedNodes.length > 0 || isChild ) {
         editorStore.openValidationModal();
     } else if(selectedEdges.length > 0) {
-        for(const edge of selectedNodes) {
+        for(const edge of selectedEdges) {
             applyEdgeChanges([{ id: edge.id, type: 'remove' }]);
         }
     }
