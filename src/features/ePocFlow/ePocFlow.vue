@@ -158,9 +158,7 @@ function onDragStart(event) {
     const { x, y } = event.event;
     startPos = { x, y };
     
-    const state = getCurrentState();
-
-    savedState = JSON.stringify(state);
+    savedState = getCurrentState();
 }
 
 function onDragEnd(event) {
