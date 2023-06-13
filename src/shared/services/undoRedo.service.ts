@@ -7,7 +7,11 @@ const { toObject }  = useVueFlow({ id: 'main' });
 
 declare const api: ApiInterface;
 
+let initialized = false;
+
 export function setupUndo() {
+    if (initialized) return;
+
     const undoRedoStore = useUndoRedoStore();
     api.receive('undo', () => {
         undoRedoStore.undo();
@@ -16,6 +20,7 @@ export function setupUndo() {
     api.receive('redo', () => {
         undoRedoStore.redo();
     });
+    initialized = true;
 }
 
 export function getCurrentState(saveForm?: boolean | object): string {

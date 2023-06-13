@@ -24,8 +24,6 @@ interface EditorState {
     openedNodeId: uid | null;
     questions: SideAction[];
     standardPages: SideAction[];
-    undoStack: [];
-    redoStack: [];
     draggedElement: {
         type?: 'nodeElement' | 'sideAction';
         //? SideAction as an array to manage the template the same way
@@ -54,8 +52,6 @@ export const useEditorStore = defineStore('editor', {
         openedNodeId: null,
         questions: questions,
         standardPages: standardPages,
-        undoStack: [],
-        redoStack: [],
         draggedElement: {},
     }),
     
@@ -70,11 +66,21 @@ export const useEditorStore = defineStore('editor', {
     },
 
     actions: {
-        dismissModals(): void {
+        reset(): void {
+            this.draggedElement = {};
+            this.openedElementId = null;
+            this.openedNodeId = null;
+            this.formPanel = null;
+            this.validationModal = false;
             this.questionMenu = false;
             this.modelMenu = false;
         },
 
+        dismissModals(): void {
+            this.questionMenu = false;
+            this.modelMenu = false;
+        },
+        
         openFormPanel(id: string, formType: string, nodeId?: string, scrollPosY?: number): void {
             this.openedElementId = id;
             this.openedNodeId = nodeId;

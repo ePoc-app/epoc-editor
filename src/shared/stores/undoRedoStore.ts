@@ -40,6 +40,11 @@ export const useUndoRedoStore = defineStore('undoRedo', {
 
             if(this.undoStack.length > 100) this.undoStack.shift();
             graphService.writeProjectData();
+        },
+
+        reset(): void {
+            this.undoStack = [];
+            this.redoStack = [];
         }
     }
 });

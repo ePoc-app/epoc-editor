@@ -1,6 +1,6 @@
 import { ApiInterface } from '@/src/shared/interfaces/api.interface';
 import { router } from '@/src/router';
-import { useEditorStore, useGraphStore } from '@/src/shared/stores';
+import { useEditorStore, useGraphStore, useUndoRedoStore } from '@/src/shared/stores';
 import { ePocProject } from '@/src/shared/interfaces';
 import { createToaster } from '@meforma/vue-toaster';
 import { graphService } from '@/src/shared/services/graph.service';
@@ -69,6 +69,8 @@ const setup = function () {
     });
 
     api.receive('epocProjectReady', (data: string) => {
+        const undoRedoStore = useUndoRedoStore(); 
+
         const parsedData = JSON.parse(data);
         const ePocProject = parsedData.project as ePocProject;
         if (!ePocProject.workdir) {
@@ -81,6 +83,9 @@ const setup = function () {
         parsedData.flow = changeScreenToPage(parsedData.flow);
 
         graphStore.setFlow(parsedData.flow);
+        
+        undoRedoStore.reset();
+        editorStore.reset();
 
         router.push('/editor').then(() => {
             editorStore.loading = false;
@@ -131,7 +136,6 @@ function newEpocProject(): void {
     router.push('/landingpage').then(() => {
         api.send('newEpocProject');
     });
-
 }
 
 function fetchRecentProjects(): void {
