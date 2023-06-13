@@ -27,6 +27,13 @@ function addDeleteEvent(event) {
 document.body.removeEventListener('keydown', addDeleteEvent);
 document.body.addEventListener('keydown', addDeleteEvent);
 
+function addMouseUpEvent() {
+    document.body.classList.remove('cursor-not-allowed', 'cursor-allowed');
+}
+
+document.body.removeEventListener('mouseup', addMouseUpEvent);
+document.body.addEventListener('mouseup', addMouseUpEvent);
+
 setupUndo();
 
 function onCursorNotAllowed() {
