@@ -10,7 +10,7 @@ const editorStore = useEditorStore();
 
 const standardContent = editorStore.standardPages.filter(({ type }) => {
     const filteredPages = ['legacy-condition', 'condition', 'question', 'model'];
-    const prodFilteredPages = env.isDev ? []:['audio'];
+    const prodFilteredPages = env.isDev ? []:[];
     return ![...filteredPages, ...prodFilteredPages].includes(type);
 });
 const questionContent = editorStore.standardPages.find(({ type }) => type === 'question');
@@ -117,7 +117,7 @@ function showTemplateMenu() {
         @dragstart="dragStart($event, conditionContent)"
         @dragend="dragging = false"
     />
-    <hr>
+    <hr v-if="env.isDev">
     <ContentButton
         v-if="env.isDev"
         v-tippy="{content: modelContent.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"

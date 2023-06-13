@@ -48,30 +48,30 @@ module.exports.setupMenu = function () {
                     ]
                 },
                 {
-                    label: 'Legacy support',
+                    label: 'Rétrocompatibilité',
                     submenu: [
+                        // {
+                        //     label: 'Mode ePoc v1',
+                        //     type: 'checkbox'
+                        // },
+                        // {
+                        //     type: 'separator'
+                        // },
                         {
-                            label: 'Mode ePoc v1',
-                            type: 'checkbox'
-                        },
-                        {
-                            type: 'separator'
-                        },
-                        {
-                            label: 'Import ePoc v1',
+                            label: 'Importer ePoc v1',
                             click: async function () {
                                 sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportPicked');
                                 const project = await pickEpocToImport();
                                 store.updateState('currentProject', project);
                                 sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportExtracted', project);
                             }
-                        },
-                        {
-                            label: 'Export ePoc v1',
-                            click: async function () {
-                                console.log('todo');
-                            }
                         }
+                        // {
+                        //     label: 'Export ePoc v1',
+                        //     click: async function () {
+                        //         console.log('todo');
+                        //     }
+                        // }
                     ]
                 },
                 {
