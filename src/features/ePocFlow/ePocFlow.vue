@@ -79,6 +79,8 @@ function update(event) {
         source: event.connection.source,
         target: event.connection.target,
     });
+
+    saveGivenState(savedState);
 }
 
 function nodeChange(event) {
@@ -113,6 +115,8 @@ function connect(event) {
             edges.value
         );
     }
+
+    saveGivenState(savedState);
 }
 
 function nodeDrag(event) {
@@ -172,6 +176,14 @@ function onDragEnd(event) {
     startPos = { x: 0, y: 0 };
 }
 
+function onConnectStart() {
+    savedState = getCurrentState();
+}
+
+function onConnectEnd() {
+    savedState = '';
+}
+
 </script>
 
 <template>
@@ -199,6 +211,8 @@ function onDragEnd(event) {
         @edgeclick="onEdgeclick"
         @pane-click="editorStore.closeFormPanel()"
         @connect="connect"
+        @connect-start="onConnectStart"
+        @connect-end="onConnectEnd"
     >
         <template #node-custom="{ id, data }">
             <PageNode :id="id" :data="data" />
