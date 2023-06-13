@@ -1,13 +1,13 @@
 import { ApiInterface } from '@/src/shared/interfaces/api.interface';
 import { getConnectedEdges, GraphNode, useVueFlow } from '@vue-flow/core';
 import { EpocV1 } from '@/src/shared/classes/epoc-v1';
-import {Assessment, ChoiceCondition, Content, Html, SimpleQuestion, uid, Video} from '@epoc/epoc-types/dist/v1';
+import {Assessment, ChoiceCondition, Content, Html, SimpleQuestion, uid, Video, Audio} from '@epoc/epoc-types/dist/v1';
 import { Question } from '@epoc/epoc-types/dist/v1/question';
-import {questions, standardPages} from '@/src/shared/data';
+import {questions} from '@/src/shared/data';
 
 declare const api: ApiInterface;
 
-const { toObject, onNodesChange, nodes, edges }  = useVueFlow({ id: 'main' });
+const { toObject, nodes, edges }  = useVueFlow({ id: 'main' });
 
 function writeProjectData(): void {
     debounceFunction(500, () => {
@@ -99,6 +99,15 @@ function newContent(epoc: EpocV1, pageNode: GraphNode) : string {
                 summary: contentNode.formValues.summary,
                 transcript: contentNode.formValues.transcript,
 
+            };
+            return epoc.addContent(pageNode.data.contentId, content);
+        } else if(contentNode.action.type === 'audio') {
+            const content: Audio = {
+                ...baseContent,
+                type: 'audio',
+                source: contentNode.formValues.source,
+                summary: contentNode.formValues.summary,
+                transcript: contentNode.formValues.transcript,
             };
             return epoc.addContent(pageNode.data.contentId, content);
         } else if (contentNode.action.type === 'html' || contentNode.action.type === 'text') {
