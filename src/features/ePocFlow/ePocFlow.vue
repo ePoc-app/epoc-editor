@@ -9,7 +9,7 @@ import ChapterNode from './nodes/ChapterNode.vue';
 import ePocNode from './nodes/ePocNode.vue';
 import AddChapterNode from './nodes/AddChapterNode.vue';
 import { NodeElement, SideAction } from '@/src/shared/interfaces';
-import { addPage, createPageFromContent, removeContentFromPage } from '@/src/shared/services/graph';
+import { addPage, createPageFromContent, removeContentFromPage, graphCopy } from '@/src/shared/services/graph';
 import { saveState, saveGivenState, getCurrentState } from '@/src/shared/services/undoRedo.service';
 
 const { vueFlowRef, project, updateEdge, edges, nodes, findNode }  = useVueFlow({ id: 'main' });
@@ -184,6 +184,14 @@ function onConnectEnd() {
     savedState = '';
 }
 
+function onKeyDown(event) {
+    const { key, metaKey, ctrlKey } = event;
+
+    if(metaKey || ctrlKey) {
+        if(key === 'c') graphCopy();
+    }
+}
+
 </script>
 
 <template>
@@ -213,6 +221,7 @@ function onConnectEnd() {
         @connect="connect"
         @connect-start="onConnectStart"
         @connect-end="onConnectEnd"
+        @keydown="onKeyDown"
     >
         <template #node-custom="{ id, data }">
             <PageNode :id="id" :data="data" />

@@ -6,7 +6,7 @@ import FormPanel from '@/src/features/forms/FormPanel.vue';
 import ValidationModal from '../components/ValidationModal.vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { editorService } from '@/src/shared/services';
-import { confirmDelete } from '@/src/shared/services/graph';
+import { confirmDelete, graphPaste } from '@/src/shared/services/graph';
 import { setupUndo } from '../shared/services/undoRedo.service';
 
 const editorStore = useEditorStore();
@@ -14,7 +14,7 @@ const editorStore = useEditorStore();
 editorService.setup();
 
 function addDeleteEvent(event) {
-    const { key } = event;
+    const { key, metaKey, ctrlKey } = event;
 
     if ((key === 'Backspace' || key === 'Delete')) {
         if((event.target as HTMLElement).className.indexOf('vue-flow') !== -1 || event.target === document.body) {
@@ -22,6 +22,14 @@ function addDeleteEvent(event) {
             confirmDelete();
         }
     }
+   
+    if(metaKey || ctrlKey) {
+        if(key === 'v') {
+            event.preventDefault();
+            graphPaste(); 
+        }
+    }
+    
 }
 
 document.body.removeEventListener('keydown', addDeleteEvent);

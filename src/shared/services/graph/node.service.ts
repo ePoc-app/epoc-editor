@@ -217,14 +217,16 @@ export function duplicatePage(): void {
     editorStore.closeFormPanel();
 }
 
-export function getSelectedNodes(isChild: boolean): Node[] {
+export function getSelectedNodes(): Node[] {
     const selectedNodes: Node[] = nodes.value.filter(node => node.selected && isNodeDeletable(node.id));
 
-    //? Chapter nodes can't be selected but can be active
+    /*
+    //? chapters node can't be selected but can be active
     const activeNode = isChild ? findNode(editorStore.openedNodeId) : findNode(editorStore.openedElementId);
-
+    
     if(activeNode && isNodeDeletable(activeNode.id)) selectedNodes.push(activeNode);
-
+    */
+    
     return selectedNodes;
 }
 
@@ -252,7 +254,7 @@ export function isNodeDeletable(id: string): boolean {
 export function deleteSelectedNodes(): void {
     const isChild = Boolean(editorStore.openedNodeId);
 
-    const selectedNodes = getSelectedNodes(isChild);
+    const selectedNodes = getSelectedNodes();
 
     if(isChild) {
         deleteElement(editorStore.openedElementId, editorStore.openedNodeId);
@@ -266,7 +268,7 @@ export function deleteSelectedNodes(): void {
 export function confirmDelete(): void {
     const isChild = Boolean(editorStore.openedNodeId);
 
-    const selectedNodes = getSelectedNodes(isChild);
+    const selectedNodes = getSelectedNodes();
     const selectedEdges = edges.value.filter(edge => edge.selected);
 
     if(selectedNodes.length > 0 || isChild ) {
@@ -309,4 +311,71 @@ export function isFormButtonDisabled(isDisabledFunction: (node) => boolean): boo
     const isChild = Boolean(editorStore.openedNodeId);
     const nodeData = isChild ? findNode(editorStore.openedNodeId).data.elements.find(e => e.id === editorStore.openedElementId) : findNode(editorStore.openedElementId).data;
     return isDisabledFunction(nodeData);
+}
+
+
+// Copy/Paste
+
+let selectedPages = null;
+let selectionRectHeight = null;
+
+export function graphCopy(): void {
+    const selectedNodes = getSelectedNodes();
+    selectedPages = selectedNodes.filter(node => node.type === 'page' || node.type === 'activity');
+    
+    const selectionRect = document.querySelector('.vue-flow__nodesselection-rect') as HTMLElement;
+    
+    //height of the selection rect
+    if(selectionRect) {
+        selectionRectHeight = selectionRect.offsetHeight;
+    }
+}
+
+//TODO: Have to detect the position of multiple pages inside a selection to paste them at the right place
+export function graphPaste(): void {
+    if(!selectedPages) return;
+    
+    const offsetY = selectionRectHeight ? selectionRectHeight : 100;
+    const offsetX = selectionRectHeight ? 0 : 100;
+
+    const newPages = [];
+    for(const page of selectedPages) {
+        const pageId = generateId();
+        
+        const elements = page.data.elements.map(element => {
+            const newElement = JSON.parse(JSON.stringify(element));
+            newElement.id = generateId();
+            newElement.parentId = pageId;
+            return newElement;
+        });
+
+        const newPage: Node = {
+            id: pageId,
+            type: page.type,
+            data: {
+                type: page.data.type,
+                elements,
+                contentId: generateContentId(),
+                formType: page.data.formType,
+                formValues: JSON.parse(JSON.stringify(page.data.formValues)),
+            },
+            position: { x: page.position.x + offsetX, y: page.position.y + offsetY },
+            deletable: true
+        };
+        newPages.push(newPage);
+    }
+    
+    // deselect the old pages
+    for(const page of selectedPages) {
+        page.selected = false;
+    }
+    
+    // select the new pages
+    for(const page of newPages) {
+        page.selected = true;
+    }
+
+    selectedPages = newPages;
+
+    addNodes(newPages);
 }
