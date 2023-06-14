@@ -114,7 +114,11 @@ const openEpocProject = async function (filepath) {
     const startTime = performance.now();
     const workdir = createWorkDir();
     const zip = new AdmZip(filepath, {});
-    zip.extractAllTo(workdir, true, false, null);
+    try {
+        zip.extractAllTo(workdir, true, false, null);
+    } catch (err) {
+        return null;
+    }
 
     const project = {
         name: path.basename(filepath),
@@ -192,7 +196,7 @@ const exportProject = async function (workdir, filepath) {
     if(!exportPath) return null;
 
     const zip = new AdmZip();
-    zip.addLocalFolder(workdir, '/', (entry) => {
+    zip.addLocalFolder(workdir, '', (entry) => {
         const excluded = ['project.json','.DS_Store', '__MACOSX', '.git'];
         return excluded.every(e => entry.indexOf(e) === -1) ;
     });

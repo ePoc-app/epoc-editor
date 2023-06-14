@@ -26,6 +26,11 @@ const setupIpcListener = function (targetWindow) {
 
     ipcMain.on('openEpocProject', async (event, epocProjectPath) => {
         const project = await openEpocProject(epocProjectPath);
+        if(!project) {
+            sendToFrontend(targetWindow, 'epocProjectError');
+            return;
+        }
+
         const flow = await readProjectData(project.workdir);
         sendToFrontend(targetWindow, 'epocProjectReady', {project, flow});
         store.updateState('currentProject', project);

@@ -91,6 +91,12 @@ const setup = function () {
             editorStore.loading = false;
         });
     });
+    
+    api.receive('epocProjectError', () => {
+        waitingToastDismiss();
+        toaster.error('😵 Une erreur s\'est produite');
+        editorStore.loading = false;
+    });
 
     api.receive('epocImportPicked', () => {
         editorStore.loading = true;
