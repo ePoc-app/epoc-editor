@@ -62,6 +62,8 @@ export function saveGivenState(state: string): void {
 export function revertToState(state: string): string {
     const graphStore = useGraphStore();
     const editorStore = useEditorStore();
+    
+    editorStore.closeFormPanel();
 
     const { flow, form } = JSON.parse(state);
 
