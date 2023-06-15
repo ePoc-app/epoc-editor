@@ -284,7 +284,7 @@ export function deleteNode(nodeId: string): void {
     const nodeToDelete = findNode(nodeId);
     applyNodeChanges([{ id:nodeToDelete.id, type: 'remove'}]);
 
-    if(nodeToDelete.type === 'chapter') moveNextChapter(nodeToDelete.id);
+    if(nodeToDelete.type === 'chapter') updateNextChapter(nodeToDelete.id);
 }
 
 export function deleteElement(id: string, pageId?: string): void {
@@ -296,13 +296,12 @@ export function deleteElement(id: string, pageId?: string): void {
     editorStore.closeFormPanel();
 }
 
-export function moveNextChapter(chapterId: string): void {
+export function updateNextChapter(chapterId: string): void {
     const chapters = nodes.value.filter(node => node.type === 'chapter');
 
     for(const chapter of chapters) {
         if(chapter.id <= chapterId) return;
 
-        chapter.position = { x: 0, y: chapter.position.y - 200 };
         chapter.data.title = `Chapitre ${Number(chapter.data.title.split(' ')[1] - 1)}`;
     }
 }
