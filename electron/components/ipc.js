@@ -3,6 +3,11 @@ const store = require('./store');
 const { ipcMain } = require('electron');
 const { runPreview } = require('./preview');
 const { getRecentFiles, pickEpocProject, openEpocProject, newEpocProject, saveEpocProject, exportProject, writeProjectData, writeEpocData, readProjectData, copyFileToWorkdir } = require('./file');
+    
+const copyData = {
+    pages: null,
+    sourceId: null,
+};
 
 /**
  * Setup ipc listeners that are received from renderer process
@@ -100,6 +105,31 @@ const setupIpcListener = function (targetWindow) {
         
         sendToFrontend(event.sender, 'fileImported', await copyFileToWorkdir(store.state.projects[targetWindow.id].workdir, filepath));
     });
+    
+    
+    ipcMain.on('graphCopy', async (event, data) => {
+        if(event.sender !== targetWindow.webContents) return;
+        
+        copyData.pages = data;
+        copyData.sourceId = targetWindow.id;
+    });
+    
+    ipcMain.on('graphPaste', async (event) => {
+        if(event.sender !== targetWindow.webContents) return;
+       
+        if(copyData.sourceId !== targetWindow.id) {
+            const assets = detectAssets(copyData.pages);
+            for(const asset of assets) {
+                const assetPath = path.join(store.state.projects[copyData.sourceId].workdir, asset);
+                await copyFileToWorkdir(store.state.projects[targetWindow.id].workdir, assetPath);
+            }
+        }
+        
+        sendToFrontend(event.sender, 'graphPasted', copyData.pages);
+        
+        copyData.pages = null;
+        copyData.sourceId = null;
+    });
 };
 
 const sendToFrontend = function(webContents, channel, data) {
@@ -122,6 +152,35 @@ const updateSavedProject = function (webContents, filepath) {
         sendToFrontend(webContents, 'epocProjectSaved', project);
     }
 };
+
+/**
+ * Detect & return all assets paths from a given data
+ * @param data
+ * @returns {String[]}
+ */
+const detectAssets = function(data) {
+    data = JSON.parse(data);
+    const formValues = [];
+    for(const page of data) {
+        for(const element of page.data.elements) {
+            formValues.push(element.formValues);
+        }
+    }
+
+    const regex = /assets\//;
+    const assetPaths = [];
+    formValues.forEach((item) => {
+        Object.values(item).forEach((value) => {
+            if (regex.test(value)) {
+                if(!assetPaths.includes(value)) {
+                    assetPaths.push(value);
+                }
+            }
+        });
+    });
+
+    return assetPaths;
+}; 
 
 module.exports = {
     setupIpcListener,

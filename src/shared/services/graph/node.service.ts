@@ -7,6 +7,7 @@ import { nextTick, toRaw, watch } from 'vue';
 
 import { addContentToPage, deleteContent } from './content.service';
 import { generateContentId, generateId } from '../graph.service';
+import { ApiInterface } from '../../interfaces/api.interface';
 
 const { nodes, edges, addNodes, addEdges, findNode, applyEdgeChanges, applyNodeChanges } = useVueFlow({ id: 'main' });
 
@@ -314,24 +315,33 @@ export function isFormButtonDisabled(isDisabledFunction: (node) => boolean): boo
 
 
 // Copy/Paste
+declare const api: ApiInterface;
 
-let selectedPages = null;
-let selectionRectHeight = null;
+function setupCopyPaste(): void {
+    api.receive('graphPasted', (selectedPages) => {
+        handleGraphPaste(JSON.parse(selectedPages), null);
+    });
+}
+
+setupCopyPaste();
 
 export function graphCopy(): void {
     const selectedNodes = getSelectedNodes();
-    selectedPages = selectedNodes.filter(node => node.type === 'page' || node.type === 'activity');
+    const selectedPages = selectedNodes.filter(node => node.type === 'page' || node.type === 'activity');
     
-    const selectionRect = document.querySelector('.vue-flow__nodesselection-rect') as HTMLElement;
+    // const selectionRect = document.querySelector('.vue-flow__nodesselection-rect') as HTMLElement;
     
     //height of the selection rect
-    if(selectionRect) {
-        selectionRectHeight = selectionRect.offsetHeight;
-    }
+    // const selectionRectHeight = selectionRect ? selectionRect.offsetHeight : null;
+    
+    api.send('graphCopy', JSON.stringify(selectedPages));
 }
 
-//TODO: Have to detect the position of multiple pages inside a selection to paste them at the right place
-export function graphPaste(): void {
+export function graphPaste() {
+    api.send('graphPaste');
+}
+
+function handleGraphPaste(selectedPages, selectionRectHeight): void {
     if(!selectedPages) return;
     
     const offsetY = selectionRectHeight ? selectionRectHeight : 100;
@@ -373,8 +383,8 @@ export function graphPaste(): void {
     for(const page of newPages) {
         page.selected = true;
     }
-
-    selectedPages = newPages;
+    // automatically copy the new pages so that they can be pasted again without superposition
+    // api.send('graphCopy', { selectedPages: newPages, selectionRectHeight: offsetY });
 
     addNodes(newPages);
 }

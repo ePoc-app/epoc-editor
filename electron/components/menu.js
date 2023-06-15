@@ -42,12 +42,14 @@ module.exports.setupMenu = function () {
             label: 'App',
             submenu: [
                 {label: 'À propos', selector: 'orderFrontStandardAboutPanel:'},
+                /*
                 {
                     label: 'Nouvelle fenêtre',
                     click: function () {
                         openWindow();
                     }
                 },
+                */
                 {
                     label: 'Quitter',
                     accelerator: 'CmdOrCtrl+Q',
