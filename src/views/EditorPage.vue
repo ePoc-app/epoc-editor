@@ -7,7 +7,7 @@ import ValidationModal from '../components/ValidationModal.vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { editorService } from '@/src/shared/services';
 import { confirmDelete, graphPaste } from '@/src/shared/services/graph';
-import { setupUndo } from '../shared/services/undoRedo.service';
+import { saveState, setupUndo } from '../shared/services/undoRedo.service';
 
 const editorStore = useEditorStore();
 
@@ -26,6 +26,7 @@ function addDeleteEvent(event) {
     if(metaKey || ctrlKey) {
         if(key === 'v') {
             event.preventDefault();
+            saveState();
             graphPaste(); 
         }
     }
