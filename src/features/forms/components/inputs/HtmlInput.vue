@@ -81,7 +81,6 @@ let savedState = '';
 let startValue = '';
 
 function onFocus() {
-    console.log('content', content.value);
     startValue = content.value; 
     savedState = getCurrentState(true);
 }

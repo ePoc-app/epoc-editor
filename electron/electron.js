@@ -1,16 +1,14 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { app, BrowserWindow, protocol, session } = require('electron');
-const { createMainWindow } = require('./components/main');
+const { app, BrowserWindow } = require('electron');
+const { createMainWindow, setupWindow } = require('./components/main');
 const { createSplashWindow } = require('./components/splash');
 const { setupIpcListener } = require('./components/ipc');
 const { waitEvent, waitAll, wait} = require('./components/utils');
 const { cleanAllWorkdir } = require('./components/file');
 const { cleanPreview } = require('./components/preview');
 const path = require('path');
-const store = require('./components/store');
 
-const { popupMenu } = require('./components/contextMenu');
 
 let mainWindow;
 let splashWindow;
@@ -47,36 +45,7 @@ app.whenReady().then(() => {
         }
     });
 
-    // Intercept assets:// protocol to serve local files from workdir
-    protocol.registerFileProtocol('assets', (request, callback) => {
-        const workdir = store.state.currentProject.workdir;
-        const filepath = request.url.substring(9);
-        callback({path: path.join(workdir, filepath)});
-    }, (err) => {
-        if (err) console.error('Failed to register protocol');
-    });
-
-    // Intercept all url starting with assets/ and redirect it to custom protocol (wysiwyg/quill)
-    const filter = {
-        urls: [
-            'http://localhost:8000/assets/*',
-            'http://localhost:8000/images/*',
-            'http://localhost:8000/videos/*',
-            `file://${encodeURI(path.join(__dirname, '../dist/assets/'))}*`,
-            `file://${encodeURI(path.join(__dirname, '../dist/images/'))}*`,
-            `file://${encodeURI(path.join(__dirname, '../dist/videos/'))}*`
-        ]
-    };
-
-    session.defaultSession.webRequest.onBeforeRequest(filter, (details, callback) => {
-        const assetsFolder = ['assets/', 'images/', 'videos/'].find(folder => details.url.includes(folder));
-        const isAppFile = ['.js', '.css', '.html', '.ttf'].some(ext => details.url.includes(ext));
-        if (mainWindow.webContents.id === details.webContents.id && !isAppFile && assetsFolder) {
-            const filepath = details.url.split(assetsFolder)[1];
-            return callback({ redirectURL: `assets://${assetsFolder}${filepath}` });
-        }
-        callback({});
-    });
+    setupWindow(mainWindow);
 
     app.on('activate', function () {
         // On macOS it's common to re-create a window in the app when the dock icon is clicked and there are no other windows open.

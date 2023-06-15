@@ -40,7 +40,19 @@ async function runPreview(workdir, contentPath) {
         fs.mkdirSync(previewEpocPath, {recursive: true});
         fs.symlinkSync(workdir, ePocRootFolder, 'junction');
         previewInitialized = true;
+    } else {
+        //TODO: View if can detect a change of current workdir and update the preview
+        // Update preview files
+        const zip = new AdmZip(previewArchive);
+        zip.extractAllTo(previewPath, true);
+
+        // Update symlink
+        if (fs.existsSync(ePocRootFolder)) {
+            fs.unlinkSync(ePocRootFolder);
+        }
+        fs.symlinkSync(workdir, ePocRootFolder, 'junction');
     }
+    
 
     const server = await createPreviewServer();
     await createPreviewWindow(server, ePocContentPath);

@@ -3,14 +3,14 @@ const events = require('events');
 class BackendStore {
     constructor (){
         this.state = {
-            currentProject: null
+            projects: {},
         };
 
         this.em = new events.EventEmitter();
     }
 
     updateState (key, value){
-        this.state[key] = value;
+        this.state[key] = { ...this.state[key], ...value };
         this.em.emit('stateUpdated');
     }
 }

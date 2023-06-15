@@ -2,6 +2,39 @@ const { app, BrowserWindow, Menu } = require('electron');
 const { sendToFrontend, updateSavedProject } = require('./ipc');
 const { pickEpocToImport, pickEpocProject, getRecentFiles, saveEpocProject, saveAsEpocProject } = require('./file');
 const store = require('./store');
+const { waitEvent } = require('./utils');
+const path = require('path');
+
+//TODO: this functin is temparory
+function openWindow() {
+    const isDev = process.env.IS_DEV === 'true';
+    const mainWindow = new BrowserWindow({
+        show: false,
+        icon: 'favicon.png',
+        width: 1500,
+        height: 1200,
+        'minHeight': 400,
+        'minWidth': 800,
+        webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: true,
+            preload: path.join(__dirname, '../preload.js')
+        }
+    });
+
+
+    // load the index.html of the app.
+    mainWindow.loadURL(
+        isDev
+            ? 'http://localhost:8000'
+            : `file://${path.join(__dirname, '../../dist/index.html')}`
+    ).then();
+    mainWindow.center();
+
+    waitEvent(mainWindow, 'ready-to-show').then(() => {
+        mainWindow.show();
+    });
+}
 
 module.exports.setupMenu = function () {
     const mainMenuTemplate = [
@@ -9,6 +42,12 @@ module.exports.setupMenu = function () {
             label: 'App',
             submenu: [
                 {label: 'À propos', selector: 'orderFrontStandardAboutPanel:'},
+                {
+                    label: 'Nouvelle fenêtre',
+                    click: function () {
+                        openWindow();
+                    }
+                },
                 {
                     label: 'Quitter',
                     accelerator: 'CmdOrCtrl+Q',
@@ -62,7 +101,7 @@ module.exports.setupMenu = function () {
                             click: async function () {
                                 sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportPicked');
                                 const project = await pickEpocToImport();
-                                store.updateState('currentProject', project);
+                                store.updateState('projects', {[BrowserWindow.getFocusedWindow().id]: project });
                                 sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportExtracted', project);
                             }
                         }
@@ -78,14 +117,14 @@ module.exports.setupMenu = function () {
                     id: 'save',
                     label: 'Sauvegarder',
                     accelerator: 'CmdOrCtrl+S',
-                    enabled: !!(store.state.currentProject && store.state.currentProject.workdir),
+                    enabled: !!(store.state.projects[BrowserWindow.getFocusedWindow().id] && store.state.projects[BrowserWindow.getFocusedWindow().id].workdir),
                     click: async function () {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectSaving');
-                        const result = await saveEpocProject(store.state.currentProject);
+                        const result = await saveEpocProject(store.state.projects[BrowserWindow.getFocusedWindow().id]);
                         if (result) {
-                            updateSavedProject(BrowserWindow.getFocusedWindow(), result);
+                            updateSavedProject(BrowserWindow.getFocusedWindow().webContents, result);
                         } else {
-                            sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectSaveCanceled');
+                            sendToFrontend(BrowserWindow.getFocusedWindow().webContents, 'epocProjectSaveCanceled');
                         }
                     }
                 },
@@ -93,14 +132,14 @@ module.exports.setupMenu = function () {
                     id: 'saveAs',
                     label: 'Sauvegarder sous...',
                     accelerator: 'Shift+CmdOrCtrl+S',
-                    enabled: !!(store.state.currentProject && store.state.currentProject.workdir),
+                    enabled: !!(store.state.projects[BrowserWindow.getFocusedWindow().id] && store.state.projects[BrowserWindow.getFocusedWindow().id].workdir),
                     click: async function () {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectSaving');
-                        const result = await saveAsEpocProject(store.state.currentProject);
+                        const result = await saveAsEpocProject(store.state.projects[BrowserWindow.getFocusedWindow().id]);
                         if (result) {
-                            updateSavedProject(BrowserWindow.getFocusedWindow(), result);
+                            updateSavedProject(BrowserWindow.getFocusedWindow().webContents, result);
                         } else {
-                            sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectSaveCanceled');
+                            sendToFrontend(BrowserWindow.getFocusedWindow().webContents, 'epocProjectSaveCanceled');
                         }
                     }
                 }
@@ -157,7 +196,7 @@ module.exports.setupMenu = function () {
 
     // Update menu on different state
     store.em.on('stateUpdated', () => {
-        const isProjectOpened = store.state.currentProject && store.state.currentProject.workdir;
+        const isProjectOpened = store.state.projects[BrowserWindow.getFocusedWindow().id] && store.state.projects[BrowserWindow.getFocusedWindow().id].workdir;
         mainMenu.getMenuItemById('save').enabled = isProjectOpened;
         mainMenu.getMenuItemById('saveAs').enabled = isProjectOpened;
     });
