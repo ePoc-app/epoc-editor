@@ -30,5 +30,5 @@ contextBridge.exposeInMainWorld('api', {
 });
 
 contextBridge.exposeInMainWorld('env', {
-    isDev: process.env.IS_DEV === 'true'
+    isDev: !!MAIN_WINDOW_VITE_DEV_SERVER_URL
 });

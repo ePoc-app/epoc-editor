@@ -9,7 +9,6 @@ const store = require('./store');
  * @returns {Electron.CrossProcessExports.BrowserWindow}
  */
 module.exports.createMainWindow = function () {
-    const isDev = process.env.IS_DEV === 'true';
     const mainWindow = new BrowserWindow({
         show: false,
         icon: 'favicon.png',
@@ -20,24 +19,23 @@ module.exports.createMainWindow = function () {
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
-            preload: path.join(__dirname, '../preload.js'),
+            preload: path.join(__dirname, 'preload.js'),
             partition: `persist:${Math.random()}`
         },
     });
-    
 
     mainWindow.on('focus', () => {
         setupMenu();
     });
 
     // load the index.html of the app.
-    mainWindow.loadURL(
-        isDev
-            ? 'http://localhost:8000'
-            : `file://${path.join(__dirname, '../../dist/index.html')}`
-    ).then();
+    if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+        mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
+    } else {
+        mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+    }
     mainWindow.center();
-    
+
     store.state.projects[mainWindow.id] = {};
 
     return mainWindow;
@@ -56,17 +54,20 @@ module.exports.setupWindow = function (window) {
     }
 
     // Intercept all url starting with assets/ and redirect it to custom protocol (wysiwyg/quill)
-    const filter = {
+    const filter = MAIN_WINDOW_VITE_DEV_SERVER_URL ? {
         urls: [
-            'http://localhost:8000/assets/*',
-            'http://localhost:8000/images/*',
-            'http://localhost:8000/videos/*',
+            `${MAIN_WINDOW_VITE_DEV_SERVER_URL}/assets/*`,
+            `${MAIN_WINDOW_VITE_DEV_SERVER_URL}/images/*`,
+            `${MAIN_WINDOW_VITE_DEV_SERVER_URL}/videos/*`
+        ]
+    } : {
+        urls: [
             `file://${encodeURI(path.join(__dirname, '../dist/assets/'))}*`,
             `file://${encodeURI(path.join(__dirname, '../dist/images/'))}*`,
             `file://${encodeURI(path.join(__dirname, '../dist/videos/'))}*`
         ]
     };
-    
+
     window.webContents.session.webRequest.onBeforeRequest(filter, (details, callback) => {
         const assetsFolder = ['assets/', 'images/', 'videos/'].find(folder => details.url.includes(folder));
         const isAppFile = ['.js', '.css', '.html', '.ttf'].some(ext => details.url.includes(ext));

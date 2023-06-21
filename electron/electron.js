@@ -7,6 +7,7 @@ const { setupIpcListener } = require('./components/ipc');
 const { waitEvent, waitAll, wait} = require('./components/utils');
 const { cleanAllWorkdir } = require('./components/file');
 const { cleanPreview } = require('./components/preview');
+const updater = require('update-electron-app');
 const path = require('path');
 
 
@@ -28,6 +29,7 @@ app.on('will-finish-launching', () => {
 
 // This method will be called when Electron has finished initialization and is ready to create browser windows.
 app.whenReady().then(() => {
+    updater({repo: 'https://github.com/inrialearninglab/epoc-editor.git'});
     mainWindow = createMainWindow();
     splashWindow = createSplashWindow();
 
@@ -36,7 +38,7 @@ app.whenReady().then(() => {
     // Display splash screen for minimum 2s then display main window
     waitAll([
         waitEvent(mainWindow, 'ready-to-show'),
-        wait(200)
+        wait(2000)
     ]).then(async () => {
         splashWindow.destroy();
         mainWindow.show();

@@ -1,0 +1,341 @@
+{
+  "logFormatVersion": 1,
+  "jobId": "820284b7-3fea-4b40-b89c-d55905c75e39",
+  "status": "Invalid",
+  "statusSummary": "Archive contains critical validation errors",
+  "statusCode": 4000,
+  "archiveFilename": "XXXX_Editor.zip",
+  "uploadDate": "2023-06-21T08:22:34Z",
+  "sha256": "ecda474b3d8917f8503a00a8b5c957f57ef9de1780f57608de6fdeb50ad2bee6",
+  "ticketContents": null,
+  "issues": [
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/MacOS/XXXX Editor",
+      "message": "The binary is not signed.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087721",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/MacOS/XXXX Editor",
+      "message": "The signature does not include a secure timestamp.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087733",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/MacOS/XXXX Editor",
+      "message": "The executable does not have the hardened runtime enabled.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087724",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Resources/app/node_modules/fsevents/fsevents.node",
+      "message": "The binary is not signed.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087721",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Resources/app/node_modules/fsevents/fsevents.node",
+      "message": "The signature does not include a secure timestamp.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087733",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Resources/app/node_modules/fsevents/fsevents.node",
+      "message": "The binary is not signed with a valid Developer ID certificate.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087721",
+      "architecture": "arm64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Resources/app/node_modules/fsevents/fsevents.node",
+      "message": "The signature does not include a secure timestamp.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087733",
+      "architecture": "arm64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework",
+      "message": "The binary is not signed.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087721",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework",
+      "message": "The signature does not include a secure timestamp.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087733",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Libraries/libEGL.dylib",
+      "message": "The binary is not signed.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087721",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Libraries/libEGL.dylib",
+      "message": "The signature does not include a secure timestamp.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087733",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Libraries/libvk_swiftshader.dylib",
+      "message": "The binary is not signed.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087721",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Libraries/libvk_swiftshader.dylib",
+      "message": "The signature does not include a secure timestamp.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087733",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Libraries/libGLESv2.dylib",
+      "message": "The binary is not signed.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087721",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Libraries/libGLESv2.dylib",
+      "message": "The signature does not include a secure timestamp.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087733",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Libraries/libffmpeg.dylib",
+      "message": "The binary is not signed.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087721",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Libraries/libffmpeg.dylib",
+      "message": "The signature does not include a secure timestamp.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087733",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Helpers/chrome_crashpad_handler",
+      "message": "The binary is not signed.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087721",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Helpers/chrome_crashpad_handler",
+      "message": "The signature does not include a secure timestamp.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087733",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Helpers/chrome_crashpad_handler",
+      "message": "The executable does not have the hardened runtime enabled.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087724",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/ReactiveObjC.framework/Versions/A/ReactiveObjC",
+      "message": "The binary is not signed.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087721",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/ReactiveObjC.framework/Versions/A/ReactiveObjC",
+      "message": "The signature does not include a secure timestamp.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087733",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/Squirrel.framework/Versions/A/Squirrel",
+      "message": "The binary is not signed.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087721",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/Squirrel.framework/Versions/A/Squirrel",
+      "message": "The signature does not include a secure timestamp.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087733",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/Squirrel.framework/Versions/A/Resources/ShipIt",
+      "message": "The binary is not signed.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087721",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/Squirrel.framework/Versions/A/Resources/ShipIt",
+      "message": "The signature does not include a secure timestamp.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087733",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/Squirrel.framework/Versions/A/Resources/ShipIt",
+      "message": "The executable does not have the hardened runtime enabled.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087724",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/Mantle.framework/Versions/A/Mantle",
+      "message": "The binary is not signed.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087721",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/Mantle.framework/Versions/A/Mantle",
+      "message": "The signature does not include a secure timestamp.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087733",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/XXXX Editor Helper (GPU).app/Contents/MacOS/XXXX Editor Helper (GPU)",
+      "message": "The binary is not signed.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087721",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/XXXX Editor Helper (GPU).app/Contents/MacOS/XXXX Editor Helper (GPU)",
+      "message": "The signature does not include a secure timestamp.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087733",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/XXXX Editor Helper (GPU).app/Contents/MacOS/XXXX Editor Helper (GPU)",
+      "message": "The executable does not have the hardened runtime enabled.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087724",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/XXXX Editor Helper (Plugin).app/Contents/MacOS/XXXX Editor Helper (Plugin)",
+      "message": "The binary is not signed.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087721",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/XXXX Editor Helper (Plugin).app/Contents/MacOS/XXXX Editor Helper (Plugin)",
+      "message": "The signature does not include a secure timestamp.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087733",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/XXXX Editor Helper (Plugin).app/Contents/MacOS/XXXX Editor Helper (Plugin)",
+      "message": "The executable does not have the hardened runtime enabled.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087724",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/XXXX Editor Helper.app/Contents/MacOS/XXXX Editor Helper",
+      "message": "The binary is not signed.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087721",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/XXXX Editor Helper.app/Contents/MacOS/XXXX Editor Helper",
+      "message": "The signature does not include a secure timestamp.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087733",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/XXXX Editor Helper.app/Contents/MacOS/XXXX Editor Helper",
+      "message": "The executable does not have the hardened runtime enabled.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087724",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/XXXX Editor Helper (Renderer).app/Contents/MacOS/XXXX Editor Helper (Renderer)",
+      "message": "The binary is not signed.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087721",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/XXXX Editor Helper (Renderer).app/Contents/MacOS/XXXX Editor Helper (Renderer)",
+      "message": "The signature does not include a secure timestamp.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087733",
+      "architecture": "x86_64"
+    },
+    {
+      "severity": "error",
+      "code": null,
+      "path": "XXXX_Editor.zip/XXXX Editor.app/Contents/Frameworks/XXXX Editor Helper (Renderer).app/Contents/MacOS/XXXX Editor Helper (Renderer)",
+      "message": "The executable does not have the hardened runtime enabled.",
+      "docUrl": "https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues#3087724",
+      "architecture": "x86_64"
+    }
+  ]
+}

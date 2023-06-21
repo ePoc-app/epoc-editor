@@ -5,7 +5,7 @@ const serveStatic = require('serve-static');
 const AdmZip = require('adm-zip');
 const { app, BrowserWindow } = require('electron');
 
-const isDev = process.env.IS_DEV === 'true';
+const isDev = !!MAIN_WINDOW_VITE_DEV_SERVER_URL;
 const resourcePath = isDev ? path.join(__dirname, '../../public') : process.resourcesPath;
 const previewArchive = path.join(resourcePath, 'preview.zip');
 const appDataPath = path.join(app.getPath('userData'));
