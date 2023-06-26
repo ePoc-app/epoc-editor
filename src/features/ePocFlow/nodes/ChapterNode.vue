@@ -45,6 +45,10 @@ function openForm() {
 
 function mouseDown() {
     editorStore.closeFormPanel();
+    
+    // unselect all nodes except current node
+    nodes.value.forEach((node) => node.selected = currentNode.id === node.id);
+
     const chapters = nodes.value.filter(node => node.type === 'chapter');
     chapters.forEach((chapter) => {
         if(chapter.id !== currentNode.id) chapter.selected = false;
