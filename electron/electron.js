@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, autoUpdater } = require('electron');
 const { createMainWindow, setupWindow } = require('./components/main');
 const { createSplashWindow } = require('./components/splash');
 const { setupIpcListener } = require('./components/ipc');
@@ -31,6 +31,10 @@ app.whenReady().then(() => {
     mainWindow = createMainWindow();
     splashWindow = createSplashWindow();
 
+    require('update-electron-app')({
+        repo: 'inrialearninglab/epoc-editor'
+    })
+
     setupIpcListener(mainWindow);
 
     // Display splash screen for minimum 2s then display main window
@@ -54,8 +58,15 @@ app.whenReady().then(() => {
     app.on('window-all-closed', () => {
         cleanAllWorkdir();
         cleanPreview();
-        app.quit();
+        if (process.platform !== 'darwin') {
+            app.quit();
+        }
     });
+
+    autoUpdater.on('update-downloaded',(e) => {
+        console.log('Update ready');
+        console.log(e);
+    })
 
     //? Context menu disabled for now
     // mainWindow.webContents.on('context-menu', () => {

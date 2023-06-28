@@ -1,6 +1,8 @@
 const cp = require('child_process');
 const fs = require('fs');
 const packageJson = require('./package.json');
+require('dotenv').config();
+const { notarize } = require('electron-notarize');
 
 /**
  * @type {import('electron-builder').Configuration}
@@ -12,8 +14,17 @@ module.exports = {
     productName: 'ePoc Editor',
     copyright: 'Copyright © 2022 ${author}',
     buildNumber: cp.execSync('git rev-parse --short HEAD').toString().trim(),
+    publish: {
+        provider: 'github',
+        repo: 'https://github.com/inrialearninglab/epoc-editor'
+    },
     mac: {
-        category: 'public.app-category.utilities'
+        category: 'public.app-category.utilities',
+        identity: 'Mac Developer: Benoit Rospars (FAMSA64QA5)',
+        hardenedRuntime: true,
+        gatekeeperAssess: false,
+        entitlements: './entitlements.plist',
+        entitlementsInherit: './entitlements.plist',
     },
     nsis: {
         oneClick: false,
@@ -53,6 +64,24 @@ module.exports = {
         role: 'Editor',
         isPackage: false,
         rank: 'Default'
+    },
+    afterSign: async (context) => {
+        const { electronPlatformName, appOutDir } = context;
+        if (electronPlatformName !== 'darwin') {
+            return;
+        }
+
+        const appName = context.packager.appInfo.productFilename;
+
+        /*return await notarize({
+            tool: 'legacy',
+            appBundleId: 'fr.inria.epoc-editor',
+            appPath: `${appOutDir}/${appName}.app`,
+            appleId: process.env.APPLE_ID,
+            appleIdPassword: process.env.APPLE_PASSWORD,
+            teamId: process.env.APPLE_TEAM_ID,
+            ascProvider: 'INRIA'
+        });*/
     }
 };
 
