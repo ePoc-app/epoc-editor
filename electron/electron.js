@@ -58,9 +58,7 @@ app.whenReady().then(() => {
     app.on('window-all-closed', () => {
         cleanAllWorkdir();
         cleanPreview();
-        if (process.platform !== 'darwin') {
-            app.quit();
-        }
+        app.quit();
     });
 
     autoUpdater.on('update-downloaded',(e) => {
