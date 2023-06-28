@@ -9,7 +9,7 @@ const { notarize } = require('electron-notarize');
  * @see https://www.electron.build/configuration/configuration
  */
 module.exports = {
-    artifactName: '${name}_v${version}.${ext}',
+    artifactName: '${name}_v${version}_${os}_${arch}.${ext}',
     appId: 'fr.inria.epoc-editor',
     productName: 'ePoc Editor',
     copyright: 'Copyright © 2022 ${author}',
