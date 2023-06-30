@@ -1,56 +1,14 @@
 stages:
   - build
-  - release
-  - autorelease
-
 build:
   image: node:16
   stage: build
   script:
-    - dpkg --add-architecture i386
-    - apt-get update -qy
-    - apt-get -y install curl wine32
     - npm i
     - npm run updatePreview
-    - npm run build-all
+    - npm run build
   artifacts:
     expire_in: 1 week
     paths:
-      - dist_electron/*.zip
-      - dist_electron/*.deb
-      - dist_electron/*.exe
-  
-  rules:
-    - if: $RELEASE_NAME == null && ($CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_TAG)
-
-release:
-  stage: release
-  needs:
-    - build
-  script:
-    - ls
-  artifacts:
-    expire_in: 1 yr
-    paths:
-      - dist_electron/*.zip
-      - dist_electron/*.deb
-      - dist_electron/*.exe
-  rules:
-    - if: '$CI_COMMIT_TAG'
-
-autorelease:
-  image: node:16
-  stage: autorelease
-  script:
-    - git remote remove origin
-    - git remote add origin https://oauth2:${PERSONAL_ACCESS_TOKEN}@gitlab.inria.fr/learninglab/epoc/epoc-editor.git
-    - git config --global user.name "${GITLAB_USER_NAME}"
-    - git config --global user.email "${GITLAB_USER_EMAIL}"
-    - npm version "$RELEASE_NAME-beta" --allow-same-version=true --git-tag-version=false
-    - git add package.json package-lock.json
-    - git commit -m "Bump version"
-    - git tag -f v$RELEASE_NAME
-    - git push origin v$RELEASE_NAME
-  rules:
-    - if: $RELEASE_NAME != null && $PERSONAL_ACCESS_TOKEN != null
+      - dist_electron/*
 
