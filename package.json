@@ -15,7 +15,7 @@
     "electron": "wait-on tcp:8000 && cross-env IS_DEV=true electron .",
     "electron:builder": "electron-builder --config electron-builder.conf.js",
     "dev": "concurrently -k 'cross-env BROWSER=none vite' 'npm run electron'",
-    "build": "vue-tsc --noEmit && cross-env ELECTRON=true vite build && npm run electron:builder",
+    "build": "vue-tsc --noEmit && cross-env ELECTRON=true vite build && npm run electron:builder -- --publish never",
     "release": "npm run build -- -- --x64 --mac --win nsis --linux AppImage --publish always",
     "test": "vitest",
     "coverage": "vitest --coverage",
