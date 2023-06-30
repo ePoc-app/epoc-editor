@@ -14,6 +14,12 @@ module.exports = {
     productName: 'ePoc Editor',
     copyright: 'Copyright © 2022 ${author}',
     buildNumber: cp.execSync('git rev-parse --short HEAD').toString().trim(),
+    publish: {
+        provider: 'github',
+        repo: 'epoc-editor',
+        owner: 'inrialearninglab',
+        releaseType: 'release'
+    },
     mac: {
         category: 'public.app-category.utilities',
         identity: 'Mac Developer: Benoit Rospars (FAMSA64QA5)',

@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { app, BrowserWindow, autoUpdater } = require('electron');
+const { app, BrowserWindow } = require('electron');
 const { createMainWindow, setupWindow } = require('./components/main');
 const { createSplashWindow } = require('./components/splash');
 const { setupIpcListener } = require('./components/ipc');
@@ -8,7 +8,7 @@ const { waitEvent, waitAll, wait} = require('./components/utils');
 const { cleanAllWorkdir } = require('./components/file');
 const { cleanPreview } = require('./components/preview');
 const path = require('path');
-
+const { autoUpdater } = require('electron-updater');
 
 let mainWindow;
 let splashWindow;
@@ -26,14 +26,12 @@ app.on('will-finish-launching', () => {
     });
 });
 
+autoUpdater.checkForUpdatesAndNotify();
+
 // This method will be called when Electron has finished initialization and is ready to create browser windows.
 app.whenReady().then(() => {
     mainWindow = createMainWindow();
     splashWindow = createSplashWindow();
-
-    require('update-electron-app')({
-        repo: 'inrialearninglab/epoc-editor'
-    });
 
     setupIpcListener(mainWindow);
 
