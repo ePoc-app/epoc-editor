@@ -7,6 +7,7 @@ import ContentButton from '@/src/components/ContentButton.vue';
 import { addContentToPage, removeContentFromPage, changeContentOrder, getSelectedNodes } from '@/src/shared/services/graph';
 import { moveGuard } from '@/src/shared/utils/draggable';
 import { graphService } from '@/src/shared/services';
+import { saveState } from '@/src/shared/services/undoRedo.service';
 
 const editorStore = useEditorStore();
 
@@ -63,11 +64,13 @@ function change(event) {
     const { added, moved, removed } = event;
 
     if(added && dropped.value) {
+        saveState();
         dropped.value = false;
         addContentToPage(currentNode.value.id, added.element, added.newIndex);
     }
 
     if(moved) {
+        saveState();
         const { oldIndex, newIndex } = moved;
         changeContentOrder(oldIndex, newIndex, props.id);
     }
