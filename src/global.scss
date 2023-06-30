@@ -82,7 +82,7 @@ body,
     width: 60px;
     height: 60px;
     border-radius: 12px;
-    border: 1px solid var(--border);
+    border: 2px solid var(--border);
     background-color: var(--content);
     box-shadow: 0 1px 8px 0 var(--shadow);
     transition: all 0.2s ease-in-out;
@@ -111,7 +111,7 @@ body,
       }
       &.active {
         color: var(--editor-blue);
-        border: 1px solid var(--editor-blue);
+        border: 2px solid var(--editor-blue);
         box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);
       }
     }

@@ -51,7 +51,7 @@ const epoc: Node = {
 const add: Node = {
     id: '2',
     type: 'add',
-    position: {x: 32, y: 128},
+    position: {x: 34, y: 128},
     draggable: false,
     deletable: false
 };

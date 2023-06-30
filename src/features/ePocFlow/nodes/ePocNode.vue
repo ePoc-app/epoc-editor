@@ -2,6 +2,7 @@
 import { useEditorStore } from '@/src/shared/stores';
 import { useVueFlow } from '@vue-flow/core';
 import ContentButton from '@/src/components/ContentButton.vue';
+import { graphService } from '@/src/shared/services';
 
 const editorStore = useEditorStore();
 
@@ -28,6 +29,10 @@ function openForm() {
     editorStore.openFormPanel(currentNode.id, currentNode.data.formType);
 }
 
+function onContextMenu() {
+    graphService.openContextMenu('epoc', {});    
+}
+
 </script>
 
 <template>
@@ -40,6 +45,7 @@ function openForm() {
             subtitle="ePoc"
             @click="openForm()"
             @mousedown="editorStore.closeFormPanel()"
+            @contextmenu="onContextMenu"
         />
     </div>
 </template>

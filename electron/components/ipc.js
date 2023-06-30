@@ -3,6 +3,8 @@ const store = require('./store');
 const { ipcMain } = require('electron');
 const { runPreview } = require('./preview');
 const { getRecentFiles, pickEpocProject, openEpocProject, newEpocProject, saveEpocProject, exportProject, writeProjectData, writeEpocData, readProjectData, copyFileToWorkdir } = require('./file');
+const { Menu } = require('electron');
+const contextMenu = require('./contextMenu');
     
 const copyData = {
     pages: null,
@@ -109,13 +111,20 @@ const setupIpcListener = function (targetWindow) {
     
     ipcMain.on('graphCopy', async (event, data) => {
         if(event.sender !== targetWindow.webContents) return;
+
+        const parsedData = JSON.parse(data);
+        const { pages } = parsedData;
         
-        copyData.pages = data;
+        copyData.pages = pages;
         copyData.sourceId = targetWindow.id;
     });
     
-    ipcMain.on('graphPaste', async (event) => {
+    ipcMain.on('graphPaste', async (event, data) => {
         if(event.sender !== targetWindow.webContents) return;
+        if(!copyData.pages) return;
+
+        const parsedData = JSON.parse(data);
+        const { position } = parsedData;
        
         if(copyData.sourceId !== targetWindow.id) {
             const assets = detectAssets(copyData.pages);
@@ -125,11 +134,21 @@ const setupIpcListener = function (targetWindow) {
             }
         }
         
-        sendToFrontend(event.sender, 'graphPasted', copyData.pages);
+        sendToFrontend(event.sender, 'graphPasted', { selectedPages: copyData.pages, position });
         
         copyData.pages = null;
         copyData.sourceId = null;
     });
+    
+    ipcMain.on('contextMenu', async(event, data) => {
+        const popupMenu = Menu.buildFromTemplate(contextMenu.getTemplateFromContext(sendToFrontend, data));
+        popupMenu.popup(targetWindow.webContents);
+
+        popupMenu.on('menu-will-close', () => {
+            sendToFrontend(targetWindow.webContents, 'contextMenuClosed');
+        });
+    });
+
 };
 
 const sendToFrontend = function(webContents, channel, data) {
@@ -160,6 +179,8 @@ const updateSavedProject = function (webContents, filepath) {
  */
 const detectAssets = function(data) {
     data = JSON.parse(data);
+    if(!data) return;
+
     const formValues = [];
     for(const page of data) {
         for(const element of page.data.elements) {

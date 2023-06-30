@@ -33,7 +33,7 @@ app.whenReady().then(() => {
 
     require('update-electron-app')({
         repo: 'inrialearninglab/epoc-editor'
-    })
+    });
 
     setupIpcListener(mainWindow);
 
@@ -64,7 +64,7 @@ app.whenReady().then(() => {
     autoUpdater.on('update-downloaded',(e) => {
         console.log('Update ready');
         console.log(e);
-    })
+    });
 
     //? Context menu disabled for now
     // mainWindow.webContents.on('context-menu', () => {

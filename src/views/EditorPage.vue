@@ -8,6 +8,7 @@ import { useEditorStore } from '@/src/shared/stores';
 import { editorService } from '@/src/shared/services';
 import { confirmDelete, graphPaste } from '@/src/shared/services/graph';
 import { saveState, setupUndo } from '../shared/services/undoRedo.service';
+import { setupContextMenu } from '../shared/services/contextMenu.service';
 
 const editorStore = useEditorStore();
 
@@ -44,6 +45,7 @@ document.body.removeEventListener('mouseup', addMouseUpEvent);
 document.body.addEventListener('mouseup', addMouseUpEvent);
 
 setupUndo();
+setupContextMenu();
 
 function onCursorNotAllowed() {
     document.body.classList.remove('cursor-allowed');

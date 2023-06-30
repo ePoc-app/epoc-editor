@@ -228,11 +228,23 @@ function getNodeById(id: string) : GraphNode {
     return nodes.value.find((node) => { return node.id === id; });
 }
 
+interface contextDataProps {
+    position?: { x: number, y: number };
+    id?: string;
+    pageId?: string;
+    selection?: string;
+}
+
+function openContextMenu(context: string, data: contextDataProps): void {
+    api.send('contextMenu', { context, ...data });
+}
+
 export const graphService = {
     importFile,
     writeProjectData,
     getPreviousNode,
-    getNextNode
+    getNextNode,
+    openContextMenu
 };
 
 export function generateContentId(): string {

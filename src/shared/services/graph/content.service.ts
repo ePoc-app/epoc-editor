@@ -62,6 +62,7 @@ export function removeContentFromPage(index: number, pageId: string, pageMoved?:
 
 export function addContentToPage(pageId: string, content: SideAction | NodeElement, index?: number): void {
     const pageNode = findNode(pageId);
+    index = index ?? pageNode.data.elements.length;
 
     if(!pageNode.data.formValues.components) pageNode.data.formValues.components = [];
 
@@ -82,6 +83,11 @@ export function addContentToPage(pageId: string, content: SideAction | NodeEleme
         pageNode.data.elements.splice(index, 0, newContent);
         pageNode.data.formValues.components.splice(index, 0, { action: content });
     }
+}
+
+export function unselectAllContents(): void {
+    const contents = document.querySelectorAll('.btn-content');
+    contents.forEach(content => content.classList.remove('selected'));
 }
 
 export function getContentDefaultValues(type) {

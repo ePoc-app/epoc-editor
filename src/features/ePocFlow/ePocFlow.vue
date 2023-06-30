@@ -9,8 +9,9 @@ import ChapterNode from './nodes/ChapterNode.vue';
 import ePocNode from './nodes/ePocNode.vue';
 import AddChapterNode from './nodes/AddChapterNode.vue';
 import { NodeElement, SideAction } from '@/src/shared/interfaces';
-import { addPage, createPageFromContent, removeContentFromPage, graphCopy } from '@/src/shared/services/graph';
+import { addPage, createPageFromContent, removeContentFromPage, graphCopy, getSelectedNodes } from '@/src/shared/services/graph';
 import { saveState, saveGivenState, getCurrentState } from '@/src/shared/services/undoRedo.service';
+import { graphService } from '@/src/shared/services';
 
 const { vueFlowRef, project, updateEdge, edges, nodes, findNode }  = useVueFlow({ id: 'main' });
 
@@ -51,9 +52,9 @@ const onDrop = (event) => {
 
 };
 
-onMounted(() => {
+function onPaneReady() {
     graphStore.restore();
-});
+}
 
 
 function onEdgeclick (event) {
@@ -192,6 +193,20 @@ function onKeyDown(event) {
     }
 }
 
+function onContextMenu(event) {
+    const position = project({
+        x: event.clientX,
+        y: event.clientY,
+    });
+    
+    graphService.openContextMenu('flow', { position });
+}
+
+function onSelectionContextMenu() {
+    const selectedNodes = JSON.stringify(getSelectedNodes());
+    graphService.openContextMenu('selection', { selection: selectedNodes });
+}
+
 </script>
 
 <template>
@@ -222,6 +237,9 @@ function onKeyDown(event) {
         @connect-start="onConnectStart"
         @connect-end="onConnectEnd"
         @keydown="onKeyDown"
+        @pane-context-menu.stop="onContextMenu"
+        @selection-context-menu="onSelectionContextMenu"
+        @pane-ready="onPaneReady"
     >
         <template #node-custom="{ id, data }">
             <PageNode :id="id" :data="data" />

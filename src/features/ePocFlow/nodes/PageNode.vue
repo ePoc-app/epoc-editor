@@ -4,8 +4,10 @@ import { computed, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { NodeElement } from '@/src/shared/interfaces';
 import ContentButton from '@/src/components/ContentButton.vue';
-import { addContentToPage, removeContentFromPage, changeContentOrder } from '@/src/shared/services/graph';
+import { addContentToPage, removeContentFromPage, changeContentOrder, unselectAllNodes } from '@/src/shared/services/graph';
 import {moveGuard} from '@/src/shared/utils/draggable';
+import { graphService } from '@/src/shared/services';
+import { questions } from '@/src/shared/data';
 
 const editorStore = useEditorStore();
 
@@ -109,6 +111,24 @@ function removeHoverEffect() {
     page.value.classList.remove('hover');
 }
 
+function onContextMenu(event) {
+    const position = {
+        x: event.clientX,
+        y: event.clientY
+    };
+    
+    const alreadyHasQuestion = currentNode.value.data.elements.some((element) => questions.some((question) => question.type === element.action.type));
+    const context = alreadyHasQuestion ? 'pageWithQuestion' : 'page';
+    unselectAllNodes();
+
+    graphService.openContextMenu(context, { position, id: currentNode.value.id } );
+    currentNode.value.selected = true;
+}
+
+function onContentContextMenu(id: string) {
+    graphService.openContextMenu('content', { pageId: currentNode.value.id, id});
+}
+
 </script>
 
 <template>
@@ -122,6 +142,7 @@ function removeHoverEffect() {
             @mouseenter="addHoverEffect"
             @mouseleave="removeHoverEffect"
             @mousedown="closeFormPanel"
+            @contextmenu.stop="onContextMenu"
             @dragover.stop
         >
             <p class="node-title" :class="{ 'active': editorStore.openedElementId ? editorStore.openedElementId === props.id : false }">{{ currentNode.data.formValues?.title || 'Page' }}</p>
@@ -156,6 +177,7 @@ function removeHoverEffect() {
                             @mouseenter="removeHoverEffect"
                             @mouseleave="addHoverEffect"
                             @dragstart="dragStart($event, element, index)"
+                            @contextmenu="onContentContextMenu(element.id)"
                         />
                     </div>
                 </template>

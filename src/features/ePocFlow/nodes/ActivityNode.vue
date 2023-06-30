@@ -4,8 +4,9 @@ import { computed, ref, reactive } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { NodeElement } from '@/src/shared/interfaces';
 import ContentButton from '@/src/components/ContentButton.vue';
-import { addContentToPage, removeContentFromPage, changeContentOrder } from '@/src/shared/services/graph';
+import { addContentToPage, removeContentFromPage, changeContentOrder, getSelectedNodes } from '@/src/shared/services/graph';
 import { moveGuard } from '@/src/shared/utils/draggable';
+import { graphService } from '@/src/shared/services';
 
 const editorStore = useEditorStore();
 
@@ -22,18 +23,18 @@ const props = defineProps<{
 
 const { findNode, edges } = useVueFlow({ id: 'main' });
 
-const currentNode = findNode(props.id);
+const currentNode = computed(() => findNode(props.id));
 const dropped = ref(false);
 
-const isSource = computed(() => getConnectedEdges([currentNode], edges.value).some((edge) => edge.source === props.id));
-const isTarget = computed(() => getConnectedEdges([currentNode], edges.value).some((edge) => edge.target === props.id));
+const isSource = computed(() => getConnectedEdges([currentNode.value], edges.value).some((edge) => edge.source === props.id));
+const isTarget = computed(() => getConnectedEdges([currentNode.value], edges.value).some((edge) => edge.target === props.id));
 
 const classList = {
     'clickable': true,
     'btn-content-node': true,
 };
 
-const isCondition = ref(currentNode.data.type === 'condition');
+const isCondition = ref(currentNode.value.data.type === 'condition');
 const page = ref(null);
 
 const dragOptions = reactive({
@@ -63,7 +64,7 @@ function change(event) {
 
     if(added && dropped.value) {
         dropped.value = false;
-        addContentToPage(currentNode.id, added.element, added.newIndex);
+        addContentToPage(currentNode.value.id, added.element, added.newIndex);
     }
 
     if(moved) {
@@ -107,6 +108,22 @@ function removeHoverEffect() {
     page.value.classList.remove('hover');
 }
 
+function onContextMenu(event) {
+    const position = {
+        x: event.clientX,
+        y: event.clientY,
+    }; 
+    
+    const selection = JSON.stringify(getSelectedNodes());
+    
+    graphService.openContextMenu('activity', { position, id: currentNode.value.id, selection });
+    currentNode.value.selected = true;
+}
+
+function onContentContextMenu(id: string) {
+    graphService.openContextMenu('content', { pageId: currentNode.value.id, id });
+}
+
 </script>
 
 <template>
@@ -120,6 +137,7 @@ function removeHoverEffect() {
             @mouseenter="addHoverEffect"
             @mouseleave="removeHoverEffect"
             @mousedown="closeFormPanel"
+            @contextmenu.stop="onContextMenu"
             @dragover.stop
         >
             <p class="node-title" :class="{ 'active': editorStore.openedElementId ? editorStore.openedElementId === props.id : false }">{{ currentNode.data.formValues?.title || 'Activité' }}</p>
@@ -154,6 +172,7 @@ function removeHoverEffect() {
                             @mouseenter="removeHoverEffect"
                             @mouseleave="addHoverEffect"
                             @dragstart="dragStart($event, element, index)"
+                            @contextmenu="onContentContextMenu(element.id)"
                         />
                     </div>
                 </template>

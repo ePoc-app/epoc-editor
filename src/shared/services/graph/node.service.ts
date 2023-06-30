@@ -1,12 +1,12 @@
 import { Chapter } from '@epoc/epoc-types/dist/v1';
 import { EpocV1 } from '../../classes/epoc-v1';
 import { useEditorStore, useGraphStore } from '../../stores';
-import { useVueFlow, Node, MarkerType, Edge } from '@vue-flow/core';
+import { useVueFlow, Node, MarkerType, Edge, getConnectedEdges } from '@vue-flow/core';
 import { NodeElement, SideAction } from '../../interfaces';
 import { nextTick, toRaw, watch } from 'vue';
 
 import { addContentToPage, deleteContent } from './content.service';
-import { generateContentId, generateId } from '../graph.service';
+import { generateContentId, generateId, graphService } from '../graph.service';
 import { ApiInterface } from '../../interfaces/api.interface';
 
 const { nodes, edges, addNodes, addEdges, findNode, applyEdgeChanges, applyNodeChanges } = useVueFlow({ id: 'main' });
@@ -66,6 +66,46 @@ export function addChapter(chapterId?: string, chapter?: Chapter, offsetY?: numb
     return newChapter;
 }
 
+export function addPage(position: { x: number, y: number }, actions: SideAction[], noAlign?: boolean): string{
+    const id = generateId();
+
+    //! see if correct in v1
+    const type = actions[0].type;
+    const isQuestion = questionTypes.includes(type);
+    const isCondition = type === 'condition';
+
+    const finalType = isQuestion ? 'question' : (isCondition ? 'condition' : 'element');
+
+    const newPageNode: Node = {
+        id,
+        type: isQuestion ? 'activity' : 'page',
+        data: {
+            type: finalType,
+            elements: [],
+            contentId: generateContentId(),
+            formType: isQuestion ? 'activity' : 'page',
+            formValues: {},
+        },
+        position,
+        deletable: true
+    };
+
+    addNodes([newPageNode]);
+
+    actions.forEach((action) => {
+        addContentToPage(id, action);
+    });
+
+    if(!noAlign) alignNode(newPageNode.id);
+
+    //? Conflicts with vue draggable on node edge
+    document.querySelectorAll('.node .ghost').forEach((ghost) => {
+        ghost.remove();
+    });
+    
+    return newPageNode.id;
+}
+
 export function createLinkedPage(sourcePage: Node, type: 'activity'|'page', contentElements: NodeElement[], title: string, subtitle: string, id: string, hidden: boolean, conditional: boolean, contentId: string, summary?: string): Node {
     const position = {
         x: sourcePage.position.x + 150,
@@ -94,19 +134,95 @@ export function createLinkedPage(sourcePage: Node, type: 'activity'|'page', cont
         position: position,
         deletable: false
     };
-
-    const newEdge : Edge = {
-        id: generateId(),
-        source: sourcePage.id,
-        target: newPage.id,
-        type: 'default',
-        updatable: true,
-        style: {stroke: '#384257', strokeWidth: 2.5},
-        markerEnd: {type: MarkerType.ArrowClosed, color: '#384257'}
-    };
+    
     addNodes([newPage]);
-    addEdges([newEdge]);
+
+    createEdge(sourcePage.id, newPage.id);
+
     return newPage;
+}
+
+export function insertAfter(pageId: string, action: SideAction): void {
+    const pageNode = findNode(pageId);
+    const newPosition = {
+        x: pageNode.position.x + 200, 
+        y: pageNode.position.y
+    };
+    
+    let sourceEdge = getConnectedEdges([pageNode], edges.value).find((edge) => edge.source === pageId);
+
+    const newPageNodeId = addPage(newPosition, [action], true);
+    createEdge(pageId, newPageNodeId);
+
+    
+    if(!sourceEdge) return;
+    
+    let targetNode = findNode(sourceEdge.target);
+    applyEdgeChanges([{ id: sourceEdge.id, type: 'remove' }]);
+    targetNode.position.x += 200;
+    createEdge(newPageNodeId, targetNode.id);
+    
+    while(sourceEdge) {
+        sourceEdge = getConnectedEdges([targetNode], edges.value).find((edge) => edge.source === targetNode.id);
+        if(!sourceEdge) return;
+
+        targetNode = findNode(sourceEdge.target);
+        targetNode.position.x += 200;
+    }
+}
+
+export function insertBefore(pageId: string, action: SideAction): void {
+    const pageNode = findNode(pageId);
+    const newPosition = {
+        x: pageNode.position.x,
+        y: pageNode.position.y
+    };
+    pageNode.position.x += 200;
+    
+    const targetEdge = getConnectedEdges([pageNode], edges.value).find((edge) => edge.target === pageId);
+   
+    const newPageNodeId = addPage(newPosition, [action], true);
+    createEdge(newPageNodeId, pageId);
+    
+    if(targetEdge) {
+        const sourceNode = findNode(targetEdge.source);
+        applyEdgeChanges([{ id: targetEdge.id, type: 'remove' }]);
+        createEdge(sourceNode.id, newPageNodeId);
+    }
+
+    let sourceEdge = getConnectedEdges([pageNode], edges.value).find((edge) => edge.source === pageId);
+    if(!sourceEdge) return;
+
+    let targetNode = findNode(sourceEdge.target);
+    while(sourceEdge) {
+        targetNode = findNode(sourceEdge.target);
+        targetNode.position.x += 200;
+
+        sourceEdge = getConnectedEdges([targetNode], edges.value).find((edge) => edge.source === targetNode.id);
+        if(!sourceEdge) return;
+    }
+}
+
+export function insertAtEnd(chapterId: string, action: SideAction): void {
+    let nextNode = graphService.getNextNode(findNode(chapterId));
+    let savedId = chapterId;
+    
+    while(nextNode) {
+        savedId = nextNode.id;
+        nextNode = graphService.getNextNode(findNode(nextNode.id));
+    }
+    
+    console.log('finalNode', savedId);
+    
+    insertAfter(savedId, action);
+}
+
+export function insertAtStart(chapterId: string, action: SideAction): void {
+    console.log('insertAtStart');
+    const nextNode = graphService.getNextNode(findNode(chapterId));
+
+    if(nextNode) insertBefore(nextNode.id, action);
+    else insertAfter(chapterId, action);
 }
 
 export function createPageFromContent(position: { x: number, y: number }, element: NodeElement): void {
@@ -139,57 +255,56 @@ export function createPageFromContent(position: { x: number, y: number }, elemen
     });
 }
 
-export function addPage(position: { x: number, y: number }, actions: SideAction[]): void {
-    const id = generateId();
-
-    //! see if correct in v1
-    const type = actions[0].type;
-    const isQuestion = questionTypes.includes(type);
-    const isCondition = type === 'condition';
-
-    const finalType = isQuestion ? 'question' : (isCondition ? 'condition' : 'element');
-
-    const newPageNode: Node = {
-        id,
-        type: isQuestion ? 'activity' : 'page',
-        data: {
-            type: finalType,
-            elements: [],
-            contentId: generateContentId(),
-            formType: isQuestion ? 'activity' : 'page',
-            formValues: {},
-        },
-        position,
-        deletable: true
+export function createEdge(sourceId: string, targetId: string): void {
+    const newEdge: Edge = {
+        id: generateId(),
+        source: sourceId,
+        target: targetId,
+        type: 'default',
+        updatable: true,
+        style: {stroke: '#384257', strokeWidth: 2.5},
+        markerEnd: {type: MarkerType.ArrowClosed, color: '#384257'}
     };
 
-    addNodes([newPageNode]);
-
-    actions.forEach((action) => {
-        addContentToPage(id, action);
-    });
-
-    alignNode(newPageNode.id);
-
-    //? Conflicts with vue draggable on node edge
-    document.querySelectorAll('.node .ghost').forEach((ghost) => {
-        ghost.remove();
-    });
+    addEdges([newEdge]);
 }
 
-export function transformActivityToPage(): void {
-    const pageNode = findNode(editorStore.openedElementId);
-    if (pageNode.data.elements.length > 1) return;
-    pageNode.type = 'page';
-    pageNode.data.formType = 'page';
-    delete pageNode.data.formValues.summary;
+export function deleteSelectedNodes(): void {
+    const isChild = Boolean(editorStore.openedNodeId);
+
+    const selectedNodes = getSelectedNodes();
+
+    if(isChild) {
+        deleteElement(editorStore.openedElementId, editorStore.openedNodeId);
+    } else {
+        deleteSelection(selectedNodes);
+    }
+
+    editorStore.closeValidationModal();
+}
+
+export function deleteSelection(selection: Node[]) {
+    selection.forEach(node => deleteElement(node.id));
+}
+
+export function deleteNode(nodeId: string): void {
+    const nodeToDelete = findNode(nodeId);
+    applyNodeChanges([{ id:nodeToDelete.id, type: 'remove'}]);
+
+    if(nodeToDelete.type === 'chapter') updateNextChapter(nodeToDelete.id);
+}
+
+export function deleteElement(id: string, pageId?: string): void {
+    const pageToDelete = findNode(id);
+
+    if(pageId || !pageToDelete) deleteContent(pageId ?? editorStore.openedNodeId, id);
+    else deleteNode(id);
+
     editorStore.closeFormPanel();
-    editorStore.openFormPanel(pageNode.id, pageNode.data.formType);
 }
 
-
-export function duplicatePage(): void {
-    const pageNode = findNode(editorStore.openedElementId);
+export function duplicatePage(pageId?: string): void {
+    const pageNode = findNode(pageId ?? editorStore.openedElementId);
     const newElements = [];
 
     const nodeId = generateId();
@@ -218,17 +333,24 @@ export function duplicatePage(): void {
     editorStore.closeFormPanel();
 }
 
-export function getSelectedNodes(): Node[] {
-    const selectedNodes: Node[] = nodes.value.filter(node => node.selected && isNodeDeletable(node.id));
+export function updateNextChapter(chapterId: string): void {
+    const chapters = nodes.value.filter(node => node.type === 'chapter');
 
-    /*
-    //? chapters node can't be selected but can be active
-    const activeNode = isChild ? findNode(editorStore.openedNodeId) : findNode(editorStore.openedElementId);
-    
-    if(activeNode && isNodeDeletable(activeNode.id)) selectedNodes.push(activeNode);
-    */
-    
-    return selectedNodes;
+    for(const chapter of chapters) {
+        if(chapter.id <= chapterId) return;
+
+        chapter.data.title = `Chapitre ${Number(chapter.data.title.split(' ')[1] - 1)}`;
+    }
+}
+
+export function transformActivityToPage(): void {
+    const pageNode = findNode(editorStore.openedElementId);
+    if (pageNode.data.elements.length > 1) return;
+    pageNode.type = 'page';
+    pageNode.data.formType = 'page';
+    delete pageNode.data.formValues.summary;
+    editorStore.closeFormPanel();
+    editorStore.openFormPanel(pageNode.id, pageNode.data.formType);
 }
 
 export function alignNode(nodeId: string): void {
@@ -247,23 +369,22 @@ export function alignNode(nodeId: string): void {
     });
 }
 
+export function getSelectedNodes(): Node[] {
+    const selectedNodes: Node[] = nodes.value.filter(node => node.selected && isNodeDeletable(node.id));
+
+    /*
+    //? chapters node can't be selected but can be active
+    const activeNode = isChild ? findNode(editorStore.openedNodeId) : findNode(editorStore.openedElementId);
+    
+    if(activeNode && isNodeDeletable(activeNode.id)) selectedNodes.push(activeNode);
+    */
+    
+    return selectedNodes;
+}
+
 export function isNodeDeletable(id: string): boolean {
     const undeletableIds = ['1', '2'];
     return !undeletableIds.includes(id);
-}
-
-export function deleteSelectedNodes(): void {
-    const isChild = Boolean(editorStore.openedNodeId);
-
-    const selectedNodes = getSelectedNodes();
-
-    if(isChild) {
-        deleteElement(editorStore.openedElementId, editorStore.openedNodeId);
-    } else {
-        selectedNodes.forEach(node => deleteElement(node.id));
-    }
-
-    editorStore.closeValidationModal();
 }
 
 export function confirmDelete(): void {
@@ -281,36 +402,14 @@ export function confirmDelete(): void {
     }
 }
 
-export function deleteNode(nodeId: string): void {
-    const nodeToDelete = findNode(nodeId);
-    applyNodeChanges([{ id:nodeToDelete.id, type: 'remove'}]);
-
-    if(nodeToDelete.type === 'chapter') updateNextChapter(nodeToDelete.id);
-}
-
-export function deleteElement(id: string, pageId?: string): void {
-    const pageToDelete = findNode(id);
-
-    if(pageId || !pageToDelete) deleteContent(pageId ?? editorStore.openedNodeId, id);
-    else deleteNode(id);
-
-    editorStore.closeFormPanel();
-}
-
-export function updateNextChapter(chapterId: string): void {
-    const chapters = nodes.value.filter(node => node.type === 'chapter');
-
-    for(const chapter of chapters) {
-        if(chapter.id <= chapterId) return;
-
-        chapter.data.title = `Chapitre ${Number(chapter.data.title.split(' ')[1] - 1)}`;
-    }
-}
-
 export function isFormButtonDisabled(isDisabledFunction: (node) => boolean): boolean {
     const isChild = Boolean(editorStore.openedNodeId);
     const nodeData = isChild ? findNode(editorStore.openedNodeId).data.elements.find(e => e.id === editorStore.openedElementId) : findNode(editorStore.openedElementId).data;
     return isDisabledFunction(nodeData);
+}
+
+export function unselectAllNodes(): void {
+    nodes.value.forEach(node => node.selected = false);
 }
 
 
@@ -318,34 +417,42 @@ export function isFormButtonDisabled(isDisabledFunction: (node) => boolean): boo
 declare const api: ApiInterface;
 
 function setupCopyPaste(): void {
-    api.receive('graphPasted', (selectedPages) => {
-        handleGraphPaste(JSON.parse(selectedPages), null);
+    api.receive('graphPasted', (data: string) => {
+        const parsedData = JSON.parse(data);
+        const { selectedPages, position } = parsedData;
+        handleGraphPaste(selectedPages, position);
     });
 }
 
 setupCopyPaste();
 
-export function graphCopy(): void {
-    const selectedNodes = getSelectedNodes();
-    const selectedPages = selectedNodes.filter(node => node.type === 'page' || node.type === 'activity');
+export function graphCopy(selection?: Node[]): void {
+    if(!selection) selection = getSelectedNodes();
+    const selectedPages = selection.filter(node => node.type === 'page' || node.type === 'activity');
     
-    // const selectionRect = document.querySelector('.vue-flow__nodesselection-rect') as HTMLElement;
+    const data = JSON.stringify({ pages: selectedPages });
     
-    //height of the selection rect
-    // const selectionRectHeight = selectionRect ? selectionRect.offsetHeight : null;
-    
-    api.send('graphCopy', JSON.stringify(selectedPages));
+    api.send('graphCopy', data);
 }
 
-export function graphPaste() {
-    api.send('graphPaste');
+export function graphPaste(position?: { x: number, y: number }) {
+    const data = JSON.stringify({ position });
+    api.send('graphPaste', data);
 }
 
-function handleGraphPaste(selectedPages, selectionRectHeight): void {
+function handleGraphPaste(selectedPages, position: { x: number, y: number }): void {
     if(!selectedPages) return;
     
-    const offsetY = selectionRectHeight ? selectionRectHeight : 100;
-    const offsetX = selectionRectHeight ? 0 : 100;
+    let offsetX;
+    let offsetY;
+    
+    if(position) {
+        offsetX = position.x - selectedPages[0].position.x;
+        offsetY = position.y - selectedPages[0].position.y;
+    } else {
+        offsetX = 100;
+        offsetY = 100;
+    }
 
     const newPages = [];
     for(const page of selectedPages) {
@@ -387,4 +494,8 @@ function handleGraphPaste(selectedPages, selectionRectHeight): void {
     // api.send('graphCopy', { selectedPages: newPages, selectionRectHeight: offsetY });
 
     addNodes(newPages);
+    
+    for(const page of newPages) {
+        alignNode(page.id);
+    }
 }

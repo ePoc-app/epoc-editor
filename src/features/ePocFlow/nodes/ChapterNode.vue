@@ -4,6 +4,7 @@ import { Handle, useVueFlow, getConnectedEdges } from '@vue-flow/core';
 import { Position } from '@vue-flow/core';
 import { computed } from 'vue';
 import ContentButton from '@/src/components/ContentButton.vue';
+import { graphService } from '@/src/shared/services';
 
 const editorStore = useEditorStore();
 
@@ -55,6 +56,10 @@ function mouseDown() {
     });
 }
 
+function onContextMenu() {
+    graphService.openContextMenu('chapter', { id: currentNode.id });
+}
+
 </script>
 
 <template>
@@ -67,6 +72,7 @@ function mouseDown() {
             :subtitle="subtitle"
             @click="openForm()"
             @mousedown="mouseDown"
+            @contextmenu="onContextMenu"
         />
     </div>
     <!-- ! mousedown.stop important in vue-flow v1.16.4 on non draggable node -->
