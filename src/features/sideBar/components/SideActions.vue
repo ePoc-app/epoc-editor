@@ -143,7 +143,7 @@ hr {
 }
 
 .active {
-    border: 1px solid var(--editor-blue);
+    border: 2px solid var(--editor-blue);
     color: var(--editor-blue);
     
     box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);

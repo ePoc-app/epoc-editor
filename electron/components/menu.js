@@ -2,39 +2,7 @@ const { app, BrowserWindow, Menu } = require('electron');
 const { sendToFrontend, updateSavedProject } = require('./ipc');
 const { pickEpocToImport, pickEpocProject, getRecentFiles, saveEpocProject, saveAsEpocProject } = require('./file');
 const store = require('./store');
-const { waitEvent } = require('./utils');
-const path = require('path');
-
-//TODO: this functin is temparory
-function openWindow() {
-    const isDev = process.env.IS_DEV === 'true';
-    const mainWindow = new BrowserWindow({
-        show: false,
-        icon: 'favicon.png',
-        width: 1500,
-        height: 1200,
-        'minHeight': 400,
-        'minWidth': 800,
-        webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            preload: path.join(__dirname, '../preload.js')
-        }
-    });
-
-
-    // load the index.html of the app.
-    mainWindow.loadURL(
-        isDev
-            ? 'http://localhost:8000'
-            : `file://${path.join(__dirname, '../../dist/index.html')}`
-    ).then();
-    mainWindow.center();
-
-    waitEvent(mainWindow, 'ready-to-show').then(() => {
-        mainWindow.show();
-    });
-}
+const { ipcMain } = require('electron');
 
 module.exports.setupMenu = function () {
     const mainMenuTemplate = [
@@ -42,14 +10,12 @@ module.exports.setupMenu = function () {
             label: 'App',
             submenu: [
                 {label: 'À propos', selector: 'orderFrontStandardAboutPanel:'},
-                /*
                 {
                     label: 'Nouvelle fenêtre',
                     click: function () {
-                        openWindow();
+                        ipcMain.emit('newWindow');
                     }
                 },
-                */
                 {
                     label: 'Quitter',
                     accelerator: 'CmdOrCtrl+Q',
@@ -242,6 +208,3 @@ module.exports.setupMenuPreview = function () {
     const previewMenu = Menu.buildFromTemplate(previewMenuTemplate);
     Menu.setApplicationMenu(previewMenu);
 };
-
-
-

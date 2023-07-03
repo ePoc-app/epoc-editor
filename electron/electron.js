@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, autoUpdater, ipcMain } = require('electron');
 const { createMainWindow, setupWindow } = require('./components/main');
 const { createSplashWindow } = require('./components/splash');
 const { setupIpcListener } = require('./components/ipc');
@@ -63,9 +63,16 @@ app.whenReady().then(() => {
         console.log('Update ready');
         console.log(e);
     });
+});
 
-    //? Context menu disabled for now
-    // mainWindow.webContents.on('context-menu', () => {
-    //     popupMenu.popup(mainWindow.webContents);
-    // });
+function createNewWindow() {
+    const newWindow = createMainWindow();
+    setupIpcListener(newWindow);
+    setupWindow(newWindow);
+    
+    newWindow.show();
+}
+
+ipcMain.on('newWindow', () => {
+    createNewWindow();
 });

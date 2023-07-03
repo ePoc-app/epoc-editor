@@ -148,7 +148,6 @@ const setupIpcListener = function (targetWindow) {
             sendToFrontend(targetWindow.webContents, 'contextMenuClosed');
         });
     });
-
 };
 
 const sendToFrontend = function(webContents, channel, data) {
@@ -178,7 +177,6 @@ const updateSavedProject = function (webContents, filepath) {
  * @returns {String[]}
  */
 const detectAssets = function(data) {
-    data = JSON.parse(data);
     if(!data) return;
 
     const formValues = [];
