@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { app, BrowserWindow, autoUpdater, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const { createMainWindow, setupWindow } = require('./components/main');
 const { createSplashWindow } = require('./components/splash');
 const { setupIpcListener } = require('./components/ipc');
