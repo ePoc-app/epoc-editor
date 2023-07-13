@@ -6,7 +6,7 @@ build:
   script:
     - npm i
     - npm run updatePreview
-    - npm run build
+    - npm run build -- -- --publish never
   artifacts:
     expire_in: 1 week
     paths:
