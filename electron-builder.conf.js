@@ -18,11 +18,11 @@ module.exports = {
         provider: 'github',
         repo: 'epoc-editor',
         owner: 'inrialearninglab',
-        releaseType: 'release'
+        releaseType: 'draft'
     },
     mac: {
         category: 'public.app-category.utilities',
-        identity: 'Mac Developer: Benoit Rospars (FAMSA64QA5)',
+        identity: process.env.APPLE_SIGNING_ID,
         hardenedRuntime: true,
         gatekeeperAssess: false,
         entitlements: './entitlements.plist',
@@ -75,15 +75,15 @@ module.exports = {
 
         const appName = context.packager.appInfo.productFilename;
 
-        /*return await notarize({
+        return await notarize({
             tool: 'legacy',
             appBundleId: 'fr.inria.epoc-editor',
             appPath: `${appOutDir}/${appName}.app`,
             appleId: process.env.APPLE_ID,
             appleIdPassword: process.env.APPLE_PASSWORD,
             teamId: process.env.APPLE_TEAM_ID,
-            ascProvider: 'INRIA'
-        });*/
+            ascProvider: process.env.APPLE_ASC
+        });
     }
 };
 
