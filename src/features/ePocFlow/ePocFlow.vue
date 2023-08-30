@@ -52,10 +52,9 @@ const onDrop = (event) => {
 
 };
 
-function onPaneReady() {
+onMounted(() => {
     graphStore.restore();
-}
-
+});
 
 function onEdgeclick (event) {
     const marker = event.edge.markerEnd;
@@ -239,7 +238,6 @@ function onSelectionContextMenu() {
         @keydown="onKeyDown"
         @pane-context-menu.stop="onContextMenu"
         @selection-context-menu="onSelectionContextMenu"
-        @pane-ready="onPaneReady"
     >
         <template #node-custom="{ id, data }">
             <PageNode :id="id" :data="data" />
