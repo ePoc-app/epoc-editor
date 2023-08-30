@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import PageTemplate from './PageTemplate.vue';
 import { useEditorStore } from '@/src/shared/stores';
-import { ref } from 'vue';
 
 const editorStore = useEditorStore();
-
-const leftCol = ref(editorStore.pageModels.filter((value, index) => index % 2 === 0));
-const rightCol = ref(editorStore.pageModels.filter((value, index) => index % 2 !== 0));
-
 </script>
 
 <template>
@@ -17,23 +12,13 @@ const rightCol = ref(editorStore.pageModels.filter((value, index) => index % 2 !
             <button class="btn btn-close"><i class="icon-x"></i></button>
         </header>
         <hr class="separator">
-        <div v-if="leftCol.length > 0" class="models">
-            <div class="col col-left">
-                <PageTemplate
-                    v-for="(model, index) in leftCol"
-                    :key="index"
-                    :elements="model.actions"
-                    :name="model.name"
-                />
-            </div>
-            <div class="col col-right">
-                <PageTemplate
-                    v-for="(model, index) in rightCol"
-                    :key="index"
-                    :elements="model.actions"
-                    :name="model.name"
-                />
-            </div>
+        <div v-if="editorStore.pageModels.length > 0" class="models">
+            <PageTemplate 
+                v-for="(model, index) in editorStore.pageModels" 
+                :key="index"
+                :elements="model.actions"
+                :name="model.name"
+            />
         </div>
         <div v-else>
             <h4 class="empty">Aucun modèle de page n'as été créé</h4>
@@ -51,7 +36,9 @@ const rightCol = ref(editorStore.pageModels.filter((value, index) => index % 2 !
     width: fit-content;
     background-color: white;
     border-right: 1px solid var(--border);
-    min-width: calc(8rem + 120px);
+
+    // All the padding + 2 nodes + all border
+    width: calc(8rem + 120px + 16px);
 
     header {
         h3 {
@@ -74,15 +61,10 @@ const rightCol = ref(editorStore.pageModels.filter((value, index) => index % 2 !
 
     .models {
         display: flex;
-        flex-direction: row;
         gap: 2rem;
         padding: 1rem;
-    }
-
-    .col {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
+        flex-wrap: wrap;
+        margin: 0;
     }
 }
 </style>

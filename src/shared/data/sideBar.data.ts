@@ -89,9 +89,15 @@ export const standardPages: SideAction[] = [
         tooltip: 'Glisser/déposer pour ajouter une condition'
     },
     {
+        icon: 'icon-badge',
+        type: 'badge',
+        label: 'Badge',
+        tooltip: 'Cliquer pour ouvrir le menu badge'
+    },
+    {
         icon: 'icon-modele',
         type: 'model',
         label: 'Modèle',
-        tooltip: 'Cliquer pour ajouter un modèle'
+        tooltip: 'Cliquer pour ouvrir le menu modèle'
     }
 ];

@@ -9,7 +9,7 @@ import env from '@/src/shared/utils/env';
 const editorStore = useEditorStore();
 
 const standardContent = editorStore.standardPages.filter(({ type }) => {
-    const filteredPages = ['legacy-condition', 'condition', 'question', 'model'];
+    const filteredPages = ['legacy-condition', 'condition', 'question', 'model', 'badge'];
     const prodFilteredPages = env.isDev ? []:[];
     return ![...filteredPages, ...prodFilteredPages].includes(type);
 });
@@ -31,7 +31,7 @@ const dragOptions = {
     move: moveGuard
 };
 
-const classList = (item: SideAction) => ({ 'clickable': item.type === 'question' || item.type === 'model' });
+const classList = (item: SideAction) => ({ 'clickable': item.type === 'question' || item.type === 'model' || item.type === 'badge' });
 
 function dragStart(event, sideAction) {
     editorStore.draggedElement = {
@@ -108,25 +108,25 @@ function showTemplateMenu() {
             </VueDraggable>
         </div>
     </div>
-    <ContentButton
-        v-if="env.isDev"
-        v-tippy="{content: conditionContent.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
-        :icon="conditionContent.icon"
-        :class-list="{ 'btn-content-blue': true }"
-        :is-draggable="true"
-        @dragstart="dragStart($event, conditionContent)"
-        @dragend="dragging = false"
-    />
-    <hr v-if="env.isDev">
-    <ContentButton
-        v-if="env.isDev"
-        v-tippy="{content: modelContent.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
-        :icon="modelContent.icon"
-        :is-draggable="false"
-        :is-active="editorStore.modelMenu"
-        :class-list="classList(modelContent)"
-        @click="showTemplateMenu"
-    />
+    <div v-if="env.isDev">
+        <ContentButton
+            v-tippy="{content: conditionContent.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
+            :icon="conditionContent.icon"
+            :class-list="{ 'btn-content-blue': true }"
+            :is-draggable="true"
+            @dragstart="dragStart($event, conditionContent)"
+            @dragend="dragging = false"
+        />
+        <hr>
+        <ContentButton
+            v-tippy="{content: modelContent.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
+            :icon="modelContent.icon"
+            :is-draggable="false"
+            :is-active="editorStore.modelMenu"
+            :class-list="classList(modelContent)"
+            @click="showTemplateMenu"
+        />
+    </div>
 </template>
 
 <style scoped lang="scss">

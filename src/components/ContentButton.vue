@@ -7,6 +7,7 @@ defineProps<{
     classList?: object;
     subtitle?: string;
     isActive?: boolean;
+    isContent?: boolean;
 }>();
 
 const emit = defineEmits<{

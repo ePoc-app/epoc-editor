@@ -35,7 +35,8 @@ export function getCurrentState(saveForm?: boolean | object): string {
             elementId: editorStore.openedElementId,
             formType: editorStore.formPanel?.type,
             nodeId: editorStore.openedNodeId,
-            scrollPosY: document.querySelector('.formPanel').scrollTop
+            badgeId: editorStore.openedBadgeId,
+            scrollPosY: document.querySelector('.formPanel')?.scrollTop
         } : null;
     }
     
@@ -47,9 +48,9 @@ export function getCurrentState(saveForm?: boolean | object): string {
     return JSON.stringify(currentState);
 }
 
-export function saveState(): void {
+export function saveState(saveForm?: boolean): void {
     const undoRedoStore = useUndoRedoStore();
-    const currentState = getCurrentState();
+    const currentState = getCurrentState(saveForm);
 
     undoRedoStore.addState(currentState);
 }
@@ -71,8 +72,10 @@ export function revertToState(state: string): string {
     graphStore.setFlow(flow);
 
     if(form) {
-        const { elementId, nodeId, formType, scrollPosY } = form;
-        editorStore.openFormPanel(elementId, formType, nodeId, scrollPosY);
+        const { elementId, nodeId, formType, scrollPosY, badgeId } = form;
+
+        if(formType === 'badge') editorStore.openBadgeFormPanel(badgeId, 'custom', scrollPosY);
+        else editorStore.openFormPanel(elementId, formType, nodeId, scrollPosY);
     }
     
     return currentState;

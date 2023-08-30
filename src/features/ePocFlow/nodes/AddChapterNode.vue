@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { addChapter } from '@/src/shared/services/graph';
 import { saveState } from '@/src/shared/services/undoRedo.service';
+import { useEditorStore } from '@/src/shared/stores';
+
+const editorStore = useEditorStore();
 
 function onClick() {
+    if(editorStore.selectNodeMode) return;
     saveState();
     addChapter();
 }

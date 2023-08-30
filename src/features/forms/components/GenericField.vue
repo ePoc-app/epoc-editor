@@ -2,7 +2,6 @@
 import { Input } from '@/src/shared/interfaces';
 import GenericInput from './inputs/GenericInput.vue';
 import { useEditorStore } from '@/src/shared/stores';
-import { graphService } from '@/src/shared/services';
 import { deleteElement, changeContentOrder } from '@/src/shared/services/graph';
 import { getCurrentState, saveGivenState } from '@/src/shared/services/undoRedo.service';
 
@@ -18,6 +17,7 @@ defineProps<{
 const currentNode = editorStore.getCurrentGraphNode;
 
 const getInputValue = (input) => {
+    if(editorStore.openedBadgeId) return getBadgeInputValue(input);
     const formValues = editorStore.openedNodeId
         ? (currentNode.data.elements.find(e => e.id === editorStore.openedElementId)?.formValues ?? {})
         : currentNode.data.formValues;
@@ -25,13 +25,26 @@ const getInputValue = (input) => {
     return formValues[input.id] ?? input.value;
 };
 
+const getBadgeInputValue = (input) => {
+    const epocNode = editorStore.getEpocNode;
+    return epocNode.data.formValues['badges']?.[editorStore.openedBadgeId]?.[input.id] ?? input.value;
+};
 
 function onInput(value: string, id: string) {
+    if(editorStore.openedBadgeId) return onBadgeInput(value, id);
+
     const element = editorStore.openedNodeId
         ? currentNode.data.elements.find(e => e.id === editorStore.openedElementId)
         : currentNode.data;
     
     element.formValues[id] = value;
+}
+
+function onBadgeInput(value: string, id: string) {
+    const epocNode = editorStore.getEpocNode;
+    const badgeId = editorStore.openedBadgeId;
+
+    epocNode.data.formValues['badges'][badgeId][id] = value;
 }
 
 
@@ -135,7 +148,7 @@ function onSaveGivenState(state: string) {
 <template>
     <h3 v-if="fieldName" class="field-title"><span v-if="displayFieldIndex" class="field-index">{{ fieldIndex+1 }}. </span>{{ fieldName }}</h3>
     <hr v-if="fieldName" class="separator">
-    <GenericInput 
+    <GenericInput
         v-for="(input, index) in inputs"
         :key="index"
         :input="input"

@@ -299,6 +299,17 @@ export const epocForm: Form = {
                     placeholder: 'Saisissez...'
                 }
             ]
+        },
+        {
+            name: 'Badges',
+            inputs: [
+                {
+                    id: 'badges',
+                    label: '',
+                    type: 'badge',
+                    value: [],
+                }
+            ]
         }
 
     ],

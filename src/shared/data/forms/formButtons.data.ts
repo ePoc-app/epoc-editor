@@ -28,3 +28,8 @@ export const contentButtons: FormButton[] = env.isDev ? [
 ] : [
     ...baseButtons,
 ];
+
+export const badgeButtons: FormButton[] = [
+    { label: 'Supprimer', icon: 'icon-supprimer', action: 'delete-badge' },
+    { label: 'Revenir à l\'ePoc', icon: 'icon-epoc', action: 'back-to-epoc' },
+];

@@ -5,7 +5,7 @@ import { deleteNode } from './node.service';
 import {generateContentId, generateId} from '../graph.service';
 import * as forms from '@/src/shared/data/forms';
 
-const { findNode } = useVueFlow({ id: 'main' });
+const { nodes, findNode } = useVueFlow({ id: 'main' });
 
 const editorStore = useEditorStore();
 
@@ -99,4 +99,16 @@ export function getContentDefaultValues(type) {
         }, {});
         return {...acc, ...keyValues};
     }, {});
+}
+
+export function getContentByContentId(contentId: string) {
+    for(const node of nodes.value) {
+        if(node.data.elements) {
+            for(const element of node.data.elements) {
+                if(element.contentId === contentId) {
+                    return element;
+                }
+            }
+        }
+    }
 }

@@ -1,13 +1,15 @@
 import { ApiInterface } from '@/src/shared/interfaces/api.interface';
 import { getConnectedEdges, GraphNode, useVueFlow } from '@vue-flow/core';
 import { EpocV1 } from '@/src/shared/classes/epoc-v1';
-import {Assessment, ChoiceCondition, Content, Html, SimpleQuestion, uid, Video, Audio} from '@epoc/epoc-types/dist/v1';
-import { Question } from '@epoc/epoc-types/dist/v1/question';
+import { Assessment, ChoiceCondition, Content, Html, SimpleQuestion, uid, Video, Audio } from '@epoc/epoc-types/src/v1';
 import {questions} from '@/src/shared/data';
+import { useEditorStore } from '@/src/shared/stores';
+import { setNodesSelectability, getContentIdFromId } from '@/src/shared/services/graph';
+import { Question } from '@epoc/epoc-types/src/v2';
 
 declare const api: ApiInterface;
 
-const { toObject, nodes, edges }  = useVueFlow({ id: 'main' });
+const { nodes, edges, findNode, toObject }  = useVueFlow({ id: 'main' });
 
 function writeProjectData(): void {
     debounceFunction(500, () => {
@@ -34,8 +36,6 @@ const debounceFunction = function (delay, cb) {
     clearTimeout(timerId);
     timerId = setTimeout(cb, delay);
 };
-
-
 
 function createContentJSON() : EpocV1 {
 
@@ -246,6 +246,56 @@ export const graphService = {
     getNextNode,
     openContextMenu
 };
+
+let openedConditionIndex: number | null = null;
+export function enterSelectNodeMode(conditionIndex: number): void {
+    const editorStore = useEditorStore();
+    editorStore.enterSelectNodeMode();
+    setNodesSelectability(true);
+
+    disableGraph();
+    openedConditionIndex = conditionIndex;
+}
+
+function getElementType(id: string): 'contents' | 'chapters' {
+    const node = findNode(id);
+    if(!node || node.type !== 'chapter' ) return 'contents';
+    else return 'chapters';
+}
+
+export function exitSelectNodeMode(selectedId?: string): void {
+    const editorStore = useEditorStore();
+    editorStore.exitSelectNodeMode();
+    setNodesSelectability(false);
+    
+    editorStore.tempConditions[openedConditionIndex].elementType = getElementType(selectedId);
+    editorStore.tempConditions[openedConditionIndex].element = getContentIdFromId(selectedId);
+
+    enableGraph();
+    openedConditionIndex = null;
+}
+
+function disableGraph(): void {
+    nodes.value.forEach(node => node.draggable = false);
+    edges.value.forEach(edge => {
+        if(edge.id === 'mainEdge') return;
+
+        edge.selectable = false;
+        edge.deletable = false;
+        edge.updatable = false;
+    });
+}
+
+function enableGraph(): void {
+    nodes.value.forEach(node => node.draggable = true);
+    edges.value.forEach(edge => {
+        if(edge.id === 'mainEdge') return;
+
+        edge.selectable = true;
+        edge.deletable = true;
+        edge.updatable = true;
+    });
+}
 
 export function generateContentId(): string {
     const firstNumber = (Math.random() * 46656) | 0;

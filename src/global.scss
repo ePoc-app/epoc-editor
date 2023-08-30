@@ -86,7 +86,6 @@ body,
     background-color: var(--content);
     box-shadow: 0 1px 8px 0 var(--shadow);
     transition: all 0.2s ease-in-out;
-    transition: text 0.2s ease-in-out;
     cursor: inherit;
     display: flex;
     flex-direction: column;
@@ -270,8 +269,7 @@ hr {
   
   &-card {
     width: calc(100% - 1.4rem);
-    margin: 0;
-    margin-bottom: 1rem;
+    margin: 0 0 1rem;
   }
 
   &-file {
@@ -484,18 +482,38 @@ g.selected {
   }
 }
 
-::-webkit-resizer {
-  border: 2px solid yellow;
-  background: blue;
-  box-shadow: 0 0 2px 5px red;
-  outline: 2px dashed green;
-
-  /*size does not work it seems*/
-  width: 150px;
-  height: 150px;
-}
-
 // TinyMCE Editor
 .tox-tinymce {
   margin-bottom: 1.5rem;
+}
+
+.badge-notification {
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  z-index: 10;
+
+  &-left {
+    left: 0;
+    transform: translate(-45%, -20%);
+  }
+
+  &-right {
+    right: 0;
+    transform: translate(45%, -40%);
+  }
+
+  small {
+    position: absolute;
+    color: white;
+    font-size: .8rem;
+  }
+
+  img {
+    height: 100%;
+  }
 }

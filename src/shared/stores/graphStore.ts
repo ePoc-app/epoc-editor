@@ -13,7 +13,7 @@ interface GraphState {
     };
 }
 
-export const useGraphStore = defineStore('project', {
+export const useGraphStore = defineStore('graph', {
     state: (): GraphState => ({
         elements: [epoc, add, mainEdge],
         flow: null

@@ -3,12 +3,16 @@ import TextInput from './TextInput.vue';
 import TextAreaInput from './TextAreaInput.vue';
 import FileInput from './FileInput.vue';
 import ScoreInput from './ScoreInput.vue';
+import HtmlInput from './HtmlInput.vue';
 
 import CheckBoxInput from './card/components/CheckBoxInput.vue';
 import RadioInput from './card/components/RadioInput.vue';
 import SelectInput from './card/components/SelectInput.vue';
 import RepeatInput from './RepeatInput.vue';
-import HtmlInput from './HtmlInput.vue';
+
+import BadgesInput from './badges/BadgesInput.vue';
+import IconPicker from './badges/components/IconPicker.vue';
+import ConditionInput from './badges/components/ConditionInput.vue';
 import { Input } from '@/src/shared/interfaces';
 
 defineProps<{
@@ -109,5 +113,18 @@ const emit = defineEmits<{
         :add-button="input.addButton"
         @change="emit('repeatInput', $event)"
         @save-given-state="emit('saveGivenState', $event)"
+    />
+    <BadgesInput
+        v-if="input.type === 'badge'"
+        :input-value="inputValue"
+    />
+    <IconPicker
+        v-if="input.type === 'icon-picker'" 
+        :label="input.label"
+        :input-value="inputValue"
+        @input="emit('input', $event)"
+    />
+    <ConditionInput
+        v-if="input.type === 'badge-conditions'" 
     />
 </template>

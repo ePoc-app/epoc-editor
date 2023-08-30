@@ -3,15 +3,16 @@ import { useEditorStore } from '../../shared/stores';
 import FormButton from './components/FormButton.vue';
 import GenericField from './components/GenericField.vue';
 import { Input } from '@/src/shared/interfaces';
-import { graphService, editorService } from '@/src/shared/services';
+import { editorService } from '@/src/shared/services';
 import { createToaster } from '@meforma/vue-toaster';
 import {
     confirmDelete,
     duplicatePage,
     duplicateContent,
     transformActivityToPage,
-    isFormButtonDisabled
+    isFormButtonDisabled, deleteBadge
 } from '@/src/shared/services/graph';
+import LinkedBadges from '@/src/features/badge/components/LinkedBadges.vue';
 
 const editorStore = useEditorStore();
 
@@ -52,6 +53,16 @@ function actionOnForm(action: string) {
     case 'simple-question':
         transformActivityToPage();
         break;
+
+    case 'back-to-epoc':
+        editorStore.openEpoc();
+        break;
+
+    case 'delete-badge':
+        deleteBadge(editorStore.openedBadgeId);
+        editorStore.openEpoc();
+        break;
+
     }
 
 }
@@ -90,13 +101,16 @@ function checkIfDisabled(disabledProp): boolean {
             :key="index"
             class="field"
         >
-            <GenericField 
+            <GenericField
                 :inputs="(field.inputs as Input[])"
                 :field-name="field.name"
                 :field-index="index"
                 :display-field-index="editorStore.formPanel.displayFieldIndex"
             />
         </div>
+        <LinkedBadges
+            :element-id="editorStore.openedElementId"
+        />
     </div>
 </template>
 

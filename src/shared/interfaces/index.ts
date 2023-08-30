@@ -7,3 +7,4 @@ export * from './formButton.interface';
 export * from './field.interface';
 export * from './pageModel.interface';
 export * from './ePocState.interface';
+export * from './badge.interface';

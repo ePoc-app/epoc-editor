@@ -1,0 +1,102 @@
+<script setup lang="ts">
+import BadgeItem from '@/src/features/badge/components/BadgeItem.vue';
+import { ref } from 'vue';
+import { graphService } from '@/src/shared/services';
+
+const emit = defineEmits<{
+    (e: 'click', icon: string): void;
+}>();
+
+function onClick() {
+    emit('click', url.value);
+}
+
+function openFile() {
+    fileInput.value.click();
+}
+
+async function changeIcon(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    fileInput.value.value = '';
+    url.value = await graphService.importFile(file.path);
+}
+function deleteFile() {
+    url.value = '';
+}
+
+const url = ref('');
+const fileInput = ref(null);
+
+</script>
+
+<template>
+    <div class="new-icon">
+        <BadgeItem
+            :icon="url"
+            :inactive="!url"
+            @click="onClick"
+        />
+        <div>
+            <p class="accepted-files">Fichier supporté: SVG</p>
+            <div v-if="!url">
+                <button id="file-selector" class="btn btn-form" @click="openFile">
+                    <i class="icon-plus"></i>
+                    Selectionner un fichier
+                </button>
+            </div>
+            <div v-show="url">
+                <div class="input-file">
+                    <input ref="fileInput" class="file" type="file" accept="image/svg+xml" @change="changeIcon">
+                    <input class="input" type="text" readonly :value="url" @click="openFile">
+                    <i class="icon-supprimer" @click="deleteFile"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<style scoped lang="scss">
+
+.new-icon {
+    display: flex;
+    gap: 1rem;
+    padding-top: 1.5rem;
+}
+
+.accepted-files {
+    font-size: .9rem;
+    color: var(--text-secondary);
+}
+
+
+.input-file{
+    position: relative;
+    margin-bottom: 1.5rem;
+
+    .input{
+        margin-bottom: 0;
+        padding-right: 1.5rem;
+    }
+
+    .file{
+        display: none;
+    }
+
+    i {
+        font-size: .9rem;
+        cursor: pointer;
+
+        &:hover {
+            color: var(--editor-red);
+        }
+    }
+}
+
+.icon-supprimer{
+    position: absolute;
+    right:.5rem;
+    top:50%;
+    transform: translateY(-50%);
+}
+</style>

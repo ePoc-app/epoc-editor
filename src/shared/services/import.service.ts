@@ -2,7 +2,7 @@ import { EpocV1 } from '@/src/shared/classes/epoc-v1';
 import { addChapter, createLinkedPage, setEpocNodeData } from '@/src/shared/services/graph';
 import { generateId } from '@/src/shared/services/graph.service';
 import { questions, standardPages } from '@/src/shared/data';
-import { Assessment, ChoiceCondition, SimpleQuestion } from '@epoc/epoc-types/dist/v1';
+import { Assessment, ChoiceCondition, SimpleQuestion } from '@epoc/epoc-types/src/v1';
 
 const mapType = {
     'video': standardPages.find(s => s.type === 'video'),

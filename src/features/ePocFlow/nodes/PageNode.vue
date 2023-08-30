@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { Handle, Position, getConnectedEdges, useVueFlow } from '@vue-flow/core';
-import { computed, ref } from 'vue';
+import { computed, Ref, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { NodeElement } from '@/src/shared/interfaces';
-import ContentButton from '@/src/components/ContentButton.vue';
-import { addContentToPage, removeContentFromPage, changeContentOrder, unselectAllNodes } from '@/src/shared/services/graph';
-import {moveGuard} from '@/src/shared/utils/draggable';
-import { graphService } from '@/src/shared/services';
+import { unselectAllNodes } from '@/src/shared/services/graph';
+import { exitSelectNodeMode, getConnectedBadges, graphService } from '@/src/shared/services';
 import { questions } from '@/src/shared/data';
-import { saveState } from '@/src/shared/services/undoRedo.service';
+
+import DraggableNode from './content/DraggableNode.vue';
 
 const editorStore = useEditorStore();
 
@@ -26,80 +25,19 @@ const props = defineProps<{
 const { findNode, edges } = useVueFlow({ id: 'main' });
 
 const currentNode = computed(() => findNode(props.id));
-const dropped = ref(false);
 
 const isSource = computed(() => getConnectedEdges([currentNode.value], edges.value).some((edge) => edge.source === props.id));
 const isTarget = computed(() => getConnectedEdges([currentNode.value], edges.value).some((edge) => edge.target === props.id));
 
-const classList = {
-    'clickable': true,
-    'btn-content-node': true,
-};
-
 const isCondition = ref(currentNode.value.data.type === 'condition');
-const page = ref(null);
-
-const dragOptions = ref({
-    group: {
-        name: 'node',
-        put: !isCondition.value,
-    },
-    disabled: false,
-    sort: !isCondition.value,
-    ghostClass: 'ghost',
-    animation: 200,
-    move: moveGuard
-});
-
-function openForm(element: NodeElement) {
-    editorStore.openFormPanel(element.id, element.formType, element.parentId);
-}
+const page: Ref<HTMLElement> = ref(null);
 
 function openPageForm(id, formType) {
-    editorStore.openFormPanel(id, formType);
-}
-
-function change(event) {
-    if(!editorStore.draggedElement) return;
-
-    const { added, moved, removed } = event;
-
-    if(added && dropped.value) {
-        saveState();
-        dropped.value = false;
-        addContentToPage(currentNode.value.id, added.element, added.newIndex);
+    if(editorStore.selectNodeMode) {
+        exitSelectNodeMode(id);
+    } else {
+        editorStore.openFormPanel(id, formType);
     }
-
-    if(moved) {
-        saveState();
-        const { oldIndex, newIndex } = moved;
-        changeContentOrder(oldIndex, newIndex, props.id);
-    }
-
-    if(removed) {
-        const { oldIndex } = removed;
-        removeContentFromPage(oldIndex, props.id, true);
-    }
-}
-
-
-
-function drop() {
-    dropped.value = true;
-    document.body.classList.remove('cursor-not-allowed', 'cursor-allowed');
-}
-
-function dragStart(event, element: NodeElement, index: number) {
-    editorStore.draggedElement = {
-        type: 'nodeElement',
-        element: element,
-        source: {
-            parentId: props.id,
-            index: index,
-        }
-    };
-    editorStore.draggedElement.type = 'nodeElement';
-    editorStore.draggedElement.element = element;
 }
 
 function closeFormPanel() {
@@ -128,9 +66,11 @@ function onContextMenu(event) {
     currentNode.value.selected = true;
 }
 
-function onContentContextMenu(id: string) {
-    graphService.openContextMenu('content', { pageId: currentNode.value.id, id});
-}
+const connectable = computed(() => {
+    return !isSource.value || isCondition.value;
+});
+
+const connectedBadges = computed(() => getConnectedBadges(currentNode.value.data.contentId));
 
 </script>
 
@@ -155,42 +95,23 @@ function onContentContextMenu(id: string) {
                 :position="Position.Left"
                 :connectable="false"
             />
-            <VueDraggable
-                v-bind="dragOptions"
-                :id="'node'+ props.id"
-                :model-value="data.elements"
-                class="node-list page-node node hover"
-                item-key="id"
-                :class=" { 'active': editorStore.openedElementId ? editorStore.openedElementId === props.id : false }"
-                @change="change"
-                @drop.stop="drop"
-            >
-                <template #item="{ element, index }">
-                    <div :key="index" class="node-item" :class="{ 'condition': isCondition }">
-                        <ContentButton
-                            :key="index"
-                            :icon="element.action.icon"
-                            :is-draggable="!isCondition"
-                            :is-active="editorStore.openedElementId ? editorStore.openedElementId === element.id : false"
-                            :class-list="classList"
-                            @click.exact="openForm(element)"
-                            @click.meta="closeFormPanel"
-                            @click.ctrl="closeFormPanel"
-                            @mousedown.stop
-                            @mouseenter="removeHoverEffect"
-                            @mouseleave="addHoverEffect"
-                            @dragstart="dragStart($event, element, index)"
-                            @contextmenu="onContentContextMenu(element.id)"
-                        />
-                    </div>
-                </template>
-            </VueDraggable>
+            <div v-if="connectedBadges.length > 0" class="badge-notification badge-notification-left">
+                <img src="/img/badge/notification.svg" alt="notification">
+                <small>{{ connectedBadges.length }}</small>
+            </div>
+            <DraggableNode
+                :node-id="id"
+                :contents="data.elements"
+                type="page"
+                @add-hover-effect="addHoverEffect"
+                @remove-hover-effect="removeHoverEffect"
+            />
         </div>
         <Handle
             type="source"
-            :class="{ 'not-connected': !isSource || isCondition }"
+            :class="{ 'not-connected': connectable }"
             :position="Position.Right"
-            :connectable="!isSource || isCondition"
+            :connectable="connectable && !editorStore.selectNodeMode"
         />
     </div>
 </template>
@@ -206,20 +127,23 @@ function onContentContextMenu(id: string) {
 .container.hover {
     .node {
         transition: all .2s ease-in-out;
-        background-color: var(--node-hover);
         box-shadow: 0 2px 5px 0 var(--shadow-outer);
-    }
-}
 
-.node-item {
-    transition: all .2s linear;
-    transition: text .2s linear;
+        &:not(.active) {
+            background-color: var(--node-hover);
+        }
+        &.active {
+            // #E1F4FA == node-active
+            background-color: darken(#E1F4FA, 5%);
+        }
+    }
 }
 
 .vue-flow__handle {
     width: 12px;
     height: 12px;
     top: calc(30px + 1rem + 1px);
+    z-index: 20;
     &-left {
         left: -6px;
     }
@@ -251,8 +175,4 @@ function onContentContextMenu(id: string) {
     }
 }
 
-.node-item {
-    transition: all .2s linear;
-    transition: text .2s linear;
-}
 </style>

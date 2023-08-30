@@ -53,6 +53,7 @@ function dragStart(event, elements) {
     flex-direction: column;
     gap: 1rem;
     padding: 1rem;
+    margin: 0;
 
     &.dragging {
         cursor: grabbing;

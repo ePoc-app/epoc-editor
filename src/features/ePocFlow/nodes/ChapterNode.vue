@@ -4,7 +4,7 @@ import { Handle, useVueFlow, getConnectedEdges } from '@vue-flow/core';
 import { Position } from '@vue-flow/core';
 import { computed } from 'vue';
 import ContentButton from '@/src/components/ContentButton.vue';
-import { graphService } from '@/src/shared/services';
+import { exitSelectNodeMode, getConnectedBadges, graphService } from '@/src/shared/services';
 
 const editorStore = useEditorStore();
 
@@ -41,7 +41,11 @@ const classList = {
 
 
 function openForm() {
-    editorStore.openFormPanel(currentNode.id, currentNode.data.formType);
+    if(editorStore.selectNodeMode) {
+        exitSelectNodeMode(currentNode.id);
+    } else {
+        editorStore.openFormPanel(currentNode.id, currentNode.data.formType);
+    }
 }
 
 function mouseDown() {
@@ -60,11 +64,17 @@ function onContextMenu() {
     graphService.openContextMenu('chapter', { id: currentNode.id });
 }
 
+const connectedBadges = computed(() => getConnectedBadges(currentNode.data.contentId));
+
 </script>
 
 <template>
     <div class="node-chapter">
-        <ContentButton 
+        <div v-if="connectedBadges.length > 0" class="badge-notification badge-notification-left">
+            <img src="/img/badge/notification.svg" alt="notification">
+            <small>{{ connectedBadges.length }}</small>
+        </div>
+        <ContentButton
             :icon="currentNode.data.action.icon"
             :is-draggable="false"
             :class-list="classList"
@@ -79,7 +89,7 @@ function onContextMenu() {
     <Handle
         type="source"
         :position="Position.Right"
-        :connectable="!isSource"
+        :connectable="!isSource && !editorStore.selectNodeMode"
         :class="{ 'not-connected': !isSource }"
         @mousedown.stop
     />

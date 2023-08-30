@@ -5,8 +5,6 @@ import { ePocProject } from '@/src/shared/interfaces';
 import { createToaster } from '@meforma/vue-toaster';
 import { graphService } from '@/src/shared/services/graph.service';
 import { createGraphEpocFromData } from '@/src/shared/services/import.service';
-import { addChapter, addContentToPage, addPage, insertAfter, deleteContent, deleteNode, duplicatePage, insertBefore, unselectAllNodes, unselectAllContents, insertAtStart, insertAtEnd } from './graph';
-import { standardActions } from '../data';
 
 const toaster = createToaster({
     duration: 1000,

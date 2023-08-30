@@ -1,6 +1,6 @@
-import { Chapter, Content, Epoc, html, Parameters, uid } from '@epoc/epoc-types/dist/v1';
-import { Question } from '@epoc/epoc-types/dist/v1/question';
-import { Author } from '@epoc/epoc-types/dist/v1/author';
+import { Chapter, Content, Epoc, html, Parameters, uid } from '@epoc/epoc-types/src/v1';
+import { Question } from '@epoc/epoc-types/src/v1/question';
+import { Author } from '@epoc/epoc-types/src/v1/author';
 
 export class EpocV1 implements Epoc {
     id: string;

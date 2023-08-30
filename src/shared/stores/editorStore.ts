@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
-import { ePocProject, Form, NodeElement, PageModel, SideAction } from '@/src/shared/interfaces';
+import { ePocProject, Form, NodeElement, PageModel, SideAction, Condition } from '@/src/shared/interfaces';
 import { GraphNode, useVueFlow } from '@vue-flow/core';
-
 import { formsModel, questions, standardPages } from '@/src/shared/data';
 
 const { nodes, findNode } = useVueFlow({ id: 'main' });
@@ -9,21 +8,19 @@ const { nodes, findNode } = useVueFlow({ id: 'main' });
 type uid = string;
 
 interface EditorState {
+    // Landing page
     loading:boolean;
     recentProjects: ePocProject[];
     currentProject: ePocProject;
+
+    // Save
     saving: boolean;
     loadingPreview: boolean;
     exporting:boolean;
-    questionMenu: boolean;
-    modelMenu: boolean;
-    pageModels: PageModel[];
-    validationModal: boolean;
-    formPanel: Form | null;
+
+    // Graph
     openedElementId: uid | null;
     openedNodeId: uid | null;
-    questions: SideAction[];
-    standardPages: SideAction[];
     draggedElement: {
         type?: 'nodeElement' | 'sideAction';
         //? SideAction as an array to manage the template the same way
@@ -33,26 +30,67 @@ interface EditorState {
             index: number
         }
     };
+    openedBadgeId: string | null;
+
+    // Panel/ Menu
+    questionMenu: boolean;
+    modelMenu: boolean;
+    formPanel: Form | null;
+
+
+    // Data
+    pageModels: PageModel[];
+    questions: SideAction[];
+    standardPages: SideAction[];
+
+    // Modal
+    conditionModal: boolean; 
+    validationModal: boolean;
+    iconModal: boolean;
+
+    // Mode
+    selectNodeMode: boolean;
+    tempConditions: Condition[];
+    editingConditions: boolean;
 }
 
 export const useEditorStore = defineStore('editor', {
     state: (): EditorState => ({
+        // Landing page
         loading: false,
         recentProjects: [],
         currentProject: {filepath: null, workdir: null, name: null, modified: null},
+
+        // Save
         saving: false,
         loadingPreview: false,
         exporting: false,
-        questionMenu: false,
-        modelMenu: false,
-        pageModels: [],
-        validationModal: false,
-        formPanel: null,
+
+        // Graph
         openedElementId: null,
         openedNodeId: null,
+        draggedElement: {},
+        openedBadgeId: null,
+
+        // Panel/ Menu
+        questionMenu: false,
+        modelMenu: false,
+        formPanel: null,
+
+        // Data
+        pageModels: [],
         questions: questions,
         standardPages: standardPages,
-        draggedElement: {},
+
+        // Modal
+        conditionModal: false,
+        validationModal: false,
+        iconModal: false,
+
+        // Mode
+        selectNodeMode: false,
+        tempConditions: [],
+        editingConditions: false,
     }),
     
     getters: {
@@ -60,6 +98,11 @@ export const useEditorStore = defineStore('editor', {
             const nodeId = this.openedNodeId ?? this.openedElementId;
             return nodeId ? findNode(nodeId) : null;
         },
+
+        getEpocNode(): GraphNode {
+            return findNode('1');
+        },
+
         openedFormType(): string | null {
             return this.formPanel?.type ?? null;
         }
@@ -81,9 +124,23 @@ export const useEditorStore = defineStore('editor', {
             this.modelMenu = false;
         },
         
+        openBadgeFormPanel(id: string, type: 'custom' | 'meta', scrollPosY?: number): void {
+            this.openedBadgeId = id;
+            this.formPanel = null;
+            this.openedNodeId = null;
+            this.openedElementId = null;
+
+            setTimeout(() => {
+                this.formPanel = formsModel.find(form => form.type === 'badge');
+            });
+
+            if(scrollPosY) this.scrollFormPanel(scrollPosY);
+        },
+        
         openFormPanel(id: string, formType: string, nodeId?: string, scrollPosY?: number): void {
             this.openedElementId = id;
             this.openedNodeId = nodeId;
+            this.openedBadgeId = null;
 
             //? To be sure the view is notified of closing / reopening
             this.formPanel = null;
@@ -115,6 +172,9 @@ export const useEditorStore = defineStore('editor', {
         },
 
         closeFormPanel(): void {
+            //? prevent closing the form panel when selecting a node
+            if(this.selectNodeMode) return;
+
             this.formPanel = null;
             this.openedElementId = null;
         },
@@ -137,6 +197,18 @@ export const useEditorStore = defineStore('editor', {
         openPage(): void {
             const parentNode = findNode(this.openedNodeId);
             this.openFormPanel(parentNode.id, parentNode.data.formType, parentNode.data.formValues);
+        },
+
+        openEpoc(): void {
+            this.openFormPanel('1', 'epoc');
+        },
+
+        enterSelectNodeMode(): void {
+            this.selectNodeMode = true;
+        },
+
+        exitSelectNodeMode(): void {
+            this.selectNodeMode = false;
         },
     }
 });

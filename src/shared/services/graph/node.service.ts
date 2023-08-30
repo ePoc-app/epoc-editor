@@ -1,15 +1,15 @@
-import { Chapter } from '@epoc/epoc-types/dist/v1';
+import { Chapter } from '@epoc/epoc-types/src/v1';
 import { EpocV1 } from '../../classes/epoc-v1';
 import { useEditorStore, useGraphStore } from '../../stores';
-import { useVueFlow, Node, MarkerType, Edge, getConnectedEdges } from '@vue-flow/core';
+import { useVueFlow, Node, getConnectedEdges } from '@vue-flow/core';
 import { NodeElement, SideAction } from '../../interfaces';
 import { nextTick, toRaw, watch } from 'vue';
 
-import { addContentToPage, deleteContent } from './content.service';
+import { addContentToPage } from './content.service';
 import { generateContentId, generateId, graphService } from '../graph.service';
-import { ApiInterface } from '../../interfaces/api.interface';
+import { deleteElement, deleteSelection, createEdge } from '.';
 
-const { nodes, edges, addNodes, addEdges, findNode, applyEdgeChanges, applyNodeChanges } = useVueFlow({ id: 'main' });
+const { nodes, edges, addNodes, findNode, applyEdgeChanges, applyNodeChanges } = useVueFlow({ id: 'main' });
 
 const editorStore = useEditorStore();
 
@@ -212,13 +212,10 @@ export function insertAtEnd(chapterId: string, action: SideAction): void {
         nextNode = graphService.getNextNode(findNode(nextNode.id));
     }
     
-    console.log('finalNode', savedId);
-    
     insertAfter(savedId, action);
 }
 
 export function insertAtStart(chapterId: string, action: SideAction): void {
-    console.log('insertAtStart');
     const nextNode = graphService.getNextNode(findNode(chapterId));
 
     if(nextNode) insertBefore(nextNode.id, action);
@@ -255,20 +252,6 @@ export function createPageFromContent(position: { x: number, y: number }, elemen
     });
 }
 
-export function createEdge(sourceId: string, targetId: string): void {
-    const newEdge: Edge = {
-        id: generateId(),
-        source: sourceId,
-        target: targetId,
-        type: 'default',
-        updatable: true,
-        style: {stroke: '#384257', strokeWidth: 2.5},
-        markerEnd: {type: MarkerType.ArrowClosed, color: '#384257'}
-    };
-
-    addEdges([newEdge]);
-}
-
 export function deleteSelectedNodes(): void {
     const isChild = Boolean(editorStore.openedNodeId);
 
@@ -283,9 +266,6 @@ export function deleteSelectedNodes(): void {
     editorStore.closeValidationModal();
 }
 
-export function deleteSelection(selection: Node[]) {
-    selection.forEach(node => deleteElement(node.id));
-}
 
 export function deleteNode(nodeId: string): void {
     const nodeToDelete = findNode(nodeId);
@@ -294,14 +274,6 @@ export function deleteNode(nodeId: string): void {
     if(nodeToDelete.type === 'chapter') updateNextChapter(nodeToDelete.id);
 }
 
-export function deleteElement(id: string, pageId?: string): void {
-    const pageToDelete = findNode(id);
-
-    if(pageId || !pageToDelete) deleteContent(pageId ?? editorStore.openedNodeId, id);
-    else deleteNode(id);
-
-    editorStore.closeFormPanel();
-}
 
 export function duplicatePage(pageId?: string): void {
     const pageNode = findNode(pageId ?? editorStore.openedElementId);
@@ -408,94 +380,19 @@ export function isFormButtonDisabled(isDisabledFunction: (node) => boolean): boo
     return isDisabledFunction(nodeData);
 }
 
+export function setNodesSelectability(selectNodeMode: boolean) {
+    for(const node of nodes.value) {
+        if(node.type === 'chapter') node.selectable = selectNodeMode;
+        else if(node.type === 'epoc') node.selectable = !selectNodeMode;
+        else if(node.type === 'add') node.selectable = !selectNodeMode;
+    }
+}
+
 export function unselectAllNodes(): void {
     nodes.value.forEach(node => node.selected = false);
 }
 
-
-// Copy/Paste
-declare const api: ApiInterface;
-
-function setupCopyPaste(): void {
-    api.receive('graphPasted', (data: string) => {
-        const parsedData = JSON.parse(data);
-        const { selectedPages, position } = parsedData;
-        handleGraphPaste(selectedPages, position);
-    });
-}
-
-setupCopyPaste();
-
-export function graphCopy(selection?: Node[]): void {
-    if(!selection) selection = getSelectedNodes();
-    const selectedPages = selection.filter(node => node.type === 'page' || node.type === 'activity');
-    
-    const data = JSON.stringify({ pages: selectedPages });
-    
-    api.send('graphCopy', data);
-}
-
-export function graphPaste(position?: { x: number, y: number }) {
-    const data = JSON.stringify({ position });
-    api.send('graphPaste', data);
-}
-
-function handleGraphPaste(selectedPages, position: { x: number, y: number }): void {
-    if(!selectedPages) return;
-    
-    let offsetX;
-    let offsetY;
-    
-    if(position) {
-        offsetX = position.x - selectedPages[0].position.x;
-        offsetY = position.y - selectedPages[0].position.y;
-    } else {
-        offsetX = 100;
-        offsetY = 100;
-    }
-
-    const newPages = [];
-    for(const page of selectedPages) {
-        const pageId = generateId();
-        
-        const elements = page.data.elements.map(element => {
-            const newElement = JSON.parse(JSON.stringify(element));
-            newElement.id = generateId();
-            newElement.parentId = pageId;
-            return newElement;
-        });
-
-        const newPage: Node = {
-            id: pageId,
-            type: page.type,
-            data: {
-                type: page.data.type,
-                elements,
-                contentId: generateContentId(),
-                formType: page.data.formType,
-                formValues: JSON.parse(JSON.stringify(page.data.formValues)),
-            },
-            position: { x: page.position.x + offsetX, y: page.position.y + offsetY },
-            deletable: true
-        };
-        newPages.push(newPage);
-    }
-    
-    // deselect the old pages
-    for(const page of selectedPages) {
-        page.selected = false;
-    }
-    
-    // select the new pages
-    for(const page of newPages) {
-        page.selected = true;
-    }
-    // automatically copy the new pages so that they can be pasted again without superposition
-    // api.send('graphCopy', { selectedPages: newPages, selectionRectHeight: offsetY });
-
-    addNodes(newPages);
-    
-    for(const page of newPages) {
-        alignNode(page.id);
-    }
+export function deleteBadge(id: string) {
+    const epocNode = findNode('1');
+    delete epocNode.data.formValues.badges[id];
 }
