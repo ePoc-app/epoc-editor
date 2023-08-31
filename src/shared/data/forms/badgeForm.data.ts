@@ -41,7 +41,7 @@ export const customBadgeForm: Form = {
             inputs: [
                 {
                     id: 'description',
-                    type: 'html',
+                    type: 'textarea',
                     label: '',
                     value: '',
                     placeholder: 'Saisissez une présentation du badge',
