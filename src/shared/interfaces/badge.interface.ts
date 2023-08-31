@@ -12,7 +12,7 @@ export interface Condition {
     element?: string;
     verb?: string;
     value?: string | number | boolean;
-    elementType?: 'contents' | 'chapters';
+    elementType?: 'contents' | 'chapters' | 'pages' | 'questions';
 }
 
 export interface VerbDescription {

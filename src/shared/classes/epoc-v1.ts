@@ -1,6 +1,7 @@
 import { Chapter, Content, Epoc, html, Parameters, uid } from '@epoc/epoc-types/src/v1';
 import { Question } from '@epoc/epoc-types/src/v1/question';
 import { Author } from '@epoc/epoc-types/src/v1/author';
+import { Badge } from '@/src/shared/interfaces';
 
 export class EpocV1 implements Epoc {
     id: string;
@@ -23,6 +24,8 @@ export class EpocV1 implements Epoc {
     chapters: Record<uid, Chapter>;
     contents: Record<uid, Content>;
     questions: Record<uid, Question>;
+    badges: Record<uid, Badge>;
+    certificateBadgeCount: number;
 
     constructor(
         id: string, title: string, image: string, objectives: string[], summary: html, teaser: string,
@@ -46,6 +49,7 @@ export class EpocV1 implements Epoc {
         };
         this.chapters = {};
         this.contents = {};
+        this.badges = {};
         this.questions = {};
         this.lastModif = lastModif;
     }

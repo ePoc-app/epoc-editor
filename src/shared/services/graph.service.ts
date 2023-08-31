@@ -1,11 +1,18 @@
 import { ApiInterface } from '@/src/shared/interfaces/api.interface';
 import { getConnectedEdges, GraphNode, useVueFlow } from '@vue-flow/core';
 import { EpocV1 } from '@/src/shared/classes/epoc-v1';
-import { Assessment, ChoiceCondition, Content, Html, SimpleQuestion, uid, Video, Audio } from '@epoc/epoc-types/src/v1';
-import {questions} from '@/src/shared/data';
+import { Assessment, Audio, ChoiceCondition, Content, Html, SimpleQuestion, uid, Video } from '@epoc/epoc-types/src/v1';
+import { questions } from '@/src/shared/data';
 import { useEditorStore } from '@/src/shared/stores';
-import { setNodesSelectability, getContentIdFromId } from '@/src/shared/services/graph';
+import {
+    findContent,
+    getContentIdFromId,
+    getElementByContentId,
+    setNodesSelectability
+} from '@/src/shared/services/graph';
 import { Question } from '@epoc/epoc-types/src/v2';
+import { createRule, getConditions } from '@/src/shared/services/badge.service';
+import { NodeElement } from '@/src/shared/interfaces';
 
 declare const api: ApiInterface;
 
@@ -41,6 +48,7 @@ function createContentJSON() : EpocV1 {
 
     const ePocNode = nodes.value.find((node) => { return node.type === 'epoc'; });
     const chapterNodes = nodes.value.filter((node) => { return node.type === 'chapter'; });
+    const badges = ePocNode.data.formValues.badges;
 
     const ePocValues = ePocNode.data.formValues;
 
@@ -53,7 +61,7 @@ function createContentJSON() : EpocV1 {
         ePocValues.teaser || '',
         ePocValues.thumbnail || '',
         ePocValues.edition || new Date().getFullYear(),
-        ePocValues.certificateScore || 0,
+        ePocValues.certificateScore || 10,
         ePocValues.authors || {},
         ePocValues.plugins,
         ePocValues.chapterParameter,
@@ -75,6 +83,9 @@ function createContentJSON() : EpocV1 {
         }
     });
 
+    if(badges) epoc.badges = exportBadgesToPage(badges);
+
+    epoc.certificateBadgeCount = 1;
 
     return epoc;
 }
@@ -257,10 +268,19 @@ export function enterSelectNodeMode(conditionIndex: number): void {
     openedConditionIndex = conditionIndex;
 }
 
-function getElementType(id: string): 'contents' | 'chapters' {
+const contentsType = ['audio', 'video', 'text'];
+function getConditionType(id: string): 'contents' | 'chapters' | 'pages' | 'questions' {
     const node = findNode(id);
-    if(!node || node.type !== 'chapter' ) return 'contents';
-    else return 'chapters';
+    if(!node) {
+        const nodeElement: NodeElement = findContent(id);
+        if(contentsType.includes(nodeElement.action.type)) return 'contents';
+
+        else return 'questions';
+    } else {
+        if(node.type === 'chapter') return 'chapters';
+        if(node.type === 'activity') return 'contents';
+        else return 'pages';
+    }
 }
 
 export function exitSelectNodeMode(selectedId?: string): void {
@@ -268,7 +288,7 @@ export function exitSelectNodeMode(selectedId?: string): void {
     editorStore.exitSelectNodeMode();
     setNodesSelectability(false);
     
-    editorStore.tempConditions[openedConditionIndex].elementType = getElementType(selectedId);
+    editorStore.tempConditions[openedConditionIndex].elementType = getConditionType(selectedId);
     editorStore.tempConditions[openedConditionIndex].element = getContentIdFromId(selectedId);
 
     enableGraph();
@@ -313,4 +333,45 @@ export function generateId(): uid {
             .substring(1);
     };
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
+
+// Used to translate v2 badges to v1
+export function exportBadgesToPage(badges) {
+
+    const res = JSON.parse(JSON.stringify(badges));
+
+    for(const badgeKey in res) {
+        const conditions = getConditions(res[badgeKey]);
+        const elements = conditions.map((condition) => condition.element);
+
+        for(const element of elements) {
+            const nodeElement = getElementByContentId(element);
+
+            if(!nodeElement) return;
+
+            // @ts-ignore
+            if(nodeElement.parentId) {
+                //@ts-ignore
+                const parentNode = findNode(nodeElement.parentId);
+
+                if(parentNode.type === 'activity') {
+                    return res;
+                }
+
+                const newElement = getContentIdFromId(parentNode.id);
+                const newConditions = conditions.map((condition) => {
+                    if (condition.element === element) {
+                        return {
+                            ...condition,
+                            element: newElement
+                        };
+                    }
+                    return condition;
+                });
+                res[badgeKey].rule = createRule(newConditions);
+            }
+        }
+    }
+
+    return res;
 }

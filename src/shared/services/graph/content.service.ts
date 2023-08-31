@@ -112,3 +112,27 @@ export function getContentByContentId(contentId: string) {
         }
     }
 }
+
+
+// translate v1 content to v2
+export function setPageContents() {
+    const pages = nodes.value.filter(node => node.type === 'page');
+
+    for(const page of pages) {
+        // in v1 there is only one element per page
+        const element: NodeElement = page.data.elements[0];
+        element.contentId = generateContentId();
+    }
+}
+
+export function findContent(id: string): NodeElement {
+    for(const node of nodes.value) {
+        if(node.data.elements) {
+            for(const element of node.data.elements) {
+                if(element.id === id) {
+                    return element;
+                }
+            }
+        }
+    }
+}

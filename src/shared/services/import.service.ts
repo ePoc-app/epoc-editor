@@ -1,8 +1,16 @@
 import { EpocV1 } from '@/src/shared/classes/epoc-v1';
-import { addChapter, createLinkedPage, setEpocNodeData } from '@/src/shared/services/graph';
+import {
+    addChapter,
+    createLinkedPage,
+    getElementByContentId,
+    setEpocNodeData,
+    setPageContents
+} from '@/src/shared/services/graph';
 import { generateId } from '@/src/shared/services/graph.service';
 import { questions, standardPages } from '@/src/shared/data';
 import { Assessment, ChoiceCondition, SimpleQuestion } from '@epoc/epoc-types/src/v1';
+import { createRule, getConditions } from '@/src/shared/services/badge.service';
+import { Node } from '@vue-flow/core';
 
 const mapType = {
     'video': standardPages.find(s => s.type === 'video'),
@@ -86,6 +94,31 @@ export function createGraphEpocFromData(epoc: EpocV1) {
             const contentHeight = (contentElements.length - 1) * 60;
             maxContentHeight =  contentHeight > maxContentHeight ? contentHeight : maxContentHeight;
         }
+    }
+
+    setPageContents();
+
+    setBadgesData(epoc.badges);
+}
+
+// to translate v1 badges to v2
+const contentVerbs = ['read', 'played', 'watched', 'listened'];
+function setBadgesData(badges) {
+    for(const badgeKey in badges) {
+        const conditions = getConditions(badges[badgeKey]);
+        conditions.forEach((condition, index) => {
+            if(contentVerbs.includes(condition.verb)) {
+                const node = getElementByContentId(condition.element) as Node;
+
+                // only 1 element per page in v1
+                const newElement = node.data.elements[0];
+
+                // replace current condition element with newElement
+                conditions[index].element = newElement.contentId;
+            }
+        });
+
+        badges[badgeKey].rule = createRule(conditions);
     }
 }
 

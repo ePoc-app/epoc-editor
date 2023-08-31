@@ -31,6 +31,7 @@ export function setEpocNodeData(epoc: EpocV1) {
     ePocValues.authors = Object.values(epoc.authors);
     ePocValues.chapterParameter = epoc.parameters?.chapterParameter;
     ePocValues.plugins = epoc.plugins;
+    ePocValues.badges = epoc.badges;
 }
 
 export function addChapter(chapterId?: string, chapter?: Chapter, offsetY?: number): Node {
