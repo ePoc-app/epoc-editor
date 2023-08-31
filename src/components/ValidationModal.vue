@@ -47,6 +47,7 @@ function confirmDelete() {
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 500;
 }
 
 .modal {

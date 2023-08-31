@@ -5,6 +5,7 @@ import { useVueFlow, Node, getConnectedEdges } from '@vue-flow/core';
 import { NodeElement, SideAction } from '../../interfaces';
 import { nextTick, toRaw, watch } from 'vue';
 
+import { deleteConnectedConditions } from '@/src/shared/services';
 import { addContentToPage } from './content.service';
 import { generateContentId, generateId, graphService } from '../graph.service';
 import { deleteElement, deleteSelection, createEdge } from '.';
@@ -270,6 +271,8 @@ export function deleteSelectedNodes(): void {
 
 export function deleteNode(nodeId: string): void {
     const nodeToDelete = findNode(nodeId);
+
+    deleteConnectedConditions(nodeToDelete.data.contentId);
     applyNodeChanges([{ id:nodeToDelete.id, type: 'remove'}]);
 
     if(nodeToDelete.type === 'chapter') updateNextChapter(nodeToDelete.id);
@@ -391,9 +394,4 @@ export function setNodesSelectability(selectNodeMode: boolean) {
 
 export function unselectAllNodes(): void {
     nodes.value.forEach(node => node.selected = false);
-}
-
-export function deleteBadge(id: string) {
-    const epocNode = findNode('1');
-    delete epocNode.data.formValues.badges[id];
 }

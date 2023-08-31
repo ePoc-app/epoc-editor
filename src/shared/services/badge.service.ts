@@ -172,3 +172,20 @@ export function saveBadge(badge: Badge) {
 
     badge.rule = createRule(editorStore.tempConditions);
 }
+
+export function deleteConnectedConditions(contentId: string) {
+    const connectedBadges= getConnectedBadges(contentId);
+    const badges = findNode('1').data.formValues.badges;
+
+    for(const badge of connectedBadges) {
+        const conditions = getConditions(badge);
+        const newConditions = conditions.filter((condition) => condition.element !== contentId);
+
+        badges[badge.id].rule = createRule(newConditions);
+    }
+}
+
+export function deleteBadge(id: string) {
+    const epocNode = findNode('1');
+    delete epocNode.data.formValues.badges[id];
+}

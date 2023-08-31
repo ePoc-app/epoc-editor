@@ -4,6 +4,7 @@ import {NodeElement, SideAction} from '../../interfaces';
 import { deleteNode } from './node.service';
 import {generateContentId, generateId} from '../graph.service';
 import * as forms from '@/src/shared/data/forms';
+import { deleteConnectedConditions } from '@/src/shared/services';
 
 const { nodes, findNode } = useVueFlow({ id: 'main' });
 
@@ -14,6 +15,7 @@ export function deleteContent(pageId: string, id: string): void {
     if(pageNode) {
         pageNode.data.elements.forEach((value, index) => {
             if(value.id === id) {
+                deleteConnectedConditions(value.contentId);
                 removeContentFromPage(index, pageId);
             }
         });

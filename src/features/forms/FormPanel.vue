@@ -3,14 +3,14 @@ import { useEditorStore } from '../../shared/stores';
 import FormButton from './components/FormButton.vue';
 import GenericField from './components/GenericField.vue';
 import { Input } from '@/src/shared/interfaces';
-import { editorService } from '@/src/shared/services';
+import { deleteBadge, editorService } from '@/src/shared/services';
 import { createToaster } from '@meforma/vue-toaster';
 import {
     confirmDelete,
     duplicatePage,
     duplicateContent,
     transformActivityToPage,
-    isFormButtonDisabled, deleteBadge
+    isFormButtonDisabled
 } from '@/src/shared/services/graph';
 import LinkedBadges from '@/src/features/badge/components/LinkedBadges.vue';
 
