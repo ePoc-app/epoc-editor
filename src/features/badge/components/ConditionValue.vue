@@ -3,15 +3,22 @@
 defineProps<{
     disabled: boolean;
     valueType?: 'boolean' | 'number';
-    inputValue: string | boolean | number;
+    inputValue: boolean | number;
 }>();
 
 const emit = defineEmits<{
-    (e: 'change', value: string): void;
+    (e: 'change', value: boolean | number | string): void;
 }>();
 
-function onChange(event: Event) {
-    emit('change', (event.target as HTMLSelectElement).value);
+function onChange(event: Event, valueType: 'boolean' | 'number' | 'string') {
+    if(valueType === 'boolean') {
+        emit('change', (event.target as HTMLSelectElement).value === 'true');
+    } else if(valueType === 'number') {
+        emit('change', Number((event.target as HTMLInputElement).value));
+    }
+    else {
+        emit('change', (event.target as HTMLInputElement).value);
+    }
 }
 
 </script>
@@ -24,7 +31,7 @@ function onChange(event: Event) {
             id="value"
             :value="inputValue"
             :disabled="disabled"
-            @change="onChange"
+            @change="onChange($event, valueType)"
         >
             <option default value="">Veuillez choisir</option>
             <option value="true">Vrai</option>
@@ -37,7 +44,7 @@ function onChange(event: Event) {
             :disabled="disabled"
             type="number"
             class="number-input"
-            @change="onChange"
+            @change="onChange($event, valueType)"
         >
         <input 
             v-else

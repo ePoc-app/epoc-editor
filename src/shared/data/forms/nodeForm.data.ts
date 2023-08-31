@@ -292,6 +292,12 @@ export const epocForm: Form = {
                     value: 10
                 },
                 {
+                    id: 'certificateBadgeCount',
+                    type: 'score',
+                    label: 'Nombre de badge pour obtenir l\'attestation',
+                    value: 1
+                },
+                {
                     id: 'chapterParameter',
                     type: 'text',
                     label: 'Label des chapitres',

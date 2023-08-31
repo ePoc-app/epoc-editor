@@ -62,6 +62,7 @@ function createContentJSON() : EpocV1 {
         ePocValues.thumbnail || '',
         ePocValues.edition || new Date().getFullYear(),
         ePocValues.certificateScore || 10,
+        ePocValues.certificateBadgeCount || 1,
         ePocValues.authors || {},
         ePocValues.plugins,
         ePocValues.chapterParameter,
@@ -85,7 +86,7 @@ function createContentJSON() : EpocV1 {
 
     if(badges) epoc.badges = exportBadgesToPage(badges);
 
-    epoc.certificateBadgeCount = 1;
+    console.log('epoc', JSON.stringify(epoc.badges, null, 2));
 
     return epoc;
 }

@@ -17,7 +17,7 @@ export interface Condition {
 
 export interface VerbDescription {
     label: string;
-    valueType: 'number' | 'boolean';
+    valueType: 'number' | 'boolean' | 'string';
 }
 
 export type ElementType = 'chapter' | 'page' | 'html' | 'video' | 'audio' | 'activity' | 'question';
