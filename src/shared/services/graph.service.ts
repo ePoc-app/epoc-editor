@@ -307,7 +307,12 @@ function disableGraph(): void {
 }
 
 function enableGraph(): void {
-    nodes.value.forEach(node => node.draggable = true);
+    nodes.value.forEach(node => {
+        if(node.type === 'epoc') return;
+        if(node.type === 'add') return;
+
+        node.draggable = true;
+    });
     edges.value.forEach(edge => {
         if(edge.id === 'mainEdge') return;
 
