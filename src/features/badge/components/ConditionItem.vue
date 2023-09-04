@@ -13,7 +13,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: 'removeCondition'): void;
-    (e: 'updateCondition', values: { value: string, key: string }): void;
+    (e: 'updateCondition', values: { value: string | number | boolean, key: string }): void;
 }>();
 
 
@@ -45,7 +45,7 @@ function removeCondition() {
     emit('removeCondition');
 }
 
-function updateCondition(value: string, key: string) {
+function updateCondition(value: string | number | boolean, key: string) {
     emit('updateCondition', { value, key });
 }
 

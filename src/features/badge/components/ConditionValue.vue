@@ -3,7 +3,7 @@
 defineProps<{
     disabled: boolean;
     valueType?: 'boolean' | 'number';
-    inputValue: boolean | number;
+    inputValue: boolean | number | string;
 }>();
 
 const emit = defineEmits<{

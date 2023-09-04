@@ -32,7 +32,7 @@ function close() {
     editorStore.editingConditions = false;
 }
 
-function updateCondition(values: { value: string, key: string }, index: number) {
+function updateCondition(values: { value: string | number | boolean, key: string }, index: number) {
     const { value, key } = values;
     editorStore.tempConditions[index][key] = value;
 }
