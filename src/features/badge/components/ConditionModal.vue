@@ -12,7 +12,7 @@ const currentBadge = editorStore.getEpocNode.data.formValues['badges'][editorSto
 
 const allConditionsValid = computed(() => {
     return editorStore.tempConditions.every((condition) => {
-        return condition.element && condition.verb && condition.value;
+        return condition.element && condition.verb && condition.value !== '';
     });
 });
 

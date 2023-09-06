@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ComputedRef } from 'vue';
+import { computed, ComputedRef, ref } from 'vue';
 import ConditionElementSelector from './ConditionElementSelector.vue';
 import ConditionValue from './ConditionValue.vue';
 import { getVerbs, getValueType, createPhrase } from '@/src/shared/services';
@@ -23,7 +23,7 @@ const currentCondition: ComputedRef<Condition> = computed(() => {
     return {
         element: props.inputValue.element || '',
         verb: props.inputValue.verb || '',
-        value: props.inputValue.value || ''
+        value: props.inputValue.value !== '' ? props.inputValue.value : ''
     };
 });
 
@@ -105,7 +105,7 @@ function handleVerbChange(value: string) {
                     </option>
                 </select>
             </div>
-            <ConditionValue 
+            <ConditionValue
                 :disabled="valueDisabled"
                 :input-value="currentCondition.value"
                 :value-type="valueDisabled ? null : getValueType(currentCondition.verb)"
@@ -113,7 +113,7 @@ function handleVerbChange(value: string) {
                 @change="updateCondition($event, 'value')"
             />
         </div>
-        <p v-if="!valueDisabled && currentCondition.value">
+        <p v-if="!valueDisabled && currentCondition.value !== ''">
             {{ `${createPhrase(currentCondition, elementType)} ${currentCondition.element}` }}
         </p>
     </article>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 
-defineProps<{
+import { watch } from 'vue';
+
+const props = defineProps<{
     disabled: boolean;
     valueType?: 'boolean' | 'number';
     inputValue: boolean | number | string;
@@ -10,30 +12,27 @@ const emit = defineEmits<{
     (e: 'change', value: boolean | number | string): void;
 }>();
 
-function onChange(event: Event, valueType: 'boolean' | 'number' | 'string') {
-    if(valueType === 'boolean') {
-        emit('change', (event.target as HTMLSelectElement).value === 'true');
-    } else if(valueType === 'number') {
-        emit('change', Number((event.target as HTMLInputElement).value));
-    }
-    else {
-        emit('change', (event.target as HTMLInputElement).value);
-    }
+function onChange(value: boolean | number | string) {
+    emit('change', value);
 }
+
+watch(props, () => {
+    if(props.valueType === 'boolean') emit('change', true);
+    else if(props.valueType === 'number') emit('change', 0);
+    else emit('change', '');
+});
 
 </script>
 
 <template>
     <div class="select">
-        Valeur    
         <select
             v-if="valueType === 'boolean'"
             id="value"
             :value="inputValue"
             :disabled="disabled"
-            @change="onChange($event, valueType)"
+            @change="onChange($event.target.value !== '' ? $event.target.value === 'true' : '')"
         >
-            <option default value="">Veuillez choisir</option>
             <option value="true">Vrai</option>
             <option value="false">Faux</option>
         </select>
@@ -44,7 +43,7 @@ function onChange(event: Event, valueType: 'boolean' | 'number' | 'string') {
             :disabled="disabled"
             type="number"
             class="number-input"
-            @change="onChange($event, valueType)"
+            @change="onChange(Number($event.target.value))"
         >
         <input 
             v-else
