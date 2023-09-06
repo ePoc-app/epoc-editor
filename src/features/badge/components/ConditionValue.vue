@@ -31,7 +31,7 @@ watch(props, () => {
             id="value"
             :value="inputValue"
             :disabled="disabled"
-            @change="onChange($event.target.value !== '' ? $event.target.value === 'true' : '')"
+            @change="onChange(($event.target as HTMLSelectElement).value !== '' ? ($event.target as HTMLSelectElement).value === 'true' : '')"
         >
             <option value="true">Vrai</option>
             <option value="false">Faux</option>
@@ -43,7 +43,7 @@ watch(props, () => {
             :disabled="disabled"
             type="number"
             class="number-input"
-            @change="onChange(Number($event.target.value))"
+            @change="onChange(Number(($event.target as HTMLSelectElement).value))"
         >
         <input 
             v-else
