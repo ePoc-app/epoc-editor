@@ -97,7 +97,7 @@ export function getContentDefaultValues(type) {
 
     return form.fields.reduce((acc, field) => {
         const keyValues = field.inputs.reduce((acc2, i) => {
-            return {[i.id] : i.value};
+            return {[i.id] : JSON.parse(JSON.stringify(i.value))};
         }, {});
         return {...acc, ...keyValues};
     }, {});
