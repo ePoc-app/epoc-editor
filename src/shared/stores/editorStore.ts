@@ -177,6 +177,7 @@ export const useEditorStore = defineStore('editor', {
 
             this.formPanel = null;
             this.openedElementId = null;
+            this.openedNodeId = null;
         },
 
         closeValidationModal(): void {
