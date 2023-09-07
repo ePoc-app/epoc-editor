@@ -69,7 +69,7 @@ module.exports = {
     },
     afterSign: async (context) => {
         const { electronPlatformName, appOutDir } = context;
-        if (electronPlatformName !== 'darwin') {
+        if (electronPlatformName !== 'darwin' || process.env.NO_NOTARIZE) {
             return;
         }
 
