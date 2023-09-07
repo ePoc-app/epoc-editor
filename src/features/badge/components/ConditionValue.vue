@@ -3,7 +3,7 @@
 import { watch } from 'vue';
 
 const props = defineProps<{
-    disabled: boolean;
+    verb: string;
     valueType?: 'boolean' | 'number';
     inputValue: boolean | number | string;
 }>();
@@ -16,21 +16,24 @@ function onChange(value: boolean | number | string) {
     emit('change', value);
 }
 
-watch(props, () => {
-    if(props.valueType === 'boolean') emit('change', true);
-    else if(props.valueType === 'number') emit('change', 0);
-    else emit('change', '');
+watch(() => props.verb, (newVerb) => {
+    if(newVerb !== '') {
+        if(props.valueType === 'boolean') emit('change', true);
+        else if(props.valueType === 'number') emit('change', 0);
+        else emit('change', '');
+    }
 });
 
 </script>
 
 <template>
     <div class="select">
+        Valeur
         <select
             v-if="valueType === 'boolean'"
             id="value"
             :value="inputValue"
-            :disabled="disabled"
+            :disabled="verb === ''"
             @change="onChange(($event.target as HTMLSelectElement).value !== '' ? ($event.target as HTMLSelectElement).value === 'true' : '')"
         >
             <option value="true">Vrai</option>
@@ -40,7 +43,7 @@ watch(props, () => {
             v-else-if="valueType === 'number'"
             id="value"
             :value="inputValue"
-            :disabled="disabled"
+            :disabled="verb === ''"
             type="number"
             class="number-input"
             @change="onChange(Number(($event.target as HTMLSelectElement).value))"

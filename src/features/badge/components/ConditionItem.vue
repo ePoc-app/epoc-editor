@@ -106,7 +106,7 @@ function handleVerbChange(value: string) {
                 </select>
             </div>
             <ConditionValue
-                :disabled="valueDisabled"
+                :verb="currentCondition.verb"
                 :input-value="currentCondition.value"
                 :value-type="valueDisabled ? null : getValueType(currentCondition.verb)"
                 class="grid-item"
