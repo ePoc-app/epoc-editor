@@ -86,8 +86,6 @@ function createContentJSON() : EpocV1 {
 
     if(badges) epoc.badges = exportBadgesToPage(badges);
 
-    console.log('epoc', JSON.stringify(epoc.badges, null, 2));
-
     return epoc;
 }
 

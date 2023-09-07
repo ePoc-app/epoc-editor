@@ -2,6 +2,7 @@ import { Verbs, VerbKey, ElementType, Condition, Badge } from '@/src/shared/inte
 import { Operand, Operands, Rule } from '@epoc/epoc-types/src/v2';
 import { useEditorStore } from '@/src/shared/stores';
 import { useVueFlow} from '@vue-flow/core';
+import { saveState } from '@/src/shared/services/undoRedo.service';
 
 const { findNode } = useVueFlow({id: 'main'});
 
@@ -186,6 +187,8 @@ export function deleteConnectedConditions(contentId: string) {
 }
 
 export function deleteBadge(id: string) {
+    saveState(true);
+
     const epocNode = findNode('1');
     delete epocNode.data.formValues.badges[id];
 }
