@@ -4,6 +4,7 @@ import { getCurrentState } from '@/src/shared/services/undoRedo.service';
 
 const props = defineProps<{
     inputValue: string;
+    label: string;
 }>();
 
 const emit = defineEmits<{
@@ -46,7 +47,7 @@ function onBlur() {
 </script>
 
 <template>
-    <label for="input-score">Score</label>
+    <label for="input-score">{{ label }}</label>
     <div id="input-score" class="input-score">
         <button @click="minus(inputValue)"><i class="icon-minus-circle"></i></button>
         <input
