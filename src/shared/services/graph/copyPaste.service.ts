@@ -53,6 +53,7 @@ function handleGraphPaste(selectedPages, position: { x: number, y: number }): vo
             const newElement = JSON.parse(JSON.stringify(element));
             newElement.id = generateId();
             newElement.parentId = pageId;
+            newElement.contentId = generateContentId();
             return newElement;
         });
 
