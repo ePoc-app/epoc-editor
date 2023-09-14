@@ -273,6 +273,13 @@ export function deleteNode(nodeId: string): void {
     const nodeToDelete = findNode(nodeId);
 
     deleteConnectedConditions(nodeToDelete.data.contentId);
+
+    if(nodeToDelete.data.elements) {
+        for(const element of nodeToDelete.data.elements) {
+            deleteConnectedConditions(element.contentId);
+        }
+    }
+
     applyNodeChanges([{ id:nodeToDelete.id, type: 'remove'}]);
 
     if(nodeToDelete.type === 'chapter') updateNextChapter(nodeToDelete.id);
