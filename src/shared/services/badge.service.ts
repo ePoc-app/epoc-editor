@@ -1,8 +1,9 @@
 import { Verbs, VerbKey, ElementType, Condition, Badge } from '@/src/shared/interfaces';
 import { Operand, Operands, Rule } from '@epoc/epoc-types/src/v2';
-import { useEditorStore } from '@/src/shared/stores';
+import { useEditorStore, useProjectStore } from '@/src/shared/stores';
 import { useVueFlow} from '@vue-flow/core';
 import { saveState } from '@/src/shared/services/undoRedo.service';
+import { graphService } from '@/src/shared/services/graph.service';
 
 const { findNode } = useVueFlow({id: 'main'});
 
@@ -191,4 +192,11 @@ export function deleteBadge(id: string) {
 
     const epocNode = findNode('1');
     delete epocNode.data.formValues.badges[id];
+}
+
+export async function saveCustomIcon(icon: string) {
+    const projectStore = useProjectStore();
+
+    const iconPath = await graphService.importFile(icon);
+    projectStore.addCustomIcon(iconPath);
 }

@@ -344,35 +344,33 @@ export function exportBadgesToPage(badges) {
 
     const res = JSON.parse(JSON.stringify(badges));
 
-    for(const badgeKey in res) {
-        const conditions = getConditions(res[badgeKey]);
+    for(const badgeKey of Object.keys(res)) {
+        let conditions = getConditions(res[badgeKey]);
         const elements = conditions.map((condition) => condition.element);
 
         for(const element of elements) {
             const nodeElement = getElementByContentId(element);
 
-            if(!nodeElement) return;
-
             // @ts-ignore
-            if(nodeElement.parentId) {
+            if(nodeElement && nodeElement.parentId) {
                 //@ts-ignore
                 const parentNode = findNode(nodeElement.parentId);
 
-                if(parentNode.type === 'activity') {
-                    return res;
-                }
+                if(parentNode.type !== 'activity') {
+                    const newElement = getContentIdFromId(parentNode.id);
 
-                const newElement = getContentIdFromId(parentNode.id);
-                const newConditions = conditions.map((condition) => {
-                    if (condition.element === element) {
-                        return {
-                            ...condition,
-                            element: newElement
-                        };
-                    }
-                    return condition;
-                });
-                res[badgeKey].rule = createRule(newConditions);
+                    conditions = conditions.map((condition) => {
+                        if (condition.element === element) {
+                            return {
+                                ...condition,
+                                element: newElement
+                            };
+                        }
+                        return condition;
+                    });
+
+                    res[badgeKey].rule = createRule(conditions);
+                }
             }
         }
     }

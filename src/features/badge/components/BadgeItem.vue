@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Badge } from '@/src/shared/interfaces';
 import { computed } from 'vue';
+import { iconsPath } from '@/src/shared/data';
 
 const props = defineProps<{
     viewMode?: boolean;
@@ -22,10 +23,15 @@ function onClick() {
 
 const badgeItem = computed(() => {
     return {
-        icon: props.badge ? props.badge.icon : props.icon,
+        icon: getIconPath(),
         title: props.badge ? props.badge.title : '',
     };
 });
+
+function getIconPath() {
+    const icon = props.badge ? props.badge.icon : props.icon;
+    return icon.endsWith('.svg') ? icon : `${iconsPath}/${icon}.svg`;
+}
 
 </script>
 
