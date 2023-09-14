@@ -8,6 +8,7 @@ const emit = defineEmits<{
 }>();
 
 function onClick() {
+    if(!url.value) return;
     emit('click', url.value);
 }
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ComputedRef, ref } from 'vue';
+import { computed, ComputedRef } from 'vue';
 import ConditionElementSelector from './ConditionElementSelector.vue';
 import ConditionValue from './ConditionValue.vue';
 import { getVerbs, getValueType, createPhrase } from '@/src/shared/services';
