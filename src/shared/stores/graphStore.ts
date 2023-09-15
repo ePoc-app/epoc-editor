@@ -15,7 +15,7 @@ interface GraphState {
 
 export const useGraphStore = defineStore('graph', {
     state: (): GraphState => ({
-        elements: [epoc, add, mainEdge],
+        elements: [epoc(), add, mainEdge],
         flow: null
     }),
 
@@ -32,20 +32,22 @@ export const useGraphStore = defineStore('graph', {
                 setEdges(this.flow.edges);
                 setTransform({x, y, zoom: this.flow.zoom || 0});
             } else {
-                this.elements = [epoc, add, mainEdge];
+                this.elements = [epoc(), add, mainEdge];
             }
         },
     }
 
 });
 
-const epoc: Node = {
-    id: '1',
-    type: 'epoc',
-    data: {action: {icon: 'icon-epoc', type: 'epoc'}, formType: 'epoc', formValues: {}},
-    position: {x: 0, y: 0},
-    draggable: false,
-    deletable: false
+const epoc = () : Node => {
+    return {
+        id: '1',
+        type: 'epoc',
+        data: {action: {icon: 'icon-epoc', type: 'epoc'}, formType: 'epoc', formValues: {id: `E-${(Math.random() + 1).toString(36).substring(7).toUpperCase()}`}},
+        position: {x: 0, y: 0},
+        draggable: false,
+        deletable: false
+    };
 };
 
 const add: Node = {
