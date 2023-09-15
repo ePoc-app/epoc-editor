@@ -9,7 +9,7 @@ module.exports.setupMenu = function () {
         {
             label: 'App',
             submenu: [
-                {label: 'À propos', selector: 'orderFrontStandardAboutPanel:'},
+                {label: 'À propos', role: 'about'},
                 {
                     label: 'Nouvelle fenêtre',
                     click: function () {
@@ -118,7 +118,6 @@ module.exports.setupMenu = function () {
                 {
                     label: 'Undo',
                     accelerator: 'CmdOrCtrl+Z',
-                    selector: 'undo:',
                     click: function() {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'undo');
                     }
@@ -126,16 +125,15 @@ module.exports.setupMenu = function () {
                 {
                     label: 'Redo',
                     accelerator: process.platform === 'darwin' ? 'Shift+CmdOrCtrl+Z' : 'CmdOrCtrl+Y',
-                    selector: 'redo:',
                     click: function() {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'redo');
                     }
                 },
                 {type: 'separator'},
-                {label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:'},
-                {label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:'},
-                {label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:'},
-                {label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:'}
+                {label: 'Cut', accelerator: 'CmdOrCtrl+X', role: 'cut'},
+                {label: 'Copy', accelerator: 'CmdOrCtrl+C', role: 'copy'},
+                {label: 'Paste', accelerator: 'CmdOrCtrl+V', role: 'paste'},
+                {label: 'Select All', accelerator: 'CmdOrCtrl+A', role: 'selectAll'}
             ]
         }, {
             label: 'Aide',
@@ -176,7 +174,7 @@ module.exports.setupMenuPreview = function () {
         {
             label: 'App',
             submenu: [
-                {label: 'About Application', selector: 'orderFrontStandardAboutPanel:'},
+                {label: 'About Application', role: 'about'},
                 {
                     label: 'Quit',
                     accelerator: 'CmdOrCtrl+Q',
