@@ -21,7 +21,7 @@
     "coverage": "vitest --coverage",
     "wdio": "wdio run ./wdio.conf.ts",
     "lint": "npx eslint ./src ./test ./electron/* --ext .ts,.vue,.js",
-    "updatePreview": "export $(grep -v '^#' .env | xargs) && curl --location --output public/preview.zip --header \"PRIVATE-TOKEN: $GITLAB_TOKEN\" $GITLAB_URL",
+    "updatePreview": "set -o allexport; source .env; set +o allexport && curl --location --output public/preview.zip --header \"PRIVATE-TOKEN: $GITLAB_TOKEN\" $GITLAB_URL",
     "debug-mac": "'/Applications/ePoc Editor.app/Contents/MacOS/ePoc Editor' --remote-debugging-port=8315"
   },
   "dependencies": {
