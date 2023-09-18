@@ -193,10 +193,3 @@ export function deleteBadge(id: string) {
     const epocNode = findNode('1');
     delete epocNode.data.formValues.badges[id];
 }
-
-export async function saveCustomIcon(icon: string) {
-    const projectStore = useProjectStore();
-
-    const iconPath = await graphService.importFile(icon);
-    projectStore.addCustomIcon(iconPath);
-}
