@@ -30,8 +30,7 @@ export function duplicateContent(): void {
     newElement.id = generateId();
     newElement.parentId = pageNode.id;
 
-    pageNode.data.elements.push(newElement);
-    addContentToPage(pageNode.id, newElement.action);
+    addContentToPage(pageNode.id, newElement);
 }
 
 export function changeContentOrder(startIndex: number, finalIndex: number, pageId: string): void {
