@@ -77,10 +77,20 @@ function checkIfDisabled(disabledProp): boolean {
     }
 }
 
+function handleKeydown(event) {
+    const { key, metaKey, ctrlKey } = event;
+
+    if(metaKey || ctrlKey) {
+        if(key === 'v') {
+            event.stopPropagation();
+        }
+    }
+}
+
 </script>
 
 <template>
-    <div class="panel">
+    <div class="panel" @keydown="handleKeydown">
         <button class="btn btn-close" @click="editorStore.closeFormPanel"><i class="icon-x"></i></button>
         <div class="title">
             <div class="form-icon"><i :class="editorStore.formPanel.icon"></i></div>
