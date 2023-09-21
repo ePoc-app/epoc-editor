@@ -1,34 +1,12 @@
-import { Verbs, VerbKey, ElementType, Condition, Badge } from '@/src/shared/interfaces';
+import { Verbs, ElementType, Condition, Badge } from '@/src/shared/interfaces';
 import { Operand, Operands, Rule } from '@epoc/epoc-types/src/v2';
-import { useEditorStore, useProjectStore } from '@/src/shared/stores';
+import { useEditorStore } from '@/src/shared/stores';
 import { useVueFlow} from '@vue-flow/core';
 import { saveState } from '@/src/shared/services/undoRedo.service';
-import { graphService } from '@/src/shared/services/graph.service';
+import { elementVerbs, verbs } from '@/src/shared/data';
 
 const { findNode } = useVueFlow({id: 'main'});
 
-const verbs: Verbs = {
-    'started': { label: 'Commencé', valueType: 'boolean' },
-    'completed': { label: 'Terminé', valueType: 'boolean' },
-    'viewed': { label: 'Vu', valueType: 'boolean' },
-    'read': { label: 'Lu', valueType: 'boolean' },
-    'played': { label: 'Joué', valueType: 'boolean' },
-    'watched': { label: 'Regardé', valueType: 'boolean' },
-    'listened': { label: 'Écouté', valueType: 'boolean' },
-    'attempted': { label: 'Tenté', valueType: 'boolean' },
-    'scored': { label: 'Obtenu un score de', valueType: 'number' },
-    'passed': { label: 'Réussi', valueType: 'boolean' },
-};
-
-const elementVerbs: Record<ElementType, VerbKey[]> = {
-    'chapter': ['started', 'completed'],
-    'page': ['viewed'],
-    'html': ['read'],
-    'video': ['played', 'watched'],
-    'audio': ['played', 'listened'],
-    'activity': ['started', 'completed', 'scored'],
-    'question': ['attempted', 'passed', 'scored']
-};
 
 export function getVerbs(type: ElementType): Verbs {
     if(!type || !elementVerbs[type]) return;
