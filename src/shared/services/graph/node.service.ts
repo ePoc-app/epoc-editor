@@ -296,6 +296,7 @@ export function duplicatePage(pageId?: string): void {
         const newElement = JSON.parse(JSON.stringify(elements));
         newElement.id = generateId();
         newElement.parentId = nodeId;
+        newElement.contentId = generateContentId();
         newElements.push(newElement);
     }
 
