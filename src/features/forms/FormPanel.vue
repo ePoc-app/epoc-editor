@@ -3,7 +3,7 @@ import { useEditorStore } from '../../shared/stores';
 import FormButton from './components/FormButton.vue';
 import GenericField from './components/GenericField.vue';
 import { Input } from '@/src/shared/interfaces';
-import { deleteBadge, editorService } from '@/src/shared/services';
+import { addNewBadge, deleteBadge, editorService } from '@/src/shared/services';
 import { createToaster } from '@meforma/vue-toaster';
 import {
     confirmDelete,
@@ -36,7 +36,7 @@ function actionOnForm(action: string) {
     case 'back-to-page':
         editorStore.openPage();
         break;
-    
+
     case 'duplicate-element':
         duplicateContent();
         break;
@@ -63,6 +63,9 @@ function actionOnForm(action: string) {
         editorStore.openEpoc();
         break;
 
+    case 'add-badge':
+        addNewBadge();
+        break;
     }
 
 }

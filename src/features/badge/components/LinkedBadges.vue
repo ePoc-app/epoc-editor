@@ -23,7 +23,7 @@ function openBadge(badgeId: string) {
 
 <template>
     <template v-if="connectedBadges.length > 0">
-        <h3 class="field-title">Badges connectés</h3>
+        <h3 class="field-title">Badges associés</h3>
         <hr class="separator">
         <div class="badges">
             <BadgeItem

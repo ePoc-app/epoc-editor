@@ -1,7 +1,7 @@
 import { FormButton } from '@/src/shared/interfaces';
 import env from '@/src/shared/utils/env';
 
-export const baseButtons = [{ label: 'Supprimer', icon: 'icon-supprimer', action: 'delete' }];
+export const baseButtons = [{ label: 'Supprimer', icon: 'icon-supprimer', action: 'delete' }, { label: 'Ajouter un badge', icon: 'icon-plus', action: 'add-badge'}];
 
 export const pageButtons: FormButton[] = env.isDev ? [
     ...baseButtons,

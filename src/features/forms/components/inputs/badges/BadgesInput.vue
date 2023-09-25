@@ -1,21 +1,13 @@
 <script setup lang="ts">
 import BadgeItem from '@/src/features/badge/components/BadgeItem.vue';
 import AddBadge from './components/AddBadge.vue';
-import { useEditorStore } from '@/src/shared/stores/editorStore';
 import { computed, ComputedRef } from 'vue';
-import { generateContentId } from '@/src/shared/services';
 import { Badge } from '@/src/shared/interfaces';
-import { saveState } from '@/src/shared/services/undoRedo.service';
-
-const editorStore = useEditorStore();
+import { addNewBadge, openBadge } from '@/src/shared/services';
 
 const props = defineProps<{
     inputValue: string[];
 }>();
-
-function openBadge(badgeId: string) {
-    editorStore.openBadgeFormPanel(badgeId, 'custom');
-}
 
 const badges: ComputedRef<Badge[]> = computed(() => {
     const res: Badge[] = [];
@@ -32,24 +24,6 @@ const badges: ComputedRef<Badge[]> = computed(() => {
 
     return res;
 });
-
-function addNewBadge() {
-    saveState(true);
-
-    const epocNode = editorStore.getEpocNode;
-    if(!epocNode.data.formValues['badges']) epocNode.data.formValues['badges'] = {};
-
-    const id = generateContentId();
-    epocNode.data.formValues['badges'][id] = {
-        title: '',
-        icon: '',
-        description: '',
-        rule: {
-            'and': []
-        }
-    };
-    openBadge(id);
-}
 
 </script>
 

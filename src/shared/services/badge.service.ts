@@ -4,6 +4,7 @@ import { useEditorStore } from '@/src/shared/stores';
 import { useVueFlow} from '@vue-flow/core';
 import { saveState } from '@/src/shared/services/undoRedo.service';
 import { elementVerbs, verbs } from '@/src/shared/data';
+import { generateContentId } from '@/src/shared/services';
 
 const { findNode } = useVueFlow({id: 'main'});
 
@@ -170,4 +171,31 @@ export function deleteBadge(id: string) {
 
     const epocNode = findNode('1');
     delete epocNode.data.formValues.badges[id];
+}
+
+export function openBadge(badgeId: string) {
+    const editorStore = useEditorStore();
+
+    editorStore.openBadgeFormPanel(badgeId, 'custom');
+}
+
+export function addNewBadge() {
+    const editorStore = useEditorStore();
+
+    saveState(true);
+
+    const epocNode = editorStore.getEpocNode;
+    if(!epocNode.data.formValues['badges']) epocNode.data.formValues['badges'] = {};
+
+    const id = generateContentId();
+    epocNode.data.formValues['badges'][id] = {
+        title: '',
+        icon: '',
+        description: '',
+        rule: {
+            'and': []
+        }
+    };
+
+    openBadge(id);
 }
