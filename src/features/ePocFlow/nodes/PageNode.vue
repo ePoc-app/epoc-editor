@@ -32,7 +32,7 @@ const isTarget = computed(() => getConnectedEdges([currentNode.value], edges.val
 const isCondition = ref(currentNode.value.data.type === 'condition');
 const page: Ref<HTMLElement> = ref(null);
 
-function openPageForm(id, formType) {
+function openPageForm(id: string, formType: string) {
     if(editorStore.selectNodeMode) {
         exitSelectNodeMode(id);
     } else {
@@ -52,13 +52,13 @@ function removeHoverEffect() {
     page.value.classList.remove('hover');
 }
 
-function onContextMenu(event) {
+function onContextMenu(event: MouseEvent) {
     const position = {
         x: event.clientX,
         y: event.clientY
     };
     
-    const alreadyHasQuestion = currentNode.value.data.elements.some((element) => questions.some((question) => question.type === element.action.type));
+    const alreadyHasQuestion = currentNode.value.data.elements.some((element: NodeElement) => questions.some((question) => question.type === element.action.type));
     const context = alreadyHasQuestion ? 'pageWithQuestion' : 'page';
     unselectAllNodes();
 
@@ -88,6 +88,7 @@ const connectedBadges = computed(() => getConnectedBadges(currentNode.value.data
             @contextmenu.stop="onContextMenu"
             @dragover.stop
         >
+            <!--suppress JSUnresolvedReference -->
             <p class="node-title" :class="{ 'active': editorStore.openedElementId ? editorStore.openedElementId === props.id : false }">{{ currentNode.data.formValues?.title || 'Page' }}</p>
             <Handle
                 :class="{ 'not-connected': !isTarget }"

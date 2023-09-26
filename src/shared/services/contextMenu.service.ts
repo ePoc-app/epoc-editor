@@ -19,15 +19,19 @@ function beforeEachReceive() {
 }
 
 const extendedApi: ExtendedApiInterface = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     send: (channel: string, data?: any) => {
         api.send(channel, data);
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     receive: (channel: string, callback: (...args: any[]) => void) => {
         api.receive(channel, (...args) => {
+            // noinspection BadExpressionStatementJS
             beforeEachReceive; // Call beforeEachReceive before receiving data
             callback(...args);
         });
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     receiveOnce: (channel: string, callback: (...args: any[]) => void) => {
         api.receiveOnce(channel, callback);
     },

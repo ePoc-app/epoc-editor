@@ -338,6 +338,7 @@ export function transformActivityToPage(): void {
 }
 
 export function alignNode(nodeId: string): void {
+    // noinspection JSIgnoredPromiseFromCall
     nextTick(() => {
         const node = findNode(nodeId);
         const stop = watch(
@@ -354,16 +355,7 @@ export function alignNode(nodeId: string): void {
 }
 
 export function getSelectedNodes(): Node[] {
-    const selectedNodes: Node[] = nodes.value.filter(node => node.selected && isNodeDeletable(node.id));
-
-    /*
-    //? chapters node can't be selected but can be active
-    const activeNode = isChild ? findNode(editorStore.openedNodeId) : findNode(editorStore.openedElementId);
-    
-    if(activeNode && isNodeDeletable(activeNode.id)) selectedNodes.push(activeNode);
-    */
-    
-    return selectedNodes;
+    return nodes.value.filter(node => node.selected && isNodeDeletable(node.id));
 }
 
 export function isNodeDeletable(id: string): boolean {
@@ -386,9 +378,12 @@ export function confirmDelete(): void {
     }
 }
 
-export function isFormButtonDisabled(isDisabledFunction: (node) => boolean): boolean {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function isFormButtonDisabled(isDisabledFunction: (node: any) => boolean): boolean {
     const isChild = Boolean(editorStore.openedNodeId);
-    const nodeData = isChild ? findNode(editorStore.openedNodeId).data.elements.find(e => e.id === editorStore.openedElementId) : findNode(editorStore.openedElementId).data;
+    const nodeData = isChild
+        ? findNode(editorStore.openedNodeId).data.elements.find((e: NodeElement)=> e.id === editorStore.openedElementId)
+        : findNode(editorStore.openedElementId).data;
     return isDisabledFunction(nodeData);
 }
 

@@ -37,7 +37,7 @@ export function createEdge(sourceId: string, targetId: string): void {
 export function getContentIdFromId(id: string): string {
     if(id === '1') return 'ePoc';
     const node = findNode(id);
-    let contentId;
+    let contentId: string;
     if(!node) {
         for(const node of nodes.value) {
             if(node.data.elements) {

@@ -1,16 +1,11 @@
 import { defineStore } from 'pinia';
-import { Edge, MarkerType, Node, useVueFlow } from '@vue-flow/core';
+import { Edge, FlowExportObject, MarkerType, Node, useVueFlow } from '@vue-flow/core';
 
 const {nodes, onConnect, addEdges, findNode, setNodes, setEdges, setTransform} = useVueFlow({id: 'main'});
 
 interface GraphState {
     elements: (Node | Edge)[];
-    flow: {
-        edges: Edge[],
-        nodes: Node[],
-        position: [number, number],
-        zoom: number
-    };
+    flow: FlowExportObject;
 }
 
 export const useGraphStore = defineStore('graph', {
@@ -21,7 +16,7 @@ export const useGraphStore = defineStore('graph', {
 
 
     actions: {
-        setFlow(flow) {
+        setFlow(flow: FlowExportObject) {
             this.flow = flow;
             this.restore();
         },

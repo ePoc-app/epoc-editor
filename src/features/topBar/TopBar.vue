@@ -26,7 +26,7 @@ onViewportChangeEnd ((event) => {
     zoom.value = event.zoom;
 });
 
-function updateZoom(val) {
+function updateZoom(val: number) {
     zoom.value = val;
     if (val === 0) {
         fitView({duration: 300});
@@ -35,7 +35,7 @@ function updateZoom(val) {
     }
 }
 
-function since(date) {
+function since(date: string) {
     if (!date) return 'jamais';
     const milliseconds = Math.abs(Date.now() - new Date(date).getTime());
     const secs = Math.floor(Math.abs(milliseconds) / 1000);

@@ -54,7 +54,7 @@ function chooseCustomIcon(icon: string) {
         </div>
 
         <div class="content">
-            <h3>Icônes personalisées</h3>
+            <h3>Icônes personnalisées</h3>
             <hr class="separator">
             <div class="badges">
                 <BadgeItem

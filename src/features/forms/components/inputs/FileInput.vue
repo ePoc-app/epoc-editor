@@ -26,11 +26,12 @@ const filetype = computed(() => {
 });
 
 //! This function have to fetch the image from the back
-async function changeImage(e) {
+async function changeImage(e: Event) {
 
     savedState = getCurrentState(true);
 
-    const file = e.target.files[0];
+    const target = e.target as HTMLInputElement;
+    const file = target.files[0];
     if (!file) return;
     fileInput.value.value = '';
     url.value = await graphService.importFile(file.path);

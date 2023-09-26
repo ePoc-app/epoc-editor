@@ -39,6 +39,7 @@ watch(
 );
 
 const plugins = 'image link lists template code';
+// noinspection SpellCheckingInspection
 const toolbar = 'bold italic alignleft aligncenter alignright link image bullist numlist outdent indent template code';
 
 const template = `
@@ -53,7 +54,7 @@ function init() {
     content.value = props.inputValue;
 }
 
-async function drop(event) {
+async function drop(event: DragEvent) {
     const file = event.dataTransfer.files[0];
     if (!file) return;
     const url = await graphService.importFile(file.path);
@@ -61,12 +62,12 @@ async function drop(event) {
     editor.setContent(editor.getContent() + `<img alt="" src="${url}"/>`);
 }
 
-function handleFilePicker(callback) {
+function handleFilePicker(callback: (url: string) => void) {
     const input = document.createElement('input');
     input.type = 'file';
     document.body.appendChild(input);
     input.click();
-    input.addEventListener('change', async (e: any) => {
+    input.addEventListener('change', async (e: Event) => {
         const fileInput = e.target as HTMLInputElement;
         const file = fileInput.files[0];
         if (!file) return;

@@ -13,7 +13,7 @@ const emit = defineEmits<{
     (e: 'saveGivenState', state: string): void
 }>();
 
-function onChange(value: 'string') {
+function onChange(value: string) {
     const savedState = getCurrentState(true);
 
     emit('change', value);
@@ -40,10 +40,10 @@ function onChange(value: 'string') {
             <div class="radio-btn">
                 <input
                     :id="'right-' + String(pos)"
-                    :name="'pos' + pos"
-                    type="radio"
-                    class="radio-input"
                     :checked="inputValue === '2'"
+                    :name="'pos' + pos"
+                    class="radio-input"
+                    type="radio"
                     @change="onChange('2')"
                 >
                 <label :for="'right-' + String(pos)">Choix droite</label>

@@ -1,5 +1,5 @@
 import env from '@/src/shared/utils/env';
-import {ElementType, VerbKey, Verbs} from "@/src/shared/interfaces";
+import {ElementType, VerbKey, Verbs} from '@/src/shared/interfaces';
 export const iconsPath = env.isDev ? '/img/badge/icon' : 'img/badge/icon';
 
 export const defaultBadgeIcons = [

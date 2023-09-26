@@ -1,7 +1,7 @@
 import { ApiInterface } from '@/src/shared/interfaces/api.interface';
 import { getConnectedEdges, GraphNode, useVueFlow } from '@vue-flow/core';
 import { EpocV1 } from '@/src/shared/classes/epoc-v1';
-import { Assessment, Audio, ChoiceCondition, Content, Html, SimpleQuestion, uid, Video } from '@epoc/epoc-types/src/v1';
+import { Assessment, Audio, Choice, ChoiceCondition, Content, Html, SimpleQuestion, uid, Video } from '@epoc/epoc-types/src/v1';
 import { questions } from '@/src/shared/data';
 import { useEditorStore } from '@/src/shared/stores';
 import {
@@ -12,7 +12,7 @@ import {
 } from '@/src/shared/services/graph';
 import { Question } from '@epoc/epoc-types/src/v2';
 import { createRule, getConditions } from '@/src/shared/services/badge.service';
-import { NodeElement } from '@/src/shared/interfaces';
+import { Badge, NodeElement } from '@/src/shared/interfaces';
 
 declare const api: ApiInterface;
 
@@ -39,7 +39,7 @@ function importFile(filepath: string): Promise<string> {
 
 let timerId = null;
 
-const debounceFunction = function (delay, cb) {
+const debounceFunction = function (delay: number, cb: () => void) {
     clearTimeout(timerId);
     timerId = setTimeout(cb, delay);
 };
@@ -134,13 +134,14 @@ function newContent(epoc: EpocV1, pageNode: GraphNode) : string {
                 conditionResolver: {
                     type: 'choice',
                     label: contentNode.formValues.label,
-                    choices: contentNode.formValues.choices.map(c => {
+                    choices: contentNode.formValues.choices.map((c: Choice) => {
                         return {label: c, value: c};
                     }),
-                    conditionalFlag: contentNode.formValues.choices.map(c => {
+                    conditionalFlag: contentNode.formValues.choices.map((c: Choice) => {
                         return {
                             value: c,
-                            flags: contentNode.formValues.conditionalFlag.reduce((arr, f) => {
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            flags: contentNode.formValues.conditionalFlag.reduce((arr: any, f: any) => {
                                 if (f.choice === c) arr.push(f.id);
                                 return arr;
                             }, [])
@@ -158,7 +159,7 @@ function newContent(epoc: EpocV1, pageNode: GraphNode) : string {
             return epoc.addContent(pageNode.data.contentId, content);
         }
     } else if (pageNode.type === 'activity') {
-        const questions = pageNode.data.elements.reduce((q, questionNode) => {
+        const questions = pageNode.data.elements.reduce((q: string[], questionNode: NodeElement) => {
             q.push(newQuestion(epoc, questionNode));
             return q;
         }, []);
@@ -172,7 +173,8 @@ function newContent(epoc: EpocV1, pageNode: GraphNode) : string {
     }
 }
 
-function newQuestion(epoc: EpocV1, questionNode) : string {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function newQuestion(epoc: EpocV1, questionNode: any) : string {
     let type = 'unknown';
     let responses = [];
     let correctResponse = [];
@@ -188,7 +190,7 @@ function newQuestion(epoc: EpocV1, questionNode) : string {
             correctResponse = questionNode.formValues.responses.filter(r => r.isCorrect).map(r => r.value);
             type = correctResponse.length > 1 ? 'multiple-choice' : 'choice';
         } else if (questionNode.formType === 'reorder') {
-            responses = questionNode.formValues.responses.map(r => {
+            responses = questionNode.formValues.responses.map((r: { label: string, value: string }) => {
                 return {
                     label: r.label,
                     value: r.value
@@ -197,7 +199,7 @@ function newQuestion(epoc: EpocV1, questionNode) : string {
             correctResponse = questionNode.formValues.responses.reduce((acc, r) => acc+r.value, '');
             type = 'reorder';
         } else if (['drag-and-drop', 'dropdown-list', 'swipe'].includes(questionNode.formType)) {
-            responses = questionNode.formValues.responses.map(r => {
+            responses = questionNode.formValues.responses.map((r: { label: string, value: string }) => {
                 return {
                     label: r.label,
                     value: r.value
@@ -224,12 +226,12 @@ function newQuestion(epoc: EpocV1, questionNode) : string {
     return epoc.addQuestion(questionNode.contentId, question);
 }
 
-function getNextNode(node): GraphNode | null {
+function getNextNode(node: GraphNode): GraphNode | null {
     const edge = getConnectedEdges([node], edges.value).filter((edge) => edge.source === node.id)[0];
     return edge ? getNodeById(edge.target) : null;
 }
 
-function getPreviousNode(node): GraphNode | null {
+function getPreviousNode(node: GraphNode): GraphNode | null {
     const edge = getConnectedEdges([node], edges.value).filter((edge) => edge.target === node.id)[0];
     return edge ? getNodeById(edge.source) : null;
 }
@@ -340,7 +342,7 @@ export function generateId(): uid {
 }
 
 // Used to translate v2 badges to v1
-export function exportBadgesToPage(badges) {
+export function exportBadgesToPage(badges: Record<string, Badge>): Record<string, Badge> {
 
     const res = JSON.parse(JSON.stringify(badges));
 

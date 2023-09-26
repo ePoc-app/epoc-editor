@@ -13,8 +13,9 @@ const emit = defineEmits<{
     (e: 'saveGivenState', state: string): void;
 }>();
 
-function onChange(event) {
-    const value = event.target.checked;
+function onChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const value = target.checked;
     const state = getCurrentState(true);
     
     emit('change', value);
@@ -42,8 +43,7 @@ function onChange(event) {
     margin: 1rem 0 .5rem 0;
     input[type="checkbox"] {
         appearance: none;
-        margin: 0;
-        margin-right: .5rem;
+      margin: 0 .5rem 0 0;
         font: inherit;
         width: 20px;
         height: 20px;

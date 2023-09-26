@@ -28,7 +28,8 @@ export function getValueType(verbKey:string): 'number' | 'boolean' {
 }
 
 
-export function getConditions(currentBadge): Condition[] {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getConditions(currentBadge: any): Condition[] {
     const rules = currentBadge.rule['and'];
     const conditions: Condition[] = [];
 
@@ -117,8 +118,9 @@ const phraseVerb = {
 };
 
 export function createPhrase(condition: Condition, elementType: ElementType) {
-    const { element, verb, value } = condition;
-    let firstPart = '';
+
+    const { verb, value } = condition;
+    let firstPart: string;
     if(verb === 'scored') {
         firstPart = `${phraseVerb[verb]} ${value} à`;
     }

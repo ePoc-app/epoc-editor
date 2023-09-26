@@ -25,7 +25,7 @@ function confirmDelete() {
         class="modal-backdrop"
         tabindex="0"
         @keyup.enter="confirmDelete"
-        @keyup.escape="editorStore.validationModal = false"
+        @keyup.esc="editorStore.validationModal = false"
     >
         <div class="modal">
             <h3>Souhaitez-vous vraiment supprimer cet élément ?</h3>

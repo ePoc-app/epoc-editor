@@ -124,7 +124,7 @@ export const useEditorStore = defineStore('editor', {
             this.modelMenu = false;
         },
         
-        openBadgeFormPanel(id: string, type: 'custom' | 'meta', scrollPosY?: number): void {
+        openBadgeFormPanel(id: string, _type: 'custom' | 'meta', scrollPosY?: number): void {
             this.openedBadgeId = id;
             this.formPanel = null;
             this.openedNodeId = null;
@@ -189,7 +189,7 @@ export const useEditorStore = defineStore('editor', {
         },
 
         savePageModel(model: SideAction[]): boolean {
-            const modelExist = this.pageModels.some(pageModel => JSON.stringify(pageModel.actions) === JSON.stringify(model));
+            const modelExist = this.pageModels.some((pageModel: PageModel) => JSON.stringify(pageModel.actions) === JSON.stringify(model));
             if(modelExist) return false;
             this.pageModels.push({ actions: model });
             return true;

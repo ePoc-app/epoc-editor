@@ -8,8 +8,9 @@ defineProps<{
     disabled?: boolean;
 }>();
 
-const onSelect = (event) => {
-    const value = Number.parseFloat(event.target.value);
+const onSelect = (event: Event) => {
+    const target = event.target as HTMLSelectElement;
+    const value = Number.parseFloat(target.value);
     emit('change', value);
 };
 

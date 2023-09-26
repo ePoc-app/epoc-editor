@@ -1,8 +1,9 @@
+<!--suppress TypeScriptCheckImport -->
 <script setup lang="ts">
 import { useEditorStore } from '../../shared/stores';
 import FormButton from './components/FormButton.vue';
 import GenericField from './components/GenericField.vue';
-import { Input } from '@/src/shared/interfaces';
+import { Input, NodeElement } from '@/src/shared/interfaces';
 import { addNewBadge, deleteBadge, editorService } from '@/src/shared/services';
 import { createToaster } from '@meforma/vue-toaster';
 import {
@@ -46,7 +47,9 @@ function actionOnForm(action: string) {
         break;
 
     case 'save-model':
-        if(editorStore.savePageModel(currentNode.data.elements.map((element) => element.action))) toaster.success('Modèle sauvegardé 👌');
+        if(editorStore.savePageModel(currentNode.data.elements.map((element: NodeElement) => element.action))) {
+            toaster.success('Modèle sauvegardé 👌');
+        }
         else toaster.error('Le modèle existe déjà 🤔');
         break;
 
@@ -70,7 +73,8 @@ function actionOnForm(action: string) {
 
 }
 
-function checkIfDisabled(disabledProp): boolean {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function checkIfDisabled(disabledProp: any): boolean {
     if (typeof disabledProp === 'boolean') {
         return disabledProp;
     } else if (typeof disabledProp === 'function') {
@@ -80,7 +84,7 @@ function checkIfDisabled(disabledProp): boolean {
     }
 }
 
-function handleKeydown(event) {
+function handleKeydown(event: KeyboardEvent) {
     const { key, metaKey, ctrlKey } = event;
 
     if(metaKey || ctrlKey) {
@@ -146,8 +150,7 @@ function handleKeydown(event) {
     margin-top: 2.5rem;
     margin-bottom: 2rem;
     h1 {
-        margin: 0;
-        margin-left: 1rem;
+        margin: 0 0 0 1rem;
     }
     .form-icon {
         transform: translate(0, 0.2rem);

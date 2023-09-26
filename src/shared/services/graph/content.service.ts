@@ -13,7 +13,7 @@ const editorStore = useEditorStore();
 export function deleteContent(pageId: string, id: string): void {
     const pageNode = findNode(pageId);
     if(pageNode) {
-        pageNode.data.elements.forEach((value, index) => {
+        pageNode.data.elements.forEach((value: NodeElement, index: number) => {
             if(value.id === id) {
                 deleteConnectedConditions(value.contentId);
                 removeContentFromPage(index, pageId);
@@ -24,7 +24,7 @@ export function deleteContent(pageId: string, id: string): void {
 
 export function duplicateContent(): void {
     const pageNode = findNode(editorStore.openedNodeId);
-    const element = pageNode.data.elements.find(element => element.id === editorStore.openedElementId);
+    const element = pageNode.data.elements.find((element: NodeElement)=> element.id === editorStore.openedElementId);
 
     const newElement = JSON.parse(JSON.stringify(element));
     newElement.id = generateId();
@@ -91,11 +91,12 @@ export function unselectAllContents(): void {
     contents.forEach(content => content.classList.remove('selected'));
 }
 
-export function getContentDefaultValues(type) {
+export function getContentDefaultValues(type: string) {
     const form = [...forms.questionForms, ...forms.elementForms, ...forms.nodeForms].find(f => f.type === type);
 
     return form.fields.reduce((acc, field) => {
-        const keyValues = field.inputs.reduce((acc2, i) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const keyValues = field.inputs.reduce((_acc2: any, i) => {
             return {[i.id] : JSON.parse(JSON.stringify(i.value))};
         }, {});
         return {...acc, ...keyValues};

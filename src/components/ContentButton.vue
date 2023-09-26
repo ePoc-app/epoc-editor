@@ -11,17 +11,17 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-    (e: 'click', event): void;
-    (e: 'contextmenu', event): void;
+    (e: 'click', event: MouseEvent): void;
+    (e: 'contextmenu', event: MouseEvent): void;
 }>();
 
 const contentButton = ref<HTMLElement>(null);
 
-function click(event) {
+function click(event: MouseEvent) {
     emit('click', event);
 }
 
-function contextMenu(event) {
+function contextMenu(event: MouseEvent) {
     emit('contextmenu', event);
     contentButton.value.classList.add('selected');
 }

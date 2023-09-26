@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useEditorStore } from '@/src/shared/stores';
 import { editorService } from '@/src/shared/services';
+import { ePocProject } from '@/src/shared/interfaces';
 
 const editorStore = useEditorStore();
 
@@ -9,7 +10,7 @@ editorService.setup();
 function pickProject() {
     editorService.pickEpocProject();
 }
-function openProject(filepath) {
+function openProject(filepath: ePocProject) {
     editorService.openEpocProject(filepath);
 }
 

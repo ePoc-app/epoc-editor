@@ -16,8 +16,9 @@ function openFile() {
     fileInput.value.click();
 }
 
-async function changeIcon(event) {
-    const file = event.target.files[0];
+async function changeIcon(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const file = target.files[0];
     if (!file) return;
     fileInput.value.value = '';
     url.value = await graphService.importFile(file.path);
@@ -43,7 +44,7 @@ const fileInput = ref(null);
             <div v-if="!url">
                 <button id="file-selector" class="btn btn-form" @click="openFile">
                     <i class="icon-plus"></i>
-                    Selectionner un fichier
+                    Sélectionner un fichier
                 </button>
             </div>
             <div v-show="url">

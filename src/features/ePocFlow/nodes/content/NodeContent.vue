@@ -14,7 +14,7 @@ const emit = defineEmits<{
     (e: 'closeFormPanel'),
     (e: 'openFormPanel'),
     (e: 'contextMenu'),
-    (e: 'dragStart', event),
+    (e: 'dragStart', event: DragEvent),
     (e: 'mouseEnter'),
     (e: 'mouseLeave'),
 }>();

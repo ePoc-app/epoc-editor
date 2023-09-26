@@ -11,6 +11,7 @@ import { questions, standardPages } from '@/src/shared/data';
 import { Assessment, ChoiceCondition, SimpleQuestion } from '@epoc/epoc-types/src/v1';
 import { createRule, getConditions } from '@/src/shared/services/badge.service';
 import { Node } from '@vue-flow/core';
+import { Badge } from '@/src/shared/interfaces';
 
 const mapType = {
     'video': standardPages.find(s => s.type === 'video'),
@@ -103,7 +104,7 @@ export function createGraphEpocFromData(epoc: EpocV1) {
 
 // to translate v1 badges to v2
 const contentVerbs = ['read', 'played', 'watched', 'listened'];
-function setBadgesData(badges) {
+function setBadgesData(badges: Record<string, Badge>) {
     for(const badgeKey in badges) {
         const conditions = getConditions(badges[badgeKey]);
         conditions.forEach((condition, index) => {
@@ -122,7 +123,8 @@ function setBadgesData(badges) {
     }
 }
 
-function newQuestion(epoc, id, qid) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function newQuestion(epoc: any, id: string, qid: string) {
     const question = epoc.questions[qid];
     return {
         id: generateId(),
@@ -140,7 +142,8 @@ function newQuestion(epoc, id, qid) {
     };
 }
 
-function setQuestionData(type, question) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function setQuestionData(type: string, question: any) {
     const questionData : {
         label: string,
         statement: string,

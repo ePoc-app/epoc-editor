@@ -25,7 +25,8 @@ export function setupUndo() {
 
 export function getCurrentState(saveForm?: boolean | object): string {
     const editorStore = useEditorStore();
-    
+
+    // noinspection JSUnusedAssignment
     let form = null;
     
     if(typeof saveForm === 'object') {

@@ -17,7 +17,7 @@ const editorStore = useEditorStore();
 
 editorService.setup();
 
-function addDeleteEvent(event) {
+function addDeleteEvent(event: KeyboardEvent) {
     const { key, metaKey, ctrlKey } = event;
 
     if ((key === 'Backspace' || key === 'Delete')) {
@@ -36,7 +36,7 @@ function addDeleteEvent(event) {
     }
 }
 
-function addEscapeEvent(event) {
+function addEscapeEvent(event: KeyboardEvent) {
     const { key } = event;
 
     if(key === 'Escape' && editorStore.selectNodeMode) {
@@ -80,7 +80,14 @@ const editorDisplay = computed(() => editorStore.selectNodeMode ? 'editor-flex' 
 </script>
 
 <template>
-    <div :class="editorDisplay" class="editor-container" @drop="onRemoveCursor" @dragend="onRemoveCursor" @mouseup="editorStore.dismissModals" @click="editorStore.dismissModals">
+    <div
+        :class="editorDisplay"
+        class="editor-container"
+        @drop="onRemoveCursor"
+        @dragend="onRemoveCursor"
+        @mouseup="editorStore.dismissModals"
+        @click="editorStore.dismissModals"
+    >
         <SideBar v-if="!editorStore.selectNodeMode" class="side-bar" @dragover="onCursorNotAllowed" />
         <TopBar v-if="!editorStore.selectNodeMode" class="top-bar" @dragover="onCursorNotAllowed" />
         <div v-if="editorStore.selectNodeMode" class="flex-information">

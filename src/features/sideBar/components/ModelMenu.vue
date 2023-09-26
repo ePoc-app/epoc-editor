@@ -33,7 +33,6 @@ const editorStore = useEditorStore();
     top: 0;
     left: 100px;
     height: 100vh;
-    width: fit-content;
     background-color: white;
     border-right: 1px solid var(--border);
 

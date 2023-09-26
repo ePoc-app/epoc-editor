@@ -2,7 +2,15 @@
 import { useEditorStore } from '@/src/shared/stores';
 import GenericInput from './GenericInput.vue';
 import AddCard from './card/AddCard.vue';
-import { Input } from '@/src/shared/interfaces';
+import {
+    DraggableChange,
+    Input,
+    RepeatAddEvent,
+    RepeatChangeEvent,
+    RepeatInputEvent,
+    RepeatMoveEvent,
+    RepeatRemoveEvent
+} from '@/src/shared/interfaces';
 import { ref } from 'vue';
 import { generateContentId } from '@/src/shared/services/graph.service';
 
@@ -15,7 +23,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-    (e: 'change', value: object | string): void;
+    (e: 'change', value: RepeatInputEvent): void;
     (e: 'saveGivenState', state: string): void;
 }>();
 
@@ -33,15 +41,16 @@ const dragOptions = {
     ghostClass: 'card-ghost',
 };
 
-const isLast = (index) => props.inputValues.length - 1 === index;
+const isLast = (index: number) => props.inputValues.length - 1 === index;
 
-function onInput(value, id, index) {
-    emit('change', {
+function onInput(value: string, id: string, index: number) {
+    const changeEvent: RepeatChangeEvent = {
         type: 'change',
         value,
         id,
         index
-    });
+    };
+    emit('change', changeEvent);
 }
 
 function addCard() {
@@ -53,44 +62,52 @@ function addCard() {
                 : input.value;
             return defaultValues;
         }, {});
-    
-    emit('change', { type: 'add', defaultValues });
+
+    const addEvent: RepeatAddEvent = {
+        type: 'add',
+        defaultValues
+    };
+    emit('change', addEvent);
 }
 
-function removeCard(index) {
-    emit('change', {
+function removeCard(index: number) {
+    const removeEvent: RepeatRemoveEvent = {
         type: 'remove',
         index
-    });
+    };
+    emit('change', removeEvent);
 }
 
+function moveCard(oldIndex: number, newIndex: number) {
 
-function moveCard(event, oldIndex?: number, newIndex?: number) {
-
-    if(!oldIndex && !newIndex) {
-        if(!event.moved) return;
-
-        oldIndex = event.moved.oldIndex;
-        newIndex = event.moved.newIndex;
-    }
-
-    emit('change', {
+    const moveEvent: RepeatMoveEvent = {
         type: 'move',
         oldIndex,
         newIndex
-    });
+    };
+
+    emit('change', moveEvent);
 }
 
-function onCheck(value, id, index) {
-    emit('change', {
+function dragCard(event: DraggableChange) {
+    if(!event.moved) return;
+
+    const { oldIndex, newIndex } = event.moved;
+    moveCard(oldIndex, newIndex);
+}
+
+function onCheck(value: boolean, id: string, index: number) {
+    const changeEvent: RepeatChangeEvent = {
         type: 'change',
         value,
         id,
         index
-    });
+    };
+    emit('change', changeEvent);
 }
 
-function onClick(index, action) {
+function onClick(index: number, action: string) {
+    console.log('click', index, action);
     const element = currentNode.data.elements?.[index];
 
     if(element && action) {
@@ -110,7 +127,7 @@ function end() {
     document.body.classList.remove('cursor-not-allowed', 'cursor-allowed', 'cursor-move');
 }
 
-function dragOver(event) {
+function dragOver(event: DragEvent) {
     if(editorStore.draggedElement) return;
     event.preventDefault();
     document.body.classList.add('cursor-move');
@@ -127,11 +144,12 @@ function dragOver(event) {
         handle=".card-header"
         filter=".fixed"
         :disabled="disabled"
-        @change="moveCard"
+        @change="dragCard"
         @start="start"
         @dragover="dragOver"
         @end="end"
     >
+        <!--suppress VueUnrecognizedSlot -->
         <template #item="{ element, index }">
             <div :key="index" class="card draggable-card">
                 <div 
@@ -147,8 +165,8 @@ function dragOver(event) {
                     <div v-if="addButton !== false" class="card-header-icon">
                         <i class="icon-supprimer delete" @click.stop="removeCard(index)"></i>
                         <hr v-if="!(isLast(index) && index === 0)" class="vertical-separator">
-                        <i v-if="!isLast(index)" class="icon-bas" @click.stop="moveCard($event, index, index + 1)"></i>
-                        <i v-if="index !== 0" class="icon-haut" @click.stop="moveCard($event, index, index - 1)"></i>
+                        <i v-if="!isLast(index)" class="icon-bas" @click.stop="moveCard(index, index + 1)"></i>
+                        <i v-if="index !== 0" class="icon-haut" @click.stop="moveCard(index, index - 1)"></i>
                         <hr v-if="!disabled" class="vertical-separator">
                         <i v-if="!disabled" class="icon-glisser"></i>
                     </div>
@@ -178,6 +196,7 @@ function dragOver(event) {
     />
 </template>
 
+<!--suppress CssOverwrittenProperties -->
 <style lang="scss" scoped>
 .form-icon {
     margin: .7rem .7rem .7rem 0;
@@ -212,7 +231,6 @@ function dragOver(event) {
         h3 {
             font-weight: bold;
             font-size: 1rem;
-            margin: .7rem 0;
             flex-grow: 1;
             margin: auto;
         }

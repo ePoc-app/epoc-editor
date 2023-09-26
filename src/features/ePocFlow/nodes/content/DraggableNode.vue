@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { moveGuard } from '@/src/shared/utils/draggable';
-import { NodeElement } from '@/src/shared/interfaces';
+import { NodeElement, DraggableChange } from '@/src/shared/interfaces';
 import { saveState } from '@/src/shared/services/undoRedo.service';
 import { addContentToPage, changeContentOrder, removeContentFromPage, openFormPanel } from '@/src/shared/services/graph';
 import { useVueFlow } from '@vue-flow/core';
@@ -56,7 +56,7 @@ const classList = {
     'btn-content-node': true
 };
 
-function change(event) {
+function change(event: DraggableChange) {
     if(!editorStore.draggedElement) return;
 
     const { added, moved, removed } = event;
@@ -84,7 +84,7 @@ function drop() {
     document.body.classList.remove('cursor-not-allowed', 'cursor-allowed');
 }
 
-function dragStart(event, element: NodeElement, index: number) {
+function dragStart(event: DragEvent, element: NodeElement, index: number) {
     editorStore.draggedElement = {
         type: 'nodeElement',
         element,
@@ -117,6 +117,7 @@ function onContextMenu(contentId: string) {
         @change="change"
         @drop.stop="drop"
     >
+        <!--suppress VueUnrecognizedSlot -->
         <template #item="{ element, index }">
             <div class="node-item" :class="{ 'condition': isCondition }">
                 <div
@@ -124,6 +125,7 @@ function onContextMenu(contentId: string) {
                     class="badge-notification badge-notification-right"
                 >
                     <img src="/img/badge/notification.svg" alt="notification">
+                    <!--suppress JSUnresolvedReference -->
                     <small>{{ getConnectedBadges(element.contentId).length }}</small>
                 </div>
                 <ContentButton

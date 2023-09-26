@@ -1,7 +1,8 @@
 import { ApiInterface } from '@/src/shared/interfaces/api.interface';
 import { getSelectedNodes, alignNode } from '.';
-import { useVueFlow, Node } from '@vue-flow/core';
+import { useVueFlow, Node, GraphNode } from '@vue-flow/core';
 import { generateId, generateContentId } from '../graph.service';
+import { NodeElement } from '@/src/shared/interfaces';
 
 const { addNodes } = useVueFlow({ id: 'main' });
 
@@ -31,11 +32,11 @@ export function graphPaste(position?: { x: number, y: number }) {
     api.send('graphPaste', data);
 }
 
-function handleGraphPaste(selectedPages, position: { x: number, y: number }): void {
+function handleGraphPaste(selectedPages: GraphNode[], position: { x: number, y: number }): void {
     if(!selectedPages) return;
     
-    let offsetX;
-    let offsetY;
+    let offsetX: number;
+    let offsetY: number;
     
     if(position) {
         offsetX = position.x - selectedPages[0].position.x;
@@ -49,7 +50,7 @@ function handleGraphPaste(selectedPages, position: { x: number, y: number }): vo
     for(const page of selectedPages) {
         const pageId = generateId();
         
-        const elements = page.data.elements.map(element => {
+        const elements = page.data.elements.map((element: NodeElement)=> {
             const newElement = JSON.parse(JSON.stringify(element));
             newElement.id = generateId();
             newElement.parentId = pageId;

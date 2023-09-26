@@ -15,7 +15,7 @@ const templateTooltip = 'Glisser/déposer pour ajouter un modèle';
 
 const dragging = ref(false);
 
-function dragStart(event, elements) {
+function dragStart(event: DragEvent, elements) {
     editorStore.draggedElement = {
         type: 'sideAction',
         element: elements
@@ -28,6 +28,7 @@ function dragStart(event, elements) {
 <template>
     <div class="container">
         <p class="page-title">{{ name ? name : 'Modèle' }}</p>
+        <!--suppress VueUnrecognizedDirective -->
         <div
             v-tippy="{content: templateTooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
             class="page-template node"
@@ -64,7 +65,6 @@ function dragStart(event, elements) {
 }
 
 .page-title {
-    margin: 0;
     padding: .2rem;
     margin: 0 1rem;
     max-width: calc(60px + 1.8rem);

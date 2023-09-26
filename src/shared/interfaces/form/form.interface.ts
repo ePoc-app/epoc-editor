@@ -1,4 +1,4 @@
-import { Field, FormButton } from '.';
+import { Field, FormButton } from '../index';
 
 export interface Form {
     type: string;

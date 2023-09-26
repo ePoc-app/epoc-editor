@@ -19,12 +19,13 @@ const emit = defineEmits<{
 
 
 const currentNode = editorStore.getCurrentGraphNode;
-const currentContent = currentNode.data.elements.find(e => e.id === editorStore.openedElementId);
+const currentContent = currentNode.data.elements.find(({id}) => id === editorStore.openedElementId);
 
 const getOptions = () => props.linkedOptions ? currentContent.formValues[props.linkedOptions] : props.options;
 
-function onChange(event) {
-    const value = event.target.value;
+function onChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const value = target.value;
     const state = getCurrentState(true);
 
     emit('change', value);

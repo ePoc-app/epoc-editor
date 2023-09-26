@@ -33,7 +33,7 @@ const dragOptions = {
 
 const classList = (item: SideAction) => ({ 'clickable': item.type === 'question' || item.type === 'model' || item.type === 'badge' });
 
-function dragStart(event, sideAction) {
+function dragStart(event: DragEvent, sideAction: SideAction) {
     editorStore.draggedElement = {
         type: 'sideAction',
         element: [sideAction]
@@ -59,8 +59,10 @@ function showTemplateMenu() {
         item-key="index"
         class="contents-list"
     >
+        <!--suppress VueUnrecognizedSlot -->
         <template #item="{ element, index }">
             <div>
+                <!--suppress VueUnrecognizedDirective -->
                 <ContentButton
                     :key="index"
                     v-tippy="{content: element.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
@@ -73,6 +75,7 @@ function showTemplateMenu() {
         </template>
     </VueDraggable>
     <div class="question">
+        <!--suppress VueUnrecognizedDirective -->
         <ContentButton
             v-tippy="{content: questionContent.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
             :icon="questionContent.icon"
@@ -93,8 +96,10 @@ function showTemplateMenu() {
                 item-key="id"
                 class="questions-list"
             >
+                <!--suppress VueUnrecognizedSlot -->
                 <template #item="{ element, index }">
                     <div>
+                        <!--suppress VueUnrecognizedDirective -->
                         <ContentButton
                             :key="index"
                             v-tippy="{content: element.label, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
@@ -109,6 +114,7 @@ function showTemplateMenu() {
         </div>
     </div>
     <div v-if="env.isDev">
+        <!--suppress VueUnrecognizedDirective -->
         <ContentButton
             v-tippy="{content: conditionContent.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
             :icon="conditionContent.icon"
@@ -118,6 +124,7 @@ function showTemplateMenu() {
             @dragend="dragging = false"
         />
         <hr>
+        <!--suppress VueUnrecognizedDirective -->
         <ContentButton
             v-tippy="{content: modelContent.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
             :icon="modelContent.icon"

@@ -1,5 +1,18 @@
 <script setup lang="ts">
-import { ConnectionMode, useVueFlow, VueFlow, getConnectedEdges, applyEdgeChanges } from '@vue-flow/core';
+import {
+    ConnectionMode,
+    useVueFlow,
+    VueFlow,
+    getConnectedEdges,
+    applyEdgeChanges,
+    NodeDragEvent,
+    Connection,
+    NodeChange,
+    EdgeUpdateEvent,
+    EdgeMouseEvent,
+    EdgeMarker
+} from '@vue-flow/core';
+
 import { markRaw, onMounted } from 'vue';
 import PageNode from './nodes/PageNode.vue';
 import ActivityNode from './nodes/ActivityNode.vue';
@@ -27,7 +40,7 @@ const nodeTypes = {
     add: markRaw(AddChapterNode), 
 };
 
-const onDrop = (event) => {
+const onDrop = (event: DragEvent) => {
     document.body.classList.remove('cursor-allowed', 'cursor-not-allowed');
 
     if(!editorStore.draggedElement) return;
@@ -56,8 +69,8 @@ onMounted(() => {
     graphStore.restore();
 });
 
-function onEdgeclick (event) {
-    const marker = event.edge.markerEnd;
+function onEdgeClick (event: EdgeMouseEvent) {
+    const marker = event.edge.markerEnd as EdgeMarker;
     // watch property changed to change color back
     Object.defineProperty(event.edge, 'selected', {
         get() {
@@ -74,7 +87,7 @@ function selectionStart() {
     editorStore.closeFormPanel();
 }
 
-function update(event) {
+function update(event: EdgeUpdateEvent) {
     updateEdge(event.edge, {
         source: event.connection.source,
         target: event.connection.target,
@@ -83,7 +96,7 @@ function update(event) {
     saveGivenState(savedState);
 }
 
-function nodeChange(event) {
+function nodeChange(event: NodeChange[]) {
     const { type } = event[0];
 
     if(type === 'remove') editorStore.closeFormPanel();
@@ -93,7 +106,7 @@ function onDragOver() {
     document.body.classList.add('cursor-allowed');
 }
 
-function connect(event) {
+function connect(event: Connection) {
     const targetNode = findNode(event.target);
     const sourceNode = findNode(event.source);
 
@@ -119,7 +132,7 @@ function connect(event) {
     saveGivenState(savedState);
 }
 
-function nodeDrag(event) {
+function nodeDrag(event: NodeDragEvent) {
     const { node } = event;
 
     if(node.type !== 'chapter') return;
@@ -158,15 +171,18 @@ function nodeDrag(event) {
 
 let startPos = { x: 0, y: 0 };
 let savedState = '';
-function onDragStart(event) {
-    const { x, y } = event.event;
+function onDragStart(event: NodeDragEvent) {
+    const mouseEvent = event.event as MouseEvent;
+    const { x, y } = mouseEvent;
     startPos = { x, y };
     
     savedState = getCurrentState();
 }
 
-function onDragEnd(event) {
-    const { x, y } = event.event;
+function onDragEnd(event: NodeDragEvent) {
+
+    const mouseEvent = event.event as MouseEvent;
+    const { x, y } = mouseEvent;
 
     if(startPos.x === x && startPos.y === y) return;
     
@@ -184,7 +200,7 @@ function onConnectEnd() {
     savedState = '';
 }
 
-function onKeyDown(event) {
+function onKeyDown(event: KeyboardEvent) {
     const { key, metaKey, ctrlKey } = event;
 
     if(metaKey || ctrlKey) {
@@ -192,7 +208,7 @@ function onKeyDown(event) {
     }
 }
 
-function onContextMenu(event) {
+function onContextMenu(event: MouseEvent) {
     const position = project({
         x: event.clientX,
         y: event.clientY,
@@ -230,7 +246,7 @@ function onSelectionContextMenu() {
         @drop="onDrop"
         @dragover.prevent="onDragOver"
         @dragenter.prevent
-        @edgeclick="onEdgeclick"
+        @edge-click="onEdgeClick"
         @pane-click="editorStore.closeFormPanel()"
         @connect="connect"
         @connect-start="onConnectStart"
@@ -239,15 +255,19 @@ function onSelectionContextMenu() {
         @pane-context-menu.stop="onContextMenu"
         @selection-context-menu="onSelectionContextMenu"
     >
+        <!--suppress VueUnrecognizedSlot -->
         <template #node-custom="{ id, data }">
             <PageNode :id="id" :data="data" />
         </template>
+        <!--suppress VueUnrecognizedSlot -->
         <template #node-chapter="{ id, data }">
             <ChapterNode :id="id" :data="data" />
         </template>
+        <!--suppress VueUnrecognizedSlot -->
         <template #node-epoc="{ id, data }">
             <ePocNode :id="id" :data="data" />
         </template>
+        <!--suppress VueUnrecognizedSlot -->
         <template #node-add="{ id, data }">
             <AddChapterNode :id="id" :data="data" />
         </template>

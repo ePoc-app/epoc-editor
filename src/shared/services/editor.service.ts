@@ -5,6 +5,9 @@ import { ePocProject } from '@/src/shared/interfaces';
 import { createToaster } from '@meforma/vue-toaster';
 import { graphService } from '@/src/shared/services/graph.service';
 import { createGraphEpocFromData } from '@/src/shared/services/import.service';
+import { FlowExportObject, useVueFlow } from '@vue-flow/core';
+
+const { findNode } = useVueFlow({ id: 'main' });
 
 const toaster = createToaster({
     duration: 1000,
@@ -16,10 +19,11 @@ declare const api: ApiInterface;
 const editorStore = useEditorStore();
 const graphStore = useGraphStore();
 let initialized = false;
-let currentToastStartTime;
-let currentToast;
+let currentToastStartTime: number;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let currentToast: any;
 
-const waitingToast = function (message) {
+const waitingToast = function (message: string) {
     currentToastStartTime = performance.now();
     currentToast = toaster.show(message, {duration: false});
 };
@@ -100,6 +104,7 @@ const setup = function () {
 
     api.receive('epocImportPicked', () => {
         editorStore.loading = true;
+        // noinspection JSIgnoredPromiseFromCall
         router.push('/landingpage');
     });
 
@@ -158,7 +163,7 @@ function pickEpocProject(): void {
     api.send('pickEpocProject');
 }
 
-function openEpocProject(project): void {
+function openEpocProject(project: ePocProject): void {
     editorStore.currentProject = project;
     editorStore.loading = true;
     router.push('/landingpage').then(() => {
@@ -180,9 +185,10 @@ function runPreview(): void {
 function runPreviewAtPage(): void {
     waitingToast('🔭 Démarrage de la prévisualisation...');
     const openedNodeId = editorStore.openedNodeId ?? editorStore.openedElementId;
-    const openedNode = graphStore.elements.find(e => e.id === openedNodeId);
-    let contentPath;
-    let error;
+    const openedNode = findNode(openedNodeId);
+    // const openedNode = graphStore.elements.find(e => e.id === openedNodeId);
+    let contentPath: string;
+    let error: boolean;
     if (openedNode) {
         if (openedNode.type === 'epoc') {
             // do nothing
@@ -228,7 +234,7 @@ export const editorService = {
 
 
 //TODO: delete backward support for old page form
-function changeScreenToPage(flow) {
+function changeScreenToPage(flow: FlowExportObject) {
     if(!flow) return;
 
     const pages = flow.nodes.filter(node => node.type === 'content');

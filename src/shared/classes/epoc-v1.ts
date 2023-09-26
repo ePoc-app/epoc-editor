@@ -18,7 +18,7 @@ export class EpocV1 implements Epoc {
     lastModif: string;
     chaptersCount: number;
     assessmentsCount: number;
-    authors:Author[];
+    authors: Author[];
     parameters: Parameters;
     plugins: string[];
     chapters: Record<uid, Chapter>;
@@ -59,12 +59,12 @@ export class EpocV1 implements Epoc {
         this.chapters[id] = chapter;
     }
 
-    addContent(id: uid, content: Content) : uid {
+    addContent(id: uid, content: Content): uid {
         this.contents[id] = content;
         return id;
     }
 
-    addQuestion(id, question) : uid {
+    addQuestion(id: string, question: Question) : uid {
         this.questions[id] = question;
         return id;
     }
