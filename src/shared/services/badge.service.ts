@@ -1,10 +1,10 @@
 import { Verbs, ElementType, Condition, Badge } from '@/src/shared/interfaces';
 import { Operand, Operands, Rule } from '@epoc/epoc-types/src/v2';
-import { useEditorStore } from '@/src/shared/stores';
+import { useEditorStore, useProjectStore } from '@/src/shared/stores';
 import { useVueFlow} from '@vue-flow/core';
 import { saveState } from '@/src/shared/services/undoRedo.service';
 import { elementVerbs, verbs } from '@/src/shared/data';
-import { generateContentId } from '@/src/shared/services';
+import { generateContentId, graphService } from '@/src/shared/services';
 
 const { findNode } = useVueFlow({id: 'main'});
 
@@ -200,4 +200,13 @@ export function addNewBadge() {
     };
 
     openBadge(id);
+}
+
+export async function saveCustomIcon(icon: string) {
+    const projectStore = useProjectStore();
+
+    const iconPath = await graphService.importFile(icon, true);
+    projectStore.addCustomIcon(iconPath);
+
+    return iconPath;
 }

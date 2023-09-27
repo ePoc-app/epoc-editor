@@ -235,10 +235,15 @@ const writeEpocData = async function (workdir, data) {
  * Copy the imported file to the workdir
  * @param {string} workdir
  * @param {string} filepath
+ * @param {boolean} isIcon
  * @return {string} the path of the copied file
  */
-const copyFileToWorkdir = async function (workdir, filepath) {
-    const assetsPath = path.join(workdir, 'assets');
+const copyFileToWorkdir = async function (workdir, filepath, isIcon) {
+    const pathEnd = isIcon ? path.join('assets', 'icons') : 'assets';
+    const assetsPath = path.join(workdir, pathEnd);
+
+    if(!fs.existsSync(assetsPath)) fs.mkdirSync(assetsPath, {recursive: true});
+
     const copyPath = path.join(assetsPath, path.basename(filepath).replace(/[^a-z0-9.]/gi, '_'));
     if (!fs.existsSync(assetsPath)) fs.mkdirSync(assetsPath);
     fs.copyFileSync(filepath, copyPath);

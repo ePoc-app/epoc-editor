@@ -30,7 +30,8 @@ const badgeItem = computed(() => {
 
 function getIconPath() {
     const icon = props.badge ? props.badge.icon : props.icon;
-    return icon.endsWith('.svg') ? icon : `${iconsPath}/${icon}.svg`;
+    if(icon.startsWith('blob')) return icon;
+    return icon.endsWith('.svg') ? `assets://${icon}` : `${iconsPath}/${icon}.svg`;
 }
 
 </script>

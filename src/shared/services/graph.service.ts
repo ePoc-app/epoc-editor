@@ -27,8 +27,8 @@ function writeProjectData(): void {
     });
 }
 
-function importFile(filepath: string): Promise<string> {
-    api.send('importFile', filepath);
+function importFile(filepath: string, isIcon?: boolean): Promise<string> {
+    api.send('importFile', { filepath, isIcon: Boolean(isIcon) });
 
     return new Promise((resolve) => {
         api.receiveOnce('fileImported', (data) => {

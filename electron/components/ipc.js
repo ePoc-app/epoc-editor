@@ -102,10 +102,11 @@ const setupIpcListener = function (targetWindow) {
         await writeEpocData(store.state.projects[targetWindow.id].workdir, data);
     });
 
-    ipcMain.on('importFile', async (event, filepath) => {
+    ipcMain.on('importFile', async (event, data) => {
+        const { filepath, isIcon } = data;
         if(event.sender !== targetWindow.webContents) return;
         
-        sendToFrontend(event.sender, 'fileImported', await copyFileToWorkdir(store.state.projects[targetWindow.id].workdir, filepath));
+        sendToFrontend(event.sender, 'fileImported', await copyFileToWorkdir(store.state.projects[targetWindow.id].workdir, filepath, isIcon));
     });
     
     
