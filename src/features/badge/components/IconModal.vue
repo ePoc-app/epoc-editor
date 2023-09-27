@@ -5,6 +5,7 @@ import { saveState } from '@/src/shared/services/undoRedo.service';
 
 import BadgeItem from '@/src/features/badge/components/BadgeItem.vue';
 import BadgePreview from '@/src/features/badge/components/BadgePreview.vue';
+import { saveCustomIcon } from '@/src/shared/services';
 
 const editorStore = useEditorStore();
 const projectStore = useProjectStore();
@@ -24,9 +25,10 @@ function chooseIcon(icon: string) {
     close();
 }
 
-function chooseCustomIcon(icon: string) {
-    projectStore.addCustomIcon(icon);
-    chooseIcon(icon);
+async function chooseCustomIcon(icon: string) {
+    const iconPath = await saveCustomIcon(icon);
+
+    chooseIcon(iconPath);
 }
 
 </script>

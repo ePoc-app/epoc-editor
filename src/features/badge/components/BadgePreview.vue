@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import BadgeItem from '@/src/features/badge/components/BadgeItem.vue';
 import { ref } from 'vue';
-import { graphService } from '@/src/shared/services';
 
 const emit = defineEmits<{
     (e: 'click', icon: string): void;
@@ -21,13 +20,15 @@ async function changeIcon(event: Event) {
     const file = target.files[0];
     if (!file) return;
     fileInput.value.value = '';
-    url.value = await graphService.importFile(file.path);
+    url.value = file.path;
+    blob.value = URL.createObjectURL(file);
 }
 function deleteFile() {
     url.value = '';
 }
 
 const url = ref('');
+const blob = ref('');
 const fileInput = ref(null);
 
 </script>
@@ -35,7 +36,7 @@ const fileInput = ref(null);
 <template>
     <div class="new-icon">
         <BadgeItem
-            :icon="url"
+            :icon="blob"
             :inactive="!url"
             @click="onClick"
         />
