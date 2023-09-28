@@ -15,17 +15,12 @@ function openIconModal() {
     editorStore.iconModal = true;
 }
 
-const icon = computed(() => {
-    if (props.inputValue.endsWith('.svg')) return props.inputValue;
-    return `${iconsPath}/${props.inputValue}.svg`;
-});
-
 </script>
 
 <template>
     <label v-if="label !== ''" class="input-label" :for="label">{{ label }}</label>
     <div :id="label" class="container">
-        <BadgeItem :icon="icon" :view-mode="true" :inactive="!inputValue" />
+        <BadgeItem :icon="inputValue" :view-mode="true" :inactive="!inputValue" />
         <button class="btn btn-form" @click="openIconModal">
             <i class="icon-plus"></i>
             Modifier l'icône

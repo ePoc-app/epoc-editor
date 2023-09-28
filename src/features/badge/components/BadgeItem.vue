@@ -38,7 +38,12 @@ function getIconPath() {
 
 <template>
     <div class="badge">
-        <div class="badge-background" :class="{ 'clickable' : !viewMode && !inactive, 'inactive' : inactive }" @mouseup.stop @click="onClick">
+        <div
+            class="badge-background"
+            :class="{ 'clickable' : !viewMode && !inactive, 'inactive' : inactive }"
+            @mouseup.stop
+            @click="onClick"
+        >
             <div v-if="!inactive" class="badge-image">
                 <img v-if="!invalid" src="/img/badge/shape.svg" class="image-shape" alt="badge">
                 <img v-if="invalid" src="/img/badge/shape-grey.svg" class="image-shape" alt="badge">
