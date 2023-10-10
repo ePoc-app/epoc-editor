@@ -66,6 +66,7 @@ function showTemplateMenu() {
                 <ContentButton
                     :key="index"
                     v-tippy="{content: element.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
+                    :data-testid="`${element.type}-content`"
                     :icon="element.icon"
                     :is-draggable="true"
                     :class-list="{ 'btn-content-blue': true }"
@@ -78,6 +79,7 @@ function showTemplateMenu() {
         <!--suppress VueUnrecognizedDirective -->
         <ContentButton
             v-tippy="{content: questionContent.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
+            data-testid="questions-menu"
             :icon="questionContent.icon"
             :is-draggable="false"
             :class-list="classList(questionContent)"
@@ -103,6 +105,7 @@ function showTemplateMenu() {
                         <ContentButton
                             :key="index"
                             v-tippy="{content: element.label, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
+                            :data-testid="`${element.type}-content`"
                             :icon="element.icon"
                             :class-list="{ 'btn-content-blue': true }"
                             :is-draggable="true"

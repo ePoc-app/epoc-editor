@@ -20,6 +20,7 @@
     "test": "vitest",
     "coverage": "vitest --coverage",
     "wdio": "wdio run ./wdio.conf.ts",
+    "e2e": "npx playwright test --workers=1",
     "lint": "npx eslint ./src ./test ./electron/* --ext .ts,.vue,.js",
     "updatePreview": "set -o allexport; source .env; set +o allexport && curl --location --output public/preview.zip --header \"PRIVATE-TOKEN: $GITLAB_TOKEN\" $GITLAB_URL",
     "debug-mac": "'/Applications/ePoc Editor.app/Contents/MacOS/ePoc Editor' --remote-debugging-port=8315"
@@ -47,6 +48,8 @@
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.38.1",
+    "@types/node": "^20.8.4",
     "@typescript-eslint/eslint-plugin": "^5.46.1",
     "@typescript-eslint/parser": "^5.46.1",
     "@vitejs/plugin-vue": "^4.0.0",

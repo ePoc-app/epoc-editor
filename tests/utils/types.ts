@@ -1,0 +1,1 @@
+export type Content = 'text' | 'video' | 'audio'
