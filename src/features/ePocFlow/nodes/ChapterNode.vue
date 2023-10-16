@@ -91,6 +91,7 @@ const connectedBadges = computed(() => getConnectedBadges(currentNode.data.conte
     </div>
     <!-- ! mousedown.stop important in vue-flow v1.16.4 on non draggable node -->
     <Handle
+        :data-testid="`source-chapter-${chapterIndex}`"
         type="source"
         :position="Position.Right"
         :connectable="!isSource && !editorStore.selectNodeMode"

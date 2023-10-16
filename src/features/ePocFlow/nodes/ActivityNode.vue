@@ -21,7 +21,7 @@ const props = defineProps<{
     }
 }>();
 
-const { findNode, edges } = useVueFlow({ id: 'main' });
+const { findNode, edges, nodes } = useVueFlow({ id: 'main' });
 
 const currentNode = computed(() => findNode(props.id));
 
@@ -70,6 +70,11 @@ const connectable = computed(() => {
 
 const connectedBadges = computed(() => getConnectedBadges(currentNode.value.data.contentId));
 
+const activityIndex = computed(() => {
+    const activities = nodes.value.filter((node) => node.type === 'activity');
+    return activities.findIndex(activity => activity.id === currentNode.value.id) + 1;
+});
+
 </script>
 
 <template>
@@ -89,6 +94,7 @@ const connectedBadges = computed(() => getConnectedBadges(currentNode.value.data
             <!--suppress JSUnresolvedReference -->
             <p class="node-title" :class="{ 'active': editorStore.openedElementId ? editorStore.openedElementId === props.id : false }">{{ currentNode.data.formValues?.title || 'Activité' }}</p>
             <Handle
+                :data-testid="`target-activity-${activityIndex}`"
                 :class="{ 'not-connected': !isTarget }"
                 type="target"
                 :position="Position.Left"
@@ -99,6 +105,7 @@ const connectedBadges = computed(() => getConnectedBadges(currentNode.value.data
                 <small>{{ connectedBadges.length }}</small>
             </div>
             <DraggableNode
+                :data-testid="`activity-${activityIndex}`"
                 :node-id="id"
                 :contents="data.elements"
                 type="activity"
@@ -107,6 +114,7 @@ const connectedBadges = computed(() => getConnectedBadges(currentNode.value.data
             />
         </div>
         <Handle
+            :data-testid="`source-activity-${activityIndex}`"
             type="source"
             :class="{ 'not-connected': connectable }"
             :position="Position.Right"

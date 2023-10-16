@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 const { _electron: electron } = require('playwright');
 
-import { sleep, addChapter, createLinkedNode } from './utils';
+import { sleep, addChapter, createLinkedNode, TestNode, ePoc } from './utils';
 
 let electronApp;
 let window;
@@ -14,6 +14,7 @@ test.describe('Create a new ePoc', () => {
     });
 
     test.afterAll(async () => {
+        await sleep(2000);
         await electronApp.close();
     });
 
@@ -24,15 +25,15 @@ test.describe('Create a new ePoc', () => {
         await sleep(2000);
     }));
 
-    test('Add a new chapter', (async () => {
-        await addChapter(window);
-        await sleep(2000);
-    }));
-
-    test('Drag & Drop a text node', (async () => {
-        const chapterBox = await window.getByTestId('chapter-1').boundingBox();
-
-        await createLinkedNode(window, 'text', chapterBox);
-        await sleep(2000);
-    }));
+    test.describe('Creating the graph', () => {
+        for(let i = 0; i < ePoc.length; i++) {
+            test(`Add ${ePoc[i].type} ${ePoc[i].index}`, (async () => {
+                if(ePoc[i].type === 'chapter') {
+                    await addChapter(window);
+                } else {
+                    await createLinkedNode(window, ePoc[i - 1], ePoc[i]);
+                }
+            }));
+        }
+    });
 });
