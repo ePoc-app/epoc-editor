@@ -1,7 +1,8 @@
 import { test } from '@playwright/test';
 const { _electron: electron } = require('playwright');
 
-import { sleep, addChapter, createLinkedNode, TestNode, ePoc } from './utils';
+import { sleep, addChapter, createLinkedNode } from '@/tests/utils';
+import { ePoc } from '@/tests/data';
 
 let electronApp;
 let window;

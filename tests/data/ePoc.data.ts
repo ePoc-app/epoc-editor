@@ -1,4 +1,4 @@
-import { TestNode } from '.';
+import { TestNode } from '../types';
 
 let chapterIndex = 0;
 let pageIndex = 0;

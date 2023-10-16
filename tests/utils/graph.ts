@@ -1,8 +1,4 @@
-import { Content, TestNode } from '.';
-
-const pages: TestNode[] = [];
-const chapters: TestNode[] = [];
-const activities: TestNode[] = [];
+import { TestNode } from '../types';
 
 export async function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -24,11 +20,6 @@ export async function dragAndDropTo(window, source, target) {
 
 export async function addChapter(window) {
     await window.getByTestId('add-chapter').click();
-
-    chapters.push({
-        type: 'chapter',
-        index: chapters.length + 1
-    });
 }
 
 export async function createLinkedNode(window, sourceNode: TestNode, newNode: TestNode ) {
