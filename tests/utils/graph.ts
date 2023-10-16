@@ -33,7 +33,6 @@ export async function createLinkedNode(window, sourceNode: TestNode, newNode: Te
         sideAction = await window.getByTestId(`${newNode.activityType}-question`);
     }
 
-
     const sourceNodeBox = await window.getByTestId(`${sourceNode.type}-${sourceNode.index}`).boundingBox();
 
     const dropLocation = {
@@ -44,6 +43,23 @@ export async function createLinkedNode(window, sourceNode: TestNode, newNode: Te
     await dragAndDrop(window, sideAction, dropLocation);
 
     await linkNodes(window, sourceNode, newNode);
+}
+
+/*
+    This function is used to add content to a page.
+    ! Doesn't work for the moment, not sure i can make it work.
+ */
+export async function addContentToNode(window, type, node: TestNode) {
+    const sideAction = await window.getByTestId(`${type}-content`);
+
+    const nodeBox = await window.getByTestId(`${node.type}-${node.index}`).boundingBox();
+
+    const dropLocation = {
+        x: nodeBox.x + nodeBox.width / 2,
+        y: nodeBox.y + nodeBox.height / 2
+    };
+
+    await dragAndDrop(window, sideAction, dropLocation);
 }
 
 export async function linkNodes(window, sourceNode: TestNode, targetNode: TestNode) {
