@@ -8,7 +8,7 @@ let activityIndex = 0;
     This array is used to create an ePoc within the tests.
     The nodes are placed following the order of the array, and connected to the previous node.
  */
-export const ePoc: TestNode[] = [
+export const nodes: TestNode[] = [
     {
         type: 'chapter',
         index: ++chapterIndex
@@ -33,3 +33,27 @@ export const ePoc: TestNode[] = [
         index: ++chapterIndex,
     }
 ];
+
+export const epocInputs = [
+    {
+        label: 'ID de l\'ePoc',
+        value: 'TestID'
+    },
+    {
+        label: 'Edition',
+        value: '2023',
+    },
+    {
+        label: 'Titre',
+        value: 'ePoc test'
+    },
+    // {
+    //     label: 'Présentation',
+    //     value: 'Cet ePoc à été généré automatiquement'
+    // },
+    // {
+    //     label: 'Nombre de badge pour obtenir l\'attestation',
+    //     value: '5'
+    // }
+
+]

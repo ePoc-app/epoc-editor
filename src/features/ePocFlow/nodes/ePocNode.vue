@@ -44,7 +44,8 @@ function onContextMenu() {
 
 <template>
     <div>
-        <ContentButton 
+        <ContentButton
+            data-testid="epoc-node"
             :icon="currentNode.data.action.icon"
             :is-draggable="false"
             :class-list="classList"

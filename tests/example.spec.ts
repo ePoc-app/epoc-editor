@@ -2,7 +2,7 @@ import { test } from '@playwright/test';
 const { _electron: electron } = require('playwright');
 
 import { sleep, addChapter, createLinkedNode } from '@/tests/utils';
-import { ePoc } from '@/tests/data';
+import { epocInputs, nodes } from '@/tests/data';
 
 let electronApp;
 let window;
@@ -15,7 +15,7 @@ test.describe('Create a new ePoc', () => {
     });
 
     test.afterAll(async () => {
-        await sleep(2000);
+        await sleep(20000);
         await electronApp.close();
     });
 
@@ -27,14 +27,28 @@ test.describe('Create a new ePoc', () => {
     }));
 
     test.describe('Creating the graph', () => {
-        for(let i = 0; i < ePoc.length; i++) {
-            test(`Add ${ePoc[i].type} ${ePoc[i].index}`, (async () => {
-                if(ePoc[i].type === 'chapter') {
+        for(let i = 0; i < nodes.length; i++) {
+            test(`Add ${nodes[i].type} ${nodes[i].index}`, (async () => {
+                if(nodes[i].type === 'chapter') {
                     await addChapter(window);
                 } else {
-                    await createLinkedNode(window, ePoc[i - 1], ePoc[i]);
+                    await createLinkedNode(window, nodes[i - 1], nodes[i]);
                 }
             }));
         }
+    });
+
+    test.describe('Filling forms', () => {
+        test('Filling ePoc form', async () => {
+
+            const epocNode = await window.getByTestId('epoc-node');
+            await epocNode.click();
+
+            for(const inputValue of epocInputs) {
+                const input = await window.getByLabel(inputValue.label);
+                await input.focus();
+                await input.fill(inputValue.value);
+            }
+        });
     });
 });
