@@ -10,20 +10,23 @@ let window;
 test.describe('Create a new ePoc', () => {
     test.beforeAll(async () => {
         electronApp = await electron.launch({ args: ['electron/electron.js']});
-        await sleep(2000);
-        window = await electronApp.firstWindow();
+        
+        window = await new Promise((resolve) => {
+            electronApp.on('window', page => {
+                if (page.url().includes('index.html')) {
+                    resolve(page);
+                }
+            });
+        });
     });
 
     test.afterAll(async () => {
-        await sleep(20000);
+        await sleep(2000);
         await electronApp.close();
     });
 
     test('Create a new project', (async () => {
         await window.getByText('Créer un nouveau projet').click();
-
-        // await window.click('text=Créer un nouveau projet');
-        await sleep(2000);
     }));
 
     test.describe('Creating the graph', () => {
