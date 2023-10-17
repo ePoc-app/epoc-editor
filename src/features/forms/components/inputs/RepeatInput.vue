@@ -15,6 +15,7 @@ import { ref } from 'vue';
 import { generateContentId } from '@/src/shared/services/graph.service';
 
 const props = defineProps<{
+    id: string;
     inputs: Input[];
     label: string;
     inputValues: string[];
@@ -152,7 +153,7 @@ function dragOver(event: DragEvent) {
         <!--suppress VueUnrecognizedSlot -->
         <template #item="{ element, index }">
             <div :key="index" class="card draggable-card">
-                <div 
+                <div
                     class="card-header" 
                     :class="{ 'border-bottom': inputs.length >= 1, 'clickable': element.action }" 
                     @click="onClick(index, element.action)"
@@ -172,7 +173,7 @@ function dragOver(event: DragEvent) {
                     </div>
                 </div>
                 <div v-if="!element.action" class="card-content">
-                    <GenericInput 
+                    <GenericInput
                         v-for="(input, indexKey) in inputs"
                         :key="indexKey"
                         :input="input"

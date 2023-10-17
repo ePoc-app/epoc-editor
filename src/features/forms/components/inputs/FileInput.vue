@@ -4,6 +4,7 @@ import { graphService } from '@/src/shared/services';
 import { getCurrentState } from '@/src/shared/services/undoRedo.service';
 
 const props = defineProps<{
+    id: string;
     inputValue: string;
     label: string;
     accept: string;
@@ -68,7 +69,7 @@ let savedState = '';
 </script>
 
 <template>
-    <label class="input-label" :for="label">{{ label }}</label>
+    <label class="input-label" :for="id">{{ label }}</label>
     <div v-show="url" class="show-input">
         <div class="input-file">
             <input ref="fileInput" class="file" type="file" :accept="accept" @change="changeImage">
@@ -82,7 +83,7 @@ let savedState = '';
         </div>
     </div>
     <div v-if="!url">
-        <button :id="label" class="btn btn-form" @click="openFile">
+        <button :id="id" class="btn btn-form" @click="openFile">
             <i class="icon-plus"></i>
             {{ placeholder }}
         </button>

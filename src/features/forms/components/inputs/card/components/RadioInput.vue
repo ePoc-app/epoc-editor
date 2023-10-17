@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { getCurrentState } from '@/src/shared/services/undoRedo.service';
 
-
 defineProps<{
-   inputValue: string;
-   label: string;
-   pos: number
+    id: string;
+    inputValue: string;
+    label: string;
+    pos: number
 }>();
 
 const emit = defineEmits<{
@@ -28,25 +28,25 @@ function onChange(value: string) {
         <div :id="String(pos)" class="radio-group">
             <div class="radio-btn">
                 <input
-                    :id="'left-' + String(pos)"
+                    :id="'left-' + id"
                     :name="'pos' + pos"
                     type="radio"
                     class="radio-input"
                     :checked="inputValue === '1'"
                     @change="onChange('1')"
                 >
-                <label :for="'left-' + String(pos)">Choix gauche</label>
+                <label :for="'left-' + id">Choix gauche</label>
             </div>
             <div class="radio-btn">
                 <input
-                    :id="'right-' + String(pos)"
+                    :id="'right-' + id"
                     :checked="inputValue === '2'"
                     :name="'pos' + pos"
                     class="radio-input"
                     type="radio"
                     @change="onChange('2')"
                 >
-                <label :for="'right-' + String(pos)">Choix droite</label>
+                <label :for="'right-' + id">Choix droite</label>
             </div>
         </div>
     </div>

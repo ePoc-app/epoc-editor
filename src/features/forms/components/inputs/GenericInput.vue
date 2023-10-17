@@ -14,8 +14,9 @@ import BadgesInput from './badges/BadgesInput.vue';
 import IconPicker from './badges/components/IconPicker.vue';
 import ConditionInput from './badges/components/ConditionInput.vue';
 import { Input, RepeatInputEvent } from '@/src/shared/interfaces';
+import { computed } from 'vue';
 
-defineProps<{
+const props = defineProps<{
     input: Input;
     inputValue: string | boolean | string[];
     icon?: string;
@@ -31,11 +32,16 @@ const emit = defineEmits<{
     (e: 'saveGivenState', state: string): void;
 }>();
 
+const inputId = computed(() => {
+    return props.pos !== null && props.pos !== undefined ? `${props.input.id}-${props.pos}` : props.input.id;
+});
+
 </script>
 
 <template>
     <TextInput
         v-if="input.type === 'text'"
+        :id="inputId"
         :label="input.label"
         :placeholder="input.placeholder"
         :input-value="inputValue as string"
@@ -45,6 +51,7 @@ const emit = defineEmits<{
     />
     <HtmlInput
         v-if="input.type === 'html'"
+        :id="inputId"
         :label="input.label"
         :placeholder="input.placeholder"
         :input-value="inputValue as string"
@@ -54,6 +61,7 @@ const emit = defineEmits<{
     />
     <TextAreaInput 
         v-if="input.type === 'textarea'"
+        :id="inputId"
         :label="input.label"
         :placeholder="input.placeholder"
         :input-value="inputValue as string"
@@ -61,8 +69,9 @@ const emit = defineEmits<{
         @input="emit('input', $event)"
         @save-given-state="emit('saveGivenState', $event)"
     />
-    <FileInput 
+    <FileInput
         v-if="input.type === 'file'"
+        :id="inputId"
         :label="input.label"
         :accept="input.accept"
         :input-value="inputValue as string"
@@ -72,6 +81,7 @@ const emit = defineEmits<{
     />
     <ScoreInput
         v-if="input.type === 'score'"
+        :id="inputId"
         :label="input.label"
         :input-value="inputValue as string"
         @input="emit('input', $event)"
@@ -79,6 +89,7 @@ const emit = defineEmits<{
     />
     <CheckBoxInput
         v-if="input.type === 'checkbox'"
+        :id="inputId"
         :label="input.label"
         :input-value="inputValue as boolean"
         :pos="pos"
@@ -87,6 +98,7 @@ const emit = defineEmits<{
     />
     <RadioInput
         v-if="input.type === 'radio-group'"
+        :id="inputId"
         :label="input.label"
         :input-value="inputValue as string"
         :pos="pos"
@@ -95,6 +107,7 @@ const emit = defineEmits<{
     />
     <SelectInput 
         v-if="input.type === 'select'"
+        :id="inputId"
         :label="input.label"
         :placeholder="input.placeholder"
         :input-value="inputValue as string"
@@ -105,6 +118,7 @@ const emit = defineEmits<{
     />
     <RepeatInput
         v-if="input.type === 'repeat'"
+        :id="inputId"
         :label="input.label"
         :placeholder="input.placeholder"
         :input-values="inputValue as string[]"

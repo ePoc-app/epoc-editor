@@ -2,6 +2,7 @@
 import { getCurrentState } from '@/src/shared/services/undoRedo.service';
 
 defineProps<{
+    id: string;
     inputValue: boolean;
     label: string;
     pos: number;
@@ -27,13 +28,13 @@ function onChange(event: Event) {
 <template>
     <div class="checkbox">
         <input
-            :id="'Checkbox' + String(pos)"
+            :id="id"
             class="checkbox-input"
             type="checkbox"
             :checked="inputValue"
             @change="onChange"
         >
-        <label :for="'Checkbox' + String(pos)">{{ label }}</label>
+        <label :for="id">{{ label }}</label>
     </div>
 </template>
 

@@ -2,6 +2,7 @@
 import { getCurrentState } from '@/src/shared/services/undoRedo.service';
 
 const props = defineProps<{
+    id: string;
     label: string;
     placeholder?: string;
     inputValue: string;
@@ -34,9 +35,9 @@ function onBlur() {
 </script>
 
 <template>
-    <label v-if="label !== ''" class="input-label" :for="label">{{ label }}</label>
+    <label v-if="label !== ''" class="input-label" :for="id">{{ label }}</label>
     <input
-        :id="label"
+        :id="id"
         class="input"
         :class="{ 'input-card' : insideCard }"
         type="text"

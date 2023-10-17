@@ -6,6 +6,7 @@ import {graphService} from '@/src/shared/services';
 import { getCurrentState } from '@/src/shared/services/undoRedo.service';
 
 const props = defineProps<{
+    id: string;
     label: string;
     inputValue: string;
     placeholder?: string;
@@ -90,11 +91,17 @@ function onBlur() {
     if(startValue !== content.value) emit('saveGivenState', savedState);
 }
 
+//? Didn't find a way to link the label to the editor because it uses a contenteditable p
+function focusEditor() {
+    const editor = getTinymce().activeEditor;
+    editor.focus();
+}
+
 </script>
 
 <template>
-    <label for="editor">{{ label }}</label>
-    <Editor 
+    <label @click="focusEditor">{{ label }}</label>
+    <Editor
         ref="editor"
         v-model="content"
         api-key="no-api-key"

@@ -3,6 +3,7 @@ import { getCurrentState } from '@/src/shared/services/undoRedo.service';
 
 
 const props = defineProps<{
+    id: string
     label: string;
     placeholder: string;
     inputValue: string;
@@ -34,9 +35,9 @@ function onBlur() {
 </script>
 
 <template>
-    <label class="input-label" :for="label">{{ label }}</label>
+    <label class="input-label" :for="id">{{ label }}</label>
     <textarea
-        :id="label"
+        :id="id"
         class="input input-textarea"
         :class="{ 'input-card' : insideCard }"
         :placeholder="placeholder"

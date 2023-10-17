@@ -5,6 +5,7 @@ import { useEditorStore } from '@/src/shared/stores';
 const editorStore = useEditorStore();
 
 const props = defineProps<{
+    id: string;
     label: string;
     inputValue: string;
     placeholder: string;
@@ -36,9 +37,9 @@ function onChange(event: Event) {
 
 <template>
     <div class="select">
-        <label for="select-box">{{ label }}</label>
+        <label :for="id">{{ label }}</label>
         <select
-            id="select-box"
+            :id="id"
             :value="inputValue"
             class="select-box"
             @change="onChange"
