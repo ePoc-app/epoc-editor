@@ -23,16 +23,12 @@ export async function addChapter(window) {
 }
 
 export async function createLinkedNode(window, sourceNode: TestNode, newNode: TestNode ) {
-    let sideAction = null;
     const questionMenu = await window.getByTestId('questions-menu');
-
-    if(newNode.type === 'page') {
-        sideAction = await window.getByTestId(`${newNode.contentType}-content`);
-    } else if(newNode.type === 'activity') {
-        await questionMenu.click();
-        sideAction = await window.getByTestId(`${newNode.activityType}-question`);
-    }
-
+    
+    if(newNode.type === 'activity') await questionMenu.click();
+    
+    const sideAction = await window.getByTestId(`${newNode.contents[0].type}-content`);
+    
     const sourceNodeBox = await window.getByTestId(`${sourceNode.type}-${sourceNode.index}`).boundingBox();
 
     const dropLocation = {

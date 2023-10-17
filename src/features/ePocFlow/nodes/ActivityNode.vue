@@ -81,6 +81,7 @@ const activityIndex = computed(() => {
     <div>
         <div 
             ref="page"
+            :data-testid="`activity-${activityIndex}`"
             class="container"
             @click.exact="openPageForm(currentNode.id, currentNode.data.formType)"
             @click.meta="closeFormPanel"
@@ -105,7 +106,7 @@ const activityIndex = computed(() => {
                 <small>{{ connectedBadges.length }}</small>
             </div>
             <DraggableNode
-                :data-testid="`activity-${activityIndex}`"
+                :parent-test-id="`activity-${activityIndex}`"
                 :node-id="id"
                 :contents="data.elements"
                 type="activity"

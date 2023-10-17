@@ -17,6 +17,7 @@ const props = defineProps<{
     nodeId: string;
     contents: NodeElement[];
     type: 'page' | 'activity';
+    parentTestId: string;
 }>();
 
 const emit = defineEmits<{
@@ -129,6 +130,7 @@ function onContextMenu(contentId: string) {
                     <small>{{ getConnectedBadges(element.contentId).length }}</small>
                 </div>
                 <ContentButton
+                    :data-testid="`${parentTestId}-${index}`"
                     :icon="element.action.icon"
                     :is-draggable="!isCondition && !editorStore.selectNodeMode"
                     :is-active="editorStore.openedElementId ? editorStore.openedElementId === element.id : false"

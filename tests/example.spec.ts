@@ -1,8 +1,8 @@
 import { test } from '@playwright/test';
 const { _electron: electron } = require('playwright');
 
-import { sleep, addChapter, createLinkedNode } from '@/tests/utils';
-import { epocInputs, nodes } from '@/tests/data';
+import { sleep, addChapter, createLinkedNode, fillForm } from '@/tests/utils';
+import { forms, nodes } from '@/tests/data';
 
 let electronApp;
 let window;
@@ -40,15 +40,23 @@ test.describe('Create a new ePoc', () => {
 
     test.describe('Filling forms', () => {
         test('Filling ePoc form', async () => {
-
-            const epocNode = await window.getByTestId('epoc-node');
-            await epocNode.click();
-
-            for(const inputValue of epocInputs) {
-                const input = await window.getByLabel(inputValue.label);
-                await input.focus();
-                await input.fill(inputValue.value);
-            }
+            const epocForm = forms.find(form => form.type === 'epoc');
+            await fillForm(window, epocForm, 'epoc-node');
         });
+        
+        for(const node of nodes) {
+            test(`Filling ${node.type}-${node.index} form`, async () => {
+                const testId = `${node.type}-${node.index}`;
+                const form = forms.find(form => form.type === node.type);
+                await fillForm(window, form, testId);
+                
+                if(node.type === 'page' || node.type === 'activity') {
+                    for(const [index,content] of node.contents.entries()) {
+                        const contentForm = forms.find(form => form.type === content.type);
+                        await fillForm(window, contentForm, `${testId}-${index}`);
+                    }
+                }
+            });
+        }
     });
 });

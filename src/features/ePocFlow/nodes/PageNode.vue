@@ -81,8 +81,9 @@ const pageIndex = computed(() => {
 
 <template>
     <div>
-        <div 
+        <div
             ref="page"
+            :data-testid="`page-${pageIndex}`"
             class="container"
             @click.exact="openPageForm(currentNode.id, currentNode.data.formType)"
             @click.meta="closeFormPanel"
@@ -107,7 +108,7 @@ const pageIndex = computed(() => {
                 <small>{{ connectedBadges.length }}</small>
             </div>
             <DraggableNode
-                :data-testid="`page-${pageIndex}`"
+                :parent-test-id="`page-${pageIndex}`"
                 :node-id="id"
                 :contents="data.elements"
                 type="page"
