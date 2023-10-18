@@ -22,6 +22,6 @@ export interface TestInput {
 }
 
 export interface TestForm {
-    type: 'page' | 'epoc' | 'activity' | 'text' | 'audio' | 'video' | 'chapter' | 'choice';
+    type: 'page' | 'epoc' | 'activity' | 'text' | 'audio' | 'video' | 'chapter' | 'choice' | 'drag-and-drop' | 'reorder' | 'swipe' | 'dropdown-list';
     inputs: TestInput[];
 }

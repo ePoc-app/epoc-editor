@@ -84,9 +84,10 @@ function showTemplateMenu() {
             :is-draggable="false"
             :class-list="classList(questionContent)"
             :is-active="editorStore.questionMenu"
+            @mouseup.stop
             @click="showQuestionsMenu"
         />
-        <div v-if="editorStore.questionMenu" class="floating-menu" @click.stop>
+        <div v-if="editorStore.questionMenu" data-testid="floating-menu" class="floating-menu" @click.stop>
             <div class="arrow-wrapper">
                 <div class="arrow">
                 </div>

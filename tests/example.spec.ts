@@ -39,7 +39,7 @@ test.describe('Create a new ePoc', () => {
                     await createLinkedNode(window, nodes[i - 1], nodes[i]);
                     if(nodes[i].contents.length > 1) {
                         for(let j = 1; j < nodes[i].contents.length; j++) {
-                            await addContentToNode(window, nodes[i].contents[j].type, nodes[i]);
+                            await addContentToNode(window, nodes[i].contents[j].type, nodes[i], j);
                         }
                     }
                 }

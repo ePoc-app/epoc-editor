@@ -22,4 +22,9 @@ const videoForm: TestForm = {
     ]
 };
 
-export const contentForms = [textForm, videoForm];
+const audioForm: TestForm = {
+    type: 'audio',
+    inputs: []
+};
+
+export const contentForms = [textForm, videoForm, audioForm];

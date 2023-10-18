@@ -32,7 +32,27 @@ export const nodes: TestNode[] = [
         index: ++activityIndex,
         contents: [
             { type: 'choice' },
-            { type: 'choice' }
+            { type: 'drag-and-drop' }
+        ]
+    },
+    {
+        type: 'chapter',
+        index: ++chapterIndex
+    },
+    {
+        type: 'page',
+        index: ++pageIndex,
+        contents: [
+            { type: 'audio' }
+        ]
+    },
+    {
+        type: 'activity',
+        index: ++activityIndex,
+        contents: [
+            { type: 'reorder' },
+            { type: 'swipe' },
+            { type: 'dropdown-list' }
         ]
     }
 ];
