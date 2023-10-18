@@ -14,7 +14,7 @@ function onClick() {
 
 <template>
     <div class="add-chapter" @mousedown="onClick()">
-        <button class="add-btn"><i class="icon-plus"></i></button>
+        <button data-testid="add-chapter" class="add-btn"><i class="icon-plus"></i></button>
     </div>
 </template>
 

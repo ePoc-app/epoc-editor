@@ -66,6 +66,7 @@ function showTemplateMenu() {
                 <ContentButton
                     :key="index"
                     v-tippy="{content: element.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
+                    :data-testid="`${element.type}-content`"
                     :icon="element.icon"
                     :is-draggable="true"
                     :class-list="{ 'btn-content-blue': true }"
@@ -78,13 +79,15 @@ function showTemplateMenu() {
         <!--suppress VueUnrecognizedDirective -->
         <ContentButton
             v-tippy="{content: questionContent.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
+            data-testid="questions-menu"
             :icon="questionContent.icon"
             :is-draggable="false"
             :class-list="classList(questionContent)"
             :is-active="editorStore.questionMenu"
+            @mouseup.stop
             @click="showQuestionsMenu"
         />
-        <div v-if="editorStore.questionMenu" class="floating-menu" @click.stop>
+        <div v-if="editorStore.questionMenu" data-testid="floating-menu" class="floating-menu" @click.stop>
             <div class="arrow-wrapper">
                 <div class="arrow">
                 </div>
@@ -103,6 +106,7 @@ function showTemplateMenu() {
                         <ContentButton
                             :key="index"
                             v-tippy="{content: element.label, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
+                            :data-testid="`${element.type}-content`"
                             :icon="element.icon"
                             :class-list="{ 'btn-content-blue': true }"
                             :is-draggable="true"

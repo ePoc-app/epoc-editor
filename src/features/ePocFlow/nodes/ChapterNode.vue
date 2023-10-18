@@ -21,14 +21,17 @@ const { findNode, nodes, edges } = useVueFlow({ id: 'main' });
 
 const currentNode = findNode(props.id);
 
-const subtitle = computed(() => {
+const chapterIndex = computed(() => {
     const chapters = nodes.value.filter(node => node.type === 'chapter');
+    return chapters.findIndex(chapter => chapter.id === currentNode.id) + 1;
+});
+
+const subtitle = computed(() => {
     const epocNode = findNode('1');
     const chapterParameter = epocNode?.data?.formValues?.chapterParameter || 'Chapitre';
     const label = chapterParameter.length > 8 ? chapterParameter.substring(0, 7) + '...' : chapterParameter;
-    const chapterIndex = chapters.findIndex(chapter => chapter.id === currentNode.id) + 1;
 
-    return `${label} ${chapterIndex}`;
+    return `${label} ${chapterIndex.value}`;
 });
 
 const isSource = computed(() => getConnectedEdges([currentNode], edges.value).some((edge) => edge.sourceNode.id === props.id));
@@ -75,6 +78,7 @@ const connectedBadges = computed(() => getConnectedBadges(currentNode.data.conte
             <small>{{ connectedBadges.length }}</small>
         </div>
         <ContentButton
+            :data-testid="`chapter-${chapterIndex}`"
             :icon="currentNode.data.action.icon"
             :is-draggable="false"
             :class-list="classList"
@@ -87,6 +91,7 @@ const connectedBadges = computed(() => getConnectedBadges(currentNode.data.conte
     </div>
     <!-- ! mousedown.stop important in vue-flow v1.16.4 on non draggable node -->
     <Handle
+        :data-testid="`source-chapter-${chapterIndex}`"
         type="source"
         :position="Position.Right"
         :connectable="!isSource && !editorStore.selectNodeMode"
