@@ -18,12 +18,6 @@ export async function fillForm(window, form: TestForm, testId: string) {
     
     for(const input of form.inputs) {
         switch(input.type) {
-            case 'text': {
-                const inputLabel = await window.getByLabel(input.label, { exact: true });
-                await inputLabel.fill(input.value as string);
-                break;
-            }
-            
             case 'html': {
                 const label = await window.getByText(input.label);
                 await label.click();
@@ -40,6 +34,12 @@ export async function fillForm(window, form: TestForm, testId: string) {
             case 'score': {
                 const score = await window.getByLabel(input.label);
                 await score.type(input.value as string);
+                break;
+            }
+            
+            default: {
+                const inputLabel = await window.getByLabel(input.label, { exact: true });
+                await inputLabel.fill(input.value as string);
                 break;
             }
         }

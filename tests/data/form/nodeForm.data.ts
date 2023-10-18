@@ -68,26 +68,35 @@ const pageForm: TestForm = {
     ]
 };
 
-const textForm: TestForm = {
-    type: 'text',
+const activityForm: TestForm = {
+    type: 'activity',
     inputs: [
         {
-            label: 'Résumé',
-            value: 'Résumé test',
-            type: 'html'
+            label: 'Titre',
+            value: 'Titre test',
+            type: 'text'
         },
-    ]
-};
-
-const videoForm: TestForm = {
-    type: 'video',
-    inputs: [
+        {
+            label: 'Sous-titre',
+            value: 'Sous-titre test',
+            type: 'text'
+        },
         {
             label: 'Résumé',
             value: 'Résumé test',
-            type: 'html'
+            type: 'textarea'
+        },
+        {
+            label: 'Caché dans la table des matières',
+            value: true,
+            type: 'checkbox'
+        },
+        {
+            label: 'Ne s\'affiche qu\'a certaines conditions',
+            value: true,
+            type: 'checkbox'
         }
     ]
 };
 
-export const forms = [epocForm, pageForm, chapterForm, textForm, videoForm];
+export const nodeForms = [epocForm, chapterForm, pageForm, activityForm];

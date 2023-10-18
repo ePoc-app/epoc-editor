@@ -105,7 +105,7 @@ function showTemplateMenu() {
                         <ContentButton
                             :key="index"
                             v-tippy="{content: element.label, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
-                            :data-testid="`${element.type}-question`"
+                            :data-testid="`${element.type}-content`"
                             :icon="element.icon"
                             :class-list="{ 'btn-content-blue': true }"
                             :is-draggable="true"

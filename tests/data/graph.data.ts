@@ -27,13 +27,11 @@ export const nodes: TestNode[] = [
             { type: 'video' }
         ]
     },
-    // {
-    //     type: 'activity',
-    //     index: ++activityIndex,
-    //     activityType: 'choice'
-    // },
-    // {
-    //     type: 'chapter',
-    //     index: ++chapterIndex,
-    // }
+    {
+        type: 'activity',
+        index: ++activityIndex,
+        contents: [
+            { type: 'choice' }
+        ]
+    }
 ];

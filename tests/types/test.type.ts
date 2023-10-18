@@ -1,6 +1,6 @@
-export type Content = 'text' | 'video' | 'audio'
+export type PageContent = 'text' | 'video' | 'audio'
 export type Question = 'choice' | 'drag-and-drop' | 'reorder' | 'swipe' | 'dropdown-list'
-export type Element = Content | Question
+export type Content = PageContent | Question
 
 export interface TestNode {
     type: 'chapter' | 'page' | 'activity';
@@ -11,10 +11,10 @@ export interface TestNode {
 export interface TestInput {
     label: string;
     value: string | boolean;
-    type: 'text' | 'html' | 'checkbox' | 'score';
+    type: 'text' | 'html' | 'checkbox' | 'score' | 'textarea';
 }
 
 export interface TestForm {
-    type: 'page' | 'epoc' | 'activity' | 'text' | 'audio' | 'video' | 'chapter';
+    type: 'page' | 'epoc' | 'activity' | 'text' | 'audio' | 'video' | 'chapter' | 'choice';
     inputs: TestInput[];
 }
