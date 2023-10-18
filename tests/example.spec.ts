@@ -9,7 +9,8 @@ let window;
 
 test.describe('Create a new ePoc', () => {
     test.beforeAll(async () => {
-        electronApp = await electron.launch({ args: ['electron/electron.js']});
+        electronApp = await electron.launch({ args: ['electron/electron.js', '--headless=true']});
+        // electronApp = await electron.launch({ args: ['electron/electron.js']});
         
         window = await new Promise((resolve) => {
             electronApp.on('window', page => {

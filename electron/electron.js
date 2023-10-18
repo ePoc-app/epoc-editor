@@ -10,6 +10,8 @@ const { cleanPreview } = require('./components/preview');
 const path = require('path');
 const { autoUpdater } = require('electron-updater');
 
+const headless = process.argv.includes('--headless=true');
+
 let mainWindow;
 let splashWindow;
 // Open file with editor, on windows : using argv | on macOS using open-file event (see below)
@@ -31,7 +33,7 @@ autoUpdater.checkForUpdatesAndNotify();
 // This method will be called when Electron has finished initialization and is ready to create browser windows.
 app.whenReady().then(() => {
     mainWindow = createMainWindow();
-    splashWindow = createSplashWindow();
+    if(!headless) splashWindow = createSplashWindow();
 
     setupIpcListener(mainWindow);
 
@@ -40,8 +42,11 @@ app.whenReady().then(() => {
         waitEvent(mainWindow, 'ready-to-show'),
         wait(200)
     ]).then(async () => {
-        splashWindow.destroy();
-        mainWindow.show();
+        if(!headless) {
+            splashWindow.destroy();
+            mainWindow.show();
+        }
+
         if (filepath) {
             mainWindow.webContents.send('epocProjectPicked', JSON.stringify({name: null, modified: null, filepath: filepath, workdir: null}));
         }
