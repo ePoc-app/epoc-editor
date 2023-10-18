@@ -22,7 +22,7 @@ test.describe('Create a new ePoc', () => {
     });
 
     test.afterAll(async () => {
-        await sleep(2000);
+        // await sleep(2000);
         await electronApp.close();
     });
 
