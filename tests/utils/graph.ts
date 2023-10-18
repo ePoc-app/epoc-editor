@@ -1,4 +1,4 @@
-import { TestNode } from '../types';
+import { TestNode, isQuestion } from '../types';
 
 export async function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -45,17 +45,24 @@ export async function createLinkedNode(window, sourceNode: TestNode, newNode: Te
     This function is used to add content to a page.
     ! Doesn't work for the moment, not sure i can make it work.
  */
-export async function addContentToNode(window, type, node: TestNode) {
+export async function addContentToNode(window, type, node: TestNode, pos?: number) {
+    const questionMenu = await window.getByTestId('questions-menu');
+    
+    if(isQuestion(type)) await questionMenu.click();
+    
     const sideAction = await window.getByTestId(`${type}-content`);
-
-    const nodeBox = await window.getByTestId(`${node.type}-${node.index}`).boundingBox();
-
+    
+    if(!pos) pos = 0;
+    const contentBox = await window.getByTestId(`${node.type}-${node.index}-${pos}`).boundingBox();
+    
     const dropLocation = {
-        x: nodeBox.x + nodeBox.width / 2,
-        y: nodeBox.y + nodeBox.height / 2
+        x: contentBox.x + 10 + pos,
+        y: contentBox.y + 10
     };
 
+    await sleep(1000);
     await dragAndDrop(window, sideAction, dropLocation);
+    await sleep(1000);
 }
 
 export async function linkNodes(window, sourceNode: TestNode, targetNode: TestNode) {

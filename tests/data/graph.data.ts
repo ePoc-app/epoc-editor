@@ -31,6 +31,7 @@ export const nodes: TestNode[] = [
         type: 'activity',
         index: ++activityIndex,
         contents: [
+            { type: 'choice' },
             { type: 'choice' }
         ]
     }

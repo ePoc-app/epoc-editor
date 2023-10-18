@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 const { _electron: electron } = require('playwright');
 
-import { sleep, addChapter, createLinkedNode, fillForm } from '@/tests/utils';
+import { sleep, addChapter, createLinkedNode, fillForm, addContentToNode } from '@/tests/utils';
 import { forms, nodes } from '@/tests/data';
 
 let electronApp;
@@ -37,6 +37,11 @@ test.describe('Create a new ePoc', () => {
                     await addChapter(window);
                 } else {
                     await createLinkedNode(window, nodes[i - 1], nodes[i]);
+                    if(nodes[i].contents.length > 1) {
+                        for(let j = 1; j < nodes[i].contents.length; j++) {
+                            await addContentToNode(window, nodes[i].contents[j].type, nodes[i]);
+                        }
+                    }
                 }
             }));
         }

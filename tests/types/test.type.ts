@@ -1,5 +1,12 @@
 export type PageContent = 'text' | 'video' | 'audio'
-export type Question = 'choice' | 'drag-and-drop' | 'reorder' | 'swipe' | 'dropdown-list'
+
+const questions = ['choice', 'drag-and-drop', 'reorder', 'swipe', 'dropdown-list'] as const;
+export type Question = typeof questions[number];
+
+export function isQuestion(value) {
+    return questions.includes(value);
+}
+
 export type Content = PageContent | Question
 
 export interface TestNode {
