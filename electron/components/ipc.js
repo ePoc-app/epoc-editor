@@ -5,7 +5,7 @@ const { runPreview } = require('./preview');
 const { getRecentFiles, pickEpocProject, openEpocProject, newEpocProject, saveEpocProject, exportProject, writeProjectData, writeEpocData, readProjectData, copyFileToWorkdir } = require('./file');
 const { Menu } = require('electron');
 const contextMenu = require('./contextMenu');
-    
+
 const copyData = {
     pages: null,
     sourceId: null,
@@ -103,13 +103,12 @@ const setupIpcListener = function (targetWindow) {
     });
 
     ipcMain.on('importFile', async (event, data) => {
-        const { filepath, isIcon } = data;
         if(event.sender !== targetWindow.webContents) return;
-        
+
+        const { filepath, isIcon } = data;
         sendToFrontend(event.sender, 'fileImported', await copyFileToWorkdir(store.state.projects[targetWindow.id].workdir, filepath, isIcon));
     });
-    
-    
+
     ipcMain.on('graphCopy', async (event, data) => {
         if(event.sender !== targetWindow.webContents) return;
 

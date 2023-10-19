@@ -170,9 +170,12 @@ const saveAsEpocProject = async function (project) {
 const zipEpocProject = async function (workdir, filepath) {
     if (!filepath || !workdir) return null;
 
+    const unusedAssets = getUnusedAssets(workdir).map(asset => path.join('assets', asset));
+
     const zip = new AdmZip();
     zip.addLocalFolder(workdir, '', (entry) => {
         const excluded = ['.DS_Store', '__MACOSX', '.git'];
+        excluded.push(...unusedAssets);
         return excluded.every(e => entry.indexOf(e) === -1) ;
     });
     await zip.writeZipPromise(filepath, null);
@@ -195,9 +198,12 @@ const exportProject = async function (workdir, filepath) {
 
     if(!exportPath) return null;
 
+    const unusedAssets = getUnusedAssets(workdir).map(asset => path.join('assets', asset));
+
     const zip = new AdmZip();
     zip.addLocalFolder(workdir, '', (entry) => {
         const excluded = ['project.json','.DS_Store', '__MACOSX', '.git'];
+        excluded.push(...unusedAssets);
         return excluded.every(e => entry.indexOf(e) === -1) ;
     });
     await zip.writeZipPromise(exportPath, null);
@@ -280,6 +286,80 @@ const updateRecent = function (project) {
     store.set('recentFiles', recentFiles);
 };
 
+/**
+ * Get all assets paths from the workdir
+ * @param {string} workdir
+ * @returns {string[]}
+ */
+const getAllAssets = function (workdir) {
+    const assetsDir = path.join(workdir, 'assets');
+    const iconsPath = path.join(assetsDir, 'icons');
+
+    const assetPaths = [];
+
+    try {
+        const items = fs.readdirSync(assetsDir);
+
+        for(const item of items) {
+            const itemPath = path.join(assetsDir, item);
+            const stat = fs.statSync(itemPath);
+
+            if(stat.isFile()) assetPaths.push(itemPath);
+        }
+
+        const iconItems = fs.readdirSync(iconsPath);
+        for(const item of iconItems) {
+            const itemPath = path.join(iconsPath, item);
+            const stat = fs.statSync(itemPath);
+
+            if(stat.isFile()) assetPaths.push(itemPath);
+        }
+
+    } catch(e) {
+        console.error('Error reading assets directory', e);
+    }
+
+    const assetsName = [];
+
+    for(const asset of assetPaths) {
+        const pathParts = asset.split('/');
+        const prefix = pathParts[pathParts.length - 2] === 'icons' ? 'icons/' : '';
+        const filename = prefix + pathParts[pathParts.length - 1];
+        assetsName.push(filename);
+    }
+    return assetsName;
+};
+
+const getUsedAssets = function (workdir) {
+    const projectJSON = fs.readFileSync(path.join(workdir, 'project.json'), 'utf8');
+    const regex = /"assets\/([^"]+)"/g;
+    const matches = projectJSON.match(regex);
+
+    if(!matches) return [];
+    return matches.map(match => {
+        return match.replace('"assets/', '')
+            .replace('"', '')
+            // To only keep the slash after icons
+            .replace(/\/+/g, '/')
+            .replace(/\\/g, '');
+    });
+};
+
+const getUnusedAssets = function (workdir) {
+    const allAssets = getAllAssets(workdir);
+    const usedAssets = getUsedAssets(workdir);
+
+    const unusedAssets = [];
+    for(const asset of allAssets) {
+        if(!usedAssets.includes(asset)) {
+            unusedAssets.push(asset);
+        }
+    }
+    console.assert(unusedAssets.length === 0, 'parasite asset detected', unusedAssets);
+
+    return unusedAssets;
+};
+
 module.exports = {
     getRecentFiles,
     openFile,
@@ -294,5 +374,6 @@ module.exports = {
     writeEpocData,
     readProjectData,
     copyFileToWorkdir,
-    cleanAllWorkdir
+    cleanAllWorkdir,
+    getAllAssets,
 };

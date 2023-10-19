@@ -1,7 +1,17 @@
 import { ApiInterface } from '@/src/shared/interfaces/api.interface';
 import { getConnectedEdges, GraphNode, useVueFlow } from '@vue-flow/core';
 import { EpocV1 } from '@/src/shared/classes/epoc-v1';
-import { Assessment, Audio, Choice, ChoiceCondition, Content, Html, SimpleQuestion, uid, Video } from '@epoc/epoc-types/src/v1';
+import {
+    Assessment,
+    Audio,
+    Choice,
+    ChoiceCondition,
+    Content,
+    Html,
+    SimpleQuestion,
+    uid,
+    Video
+} from '@epoc/epoc-types/src/v1';
 import { questions } from '@/src/shared/data';
 import { useEditorStore } from '@/src/shared/stores';
 import {
@@ -343,7 +353,6 @@ export function generateId(): uid {
 
 // Used to translate v2 badges to v1
 export function exportBadgesToPage(badges: Record<string, Badge>): Record<string, Badge> {
-
     const res = JSON.parse(JSON.stringify(badges));
 
     for(const badgeKey of Object.keys(res)) {
