@@ -45,7 +45,8 @@ function deleteFile() {
     savedState = getCurrentState(true);
 
     url.value = '';
-    
+
+    emit('input', url.value);
     emit('saveGivenState', savedState);
 }
 
