@@ -59,7 +59,7 @@ export function addChapter(chapterId?: string, chapter?: Chapter, offsetY?: numb
         position: { x: 0, y: newYPos },
         data,
         draggable: true,
-        deletable: true,
+        deletable: false,
         selectable: false
     };
 
@@ -89,7 +89,7 @@ export function addPage(position: { x: number, y: number }, actions: SideAction[
             formValues: {},
         },
         position,
-        deletable: true
+        deletable: false
     };
 
     addNodes([newPageNode]);
