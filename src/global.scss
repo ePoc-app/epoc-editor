@@ -486,6 +486,13 @@ g.selected {
 .tox-tinymce {
   margin-bottom: 1.5rem;
 }
+[id^="tiny-vue_"] {
+  height: 340px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  resize: none;
+  margin-bottom: 1.5rem;
+}
 
 .badge-notification {
   position: absolute;

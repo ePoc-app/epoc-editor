@@ -109,6 +109,7 @@ function focusEditor() {
         :toolbar="toolbar"
         :init="{
             menubar: false,
+            height: 350,
             statusbar: false,
             templates: [
                 { title: 'Plier/déplier', content: template, description: 'Plier/déplier avec titre et contenu' }
@@ -117,7 +118,7 @@ function focusEditor() {
             file_picker_callback: handleFilePicker,
             link_default_target: '_blank',
             link_target_list: false,
-            paste_data_images: false
+            paste_data_images: false,
         }"
         @init="init"
         @drop.stop.prevent="drop"
