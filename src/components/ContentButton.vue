@@ -8,6 +8,7 @@ defineProps<{
     subtitle?: string;
     isActive?: boolean;
     isContent?: boolean;
+    rotate?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -37,8 +38,10 @@ function contextMenu(event: MouseEvent) {
         @click.stop="click"
         @contextmenu.stop="contextMenu"
     >
-        <i :class="icon" />
-        <span v-if="subtitle" class="subtitle">{{ subtitle }}</span>
+        <div class="text" :class="{ 'rotated': rotate }">
+            <i :class="icon" />
+            <span v-if="subtitle" class="subtitle">{{ subtitle }}</span>
+        </div>
     </div>
 </template>
 
@@ -54,5 +57,15 @@ function contextMenu(event: MouseEvent) {
 .selected {
     border: 2px solid var(--editor-blue);
     box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);  
+}
+
+.text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.rotated {
+    transform: rotate(-45deg);
 }
 </style>

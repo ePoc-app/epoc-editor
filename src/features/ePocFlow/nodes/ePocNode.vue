@@ -38,7 +38,7 @@ function onContextMenu() {
 </script>
 
 <template>
-    <div>
+    <div class="rotated">
         <ContentButton
             data-testid="epoc-node"
             :icon="currentNode.data.action.icon"
@@ -46,9 +46,21 @@ function onContextMenu() {
             :class-list="classList"
             :is-active="isActive"
             subtitle="ePoc"
+            :rotate="true"
             @click="openForm()"
             @mousedown="editorStore.closeFormPanel()"
             @contextmenu="onContextMenu"
         />
     </div>
 </template>
+
+<style scoped lang="scss">
+.rotated {
+    transform: rotate(45deg);
+
+    i, span {
+        transform: rotate(-45deg);
+        color: red;
+    }
+}
+</style>
