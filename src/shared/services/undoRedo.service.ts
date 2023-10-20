@@ -76,7 +76,7 @@ export function revertToState(state: string): string {
         const { elementId, nodeId, formType, scrollPosY, badgeId } = form;
 
         if(formType === 'badge') editorStore.openBadgeFormPanel(badgeId, 'custom', scrollPosY);
-        else editorStore.openFormPanel(elementId, formType, nodeId, scrollPosY);
+        else editorStore.openFormPanel(elementId, formType,{ nodeId, scrollPosY });
     }
     
     return currentState;

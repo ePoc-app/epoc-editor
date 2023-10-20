@@ -99,7 +99,7 @@ export function openFormPanel(element: NodeElement) {
     if(editorStore.selectNodeMode) {
         exitSelectNodeMode(element.id);
     } else {
-        editorStore.openFormPanel(element.id, element.formType, element.parentId);
+        editorStore.openFormPanel(element.id, element.formType, { nodeId: element.parentId });
     }
 }
 
@@ -110,9 +110,9 @@ export function goToElement(contentId: string) {
 
     if(Object.hasOwn(element, 'parentId')) {
         const nodeElement = element as NodeElement;
-        editorStore.openFormPanel(nodeElement.id, nodeElement.formType, nodeElement.parentId);
+        editorStore.openFormPanel(nodeElement.id, nodeElement.formType, { nodeId: nodeElement.parentId, centerNode: true });
     } else {
         const node = element as Node;
-        editorStore.openFormPanel(node.id, node.data.formType);
+        editorStore.openFormPanel(node.id, node.data.formType, { centerNode: true });
     }
 }

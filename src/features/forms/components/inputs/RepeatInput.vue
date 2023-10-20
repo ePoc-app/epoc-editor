@@ -112,7 +112,7 @@ function onClick(index: number, action: string) {
 
     if(element && action) {
         const { id, formType, parentId } = element;
-        editorStore.openFormPanel(id, formType, parentId);
+        editorStore.openFormPanel(id, formType, { nodeId: parentId });
     }
 }
 

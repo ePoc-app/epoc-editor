@@ -3,7 +3,11 @@ import { ePocProject, Form, NodeElement, PageModel, SideAction, Condition } from
 import { GraphNode, useVueFlow } from '@vue-flow/core';
 import { formsModel, questions, standardPages } from '@/src/shared/data';
 
-const { nodes, findNode } = useVueFlow({ id: 'main' });
+const {
+    nodes,
+    findNode,
+    getTransform,
+    setTransform } = useVueFlow({ id: 'main' });
 
 type uid = string;
 
@@ -44,7 +48,7 @@ interface EditorState {
     standardPages: SideAction[];
 
     // Modal
-    conditionModal: boolean; 
+    conditionModal: boolean;
     validationModal: boolean;
     iconModal: boolean;
 
@@ -137,20 +141,33 @@ export const useEditorStore = defineStore('editor', {
             if(scrollPosY) this.scrollFormPanel(scrollPosY);
         },
         
-        openFormPanel(id: string, formType: string, nodeId?: string, scrollPosY?: number): void {
+        openFormPanel(id: string, formType: string, options?: { nodeId?: string, scrollPosY?: number, centerNode?: boolean }): void {
+            const { nodeId, scrollPosY, centerNode } = options ?? {};
+            
             this.openedElementId = id;
             this.openedNodeId = nodeId;
             this.openedBadgeId = null;
 
             //? To be sure the view is notified of closing / reopening
             this.formPanel = null;
-            setTimeout(() => { 
+            setTimeout(() => {
                 this.formPanel = formsModel.find(form => form.type === formType);
             });
 
             if(scrollPosY) this.scrollFormPanel(scrollPosY);
 
             nodes.value.forEach(node => node.selected = node.id === this.openedElementId);
+            
+            if(!centerNode) return;
+            
+            const node = nodeId ? findNode(nodeId) : findNode(id);
+            if(!node) return;
+            
+            const { zoom } = getTransform();
+            const { x, y } = node.position;
+            
+            setTransform({ x: -x * zoom + 200, y: -y * zoom + 200, zoom});
+            
         },
         
         scrollFormPanel(posY: number): void {
@@ -197,7 +214,7 @@ export const useEditorStore = defineStore('editor', {
 
         openPage(): void {
             const parentNode = findNode(this.openedNodeId);
-            this.openFormPanel(parentNode.id, parentNode.data.formType, parentNode.data.formValues);
+            this.openFormPanel(parentNode.id, parentNode.data.formType);
         },
 
         openEpoc(): void {

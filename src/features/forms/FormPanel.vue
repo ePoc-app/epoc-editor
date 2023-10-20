@@ -26,49 +26,49 @@ const currentNode = editorStore.getCurrentGraphNode;
 
 function actionOnForm(action: string) {
     switch (action) {
-    case 'delete':
-        confirmDelete();
-        break;
+        case 'delete':
+            confirmDelete();
+            break;
 
-    case 'duplicate-page':
-        duplicatePage();
-        break;
+        case 'duplicate-page':
+            duplicatePage();
+            break;
 
-    case 'back-to-page':
-        editorStore.openPage();
-        break;
+        case 'back-to-page':
+            editorStore.openPage();
+            break;
 
-    case 'duplicate-element':
-        duplicateContent();
-        break;
+        case 'duplicate-element':
+            duplicateContent();
+            break;
 
-    case 'launch-preview':
-        editorService.runPreviewAtPage();
-        break;
+        case 'launch-preview':
+            editorService.runPreviewAtPage();
+            break;
 
-    case 'save-model':
-        if(editorStore.savePageModel(currentNode.data.elements.map((element: NodeElement) => element.action))) {
-            toaster.success('Modèle sauvegardé 👌');
-        }
-        else toaster.error('Le modèle existe déjà 🤔');
-        break;
+        case 'save-model':
+            if(editorStore.savePageModel(currentNode.data.elements.map((element: NodeElement) => element.action))) {
+                toaster.success('Modèle sauvegardé 👌');
+            }
+            else toaster.error('Le modèle existe déjà 🤔');
+            break;
 
-    case 'simple-question':
-        transformActivityToPage();
-        break;
+        case 'simple-question':
+            transformActivityToPage();
+            break;
 
-    case 'back-to-epoc':
-        editorStore.openEpoc();
-        break;
+        case 'back-to-epoc':
+            editorStore.openEpoc();
+            break;
 
-    case 'delete-badge':
-        deleteBadge(editorStore.openedBadgeId);
-        editorStore.openEpoc();
-        break;
+        case 'delete-badge':
+            deleteBadge(editorStore.openedBadgeId);
+            editorStore.openEpoc();
+            break;
 
-    case 'add-badge':
-        addNewBadge();
-        break;
+        case 'add-badge':
+            addNewBadge();
+            break;
     }
 
 }
