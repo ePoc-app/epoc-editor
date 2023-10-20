@@ -109,8 +109,9 @@ function focusEditor() {
         :toolbar="toolbar"
         :init="{
             menubar: false,
+            min_height: 150,
+            max_height: 800,
             height: 350,
-            statusbar: false,
             templates: [
                 { title: 'Plier/déplier', content: template, description: 'Plier/déplier avec titre et contenu' }
             ],
