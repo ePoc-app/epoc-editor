@@ -1,19 +1,14 @@
 <script setup lang="ts">
 import { useEditorStore } from '@/src/shared/stores';
-import { useVueFlow } from '@vue-flow/core';
+import { Emits, NodeProps, useVueFlow } from '@vue-flow/core';
 import ContentButton from '@/src/components/ContentButton.vue';
 import { exitSelectNodeMode, graphService } from '@/src/shared/services';
 import { computed } from 'vue';
 
 const editorStore = useEditorStore();
 
-const props = defineProps<{
-    id: string;
-    data: {
-        type: object;
-        required: true;
-    }
-}>();
+const props = defineProps<Partial<NodeProps>>();
+defineEmits<Partial<Emits>>();
 
 const { findNode } = useVueFlow({ id: 'main' });
 

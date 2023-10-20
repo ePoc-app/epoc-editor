@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Handle, Position, getConnectedEdges, useVueFlow } from '@vue-flow/core';
+import { Handle, Position, getConnectedEdges, useVueFlow, NodeProps, Emits } from '@vue-flow/core';
 import { computed, Ref, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { NodeElement } from '@/src/shared/interfaces';
@@ -11,16 +11,8 @@ import DraggableNode from './content/DraggableNode.vue';
 
 const editorStore = useEditorStore();
 
-const props = defineProps<{
-    id: string;
-    data: {
-        type: string;
-        required: true;
-        elements: NodeElement[];
-        isSource: boolean;
-        isTarget: boolean;
-    }
-}>();
+const props = defineProps<Partial<NodeProps>>();
+defineEmits<Partial<Emits>>();
 
 const { findNode, edges, nodes } = useVueFlow({ id: 'main' });
 
@@ -74,7 +66,7 @@ const connectedBadges = computed(() => getConnectedBadges(currentNode.value.data
 
 const pageIndex = computed(() => {
     const pages = nodes.value.filter((node) => node.type === 'page');
-    return pages.findIndex((page: any) => page.id === currentNode.value.id) + 1;
+    return pages.findIndex((page) => page.id === currentNode.value.id) + 1;
 });
 
 </script>

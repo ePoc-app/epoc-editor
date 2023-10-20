@@ -17,7 +17,7 @@ defineProps<{
     inputs: Input[];
     fieldName?: string;
     fieldIndex?: number;
-    displayFieldIndex: boolean;
+    displayFieldIndex?: boolean;
 }>();
 
 const currentNode = editorStore.getCurrentGraphNode;
@@ -64,32 +64,31 @@ function onRepeatInput(value: RepeatInputEvent, id: string) {
         : null;
 
     switch(value.type) {
+        case 'add':
+        {
+            handleAddRepeatInput(element, value as RepeatAddEvent, id);
+            break;
+        }
 
-    case 'add':
-    {
-        handleAddRepeatInput(element, value as RepeatAddEvent, id);
-        break;
-    }
+        case 'remove':
+        {
+            handleRemoveRepeatInput(element, value as RepeatRemoveEvent, id);
+            break;
+        }
 
-    case 'remove':
-    {
-        handleRemoveRepeatInput(element, value as RepeatRemoveEvent, id);
-        break;
-    }
+        case 'move':
+        {
+            handleMoveRepeatInput(element, value as RepeatMoveEvent, id);
+            break;
+        }
 
-    case 'move':
-    {
-        handleMoveRepeatInput(element, value as RepeatMoveEvent, id);
-        break;
-    }
+        case 'change':
+        {
+            handleChangeRepeatInput(element, value as RepeatChangeEvent, id);
+            break;
+        }
 
-    case 'change':
-    {
-        handleChangeRepeatInput(element, value as RepeatChangeEvent, id);
-        break;
-    }
-    
-    default: break;
+        default: break;
     }
 
     onSaveGivenState(state);

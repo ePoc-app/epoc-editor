@@ -4,7 +4,7 @@ import { getCurrentState } from '@/src/shared/services/undoRedo.service';
 
 const props = defineProps<{
     id: string;
-    inputValue: string;
+    inputValue: number;
     label: string;
 }>();
 
@@ -13,26 +13,26 @@ const emit = defineEmits<{
     (e: 'saveGivenState', state: string): void;
 }>();
 
-function minus(inputValue: string) {
-    savedValue = getCurrentState(true);
-    const value = Number(inputValue) - 1;
+function minus(inputValue: number) {
+    savedState = getCurrentState(true);
+    const value = inputValue - 1;
 
-    emit('input', `${value}`);
+    emit('input', String(value));
     emit('saveGivenState', savedValue);
 }
 
-function plus(inputValue: string) {
-    savedValue = getCurrentState(true);
-    const value = Number(inputValue) + 1;
+function plus(inputValue: number) {
+    savedState = getCurrentState(true);
+    const value = inputValue + 1;
 
-    emit('input', `${value}`);
-    emit('saveGivenState', savedValue);
+    emit('input', String(value));
+    emit('saveGivenState', savedState);
 }
 
 
 // Undo Redo
 let savedState = '';
-let savedValue = '';
+let savedValue = null;
 
 function onFocus() {
     savedValue = props.inputValue;
@@ -55,7 +55,7 @@ function onBlur() {
             :id="id"
             type="number"
             :value="inputValue"
-            @input="emit('input', ($event.target as HTMLInputElement).value)"
+            @input="emit('input',($event.target as HTMLInputElement).value)"
             @focus="onFocus"
             @blur="onBlur"
         >

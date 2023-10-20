@@ -20,7 +20,7 @@ const props = defineProps<{
     label: string;
     inputValues: string[];
     fieldIndex: number;
-    addButton: boolean;
+    addButton?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -108,7 +108,6 @@ function onCheck(value: boolean, id: string, index: number) {
 }
 
 function onClick(index: number, action: string) {
-    console.log('click', index, action);
     const element = currentNode.data.elements?.[index];
 
     if(element && action) {

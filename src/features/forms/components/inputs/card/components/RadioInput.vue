@@ -5,6 +5,7 @@ defineProps<{
     id: string;
     inputValue: string;
     label: string;
+    //!Deprectated prop remove it when reimplemening the radio input
     pos: number
 }>();
 

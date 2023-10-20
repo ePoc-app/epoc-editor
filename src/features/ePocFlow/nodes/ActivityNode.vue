@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { Handle, Position, getConnectedEdges, useVueFlow } from '@vue-flow/core';
+import { Handle, Position, getConnectedEdges, useVueFlow, NodeProps, Emits } from '@vue-flow/core';
 import { computed, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
-import { NodeElement } from '@/src/shared/interfaces';
 import { getSelectedNodes } from '@/src/shared/services/graph';
 import { exitSelectNodeMode, getConnectedBadges, graphService } from '@/src/shared/services';
 
@@ -10,16 +9,8 @@ import DraggableNode from '@/src/features/ePocFlow/nodes/content/DraggableNode.v
 
 const editorStore = useEditorStore();
 
-const props = defineProps<{
-    id: string;
-    data: {
-        type: string;
-        required: true;
-        elements: NodeElement[];
-        isSource: boolean;
-        isTarget: boolean;
-    }
-}>();
+const props = defineProps<Partial<NodeProps>>();
+defineEmits<Partial<Emits>>();
 
 const { findNode, edges, nodes } = useVueFlow({ id: 'main' });
 

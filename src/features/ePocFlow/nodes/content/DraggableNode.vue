@@ -113,6 +113,7 @@ function onContextMenu(contentId: string) {
         v-bind="dragOptions"
         :id="'node' + nodeId"
         :model-value="contents"
+        item-key="index"
         class="node-list node hover"
         :class="draggableClass"
         @change="change"

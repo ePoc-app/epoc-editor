@@ -18,7 +18,7 @@ import { computed } from 'vue';
 
 const props = defineProps<{
     input: Input;
-    inputValue: string | boolean | string[];
+    inputValue: string | boolean | string[] | number;
     icon?: string;
     insideCard?: boolean;
     pos?: number;
@@ -33,7 +33,11 @@ const emit = defineEmits<{
 }>();
 
 const inputId = computed(() => {
-    return props.pos !== null && props.pos !== undefined ? `${props.input.id}-${props.pos}` : props.input.id;
+    if(props.pos !== undefined && props.pos !== null) {
+        return `${props.input.id}-${props.pos}`;
+    } else {
+        return props.input.id;
+    }
 });
 
 </script>
@@ -83,7 +87,7 @@ const inputId = computed(() => {
         v-if="input.type === 'score'"
         :id="inputId"
         :label="input.label"
-        :input-value="inputValue as string"
+        :input-value="Number(inputValue)"
         @input="emit('input', $event)"
         @save-given-state="emit('saveGivenState', $event)"
     />
@@ -92,7 +96,6 @@ const inputId = computed(() => {
         :id="inputId"
         :label="input.label"
         :input-value="inputValue as boolean"
-        :pos="pos"
         @change="emit('check', $event)"
         @save-given-state="emit('saveGivenState', $event)"
     />
@@ -120,7 +123,6 @@ const inputId = computed(() => {
         v-if="input.type === 'repeat'"
         :id="inputId"
         :label="input.label"
-        :placeholder="input.placeholder"
         :input-values="inputValue as string[]"
         :inputs="input.inputs"
         :field-index="fieldIndex"

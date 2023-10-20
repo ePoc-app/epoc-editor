@@ -5,7 +5,6 @@ defineProps<{
     id: string;
     inputValue: boolean;
     label: string;
-    pos: number;
 }>();
 
 

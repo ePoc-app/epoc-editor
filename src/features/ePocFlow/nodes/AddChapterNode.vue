@@ -2,8 +2,12 @@
 import { addChapter } from '@/src/shared/services/graph';
 import { saveState } from '@/src/shared/services/undoRedo.service';
 import { useEditorStore } from '@/src/shared/stores';
+import { Emits, NodeProps } from '@vue-flow/core';
 
 const editorStore = useEditorStore();
+
+defineProps<Partial<NodeProps>>();
+defineEmits<Partial<Emits>>();
 
 function onClick() {
     if(editorStore.selectNodeMode) return;

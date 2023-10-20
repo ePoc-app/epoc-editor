@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useEditorStore } from '@/src/shared/stores';
-import { Handle, useVueFlow, getConnectedEdges } from '@vue-flow/core';
+import { Handle, useVueFlow, getConnectedEdges, NodeProps, Emits } from '@vue-flow/core';
 import { Position } from '@vue-flow/core';
 import { computed } from 'vue';
 import ContentButton from '@/src/components/ContentButton.vue';
@@ -8,16 +8,10 @@ import { exitSelectNodeMode, getConnectedBadges, graphService } from '@/src/shar
 
 const editorStore = useEditorStore();
 
-const props = defineProps<{
-    id: string;
-    data: {
-        type: object;
-        required: true;
-        title: string;
-    }
-}>();
+const props = defineProps<Partial<NodeProps>>();
+defineEmits<Partial<Emits>>();
 
-const { findNode, nodes, edges } = useVueFlow({ id: 'main' });    
+const { findNode, nodes, edges } = useVueFlow({ id: 'main' });
 
 const currentNode = findNode(props.id);
 
