@@ -147,19 +147,6 @@ export const epocForm: Form = {
         {
             inputs :[
                 {
-                    id: 'id',
-                    type: 'text',
-                    label: 'ID de l\'ePoc',
-                    value: 'E000XX',
-
-                },
-                {
-                    id: 'edition',
-                    type: 'text',
-                    label: 'Edition',
-                    value: String(new Date().getFullYear()),
-                },
-                {
                     id: 'title',
                     type: 'text',
                     label: 'Titre',
@@ -196,6 +183,12 @@ export const epocForm: Form = {
                     label: 'Présentation',
                     value: '',
                     placeholder: 'Saisissez une présentation de l\'ePoc...'
+                },
+                {
+                    id: 'edition',
+                    type: 'text',
+                    label: 'Edition',
+                    value: String(new Date().getFullYear()),
                 }
             ]
         },
