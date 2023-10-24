@@ -493,6 +493,12 @@ g.selected {
 // TinyMCE Editor
 .tox-tinymce {
   margin-bottom: 1.5rem;
+  border: 1px solid var(--border) !important;
+
+  &.focus {
+    border: 1px solid var(--editor-blue) !important;
+    box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);
+  }
 }
 
 .tox-statusbar {
@@ -509,10 +515,11 @@ g.selected {
 
 [id^="tiny-vue_"] {
   height: 340px;
-  border: 2px solid var(--border);
+  border: 1px solid var(--border);
   border-radius: 8px;
   resize: none;
   margin-bottom: 1.5rem;
+  padding: 4rem 1rem 1rem 1rem;
 }
 
 .badge-notification {

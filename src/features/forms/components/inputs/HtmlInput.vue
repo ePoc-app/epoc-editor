@@ -83,12 +83,18 @@ let savedState = '';
 let startValue = '';
 
 function onFocus() {
-    startValue = content.value; 
+    startValue = content.value;
     savedState = getCurrentState(true);
+
+    const htmlInput = document.querySelector('.tox-tinymce') as HTMLElement;
+    htmlInput.classList.add('focus');
 }
 
 function onBlur() {
     if(startValue !== content.value) emit('saveGivenState', savedState);
+
+    const htmlInput = document.querySelector('.tox-tinymce') as HTMLElement;
+    htmlInput.classList.remove('focus');
 }
 
 //? Didn't find a way to link the label to the editor because it uses a contenteditable p
