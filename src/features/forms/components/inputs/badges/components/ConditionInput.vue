@@ -21,13 +21,30 @@ function getPhrase(condition: Condition): { phrase: string, id: string} {
     return { phrase, id: condition.element };
 }
 
+
+let hoveredElement = null;
+function handleMouseEnter(condition: Condition) {
+    hoveredElement = document.getElementById(condition.element);
+    hoveredElement.classList.add('highlight');
+}
+
+function handleMouseLeave() {
+    hoveredElement.classList.remove('highlight');
+    hoveredElement = null;
+}
+
 </script>
 
 <template>
     <ul v-if="conditions.length > 0">
         <li v-for="(condition, index) of conditions" :key="index">
             {{ getPhrase(condition).phrase }}
-            <a @click="goToElement(condition.element)">{{ condition.element }}</a>
+            <a
+                @mouseenter="handleMouseEnter(condition)"
+                @mouseleave="handleMouseLeave"
+                @click="goToElement(condition.element)">
+                {{ condition.element }}
+            </a>
         </li>
     </ul>
     <button class="btn btn-form" @click="onClick">

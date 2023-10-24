@@ -84,7 +84,6 @@ function handleVerbChange(value: string) {
                 :input-value="currentCondition.element"
                 :index="conditionIndex"
                 class="grid-item"
-                @change="resetValue(true, true)"
             />
             <div class="select">
                 Condition    

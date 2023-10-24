@@ -228,5 +228,10 @@ export const useEditorStore = defineStore('editor', {
         exitSelectNodeMode(): void {
             this.selectNodeMode = false;
         },
+        
+        resetTempCondition(index: number) {
+            this.tempConditions[index].verb = '';
+            this.tempConditions[index].value = '';
+        }
     }
 });

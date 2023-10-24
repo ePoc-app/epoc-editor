@@ -97,6 +97,7 @@ const activityIndex = computed(() => {
                 <small>{{ connectedBadges.length }}</small>
             </div>
             <DraggableNode
+                :id="currentNode.data.contentId"
                 :parent-test-id="`activity-${activityIndex}`"
                 :node-id="id"
                 :contents="data.elements"

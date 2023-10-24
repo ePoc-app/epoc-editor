@@ -7,12 +7,7 @@ const props = defineProps<{
     inputValue: string;
 }>();
 
-const emit = defineEmits<{
-    (e: 'change'): void;
-}>();
-
 function onClick() {
-    emit('change');
     enterSelectNodeMode(props.index);
 }
 

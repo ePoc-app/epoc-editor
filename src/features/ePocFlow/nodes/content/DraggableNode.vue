@@ -131,6 +131,7 @@ function onContextMenu(contentId: string) {
                     <small>{{ getConnectedBadges(element.contentId).length }}</small>
                 </div>
                 <ContentButton
+                    :id="element.contentId"
                     :data-testid="`${parentTestId}-${index}`"
                     :icon="element.action.icon"
                     :is-draggable="!isCondition && !editorStore.selectNodeMode"

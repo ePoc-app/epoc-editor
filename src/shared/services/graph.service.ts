@@ -299,8 +299,14 @@ export function exitSelectNodeMode(selectedId?: string): void {
     editorStore.exitSelectNodeMode();
     setNodesSelectability(false);
     
-    editorStore.tempConditions[openedConditionIndex].elementType = getConditionType(selectedId);
-    editorStore.tempConditions[openedConditionIndex].element = getContentIdFromId(selectedId);
+    if(selectedId !== undefined) {
+        
+        if(openedConditionIndex) editorStore.resetTempCondition(openedConditionIndex);
+        
+        editorStore.tempConditions[openedConditionIndex].elementType = getConditionType(selectedId);
+        editorStore.tempConditions[openedConditionIndex].element = getContentIdFromId(selectedId);
+    }
+    
 
     enableGraph();
     openedConditionIndex = null;

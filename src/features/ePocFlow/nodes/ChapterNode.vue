@@ -72,6 +72,7 @@ const connectedBadges = computed(() => getConnectedBadges(currentNode.data.conte
             <small>{{ connectedBadges.length }}</small>
         </div>
         <ContentButton
+            :id="currentNode.data.contentId"
             :data-testid="`chapter-${chapterIndex}`"
             :icon="currentNode.data.action.icon"
             :is-draggable="false"

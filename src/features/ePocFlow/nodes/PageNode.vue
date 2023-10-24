@@ -100,6 +100,7 @@ const pageIndex = computed(() => {
                 <small>{{ connectedBadges.length }}</small>
             </div>
             <DraggableNode
+                :id="currentNode.data.contentId"
                 :parent-test-id="`page-${pageIndex}`"
                 :node-id="id"
                 :contents="data.elements"
