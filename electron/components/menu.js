@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, shell, BrowserWindow, Menu } = require('electron');
 const { sendToFrontend, updateSavedProject } = require('./ipc');
 const { pickEpocToImport, pickEpocProject, getRecentFiles, saveEpocProject, saveAsEpocProject } = require('./file');
 const store = require('./store');
@@ -138,6 +138,34 @@ module.exports.setupMenu = function () {
         }, {
             label: 'Aide',
             submenu: [
+                {
+                    label: 'Documentation',
+                    click: async function () {
+                        await shell.openExternal('https://epoc.inria.fr/guide/user/getting-started/');
+                    },
+                },
+                {
+                    label: 'Signaler un problème',
+                    click: async function () {
+                        const isDev = process.env.IS_DEV === 'true';
+
+                        const emailSubject ='Aide éditeur';
+                        const emailRecipient = 'ill-ePoc-contact@inria.fr';
+                        let emailBody = '';
+                        if(isDev) {
+                            const appVersion = app.getVersion();
+                            emailBody = encodeURIComponent(`Version: ${appVersion}\n---\n\nDécrivez votre problème ci-dessous:\n\n`);
+                        } else {
+                            const appInfo = require('../../dist/appInfo.json');
+                            emailBody = encodeURIComponent(`Version: ${appInfo.version}\nBuild: ${appInfo.buildNumber}\n ---\n\nDécrivez votre problème ci-dessous:\n\n`);
+                        }
+
+                        const mailtoLink = `mailto:${emailRecipient}?subject=${emailSubject}&body=${emailBody}`;
+
+                        await shell.openExternal(mailtoLink);
+                    }
+                },
+                { type: 'separator' },
                 {
                     label: 'Dev Tools',
                     accelerator: 'CmdOrCtrl+D',
