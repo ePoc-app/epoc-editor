@@ -201,7 +201,6 @@ hr {
 .card {
   background-color: var(--content);
   border-radius: 12px;
-  margin: auto;
   display: flex;
   flex-direction: column;
   &-large {
@@ -266,15 +265,12 @@ hr {
   font-size: 1.1rem;
   color: var(--text);
   outline: none;
+  width: auto;
   
   &::placeholder {
     color: var(--editor-grayblue);
   }
 
-  &:not(.input-card) {
-    width: 24rem;
-  }
-  
   &-card {
     width: calc(100% - 1.4rem);
     margin: 0 0 1rem;

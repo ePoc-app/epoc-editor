@@ -21,7 +21,7 @@ function createProject() {
 </script>
 
 <template>
-    <div class="card card-large">
+    <div class="card card-large landing-page">
         <div class="logo">
             <img alt="logo epoc" src="/img/epoc.svg" />
             <img alt="logo inria" src="/img/inria.svg" />
@@ -62,6 +62,11 @@ function createProject() {
 </template>
 
 <style scoped lang="scss">
+
+.landing-page {
+    margin: auto;
+}
+
 .card {
     font-weight: bold;
     .btn-open {

@@ -137,7 +137,7 @@ function handleKeydown(event: KeyboardEvent) {
     top: 80px;
     right: 0;
     height: calc(100% - 80px);
-    width: 26rem;
+    width: 27rem;
     background-color: white;
     padding: 0 1rem;
     display: flex;
@@ -161,6 +161,5 @@ function handleKeydown(event: KeyboardEvent) {
     margin-bottom: 2.5rem;
     display: flex;
     flex-wrap: wrap;
-    max-width: 24rem;
 }
 </style>

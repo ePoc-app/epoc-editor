@@ -209,7 +209,6 @@ function dragOver(event: DragEvent) {
 
 .card {
     border: 2px solid var(--border);
-    width: 25rem;
     border-radius: 8px;
     margin-bottom: 1rem;
     transition: all .2s linear;
