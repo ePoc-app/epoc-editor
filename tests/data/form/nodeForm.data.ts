@@ -4,11 +4,6 @@ const epocForm: TestForm = {
     type: 'epoc',
     inputs: [
         {
-            label: 'ID de l\'ePoc',
-            value: 'TestID',
-            type: 'text'
-        },
-        {
             label: 'Edition',
             value: '2023',
             type: 'text'

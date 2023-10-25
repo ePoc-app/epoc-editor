@@ -5,9 +5,19 @@ async function openForm(window, testId: string) {
     const elementBox = await element.boundingBox();
     
     const clickLocation = {
-        x: elementBox.x + 10,
-        y: elementBox.y + 10
+        x: 0,
+        y: 0
     };
+    
+    //? epoc-node isn't squared, so we need to click in the middle
+    if(testId === 'epoc-node') {
+        clickLocation.x = elementBox.x + elementBox.width / 2;
+        clickLocation.y = elementBox.y + elementBox.height / 2;
+    } else {
+        clickLocation.x = elementBox.x + 10;
+        clickLocation.y = elementBox.y + 10;
+    }
+    
     await window.mouse.click(clickLocation.x, clickLocation.y);
 }
 
