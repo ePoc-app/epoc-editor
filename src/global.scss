@@ -114,8 +114,8 @@ body,
         box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);
       }
       &.highlight {
-        color: var(--editor-green);
-        border: 2px solid var(--editor-green);
+        color: var(--editor-yellow);
+        border: 2px solid var(--editor-yellow);
       }
     }
     &-blue {
@@ -253,7 +253,7 @@ hr {
   }
 
   &.highlight {
-    border: 2px solid var(--editor-green) !important;
+    border: 2px solid var(--editor-yellow) !important;
   }
 }
 

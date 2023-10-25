@@ -26,8 +26,6 @@ $editor-blue: #00B3E9;
 $node-active: #E1F4FA;
 $editor-red: #E63312;
 
-$editor-green: #00D957;
-
 $editor-node-ghost: #D6E2F0;
 
 [color-scheme="light"] {
@@ -63,6 +61,5 @@ $editor-node-ghost: #D6E2F0;
     --editor-red: #{$editor-red};
     --inria-grey: #{$inria-grey};
     --node-hover: #E9EFF6;
-
-    --editor-green: #{$editor-green};
+    --editor-yellow: #{$inria-certificate};
 }
