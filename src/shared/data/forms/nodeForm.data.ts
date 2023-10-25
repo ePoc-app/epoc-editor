@@ -255,23 +255,13 @@ export const epocForm: Form = {
             ]
         },
         {
-            name: 'Plugins',
+            name: 'Badges',
             inputs: [
                 {
-                    id: 'plugins',
-                    label: 'Plugin',
-                    type: 'repeat',
+                    id: 'badges',
+                    label: '',
+                    type: 'badge',
                     value: [],
-                    inputs: [
-                        {
-                            id: '',
-                            type: 'file',
-                            label: 'Fichier de plugin',
-                            placeholder: 'Ajouter un plugin',
-                            value: '',
-                            accept: '.js'
-                        }
-                    ]
                 }
             ]
         },
@@ -300,17 +290,26 @@ export const epocForm: Form = {
             ]
         },
         {
-            name: 'Badges',
+            name: 'Plugins',
             inputs: [
                 {
-                    id: 'badges',
-                    label: '',
-                    type: 'badge',
+                    id: 'plugins',
+                    label: 'Plugin',
+                    type: 'repeat',
                     value: [],
+                    inputs: [
+                        {
+                            id: '',
+                            type: 'file',
+                            label: 'Fichier de plugin',
+                            placeholder: 'Ajouter un plugin',
+                            value: '',
+                            accept: '.js'
+                        }
+                    ]
                 }
             ]
-        }
-
+        },
     ],
 };
 
