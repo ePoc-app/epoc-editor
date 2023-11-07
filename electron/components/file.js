@@ -164,21 +164,36 @@ const saveAsEpocProject = async function (project) {
 };
 
 /**
+ * Zip files of an ePoc project
+ * @param {string} workdir the path to the workdir
+ * @param {string} filepath the path to the .epoc project file
+ * @param {boolean} exporting if true, the project.json file will not be included
+ */
+const zipFiles = async function(workdir, filepath, exporting) {
+    // Do not use path.join here, admZIP normalize the entries path
+    const unusedAssets = getUnusedAssets(workdir).map(asset => 'assets/' + asset);
+
+    const excluded = ['.DS_Store', '__MACOSX', '.git'];
+    excluded.push(...unusedAssets);
+
+    if(exporting) excluded.push('project.json');
+
+    const zip = new AdmZip();
+    zip.addLocalFolder(workdir, '', (entry) => {
+        return excluded.every(e => entry.indexOf(e) === -1) ;
+    });
+    await zip.writeZipPromise(filepath, null);
+};
+
+/**
  * Zip the content of an ePoc project file from the project workdir
  * @returns {string}
  */
 const zipEpocProject = async function (workdir, filepath) {
     if (!filepath || !workdir) return null;
 
-    const unusedAssets = getUnusedAssets(workdir).map(asset => path.join('assets', asset));
+    await zipFiles(workdir, filepath, false);
 
-    const zip = new AdmZip();
-    zip.addLocalFolder(workdir, '', (entry) => {
-        const excluded = ['.DS_Store', '__MACOSX', '.git'];
-        excluded.push(...unusedAssets);
-        return excluded.every(e => entry.indexOf(e) === -1) ;
-    });
-    await zip.writeZipPromise(filepath, null);
     return filepath;
 };
 
@@ -198,16 +213,9 @@ const exportProject = async function (workdir, filepath) {
 
     if(!exportPath) return null;
 
-    const unusedAssets = getUnusedAssets(workdir).map(asset => path.join('assets', asset));
-
-    const zip = new AdmZip();
-    zip.addLocalFolder(workdir, '', (entry) => {
-        const excluded = ['project.json','.DS_Store', '__MACOSX', '.git'];
-        excluded.push(...unusedAssets);
-        return excluded.every(e => entry.indexOf(e) === -1) ;
-    });
-    await zip.writeZipPromise(exportPath, null);
+    await zipFiles(workdir, exportPath, true);
     shell.showItemInFolder(exportPath);
+
     return exportPath;
 };
 
@@ -322,8 +330,8 @@ const getAllAssets = function (workdir) {
     const assetsName = [];
 
     for(const asset of assetPaths) {
-        const pathParts = asset.split('/');
-        const prefix = pathParts[pathParts.length - 2] === 'icons' ? 'icons/' : '';
+        const pathParts = asset.split(path.sep);
+        const prefix = pathParts[pathParts.length - 2] === 'icons' ? `icons${path.sep}` : '';
         const filename = prefix + pathParts[pathParts.length - 1];
         assetsName.push(filename);
     }
@@ -332,13 +340,13 @@ const getAllAssets = function (workdir) {
 
 const getUsedAssets = function (workdir) {
     const projectJSON = fs.readFileSync(path.join(workdir, 'project.json'), 'utf8');
-    const regex = /"assets\/([^"]+)"/g;
+    const regex = /"assets[\\/\\\\]([^"]+)"/g;
     const matches = projectJSON.match(regex);
 
     if(!matches) return [];
     return matches.map(match => {
-        return match.replace('"assets/', '')
-            .replace('"', '')
+        return match.replace(`assets${path.sep}`, '')
+            .replaceAll('"', '')
             // To only keep the slash after icons
             .replace(/\/+/g, '/')
             .replace(/\\/g, '');
