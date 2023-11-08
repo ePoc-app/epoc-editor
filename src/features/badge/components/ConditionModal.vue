@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useEditorStore } from '@/src/shared/stores';
 import { getConditions, saveBadge } from '@/src/shared/services';
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { saveState } from '@/src/shared/services/undoRedo.service';
 
 import ConditionItem from './ConditionItem.vue';
@@ -43,39 +43,45 @@ function save() {
     close();
 }
 
+const modalScreen = ref(null);
+onMounted(() => {
+    modalScreen.value.focus();
+});
+
 </script>
 
 <template>
-    <div class="modal-backdrop" />
-    <article class="condition-modal">
-        <header>
-            <div class="content">
-                <h2>Conditions d'obtention du badge</h2>
-                <button class="btn btn-close" @click="close"><i class="icon-x"></i></button>
+    <div ref="modalScreen" class="modal-backdrop" tabindex="0" @keyup.esc="close">
+        <article class="condition-modal">
+            <header>
+                <div class="content">
+                    <h2>Conditions d'obtention du badge</h2>
+                    <button class="btn btn-close" @click="close"><i class="icon-x"></i></button>
+                </div>
+            </header>
+            <div class="content conditions">
+                <ConditionItem
+                    v-for="(condition, index) in editorStore.tempConditions"
+                    :key="index"
+                    :input-value="condition"
+                    :condition-index="index"
+                    @remove-condition="editorStore.tempConditions.splice(index, 1)"
+                    @update-condition="updateCondition($event, index)"
+                />
+                <button class="add btn btn-form" @click="addCondition">
+                    <i class="icon-plus"></i>
+                    Ajouter une condition
+                </button>
             </div>
-        </header>
-        <div class="content conditions">
-            <ConditionItem
-                v-for="(condition, index) in editorStore.tempConditions"
-                :key="index" 
-                :input-value="condition"
-                :condition-index="index"
-                @remove-condition="editorStore.tempConditions.splice(index, 1)"
-                @update-condition="updateCondition($event, index)"
-            />
-            <button class="add btn btn-form" @click="addCondition">
-                <i class="icon-plus"></i>
-                Ajouter une condition
-            </button>
-        </div>
-        
-        <footer>
-            <div class="content">
-                <button class="btn-choice cancel" @click="close">ANNULER</button>
-                <button :disabled="!allConditionsValid" class="btn-choice save" @click="save">ENREGISTRER</button>
-            </div> 
-        </footer>
-    </article>
+
+            <footer>
+                <div class="content">
+                    <button class="btn-choice cancel" @click="close">ANNULER</button>
+                    <button :disabled="!allConditionsValid" class="btn-choice save" @click="save">ENREGISTRER</button>
+                </div>
+            </footer>
+        </article>
+    </div>
 </template>
 
 <style scoped lang="scss">
@@ -113,11 +119,14 @@ footer {
 .modal-backdrop {
     position: fixed;
     top: 0;
+    bottom: 0;
     left: 0;
-    height: 100vh;
-    width: 100vw;
-    background-color: rgba(0, 0, 0, .2);
-    z-index: 150;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 500;
 }
 
 .content {
