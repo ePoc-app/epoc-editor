@@ -118,24 +118,24 @@ module.exports.setupMenu = function () {
             label: 'Édition',
             submenu: [
                 {
-                    label: 'Undo',
+                    label: 'Annuler',
                     accelerator: 'CmdOrCtrl+Z',
                     click: function() {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'undo');
                     }
                 },
                 {
-                    label: 'Redo',
+                    label: 'Rétablir',
                     accelerator: process.platform === 'darwin' ? 'Shift+CmdOrCtrl+Z' : 'CmdOrCtrl+Y',
                     click: function() {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'redo');
                     }
                 },
                 {type: 'separator'},
-                {label: 'Cut', accelerator: 'CmdOrCtrl+X', role: 'cut'},
-                {label: 'Copy', accelerator: 'CmdOrCtrl+C', role: 'copy'},
-                {label: 'Paste', accelerator: 'CmdOrCtrl+V', role: 'paste'},
-                {label: 'Select All', accelerator: 'CmdOrCtrl+A', role: 'selectAll'},
+                {label: 'Couper', accelerator: 'CmdOrCtrl+X', role: 'cut'},
+                {label: 'Copier', accelerator: 'CmdOrCtrl+C', role: 'copy'},
+                {label: 'Coller', accelerator: 'CmdOrCtrl+V', role: 'paste'},
+                {label: 'Tout sélectionner', accelerator: 'CmdOrCtrl+A', role: 'selectAll'},
                 {type: 'separator'},
                 {
                     label: 'Vérifier l\'orthographe lors de la saisie',
@@ -183,14 +183,14 @@ module.exports.setupMenu = function () {
                 },
                 { type: 'separator' },
                 {
-                    label: 'Dev Tools',
+                    label: 'Outils de développement',
                     accelerator: 'CmdOrCtrl+D',
                     click: function () {
                         BrowserWindow.getFocusedWindow().webContents.toggleDevTools();
                     }
                 },
                 {
-                    label: 'Reload',
+                    label: 'Recharger',
                     accelerator: 'CmdOrCtrl+R',
                     click: function () {
                         BrowserWindow.getFocusedWindow().webContents.reload();
