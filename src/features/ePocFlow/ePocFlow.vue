@@ -26,7 +26,7 @@ import { addPage, createPageFromContent, removeContentFromPage, graphCopy, getSe
 import { saveState, saveGivenState, getCurrentState } from '@/src/shared/services/undoRedo.service';
 import { graphService } from '@/src/shared/services';
 
-const { vueFlowRef, project, updateEdge, edges, nodes, findNode }  = useVueFlow({ id: 'main' });
+const { vueFlowRef, project, updateEdge, edges, nodes, findNode, setTransform }  = useVueFlow({ id: 'main' });
 
 
 const editorStore = useEditorStore();
@@ -222,6 +222,10 @@ function onSelectionContextMenu() {
     graphService.openContextMenu('selection', { selection: selectedNodes });
 }
 
+function onPaneReady() {
+    setTransform({ x: 16, y: 16, zoom: 0.75 });
+}
+
 </script>
 
 <template>
@@ -254,6 +258,7 @@ function onSelectionContextMenu() {
         @keydown="onKeyDown"
         @pane-context-menu.stop="onContextMenu"
         @selection-context-menu="onSelectionContextMenu"
+        @pane-ready="onPaneReady"
     >
         <!--suppress VueUnrecognizedSlot -->
         <template #node-custom="{ id, data }">
