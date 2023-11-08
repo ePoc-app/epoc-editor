@@ -3,6 +3,8 @@ const { sendToFrontend, updateSavedProject } = require('./ipc');
 const { pickEpocToImport, pickEpocProject, getRecentFiles, saveEpocProject, saveAsEpocProject } = require('./file');
 const store = require('./store');
 const { ipcMain } = require('electron');
+const Store = require('electron-store');
+const electronStore = new Store();
 
 module.exports.setupMenu = function () {
     const mainMenuTemplate = [
@@ -133,7 +135,21 @@ module.exports.setupMenu = function () {
                 {label: 'Cut', accelerator: 'CmdOrCtrl+X', role: 'cut'},
                 {label: 'Copy', accelerator: 'CmdOrCtrl+C', role: 'copy'},
                 {label: 'Paste', accelerator: 'CmdOrCtrl+V', role: 'paste'},
-                {label: 'Select All', accelerator: 'CmdOrCtrl+A', role: 'selectAll'}
+                {label: 'Select All', accelerator: 'CmdOrCtrl+A', role: 'selectAll'},
+                {type: 'separator'},
+                {
+                    label: 'Vérifier l\'orthographe lors de la saisie',
+                    type: 'checkbox',
+                    checked: electronStore.get('spellcheck'),
+                    click: function() {
+                        electronStore.set('spellcheck', !electronStore.get('spellcheck'));
+
+                        const webContents= BrowserWindow.getFocusedWindow().webContents;
+
+                        webContents.session.setSpellCheckerEnabled(electronStore.get('spellcheck'));
+                        webContents.reload();
+                    }
+                }
             ]
         }, {
             label: 'Aide',

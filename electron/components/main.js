@@ -3,6 +3,9 @@ const path = require('path');
 const { setupMenu } = require('./menu');
 const store = require('./store');
 
+const Store = require('electron-store');
+const electronStore = new Store();
+
 
 /**
  * Create the app main window
@@ -24,7 +27,9 @@ module.exports.createMainWindow = function () {
             partition: `persist:${Math.random()}`
         },
     });
-    
+
+    if(electronStore.get('spellcheck') === undefined) electronStore.set('spellcheck', true);
+    mainWindow.webContents.session.setSpellCheckerEnabled(electronStore.get('spellcheck'));
 
     mainWindow.on('focus', () => {
         setupMenu();
