@@ -205,7 +205,7 @@ export const epocForm: Form = {
                             id: 'name',
                             type: 'text',
                             label: 'Nom',
-                            placeholder: 'Prénom Nom',
+                            placeholder: 'Jeanne Dupont',
                             value: ''
                         },
                         {
