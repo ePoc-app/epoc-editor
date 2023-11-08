@@ -210,3 +210,20 @@ export async function saveCustomIcon(icon: string) {
 
     return iconPath;
 }
+
+export function isBadgeValid(badge): boolean {
+    return badge.rule.and.length > 0;
+}
+
+export function getValidBadges(){
+    const epocNode = findNode('1');
+    const badges = epocNode.data.formValues.badges;
+    if(!badges) return null;
+    
+    const res = {};
+    for(const badgeId in badges) {
+        if(isBadgeValid(badges[badgeId])) res[badgeId] = badges[badgeId];
+    }
+    
+    return res;
+}

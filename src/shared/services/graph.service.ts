@@ -21,7 +21,7 @@ import {
     setNodesSelectability
 } from '@/src/shared/services/graph';
 import { Question } from '@epoc/epoc-types/src/v2';
-import { createRule, getConditions } from '@/src/shared/services/badge.service';
+import { createRule, getConditions, getValidBadges } from '@/src/shared/services/badge.service';
 import { Badge, NodeElement } from '@/src/shared/interfaces';
 
 declare const api: ApiInterface;
@@ -58,7 +58,7 @@ function createContentJSON() : EpocV1 {
 
     const ePocNode = nodes.value.find((node) => { return node.type === 'epoc'; });
     const chapterNodes = nodes.value.filter((node) => { return node.type === 'chapter'; });
-    const badges = ePocNode.data.formValues.badges;
+    const validBadges = getValidBadges();
 
     const ePocValues = ePocNode.data.formValues;
 
@@ -93,8 +93,10 @@ function createContentJSON() : EpocV1 {
             pageNode = getNextNode(pageNode);
         }
     });
-
-    if(badges) epoc.badges = exportBadgesToPage(badges);
+    
+    if(validBadges) {
+        epoc.badges = exportBadgesToPage(validBadges);
+    }
 
     return epoc;
 }

@@ -3,7 +3,7 @@ import BadgeItem from '@/src/features/badge/components/BadgeItem.vue';
 import AddBadge from './components/AddBadge.vue';
 import { computed, ComputedRef } from 'vue';
 import { Badge } from '@/src/shared/interfaces';
-import { addNewBadge, openBadge } from '@/src/shared/services';
+import { addNewBadge, isBadgeValid, openBadge } from '@/src/shared/services';
 
 const props = defineProps<{
     inputValue: string[];
@@ -37,7 +37,7 @@ const badges: ComputedRef<Badge[]> = computed(() => {
             v-for="(badge, index) in badges"
             :key="index"
             :badge="badge"
-            :invalid="Object.keys(badge.rule.and).length === 0"
+            :invalid="!isBadgeValid(badge)"
             @click="openBadge(badge.id)"
         />
     </div>
