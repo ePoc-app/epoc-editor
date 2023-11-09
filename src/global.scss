@@ -252,7 +252,7 @@ hr {
   }
 
   &.highlight {
-    border: 2px solid var(--editor-yellow) !important;
+    border: 2px solid var(--editor-green) !important;
   }
 }
 
@@ -266,7 +266,7 @@ hr {
   color: var(--text);
   outline: none;
   width: auto;
-  
+
   &::placeholder {
     color: var(--editor-grayblue);
   }
@@ -495,6 +495,11 @@ g.selected {
     border: 1px solid var(--editor-blue) !important;
     box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);
   }
+}
+
+//? button are applied a width in certain cases i don't understand why
+.tox-tbtn {
+  width: 28px !important;
 }
 
 .tox-statusbar {

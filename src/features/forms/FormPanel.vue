@@ -84,66 +84,42 @@ function checkIfDisabled(disabledProp: any): boolean {
     }
 }
 
-function handleKeydown(event: KeyboardEvent) {
-    const { key, metaKey, ctrlKey } = event;
-
-    if(metaKey || ctrlKey) {
-        if(key === 'v') {
-            event.stopPropagation();
-        }
-    }
-}
-
 </script>
 
 <template>
-    <div class="panel" @keydown="handleKeydown">
-        <button class="btn btn-close" @click="editorStore.closeFormPanel"><i class="icon-x"></i></button>
-        <div class="title">
-            <div class="form-icon"><i :class="editorStore.formPanel.icon"></i></div>
-            <h1>{{ editorStore.formPanel.name }}</h1>
-        </div>
-        <div class="buttons">
-            <FormButton
-                v-for="button in editorStore.formPanel.buttons"
-                :key="button.label"
-                :label="button.label"
-                :icon="button.icon"
-                :disabled="checkIfDisabled(button.disabled)"
-                @click="actionOnForm(button.action)"
-            />
-        </div>
-        <div
-            v-for="(field, index) of editorStore.formPanel.fields"
-            :key="index"
-            class="field"
-        >
-            <GenericField
-                :inputs="(field.inputs as Input[])"
-                :field-name="field.name"
-                :field-index="index"
-                :display-field-index="editorStore.formPanel.displayFieldIndex"
-            />
-        </div>
-        <LinkedBadges
-            :element-id="editorStore.openedElementId"
+    <button class="btn btn-close" @click="editorStore.closeFormPanel"><i class="icon-x"></i></button>
+    <div class="title">
+        <div class="form-icon"><i :class="editorStore.formPanel.icon"></i></div>
+        <h1>{{ editorStore.formPanel.name }}</h1>
+    </div>
+    <div class="buttons">
+        <FormButton
+            v-for="button in editorStore.formPanel.buttons"
+            :key="button.label"
+            :label="button.label"
+            :icon="button.icon"
+            :disabled="checkIfDisabled(button.disabled)"
+            @click="actionOnForm(button.action)"
         />
     </div>
+    <div
+        v-for="(field, index) of editorStore.formPanel.fields"
+        :key="index"
+        class="field"
+    >
+        <GenericField
+            :inputs="(field.inputs as Input[])"
+            :field-name="field.name"
+            :field-index="index"
+            :display-field-index="editorStore.formPanel.displayFieldIndex"
+        />
+    </div>
+    <LinkedBadges
+        :element-id="editorStore.openedElementId"
+    />
 </template>
 
 <style scoped lang="scss">
-.panel {
-    position: absolute;
-    top: 80px;
-    right: 0;
-    height: calc(100% - 80px);
-    width: 27rem;
-    background-color: white;
-    padding: 0 1rem;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-}
 .title {
     display: flex;
     flex-direction: row;

@@ -2,7 +2,7 @@
 import TopBar from '@/src/features/topBar/TopBar.vue';
 import ePocFlow from '@/src/features/ePocFlow/ePocFlow.vue';
 import SideBar from '@/src/features/sideBar/SideBar.vue';
-import FormPanel from '@/src/features/forms/FormPanel.vue';
+import ResizablePanel from '@/src/features/forms/ResizablePanel.vue';
 import ValidationModal from '../components/ValidationModal.vue';
 import ConditionModal  from '@/src/features/badge/components/ConditionModal.vue';
 import IconModal from '@/src/features/badge/components/IconModal.vue';
@@ -98,7 +98,7 @@ const editorDisplay = computed(() => editorStore.selectNodeMode ? 'editor-flex' 
         </div>
         <ePocFlow class="editor-content" @dragover="onCursorAllowed" />
         <Transition>
-            <FormPanel v-if="editorStore.formPanel && !editorStore.selectNodeMode" class="formPanel" @dragover="onCursorNotAllowed" />
+            <ResizablePanel v-if="editorStore.formPanel && !editorStore.selectNodeMode" class="formPanel" @dragover="onCursorNotAllowed" />
         </Transition>
         <ValidationModal v-if="editorStore.validationModal" />
         <ConditionModal v-if="editorStore.conditionModal && !editorStore.selectNodeMode" />
