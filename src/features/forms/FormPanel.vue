@@ -89,12 +89,12 @@ function checkIfDisabled(disabledProp: any): boolean {
 <template>
     <button class="btn btn-close" @click="editorStore.closeFormPanel"><i class="icon-x"></i></button>
     <div class="title">
-        <div class="form-icon"><i :class="editorStore.formPanel.icon"></i></div>
-        <h1>{{ editorStore.formPanel.name }}</h1>
+        <div class="form-icon"><i :class="editorStore.formPanel.form.icon"></i></div>
+        <h1>{{ editorStore.formPanel.form.name }}</h1>
     </div>
     <div class="buttons">
         <FormButton
-            v-for="button in editorStore.formPanel.buttons"
+            v-for="button in editorStore.formPanel.form.buttons"
             :key="button.label"
             :label="button.label"
             :icon="button.icon"
@@ -103,7 +103,7 @@ function checkIfDisabled(disabledProp: any): boolean {
         />
     </div>
     <div
-        v-for="(field, index) of editorStore.formPanel.fields"
+        v-for="(field, index) of editorStore.formPanel.form.fields"
         :key="index"
         class="field"
     >
@@ -111,7 +111,7 @@ function checkIfDisabled(disabledProp: any): boolean {
             :inputs="(field.inputs as Input[])"
             :field-name="field.name"
             :field-index="index"
-            :display-field-index="editorStore.formPanel.displayFieldIndex"
+            :display-field-index="editorStore.formPanel.form.displayFieldIndex"
         />
     </div>
     <LinkedBadges

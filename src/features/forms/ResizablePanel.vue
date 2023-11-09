@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import FormPanel from './FormPanel.vue';
-import { ref, Ref } from 'vue';
+import { onMounted, ref, Ref } from 'vue';
+import { useEditorStore } from '@/src/shared/stores';
+
+const editorStore = useEditorStore();
 
 function handleKeyDown(event: KeyboardEvent) {
     const { key, metaKey, ctrlKey } = event;
@@ -18,9 +21,7 @@ const resizeHandle: Ref<HTMLDivElement | null> = ref(null);
 const resizing = ref(false);
 let startWidth = 0;
 let startX = 0;
-let maxWidth = 0;
 function startResize(event: MouseEvent) {
-    console.log('startResize');
     resizing.value = true;
     window.addEventListener('mousemove', resize);
     window.addEventListener('mouseup', stopResize);
@@ -28,18 +29,12 @@ function startResize(event: MouseEvent) {
 
     startWidth = panel.value.offsetWidth;
     startX = event.clientX;
-
-    const vueFlow = document.querySelector('.vue-flow');
-
-    //? remove the padding and the resize handle width
-    maxWidth = vueFlow.clientWidth - 32;
 }
 
 function resize(event: MouseEvent) {
     if(!panel.value) return;
 
     const newWidth = startWidth - (event.clientX - startX);
-
     panel.value.style.width = `${newWidth}px`;
 }
 
@@ -47,7 +42,15 @@ function stopResize() {
     window.removeEventListener('mousemove', resize);
     window.removeEventListener('mouseup', stopResize);
     resizing.value = false;
+
+    editorStore.formPanel.width = panel.value?.offsetWidth || 0;
 }
+
+onMounted(() => {
+    if(!editorStore.formPanel.width) return;
+
+    panel.value.style.width = `${editorStore.formPanel.width}px`;
+});
 
 </script>
 

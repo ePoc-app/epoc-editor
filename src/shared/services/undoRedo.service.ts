@@ -34,7 +34,7 @@ export function getCurrentState(saveForm?: boolean | object): string {
     } else {
         form = saveForm ? {
             elementId: editorStore.openedElementId,
-            formType: editorStore.formPanel?.type,
+            formType: editorStore.formPanel.form?.type,
             nodeId: editorStore.openedNodeId,
             badgeId: editorStore.openedBadgeId,
             scrollPosY: document.querySelector('.formPanel')?.scrollTop

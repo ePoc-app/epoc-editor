@@ -39,7 +39,10 @@ interface EditorState {
     // Panel/ Menu
     questionMenu: boolean;
     modelMenu: boolean;
-    formPanel: Form | null;
+    formPanel: {
+        form: Form | null;
+        width: number;
+    }
 
 
     // Data
@@ -80,7 +83,10 @@ export const useEditorStore = defineStore('editor', {
         // Panel/ Menu
         questionMenu: false,
         modelMenu: false,
-        formPanel: null,
+        formPanel: {
+            form: null,
+            width: 0
+        },
 
         // Data
         pageModels: [],
@@ -110,7 +116,7 @@ export const useEditorStore = defineStore('editor', {
         },
 
         openedFormType(): string | null {
-            return this.formPanel?.type ?? null;
+            return this.formPanel.form?.type ?? null;
         }
     },
 
@@ -119,7 +125,7 @@ export const useEditorStore = defineStore('editor', {
             this.draggedElement = {};
             this.openedElementId = null;
             this.openedNodeId = null;
-            this.formPanel = null;
+            this.formPanel.form = null;
             this.validationModal = false;
             this.questionMenu = false;
             this.modelMenu = false;
@@ -133,12 +139,12 @@ export const useEditorStore = defineStore('editor', {
         
         openBadgeFormPanel(id: string, _type: 'custom' | 'meta', scrollPosY?: number): void {
             this.openedBadgeId = id;
-            this.formPanel = null;
+            this.formPanel.form = null;
             this.openedNodeId = null;
             this.openedElementId = null;
 
             setTimeout(() => {
-                this.formPanel = formsModel.find(form => form.type === 'badge');
+                this.formPanel.form = formsModel.find(form => form.type === 'badge');
             });
 
             if(scrollPosY) this.scrollFormPanel(scrollPosY);
@@ -152,9 +158,9 @@ export const useEditorStore = defineStore('editor', {
             this.openedBadgeId = null;
 
             //? To be sure the view is notified of closing / reopening
-            this.formPanel = null;
+            this.formPanel.form = null;
             setTimeout(() => {
-                this.formPanel = formsModel.find(form => form.type === formType);
+                this.formPanel.form = formsModel.find(form => form.type === formType);
             });
 
             if(scrollPosY) this.scrollFormPanel(scrollPosY);
@@ -195,7 +201,7 @@ export const useEditorStore = defineStore('editor', {
             //? prevent closing the form panel when selecting a node
             if(this.selectNodeMode) return;
 
-            this.formPanel = null;
+            this.formPanel.form = null;
             this.openedElementId = null;
             this.openedNodeId = null;
         },

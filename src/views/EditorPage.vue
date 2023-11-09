@@ -98,7 +98,7 @@ const editorDisplay = computed(() => editorStore.selectNodeMode ? 'editor-flex' 
         </div>
         <ePocFlow class="editor-content" @dragover="onCursorAllowed" />
         <Transition>
-            <ResizablePanel v-if="editorStore.formPanel && !editorStore.selectNodeMode" class="formPanel" @dragover="onCursorNotAllowed" />
+            <ResizablePanel v-if="editorStore.formPanel.form && !editorStore.selectNodeMode" class="formPanel" @dragover="onCursorNotAllowed" />
         </Transition>
         <ValidationModal v-if="editorStore.validationModal" />
         <ConditionModal v-if="editorStore.conditionModal && !editorStore.selectNodeMode" />
