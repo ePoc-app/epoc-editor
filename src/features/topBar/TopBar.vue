@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import TopActionButton from './TopActionButton.vue';
-import TopActionDropdown from './TopActionDropdown.vue';
 import { useEditorStore, useUndoRedoStore } from '@/src/shared/stores';
 import { computed, ref } from 'vue';
 import { editorService } from '@/src/shared/services';
 import { useVueFlow } from '@vue-flow/core';
+import TopActionsMenu from '@/src/features/topBar/TopActionsMenu.vue';
 
 const editorStore = useEditorStore();
 const undoRedoStore = useUndoRedoStore();
@@ -59,21 +58,28 @@ setInterval(() => {
                 <h3>{{ editorStore.currentProject.filepath ? editorStore.currentProject.filepath : 'Nouvel ePoc' }}</h3>
                 <small>Dernière sauvegarde : {{ savedSince }}</small>
             </div>
-            <div class="top-bar-actions">
-                <TopActionDropdown icon="icon-chevron" :text="zoomString" position="left" :input-value="zoom" @change="updateZoom" />
-                <hr class="vertical-separator">
-                <TopActionButton icon="icon-arriere" :disabled="undoRedoStore.undoStack.length <= 0" @click="undoRedoStore.undo()" />
-                <TopActionButton icon="icon-avant" :disabled="undoRedoStore.redoStack.length <= 0" @click="undoRedoStore.redo()" />
-                <hr class="vertical-separator">
-                <TopActionButton icon="icon-save" text="Sauvegarder" position="right" :disabled="editorStore.saving" @click="editorService.saveEpocProject" />
-                <TopActionButton icon="icon-play" text="Aperçu" position="right" :disabled="editorStore.loadingPreview" @click="editorService.runPreviewAtPage()" />
-                <TopActionButton icon="icon-export" text="Exporter archive" position="right" :disabled="editorStore.exporting" @click="editorService.exportProject()" />
-            </div>
+            <TopActionsMenu
+                :undo-disabled="undoRedoStore.undoStack.length <= 0"
+                :redo-disabled="undoRedoStore.redoStack.length <= 0"
+                :saving="editorStore.saving"
+                :loading-preview="editorStore.loadingPreview"
+                :exporting="editorStore.exporting"
+                :zoom-string="zoomString"
+                :zoom="zoom"
+                @undo="undoRedoStore.undo()"
+                @redo="undoRedoStore.redo()"
+                @save="editorService.saveEpocProject"
+                @run-preview="editorService.runPreviewAtPage()"
+                @export-project="editorService.exportProject()"
+                @update-zoom="updateZoom"
+            />
         </div>
     </div>
 </template>
 
 <style scoped lang="scss">
+@use '@/src/mixins';
+
 .top-bar {
     background-color: var(--content);
     border-bottom: 1px solid var(--border);
@@ -97,13 +103,6 @@ setInterval(() => {
        }
        min-width: 0;
     }
-    &-actions {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin-left: auto;
-        min-width: fit-content;
-    }
     h3 {
         margin: 0 0 .2rem 0;
 
@@ -123,5 +122,7 @@ setInterval(() => {
         background-position: right 0.7rem top 50%;
         background-size: .8rem auto;
     }
+
 }
+
 </style>

@@ -51,6 +51,7 @@ interface EditorState {
     conditionModal: boolean;
     validationModal: boolean;
     iconModal: boolean;
+    hamburgerMenu: boolean;
 
     // Mode
     selectNodeMode: boolean;
@@ -90,6 +91,7 @@ export const useEditorStore = defineStore('editor', {
         conditionModal: false,
         validationModal: false,
         iconModal: false,
+        hamburgerMenu: false,
 
         // Mode
         selectNodeMode: false,
@@ -126,6 +128,7 @@ export const useEditorStore = defineStore('editor', {
         dismissModals(): void {
             this.questionMenu = false;
             this.modelMenu = false;
+            this.hamburgerMenu = false;
         },
         
         openBadgeFormPanel(id: string, _type: 'custom' | 'meta', scrollPosY?: number): void {
