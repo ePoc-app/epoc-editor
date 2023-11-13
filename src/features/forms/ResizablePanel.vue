@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import FormPanel from './FormPanel.vue';
-import { onMounted, ref, Ref } from 'vue';
+import { computed, onMounted, ref, Ref, watch } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
 
 const editorStore = useEditorStore();
@@ -44,12 +44,33 @@ function stopResize() {
     resizing.value = false;
 
     editorStore.formPanel.width = panel.value?.offsetWidth || 0;
+    isMaximized.value = panel.value.getBoundingClientRect().x <= 100;
+}
+
+const isMaximized = ref(false);
+
+function maximize() {
+    if(!panel.value) return;
+
+    const styles = getComputedStyle(panel.value);
+    panel.value.style.width = styles.maxWidth;
+
+    editorStore.formPanel.width = panel.value.offsetWidth;
+    isMaximized.value = true;
+}
+
+function minimize() {
+    if(!panel.value) return;
+
+    panel.value.style.width = 'auto';
+    isMaximized.value = false;
 }
 
 onMounted(() => {
     if(!editorStore.formPanel.width) return;
 
     panel.value.style.width = `${editorStore.formPanel.width}px`;
+    isMaximized.value = panel.value.getBoundingClientRect().x <= 100;
 });
 
 </script>
@@ -58,7 +79,7 @@ onMounted(() => {
     <div v-if="resizing" class="overlay" @mouseup="stopResize"></div>
     <div ref="panel" class="panel" @keydown="handleKeyDown">
         <div ref="resizeHandle" class="resize-handle" @mousedown="startResize"></div>
-        <FormPanel />
+        <FormPanel :is-maximized="isMaximized" @maximize="maximize" @minimize="minimize" />
     </div>
 </template>
 

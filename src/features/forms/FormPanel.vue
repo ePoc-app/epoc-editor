@@ -17,6 +17,15 @@ import LinkedBadges from '@/src/features/badge/components/LinkedBadges.vue';
 
 const editorStore = useEditorStore();
 
+defineProps<{
+    isMaximized: boolean;
+}>();
+
+const emit = defineEmits<{
+    (e: 'maximize'): void;
+    (e: 'minimize'): void;
+}>();
+
 const toaster = createToaster({
     duration: 1000,
     queue: true
@@ -84,10 +93,22 @@ function checkIfDisabled(disabledProp: any): boolean {
     }
 }
 
+function maximizeFormPanel() {
+    emit('maximize');
+}
+
+function minimizeFormPanel() {
+    emit('minimize');
+}
+
 </script>
 
 <template>
-    <button class="btn btn-close" @click="editorStore.closeFormPanel"><i class="icon-x"></i></button>
+    <div class="command-buttons">
+        <button v-if="isMaximized" class="btn" @click="minimizeFormPanel"><i class="icon-minimize-2"></i></button>
+        <button v-else class="btn" @click="maximizeFormPanel"><i class="icon-maximize-2"></i></button>
+        <button class="btn" @click="editorStore.closeFormPanel"><i class="icon-x"></i></button>
+    </div>
     <div class="title">
         <div class="form-icon"><i :class="editorStore.formPanel.form.icon"></i></div>
         <h1>{{ editorStore.formPanel.form.name }}</h1>
@@ -132,6 +153,33 @@ function checkIfDisabled(disabledProp: any): boolean {
         transform: translate(0, 0.2rem);
     }
 }
+
+
+.command-buttons {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:1.5rem;
+    height:1.5rem;
+    z-index: 10;
+    border-radius: 2rem;
+    i {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+    }
+  }
+}
+
 
 .buttons {
     margin-bottom: 2.5rem;
