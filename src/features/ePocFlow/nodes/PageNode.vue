@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Handle, Position, getConnectedEdges, useVueFlow, NodeProps, Emits } from '@vue-flow/core';
+import { Handle, Position, getConnectedEdges, useVueFlow, NodeProps, FlowEmits } from '@vue-flow/core';
 import { computed, Ref, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { NodeElement } from '@/src/shared/interfaces';
@@ -12,7 +12,7 @@ import DraggableNode from './content/DraggableNode.vue';
 const editorStore = useEditorStore();
 
 const props = defineProps<Partial<NodeProps>>();
-defineEmits<Partial<Emits>>();
+defineEmits<Partial<FlowEmits>>();
 
 const { findNode, edges, nodes } = useVueFlow({ id: 'main' });
 

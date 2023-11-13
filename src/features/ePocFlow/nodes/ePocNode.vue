@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useEditorStore } from '@/src/shared/stores';
-import { Emits, NodeProps, useVueFlow } from '@vue-flow/core';
+import { FlowEmits, NodeProps, useVueFlow } from '@vue-flow/core';
 import ContentButton from '@/src/components/ContentButton.vue';
 import { closeFormPanel, exitSelectNodeMode, graphService } from '@/src/shared/services';
 import { computed } from 'vue';
@@ -8,7 +8,7 @@ import { computed } from 'vue';
 const editorStore = useEditorStore();
 
 const props = defineProps<Partial<NodeProps>>();
-defineEmits<Partial<Emits>>();
+defineEmits<Partial<FlowEmits>>();
 
 const { findNode } = useVueFlow({ id: 'main' });
 

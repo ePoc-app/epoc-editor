@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useEditorStore } from '@/src/shared/stores';
-import { Handle, useVueFlow, getConnectedEdges, NodeProps, Emits } from '@vue-flow/core';
+import { Handle, useVueFlow, getConnectedEdges, NodeProps, FlowEmits} from '@vue-flow/core';
 import { Position } from '@vue-flow/core';
 import { computed } from 'vue';
 import ContentButton from '@/src/components/ContentButton.vue';
@@ -9,7 +9,7 @@ import { closeFormPanel, exitSelectNodeMode, getConnectedBadges, graphService } 
 const editorStore = useEditorStore();
 
 const props = defineProps<Partial<NodeProps>>();
-defineEmits<Partial<Emits>>();
+defineEmits<Partial<FlowEmits>>();
 
 const { findNode, nodes, edges } = useVueFlow({ id: 'main' });
 
