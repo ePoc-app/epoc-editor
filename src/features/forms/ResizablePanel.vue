@@ -63,6 +63,8 @@ function minimize() {
     if(!panel.value) return;
 
     panel.value.style.width = 'auto';
+
+    editorStore.formPanel.width = panel.value.offsetWidth;
     isMaximized.value = false;
 }
 
