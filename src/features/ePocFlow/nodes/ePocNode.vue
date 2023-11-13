@@ -2,7 +2,7 @@
 import { useEditorStore } from '@/src/shared/stores';
 import { Emits, NodeProps, useVueFlow } from '@vue-flow/core';
 import ContentButton from '@/src/components/ContentButton.vue';
-import { exitSelectNodeMode, graphService } from '@/src/shared/services';
+import { closeFormPanel, exitSelectNodeMode, graphService } from '@/src/shared/services';
 import { computed } from 'vue';
 
 const editorStore = useEditorStore();
@@ -48,7 +48,7 @@ function onContextMenu() {
             subtitle="ePoc"
             :rotate="true"
             @click="openForm()"
-            @mousedown="editorStore.closeFormPanel()"
+            @mousedown="closeFormPanel()"
             @contextmenu="onContextMenu"
         />
     </div>

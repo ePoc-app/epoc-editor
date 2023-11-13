@@ -4,7 +4,7 @@ import { useEditorStore } from '../../shared/stores';
 import FormButton from './components/FormButton.vue';
 import GenericField from './components/GenericField.vue';
 import { Input, NodeElement } from '@/src/shared/interfaces';
-import { addNewBadge, deleteBadge, editorService } from '@/src/shared/services';
+import { addNewBadge, closeFormPanel, deleteBadge, editorService } from '@/src/shared/services';
 import { createToaster } from '@meforma/vue-toaster';
 import {
     confirmDelete,
@@ -107,7 +107,7 @@ function minimizeFormPanel() {
     <div class="command-buttons">
         <button v-if="isMaximized" class="btn" @click="minimizeFormPanel"><i class="icon-minimize-2"></i></button>
         <button v-else class="btn" @click="maximizeFormPanel"><i class="icon-maximize-2"></i></button>
-        <button class="btn" @click="editorStore.closeFormPanel"><i class="icon-x"></i></button>
+        <button class="btn" @click="closeFormPanel"><i class="icon-x"></i></button>
     </div>
     <div class="title">
         <div class="form-icon"><i :class="editorStore.formPanel.form.icon"></i></div>

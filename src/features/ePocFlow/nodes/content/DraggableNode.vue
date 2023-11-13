@@ -6,7 +6,7 @@ import { NodeElement, DraggableChange } from '@/src/shared/interfaces';
 import { saveState } from '@/src/shared/services/undoRedo.service';
 import { addContentToPage, changeContentOrder, removeContentFromPage, openFormPanel } from '@/src/shared/services/graph';
 import { useVueFlow } from '@vue-flow/core';
-import { getConnectedBadges, graphService } from '@/src/shared/services';
+import { closeFormPanel, getConnectedBadges, graphService } from '@/src/shared/services';
 
 import ContentButton from '@/src/components/ContentButton.vue';
 
@@ -96,10 +96,6 @@ function dragStart(event: DragEvent, element: NodeElement, index: number) {
     };
     editorStore.draggedElement.type = 'nodeElement';
     editorStore.draggedElement.element = element;
-}
-
-function closeFormPanel() {
-    editorStore.closeFormPanel();
 }
 
 function onContextMenu(contentId: string) {

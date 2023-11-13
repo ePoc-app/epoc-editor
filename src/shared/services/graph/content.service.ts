@@ -2,7 +2,7 @@ import { useVueFlow } from '@vue-flow/core';
 import { useEditorStore } from '../../stores';
 import {NodeElement, SideAction} from '../../interfaces';
 import { deleteNode } from './node.service';
-import {generateContentId, generateId} from '../graph.service';
+import { closeFormPanel, generateContentId, generateId } from '../graph.service';
 import * as forms from '@/src/shared/data/forms';
 import { deleteConnectedConditions } from '@/src/shared/services';
 
@@ -47,7 +47,7 @@ export function changeContentOrder(startIndex: number, finalIndex: number, pageI
 
 //? The parameter pageMoved is used when openedParentId is not usable
 export function removeContentFromPage(index: number, pageId: string, pageMoved?: boolean): void {
-    editorStore.closeFormPanel();
+    closeFormPanel();
 
     const pageNode = findNode(pageId);
     pageNode.data.elements.splice(index, 1);

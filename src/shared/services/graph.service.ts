@@ -15,13 +15,14 @@ import {
 import { questions } from '@/src/shared/data';
 import { useEditorStore } from '@/src/shared/stores';
 import {
+    deleteEmptyBadges,
     findContent,
     getContentIdFromId,
     getElementByContentId,
     setNodesSelectability
 } from '@/src/shared/services/graph';
 import { Question } from '@epoc/epoc-types/src/v2';
-import { createRule, getConditions, getValidBadges } from '@/src/shared/services/badge.service';
+import { createRule, getConditions, getValidBadges } from '@/src/shared/services/graph/badge.service';
 import { Badge, NodeElement } from '@/src/shared/interfaces';
 
 declare const api: ApiInterface;
@@ -395,4 +396,18 @@ export function exportBadgesToPage(badges: Record<string, Badge>): Record<string
     }
 
     return res;
+}
+
+export function closeFormPanel() {
+    const editorStore = useEditorStore();
+    
+    if(editorStore.selectNodeMode) return;
+    
+    if(editorStore.formPanel.form && editorStore.formPanel.form.type === 'badge') {
+        deleteEmptyBadges();
+    }
+
+    editorStore.formPanel.form = null;
+    editorStore.openedElementId = null;
+    editorStore.openedNodeId = null;
 }

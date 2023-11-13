@@ -9,7 +9,7 @@ import {
 import { generateId } from '@/src/shared/services/graph.service';
 import { questions, standardPages } from '@/src/shared/data';
 import { Assessment, ChoiceCondition, SimpleQuestion } from '@epoc/epoc-types/src/v1';
-import { createRule, getConditions } from '@/src/shared/services/badge.service';
+import { createRule, getConditions } from '@/src/shared/services/graph/badge.service';
 import { Node } from '@vue-flow/core';
 import { Badge } from '@/src/shared/interfaces';
 

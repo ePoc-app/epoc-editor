@@ -4,7 +4,7 @@ import { computed, Ref, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { NodeElement } from '@/src/shared/interfaces';
 import { unselectAllNodes } from '@/src/shared/services/graph';
-import { exitSelectNodeMode, getConnectedBadges, graphService } from '@/src/shared/services';
+import { closeFormPanel, exitSelectNodeMode, getConnectedBadges, graphService } from '@/src/shared/services';
 import { questions } from '@/src/shared/data';
 
 import DraggableNode from './content/DraggableNode.vue';
@@ -30,10 +30,6 @@ function openPageForm(id: string, formType: string) {
     } else {
         editorStore.openFormPanel(id, formType);
     }
-}
-
-function closeFormPanel() {
-    editorStore.closeFormPanel();
 }
 
 function addHoverEffect() {

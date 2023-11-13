@@ -4,7 +4,7 @@ import { Handle, useVueFlow, getConnectedEdges, NodeProps, Emits } from '@vue-fl
 import { Position } from '@vue-flow/core';
 import { computed } from 'vue';
 import ContentButton from '@/src/components/ContentButton.vue';
-import { exitSelectNodeMode, getConnectedBadges, graphService } from '@/src/shared/services';
+import { closeFormPanel, exitSelectNodeMode, getConnectedBadges, graphService } from '@/src/shared/services';
 
 const editorStore = useEditorStore();
 
@@ -46,7 +46,7 @@ function openForm() {
 }
 
 function mouseDown() {
-    editorStore.closeFormPanel();
+    closeFormPanel();
     
     // unselect all nodes except current node
     nodes.value.forEach((node) => node.selected = currentNode.id === node.id);

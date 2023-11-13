@@ -197,15 +197,6 @@ export const useEditorStore = defineStore('editor', {
             });
         },
 
-        closeFormPanel(): void {
-            //? prevent closing the form panel when selecting a node
-            if(this.selectNodeMode) return;
-
-            this.formPanel.form = null;
-            this.openedElementId = null;
-            this.openedNodeId = null;
-        },
-
         closeValidationModal(): void {
             this.validationModal = false;
         },

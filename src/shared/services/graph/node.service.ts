@@ -5,7 +5,7 @@ import { useVueFlow, Node, getConnectedEdges } from '@vue-flow/core';
 import { NodeElement, SideAction } from '../../interfaces';
 import { nextTick, toRaw, watch } from 'vue';
 
-import { deleteConnectedConditions } from '@/src/shared/services';
+import { closeFormPanel, deleteConnectedConditions } from '@/src/shared/services';
 import { addContentToPage } from './content.service';
 import { generateContentId, generateId, graphService } from '../graph.service';
 import { deleteElement, deleteSelection, createEdge } from '.';
@@ -314,7 +314,7 @@ export function duplicatePage(pageId?: string): void {
     };
 
     addNodes([newPage]);
-    editorStore.closeFormPanel();
+    closeFormPanel();
 }
 
 export function updateNextChapter(chapterId: string): void {
@@ -333,7 +333,7 @@ export function transformActivityToPage(): void {
     pageNode.type = 'page';
     pageNode.data.formType = 'page';
     delete pageNode.data.formValues.summary;
-    editorStore.closeFormPanel();
+    closeFormPanel();
     editorStore.openFormPanel(pageNode.id, pageNode.data.formType);
 }
 

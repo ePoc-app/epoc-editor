@@ -1,7 +1,7 @@
 import { useVueFlow, Node, MarkerType, Edge } from '@vue-flow/core';
 import { deleteContent, deleteNode, getContentByContentId } from './';
 import { useEditorStore } from '@/src/shared/stores';
-import { exitSelectNodeMode, generateId } from '../graph.service';
+import { closeFormPanel, exitSelectNodeMode, generateId } from '../graph.service';
 import { ElementType, NodeElement } from '../../interfaces';
 
 const { nodes, findNode, addEdges } = useVueFlow({ id: 'main' });
@@ -17,7 +17,7 @@ export function deleteElement(id: string, pageId?: string): void {
     if(pageId || !pageToDelete) deleteContent(pageId ?? editorStore.openedNodeId, id);
     else deleteNode(id);
 
-    editorStore.closeFormPanel();
+    closeFormPanel();
 }
 
 export function createEdge(sourceId: string, targetId: string): void {

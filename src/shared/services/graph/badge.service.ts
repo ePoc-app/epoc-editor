@@ -215,6 +215,22 @@ export function isBadgeValid(badge): boolean {
     return badge.rule.and.length > 0;
 }
 
+export function isBadgeEmpty(badge): boolean {
+    return badge.title === ''
+        && badge.icon === ''
+        && badge.description === ''
+        && badge.rule.and.length === 0;
+}
+
+export function deleteEmptyBadges() {
+    const epocNode = findNode('1');
+    const badges = epocNode.data.formValues.badges;
+
+    for(const badgeId in badges) {
+        if(isBadgeEmpty(badges[badgeId])) delete badges[badgeId];
+    }
+}
+
 export function getValidBadges(){
     const epocNode = findNode('1');
     const badges = epocNode.data.formValues.badges;

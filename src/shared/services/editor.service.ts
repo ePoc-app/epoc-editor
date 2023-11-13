@@ -3,7 +3,7 @@ import { router } from '@/src/router';
 import { useEditorStore, useGraphStore, useUndoRedoStore } from '@/src/shared/stores';
 import { ePocProject } from '@/src/shared/interfaces';
 import { createToaster } from '@meforma/vue-toaster';
-import { graphService } from '@/src/shared/services/graph.service';
+import { closeFormPanel, graphService } from '.';
 import { createGraphEpocFromData } from '@/src/shared/services/import.service';
 import { FlowExportObject, useVueFlow } from '@vue-flow/core';
 
@@ -81,7 +81,8 @@ const setup = function () {
             editorStore.loading = false;
             return;
         }
-        editorStore.closeFormPanel();
+        
+        closeFormPanel();
         editorStore.currentProject = ePocProject;
 
         parsedData.flow = changeScreenToPage(parsedData.flow);

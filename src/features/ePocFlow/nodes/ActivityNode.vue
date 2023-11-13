@@ -3,7 +3,7 @@ import { Handle, Position, getConnectedEdges, useVueFlow, NodeProps, Emits } fro
 import { computed, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { getSelectedNodes } from '@/src/shared/services/graph';
-import { exitSelectNodeMode, getConnectedBadges, graphService } from '@/src/shared/services';
+import { closeFormPanel, exitSelectNodeMode, getConnectedBadges, graphService } from '@/src/shared/services';
 
 import DraggableNode from '@/src/features/ePocFlow/nodes/content/DraggableNode.vue';
 
@@ -29,10 +29,6 @@ function openPageForm(id: string, formType: string) {
     } else {
         editorStore.openFormPanel(id, formType);
     }
-}
-
-function closeFormPanel() {
-    editorStore.closeFormPanel();
 }
 
 function addHoverEffect() {

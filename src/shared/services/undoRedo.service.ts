@@ -2,6 +2,7 @@ import { useVueFlow } from '@vue-flow/core';
 import { useUndoRedoStore, useGraphStore, useEditorStore } from '../stores';
 import { ePocState } from '../interfaces';
 import { ApiInterface } from '../interfaces/api.interface';
+import { closeFormPanel } from '.';
 
 const { toObject }  = useVueFlow({ id: 'main' });
 
@@ -65,7 +66,7 @@ export function revertToState(state: string): string {
     const graphStore = useGraphStore();
     const editorStore = useEditorStore();
     
-    editorStore.closeFormPanel();
+    closeFormPanel();
 
     const { flow, form } = JSON.parse(state);
 

@@ -24,7 +24,7 @@ import AddChapterNode from './nodes/AddChapterNode.vue';
 import { NodeElement, SideAction } from '@/src/shared/interfaces';
 import { addPage, createPageFromContent, removeContentFromPage, graphCopy, getSelectedNodes } from '@/src/shared/services/graph';
 import { saveState, saveGivenState, getCurrentState } from '@/src/shared/services/undoRedo.service';
-import { graphService } from '@/src/shared/services';
+import { closeFormPanel, graphService } from '@/src/shared/services';
 
 const { vueFlowRef, project, updateEdge, edges, nodes, findNode, setTransform }  = useVueFlow({ id: 'main' });
 
@@ -84,7 +84,7 @@ function onEdgeClick (event: EdgeMouseEvent) {
 }
 
 function selectionStart() {
-    editorStore.closeFormPanel();
+    closeFormPanel();
 }
 
 function update(event: EdgeUpdateEvent) {
@@ -99,7 +99,7 @@ function update(event: EdgeUpdateEvent) {
 function nodeChange(event: NodeChange[]) {
     const { type } = event[0];
 
-    if(type === 'remove') editorStore.closeFormPanel();
+    if(type === 'remove') closeFormPanel();
 }
 
 function onDragOver() {
@@ -251,7 +251,7 @@ function onPaneReady() {
         @dragover.prevent="onDragOver"
         @dragenter.prevent
         @edge-click="onEdgeClick"
-        @pane-click="editorStore.closeFormPanel()"
+        @pane-click="closeFormPanel()"
         @connect="connect"
         @connect-start="onConnectStart"
         @connect-end="onConnectEnd"
