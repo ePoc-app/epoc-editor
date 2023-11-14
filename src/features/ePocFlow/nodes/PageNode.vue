@@ -55,7 +55,8 @@ function onContextMenu(event: MouseEvent) {
 }
 
 const connectable = computed(() => {
-    return !isSource.value || isCondition.value;
+    return isCondition.value ? 2 : 'single';
+    // return !isSource.value || isCondition.value;
 });
 
 const connectedBadges = computed(() => getConnectedBadges(currentNode.value.data.contentId));
@@ -89,7 +90,7 @@ const pageIndex = computed(() => {
                 :class="{ 'not-connected': !isTarget }"
                 type="target"
                 :position="Position.Left"
-                :connectable="false"
+                connectable="single"
             />
             <div v-if="connectedBadges.length > 0" class="badge-notification badge-notification-left">
                 <img src="/img/badge/notification.svg" alt="notification">
@@ -108,9 +109,9 @@ const pageIndex = computed(() => {
         <Handle
             :data-testid="`source-page-${pageIndex}`"
             type="source"
-            :class="{ 'not-connected': connectable }"
+            :class="{ 'not-connected': !isSource }"
             :position="Position.Right"
-            :connectable="connectable && !editorStore.selectNodeMode"
+            :connectable="connectable"
         />
     </div>
 </template>
