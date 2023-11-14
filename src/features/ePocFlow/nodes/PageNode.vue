@@ -55,7 +55,10 @@ function onContextMenu(event: MouseEvent) {
 }
 
 const connectable = computed(() => {
-    return !isSource.value || isCondition.value;
+    if(isCondition.value) {
+        return getConnectedEdges([currentNode.value], edges.value).filter((edge) => edge.source === props.id).length < 2;
+    }
+    return !isSource.value;
 });
 
 const connectedBadges = computed(() => getConnectedBadges(currentNode.value.data.contentId));
