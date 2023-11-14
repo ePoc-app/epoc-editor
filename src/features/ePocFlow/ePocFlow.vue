@@ -223,7 +223,7 @@ function onSelectionContextMenu() {
 }
 
 function onPaneReady() {
-    setTransform({ x: 16, y: 16, zoom: 0.75 });
+    setTransform({ x: 32, y: 32, zoom: 1 });
 }
 
 </script>
