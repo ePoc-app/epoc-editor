@@ -71,6 +71,11 @@ function onBlur() {
     width: fit-content;
     margin-bottom: 1.5rem;
 
+    &:focus-within {
+        outline: 1px solid var(--editor-blue);
+        box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);
+    }
+
     input[type="number"] {
         border: none;
         margin: .5rem;
