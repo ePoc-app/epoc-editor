@@ -22,7 +22,51 @@ const epocForm: TestForm = {
             label: 'Nombre de badge pour obtenir l\'attestation',
             value: '5',
             type: 'score'
-        }
+        },
+        {
+            id: 'authors',
+            type: 'repeat',
+            cards: [
+                {
+                    value: [
+                        {
+                            label: 'Nom',
+                            value: 'Jean Dupont',
+                            type: 'text'
+                        },
+                        {
+                            label: 'Titre',
+                            value: 'Professeur',
+                            type: 'text'
+                        },
+                        {
+                            label: 'description',
+                            value: 'Titulaire de la chaire de physique quantique',
+                            type: 'html'
+                        }
+                    ]
+                },
+                {
+                    value: [
+                        {
+                            label: 'Nom',
+                            value: 'Jeanne Dupont',
+                            type: 'text'
+                        },
+                        {
+                            label: 'Titre',
+                            value: 'Chercheuse',
+                            type: 'text'
+                        },
+                        {
+                            label: 'description',
+                            value: 'Membre du laboratoire de physique quantique',
+                            type: 'html'
+                        }
+                    ]
+                }
+            ]
+        },
     ]
 };
 

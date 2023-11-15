@@ -21,7 +21,16 @@ export interface TestInput {
     type: 'text' | 'html' | 'checkbox' | 'score' | 'textarea';
 }
 
+interface TestRepeatCard {
+    value: TestInput[];
+}
+export interface TestRepeatInput {
+    id: string;
+    type: 'repeat';
+    cards: TestRepeatCard[];
+}
+
 export interface TestForm {
     type: 'page' | 'epoc' | 'activity' | 'text' | 'audio' | 'video' | 'chapter' | 'choice' | 'drag-and-drop' | 'reorder' | 'swipe' | 'dropdown-list';
-    inputs: TestInput[];
+    inputs: (TestInput | TestRepeatInput)[];
 }

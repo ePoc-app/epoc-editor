@@ -43,7 +43,6 @@ export async function createLinkedNode(window, sourceNode: TestNode, newNode: Te
 
 /*
     This function is used to add content to a page.
-    ! Doesn't work for the moment, not sure i can make it work.
  */
 export async function addContentToNode(window, type, node: TestNode, pos: number) {
     const questionMenu = await window.getByTestId('questions-menu');
