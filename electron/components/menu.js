@@ -57,32 +57,41 @@ module.exports.setupMenu = function () {
                     ]
                 },
                 {
-                    label: 'Rétrocompatibilité',
-                    submenu: [
-                        // {
-                        //     label: 'Mode ePoc v1',
-                        //     type: 'checkbox'
-                        // },
-                        // {
-                        //     type: 'separator'
-                        // },
-                        {
-                            label: 'Importer ePoc v1',
-                            click: async function () {
-                                sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportPicked');
-                                const project = await pickEpocToImport();
-                                store.updateState('projects', {[BrowserWindow.getFocusedWindow().id]: project });
-                                sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportExtracted', project);
-                            }
-                        }
-                        // {
-                        //     label: 'Export ePoc v1',
-                        //     click: async function () {
-                        //         console.log('todo');
-                        //     }
-                        // }
-                    ]
+                    label: 'Importer un fichier zip',
+                    click: async function() {
+                        sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportPicked');
+                        const project = await pickEpocToImport();
+                        store.updateState('projects', {[BrowserWindow.getFocusedWindow().id]: project});
+                        sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportExtracted', project);
+                    }
                 },
+                // {
+                //     label: 'Rétrocompatibilité',
+                //     submenu: [
+                //         // {
+                //         //     label: 'Mode ePoc v1',
+                //         //     type: 'checkbox'
+                //         // },
+                //         // {
+                //         //     type: 'separator'
+                //         // },
+                //         {
+                //             label: 'Importer ePoc v1',
+                //             click: async function () {
+                //                 sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportPicked');
+                //                 const project = await pickEpocToImport();
+                //                 store.updateState('projects', {[BrowserWindow.getFocusedWindow().id]: project });
+                //                 sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportExtracted', project);
+                //             }
+                //         }
+                //         // {
+                //         //     label: 'Export ePoc v1',
+                //         //     click: async function () {
+                //         //         console.log('todo');
+                //         //     }
+                //         // }
+                //     ]
+                // },
                 {
                     id: 'save',
                     label: 'Sauvegarder',
