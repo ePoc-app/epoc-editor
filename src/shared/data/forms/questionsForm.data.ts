@@ -317,7 +317,7 @@ export const swipeForm: Form = {
                     id: 'categories',
                     label: 'Choix',
                     type: 'repeat',
-                    value: ['Gauche', 'Droite'],
+                    value: ['Droite', 'Gauche'],
                     addButton: false,
                     inputs: [
                         {

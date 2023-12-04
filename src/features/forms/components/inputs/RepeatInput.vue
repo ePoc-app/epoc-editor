@@ -133,6 +133,14 @@ function dragOver(event: DragEvent) {
     document.body.classList.add('cursor-move');
 }
 
+// Used to get "choice left/right" on swipe choice
+function getLabelIdentifier(index) {
+    if(props.addButton === false) {
+        return index === 0 ? 'droite' : 'gauche';
+    }
+    else return index + 1;
+}
+
 </script>
 
 <template>
@@ -161,7 +169,7 @@ function dragOver(event: DragEvent) {
                         <div class="form-icon"><i :class="element.action.icon"></i></div>
                         <h3>{{ element.action.label }}</h3>
                     </div>
-                    <h3 v-else>{{ label }} {{ index + 1 }}</h3>
+                    <h3 v-else>{{ label }} {{ getLabelIdentifier(index) }}</h3>
                     <div v-if="addButton !== false" class="card-header-icon">
                         <i class="icon-supprimer delete" @click.stop="removeCard(index)"></i>
                         <hr v-if="!(isLast(index) && index === 0)" class="vertical-separator">
