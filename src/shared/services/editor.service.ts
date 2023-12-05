@@ -6,6 +6,7 @@ import { createToaster } from '@meforma/vue-toaster';
 import { closeFormPanel, graphService } from '.';
 import { createGraphEpocFromData } from '@/src/shared/services/import.service';
 import { FlowExportObject, useVueFlow } from '@vue-flow/core';
+import { saveState } from '@/src/shared/services/undoRedo.service';
 
 const { findNode } = useVueFlow({ id: 'main' });
 
@@ -115,7 +116,9 @@ const setup = function () {
         router.push('/editor').then(() => {
             editorStore.loading = false;
             if (!importedEpoc || !importedEpoc.workdir) return;
+            
             createGraphEpocFromData(importedEpoc.epoc);
+            saveState();
         });
     });
 
