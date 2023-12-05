@@ -310,6 +310,25 @@ export const epocForm: Form = {
                 }
             ]
         },
+        {
+            name: 'Licence',
+            inputs: [
+                {
+                    id: 'licenceName',
+                    type: 'text',
+                    label: 'Nom',
+                    placeholder: 'CC-BY 4.0',
+                    value: ''
+                },
+                {
+                    id: 'licenceUrl',
+                    type: 'text',
+                    label: 'URL',
+                    placeholder: 'https://creativecommons.org/licenses/by/4.0/deed',
+                    value: ''
+                }
+            ]
+        }
     ],
 };
 

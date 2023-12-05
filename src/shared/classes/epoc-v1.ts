@@ -1,7 +1,7 @@
 import { Chapter, Content, Epoc, html, Parameters, uid } from '@epoc/epoc-types/src/v1';
 import { Question } from '@epoc/epoc-types/src/v1/question';
 import { Author } from '@epoc/epoc-types/src/v1/author';
-import { Badge } from '@/src/shared/interfaces';
+import { Badge } from '@epoc/epoc-types/src/v1/badge';
 
 export class EpocV1 implements Epoc {
     id: string;
@@ -26,11 +26,16 @@ export class EpocV1 implements Epoc {
     questions: Record<uid, Question>;
     badges: Record<uid, Badge>;
     certificateBadgeCount: number;
+    license: {
+        name: string;
+        url: string;
+        content: string;
+    };
 
     constructor(
         id: string, title: string, image: string, objectives: string[], summary: html, teaser: string,
         thumbnail: string, edition: string, certificateScore: number, certificateBadgeCount: number, authors: Author[],
-        plugins: string[], chapterParameter: string, lastModif: string
+        plugins: string[], chapterParameter: string, lastModif: string, license: { name: string; url: string; content: string; }
     ) {
         this.version = '1';
         this.id = id;
@@ -53,6 +58,7 @@ export class EpocV1 implements Epoc {
         this.badges = {};
         this.questions = {};
         this.lastModif = lastModif;
+        this.license = license;
     }
 
     addChapter(id: uid, chapter: Chapter) {
