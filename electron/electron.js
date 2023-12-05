@@ -64,6 +64,11 @@ app.whenReady().then(() => {
         app.quit();
     });
 
+    app.setAboutPanelOptions({
+        copyright: 'Licence: CeCILL-B'
+    });
+
+
     autoUpdater.on('update-downloaded',(e) => {
         console.log('Update ready');
         console.log(e);
