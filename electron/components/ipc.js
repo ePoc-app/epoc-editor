@@ -1,7 +1,7 @@
 const path = require('path');
 const store = require('./store');
 const { ipcMain } = require('electron');
-const { runPreview } = require('./preview');
+const { runPreview, updatePreview } = require('./preview');
 const { getRecentFiles, pickEpocProject, openEpocProject, newEpocProject, saveEpocProject, exportProject, writeProjectData, writeEpocData, readProjectData, copyFileToWorkdir } = require('./file');
 const { Menu } = require('electron');
 const contextMenu = require('./contextMenu');
@@ -100,6 +100,7 @@ const setupIpcListener = function (targetWindow) {
         if(event.sender !== targetWindow.webContents) return;
 
         await writeEpocData(store.state.projects[targetWindow.id].workdir, data);
+        updatePreview();
     });
 
     ipcMain.on('importFile', async (event, data) => {

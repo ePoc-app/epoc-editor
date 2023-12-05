@@ -82,6 +82,12 @@ function createPreviewServer () {
     });
 }
 
+function updatePreview() {
+    if (!previewWindow) return;
+
+    previewWindow.reload();
+}
+
 async function createPreviewWindow(server, contentPath) {
     if (!previewWindow) {
         previewWindow = new BrowserWindow({
@@ -124,5 +130,6 @@ const cleanPreview = function () {
 
 module.exports = {
     runPreview,
-    cleanPreview
+    cleanPreview,
+    updatePreview
 };
