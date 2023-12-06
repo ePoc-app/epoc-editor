@@ -66,9 +66,9 @@ module.exports.setupWindow = function (window) {
             'http://localhost:8000/assets/*',
             'http://localhost:8000/images/*',
             'http://localhost:8000/videos/*',
-            `file://${encodeURI(path.join(__dirname, '../dist/assets/'))}*`,
-            `file://${encodeURI(path.join(__dirname, '../dist/images/'))}*`,
-            `file://${encodeURI(path.join(__dirname, '../dist/videos/'))}*`
+            `file://${encodeURI(path.join(__dirname, '../../dist/assets/'))}*`,
+            `file://${encodeURI(path.join(__dirname, '../../dist/images/'))}*`,
+            `file://${encodeURI(path.join(__dirname, '../../dist/videos/'))}*`
         ]
     };
     
