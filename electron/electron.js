@@ -14,8 +14,7 @@ const headless = process.argv.includes('--headless=true');
 
 let mainWindow;
 let splashWindow;
-// Open file with editor, on windows : using argv | on macOS using open-file event (see below)
-let filepath = process.platform === 'win32' && process.argv[1] ? path.normalize(process.argv[1]) : null;
+let filepath = process.argv[1] ? path.normalize(process.argv[1]) : null;
 
 app.on('will-finish-launching', () => {
     app.on('open-file', async (event, path) => {
@@ -47,12 +46,13 @@ app.whenReady().then(() => {
             mainWindow.show();
         }
 
+        setupWindow(mainWindow);
+
         if (filepath) {
             mainWindow.webContents.send('epocProjectPicked', JSON.stringify({name: null, modified: null, filepath: filepath, workdir: null}));
         }
     });
 
-    setupWindow(mainWindow);
 
     app.on('activate', function () {
         // On macOS it's common to re-create a window in the app when the dock icon is clicked and there are no other windows open.
