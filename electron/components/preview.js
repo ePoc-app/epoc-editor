@@ -41,7 +41,6 @@ async function runPreview(workdir, contentPath) {
         fs.symlinkSync(workdir, ePocRootFolder, 'junction');
         previewInitialized = true;
     } else {
-        //TODO: View if can detect a change of current workdir and update the preview
         // Update preview files
         const zip = new AdmZip(previewArchive);
         zip.extractAllTo(previewPath, true);

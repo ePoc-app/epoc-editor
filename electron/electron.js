@@ -65,7 +65,7 @@ app.whenReady().then(() => {
     });
 
     app.setAboutPanelOptions({
-        copyright: 'Licence: CeCILL-B'
+        credits: 'Logiciel distribué sous licence CeCILL-B.'
     });
 
 
