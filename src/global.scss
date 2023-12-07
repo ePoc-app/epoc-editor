@@ -557,3 +557,7 @@ g.selected {
 .editor-container {
   overflow-x: hidden;
 }
+
+body > input {
+  display: none;
+}
