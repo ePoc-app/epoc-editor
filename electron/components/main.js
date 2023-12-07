@@ -48,7 +48,7 @@ module.exports.createMainWindow = function () {
     return mainWindow;
 };
 
-module.exports.setupWindow = function (window) {
+module.exports.setupWindow = function (window, filepath) {
     // Intercept assets:// protocol to serve local files from workdir
     try {
         window.webContents.session.protocol.registerFileProtocol('assets', (request, callback) => {
@@ -92,4 +92,9 @@ module.exports.setupWindow = function (window) {
         }
         callback({});
     });
+
+    if (filepath) {
+        window.webContents.send('epocProjectPicked', JSON.stringify({name: null, modified: null, filepath: filepath, workdir: null}));
+    }
+
 };
