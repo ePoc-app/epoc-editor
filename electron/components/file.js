@@ -261,7 +261,7 @@ const copyFileToWorkdir = async function (workdir, filepath, isIcon) {
     const copyPath = path.join(assetsPath, path.basename(filepath).replace(/[^a-z0-9.]/gi, '_'));
     if (!fs.existsSync(assetsPath)) fs.mkdirSync(assetsPath);
     fs.copyFileSync(filepath, copyPath);
-    return path.relative(workdir, copyPath);
+    return path.relative(workdir, copyPath).replaceAll('\\', '/');
 };
 
 /**
@@ -345,7 +345,7 @@ const getUsedAssets = function (workdir) {
 
     if(!matches) return [];
     return matches.map(match => {
-        return match.replace(`assets${path.sep}`, '')
+        return match.replace('assets/', '')
             .replaceAll('"', '')
             // To only keep the slash after icons
             .replace(/\/+/g, '/')
@@ -363,7 +363,6 @@ const getUnusedAssets = function (workdir) {
             unusedAssets.push(asset);
         }
     }
-    console.assert(unusedAssets.length === 0, 'parasite asset detected', unusedAssets);
 
     return unusedAssets;
 };

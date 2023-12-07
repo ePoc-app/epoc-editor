@@ -60,15 +60,26 @@ module.exports.setupWindow = function (window) {
         console.error('Failed to register protocol:', error);
     }
 
+    const windowsUrl= [
+        `file:///${encodeURI(path.join(__dirname, '../../dist/assets/').replaceAll('\\', '/'))}*`,
+        `file:///${encodeURI(path.join(__dirname, '../../dist/images/').replaceAll('\\', '/'))}*`,
+        `file:///${encodeURI(path.join(__dirname, '../../dist/videos/').replaceAll('\\', '/'))}*`,
+    ];
+
+    const posixUrl = [
+        `file://${encodeURI(path.join(__dirname, '../../dist/assets/'))}*`,
+        `file://${encodeURI(path.join(__dirname, '../../dist/images/'))}*`,
+        `file://${encodeURI(path.join(__dirname, '../../dist/videos/'))}*`,
+    ];
+
     // Intercept all url starting with assets/ and redirect it to custom protocol (wysiwyg/quill)
     const filter = {
         urls: [
             'http://localhost:8000/assets/*',
             'http://localhost:8000/images/*',
             'http://localhost:8000/videos/*',
-            `file://${encodeURI(path.join(__dirname, '../../dist/assets/'))}*`,
-            `file://${encodeURI(path.join(__dirname, '../../dist/images/'))}*`,
-            `file://${encodeURI(path.join(__dirname, '../../dist/videos/'))}*`
+
+            ...(process.platform === 'win32' ? windowsUrl : posixUrl)
         ]
     };
     

@@ -26,7 +26,6 @@ const filetype = computed(() => {
     return null;
 });
 
-//! This function have to fetch the image from the back
 async function changeImage(e: Event) {
 
     savedState = getCurrentState(true);
@@ -56,6 +55,11 @@ function openFile() {
 
 onMounted(() => {
     url.value = props.inputValue;
+    if(url.value.includes('\\')) {
+        //? Backwards support if files contains backslashes (not possible anymore)
+        // TODO: Remove this in the future
+        emit('input', url.value.replaceAll('\\', '/'));
+    }
 });
 
 watch(
