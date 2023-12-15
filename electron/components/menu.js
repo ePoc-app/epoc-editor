@@ -247,6 +247,17 @@ module.exports.setupMenuPreview = function () {
                     }
                 },
                 {
+                    label: 'Reset data',
+                    click: function () {
+                        BrowserWindow.getFocusedWindow().webContents.executeJavaScript(`
+                          // Clear IndexedDB
+                          indexedDB.deleteDatabase('__epocdb');
+                          console.log('clear db');
+                          location.reload();
+                        `);
+                    }
+                },
+                {
                     label: 'Dev Tools',
                     accelerator: 'CmdOrCtrl+D',
                     click: function () {
