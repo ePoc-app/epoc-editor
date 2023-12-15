@@ -10,4 +10,5 @@ export interface Input {
     addButton?: boolean;
     options?: string[];
     linkedOptions?: string;
+    targetDirectory?: string
 }

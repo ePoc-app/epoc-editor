@@ -9,6 +9,7 @@ const props = defineProps<{
     label: string;
     accept: string;
     placeholder: string;
+    targetDirectory?: string
 }>();
 
 const emit = defineEmits<{
@@ -34,7 +35,7 @@ async function changeImage(e: Event) {
     const file = target.files[0];
     if (!file) return;
     fileInput.value.value = '';
-    url.value = await graphService.importFile(file.path);
+    url.value = await graphService.importFile(file.path, props.targetDirectory);
 
     emit('input', url.value);
     emit('saveGivenState', savedState);

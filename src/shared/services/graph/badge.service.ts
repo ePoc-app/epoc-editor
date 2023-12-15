@@ -205,7 +205,7 @@ export function addNewBadge() {
 export async function saveCustomIcon(icon: string) {
     const projectStore = useProjectStore();
 
-    const iconPath = await graphService.importFile(icon, true);
+    const iconPath = await graphService.importFile(icon, 'assets/icons');
     projectStore.addCustomIcon(iconPath);
 
     return iconPath;

@@ -106,8 +106,8 @@ const setupIpcListener = function (targetWindow) {
     ipcMain.on('importFile', async (event, data) => {
         if(event.sender !== targetWindow.webContents) return;
 
-        const { filepath, isIcon } = data;
-        sendToFrontend(event.sender, 'fileImported', await copyFileToWorkdir(store.state.projects[targetWindow.id].workdir, filepath, isIcon));
+        const { filepath, targetDirectory } = data;
+        sendToFrontend(event.sender, 'fileImported', await copyFileToWorkdir(store.state.projects[targetWindow.id].workdir, filepath, targetDirectory));
     });
 
     ipcMain.on('graphCopy', async (event, data) => {

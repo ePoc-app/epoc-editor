@@ -38,8 +38,8 @@ function writeProjectData(): void {
     });
 }
 
-function importFile(filepath: string, isIcon?: boolean): Promise<string> {
-    api.send('importFile', { filepath, isIcon: Boolean(isIcon) });
+function importFile(filepath: string, targetDirectory?: string): Promise<string> {
+    api.send('importFile', { filepath, targetDirectory });
 
     return new Promise((resolve) => {
         api.receiveOnce('fileImported', (data) => {
@@ -62,8 +62,6 @@ function createContentJSON() : EpocV1 {
     const validBadges = getValidBadges();
 
     const ePocValues = ePocNode.data.formValues;
-    
-    console.log('epocValues', ePocValues);
 
     const epoc = new EpocV1(
         ePocValues.id || 'E000XX',

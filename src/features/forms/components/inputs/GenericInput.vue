@@ -80,6 +80,7 @@ const inputId = computed(() => {
         :accept="input.accept"
         :input-value="inputValue as string"
         :placeholder="input.placeholder"
+        :target-directory="input.targetDirectory"
         @input="emit('input', $event)"
         @save-given-state="emit('saveGivenState', $event)"
     />
