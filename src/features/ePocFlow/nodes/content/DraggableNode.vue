@@ -4,7 +4,7 @@ import { useEditorStore } from '@/src/shared/stores';
 import { moveGuard } from '@/src/shared/utils/draggable';
 import { NodeElement, DraggableChange } from '@/src/shared/interfaces';
 import { saveState } from '@/src/shared/services/undoRedo.service';
-import { addContentToPage, changeContentOrder, removeContentFromPage, openFormPanel } from '@/src/shared/services/graph';
+import { addContentToPage, changeContentOrder, removeContentFromPage, openFormPanel, getElementByContentId } from '@/src/shared/services/graph';
 import { useVueFlow } from '@vue-flow/core';
 import { closeFormPanel, getConnectedBadges, graphService } from '@/src/shared/services';
 
@@ -36,8 +36,18 @@ const dragOptions = computed(() => {
         ghostClass: 'ghost',
         animation: 200,
         move: moveGuard,
+        revertOnSpill: true,
+        onSpill: handleSpill
     };
 });
+
+// Using revertOnSpill so that we can call our removeContentFromPage function using the spill hook
+function handleSpill(event) {
+    const oldIndex = event.oldIndex;
+    const parent = getElementByContentId(event.from.id);
+    
+    removeContentFromPage(oldIndex, parent.id, true);
+}
 
 const draggableClass = computed(() => {
     return {

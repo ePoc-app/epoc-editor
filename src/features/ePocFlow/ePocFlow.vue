@@ -52,15 +52,13 @@ const onDrop = (event: DragEvent) => {
         y: event.clientY - top,
     });
 
-    const { element, type, source } = editorStore.draggedElement;
+    const { element, type } = editorStore.draggedElement;
 
     saveState();
 
     if(type === 'sideAction') addPage(position, element as SideAction[]);
     else if(type === 'nodeElement') {
         createPageFromContent(position, element as NodeElement);
-
-        setTimeout(() => removeContentFromPage(source.index, source.parentId, true), 0);
     }
 
 };
