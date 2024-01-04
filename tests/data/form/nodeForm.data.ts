@@ -6,22 +6,22 @@ const epocForm: TestForm = {
         {
             label: 'Edition',
             value: '2023',
-            type: 'text'
+            type: 'text',
         },
         {
             label: 'Titre',
             value: 'ePoc test',
-            type: 'text'
+            type: 'text',
         },
         {
             label: 'Présentation',
             value: 'Cet ePoc à été généré automatiquement',
-            type: 'html'
+            type: 'html',
         },
         {
-            label: 'Nombre de badge pour obtenir l\'attestation',
+            label: "Nombre de badge pour obtenir l'attestation",
             value: '5',
-            type: 'score'
+            type: 'score',
         },
         {
             id: 'authors',
@@ -32,42 +32,42 @@ const epocForm: TestForm = {
                         {
                             label: 'Nom',
                             value: 'Jean Dupont',
-                            type: 'text'
+                            type: 'text',
                         },
                         {
                             label: 'Titre',
                             value: 'Professeur',
-                            type: 'text'
+                            type: 'text',
                         },
                         {
                             label: 'description',
                             value: 'Titulaire de la chaire de physique quantique',
-                            type: 'html'
-                        }
-                    ]
+                            type: 'html',
+                        },
+                    ],
                 },
                 {
                     value: [
                         {
                             label: 'Nom',
                             value: 'Jeanne Dupont',
-                            type: 'text'
+                            type: 'text',
                         },
                         {
                             label: 'Titre',
                             value: 'Chercheuse',
-                            type: 'text'
+                            type: 'text',
                         },
                         {
                             label: 'description',
                             value: 'Membre du laboratoire de physique quantique',
-                            type: 'html'
-                        }
-                    ]
-                }
-            ]
+                            type: 'html',
+                        },
+                    ],
+                },
+            ],
         },
-    ]
+    ],
 };
 
 const chapterForm: TestForm = {
@@ -76,9 +76,9 @@ const chapterForm: TestForm = {
         {
             label: 'Titre',
             value: 'Chapitre test',
-            type: 'text'
-        }
-    ]
+            type: 'text',
+        },
+    ],
 };
 
 const pageForm: TestForm = {
@@ -87,24 +87,24 @@ const pageForm: TestForm = {
         {
             label: 'Titre',
             value: 'Titre test',
-            type: 'text'
+            type: 'text',
         },
         {
             label: 'Sous-titre',
             value: 'Sous-titre test',
-            type: 'text'
+            type: 'text',
         },
         {
             label: 'Caché dans la table des matières',
             value: true,
-            type: 'checkbox'
+            type: 'checkbox',
         },
         {
-            label: 'Ne s\'affiche qu\'a certaines conditions',
+            label: "Ne s'affiche qu'a certaines conditions",
             value: true,
-            type: 'checkbox'
-        }
-    ]
+            type: 'checkbox',
+        },
+    ],
 };
 
 const activityForm: TestForm = {
@@ -113,29 +113,29 @@ const activityForm: TestForm = {
         {
             label: 'Titre',
             value: 'Titre test',
-            type: 'text'
+            type: 'text',
         },
         {
             label: 'Sous-titre',
             value: 'Sous-titre test',
-            type: 'text'
+            type: 'text',
         },
         {
             label: 'Résumé',
             value: 'Résumé test',
-            type: 'textarea'
+            type: 'textarea',
         },
         {
             label: 'Caché dans la table des matières',
             value: true,
-            type: 'checkbox'
+            type: 'checkbox',
         },
         {
-            label: 'Ne s\'affiche qu\'a certaines conditions',
+            label: "Ne s'affiche qu'a certaines conditions",
             value: true,
-            type: 'checkbox'
-        }
-    ]
+            type: 'checkbox',
+        },
+    ],
 };
 
 export const nodeForms = [epocForm, chapterForm, pageForm, activityForm];

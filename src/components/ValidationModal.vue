@@ -1,4 +1,4 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useEditorStore } from '../shared/stores';
 import { deleteSelectedNodes } from '../shared/services/graph';
@@ -16,7 +16,6 @@ function confirmDelete() {
     saveState();
     deleteSelectedNodes();
 }
-
 </script>
 
 <template>
@@ -31,7 +30,9 @@ function confirmDelete() {
             <h3>Souhaitez-vous vraiment supprimer cet élément ?</h3>
             <button class="btn btn-close" @click="editorStore.validationModal = false"><i class="icon-x"></i></button>
             <button class="btn-choice accept" @click="confirmDelete">OUI, SUPPRIMER</button>
-            <button class="btn-choice cancel" @click="editorStore.validationModal = false">NON, NE PAS SUPPRIMER</button>
+            <button class="btn-choice cancel" @click="editorStore.validationModal = false">
+                NON, NE PAS SUPPRIMER
+            </button>
         </div>
     </div>
 </template>
@@ -83,7 +84,7 @@ h3 {
         border: 1px solid var(--inria-grey);
     }
     &.accept {
-        background-color: #E93100;
+        background-color: #e93100;
         color: #fff;
     }
 }

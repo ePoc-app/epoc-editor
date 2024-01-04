@@ -13,7 +13,7 @@ module.exports.createSplashWindow = function () {
         frame: false,
         alwaysOnTop: true,
         resizable: false,
-        transparent: true
+        transparent: true,
     });
 
     splashWindow.loadFile(
@@ -22,13 +22,12 @@ module.exports.createSplashWindow = function () {
             : `${path.join(__dirname, '../../dist/splash.html')}`
     );
     splashWindow.center();
-    const appInfo = isDev ? {
-        version: app.getVersion(),
-        buildNumber: 'dev'
-    } : require('../../dist/appInfo.json');
+
+    const appInfo = isDev ? { version: app.getVersion(), buildNumber: 'dev' } : require('../../dist/appInfo.json');
     splashWindow.webContents.executeJavaScript(`
         document.getElementById('appVersion').innerHTML = "v${appInfo.version}"
         document.getElementById('buildVersion').innerHTML = "(${appInfo.buildNumber})"
     `);
+
     return splashWindow;
 };

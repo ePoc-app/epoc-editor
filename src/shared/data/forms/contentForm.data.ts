@@ -14,11 +14,11 @@ export const textForm: Form = {
                     type: 'html',
                     label: 'Résumé',
                     value: '',
-                    placeholder: 'Saisissez un résumé...'
-                }
+                    placeholder: 'Saisissez un résumé...',
+                },
             ],
-        }
-    ]
+        },
+    ],
 };
 
 export const videoForm: Form = {
@@ -35,14 +35,14 @@ export const videoForm: Form = {
                     label: 'Vidéo',
                     placeholder: 'Ajouter une vidéo',
                     value: '',
-                    accept: '.mp4'
+                    accept: '.mp4',
                 },
                 {
                     id: 'summary',
                     type: 'html',
                     label: 'Résumé',
                     value: '',
-                    placeholder: 'Saisissez...'
+                    placeholder: 'Saisissez...',
                 },
                 {
                     id: 'transcript',
@@ -50,7 +50,7 @@ export const videoForm: Form = {
                     label: 'Transcription',
                     value: '',
                     placeholder: 'Ajouter une transcription',
-                    accept: '.txt,.vtt'
+                    accept: '.txt,.vtt',
                 },
                 {
                     id: 'poster',
@@ -58,9 +58,9 @@ export const videoForm: Form = {
                     label: 'Vignette',
                     value: '',
                     placeholder: 'Ajouter une vignette',
-                    accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp'
-                }
-            ]
+                    accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
+                },
+            ],
         },
         {
             name: 'Sous-titres',
@@ -76,7 +76,7 @@ export const videoForm: Form = {
                             type: 'text',
                             label: 'Nom de la langue',
                             value: '',
-                            placeholder: 'English'
+                            placeholder: 'English',
                         },
                         {
                             id: 'lang',
@@ -91,13 +91,13 @@ export const videoForm: Form = {
                             label: 'Fichier',
                             value: '',
                             placeholder: 'Ajouter des sous-titres',
-                            accept: '.vtt'
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
+                            accept: '.vtt',
+                        },
+                    ],
+                },
+            ],
+        },
+    ],
 };
 
 export const audioForm: Form = {
@@ -122,7 +122,7 @@ export const audioForm: Form = {
                     label: 'Transcription',
                     value: '',
                     placeholder: 'Ajouter une transcription',
-                    accept: '.txt,.vtt'
+                    accept: '.txt,.vtt',
                 },
                 {
                     id: 'poster',
@@ -130,7 +130,7 @@ export const audioForm: Form = {
                     label: 'Vignette',
                     value: '',
                     placeholder: 'Ajouter une vignette',
-                    accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp'
+                    accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
                 },
                 {
                     id: 'subtitles',
@@ -138,11 +138,11 @@ export const audioForm: Form = {
                     label: 'Sous-titres',
                     value: '',
                     placeholder: 'Ajouter des sous-titres',
-                    accept: '.vtt'
-                }
-            ]
-        }
-    ]
+                    accept: '.vtt',
+                },
+            ],
+        },
+    ],
 };
 
 export const elementForms: Form[] = [textForm, videoForm, audioForm];

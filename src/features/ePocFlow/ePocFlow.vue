@@ -10,7 +10,7 @@ import {
     NodeChange,
     EdgeUpdateEvent,
     EdgeMouseEvent,
-    EdgeMarker
+    EdgeMarker,
 } from '@vue-flow/core';
 
 import { markRaw, onMounted } from 'vue';
@@ -22,12 +22,17 @@ import ChapterNode from './nodes/ChapterNode.vue';
 import ePocNode from './nodes/ePocNode.vue';
 import AddChapterNode from './nodes/AddChapterNode.vue';
 import { NodeElement, SideAction } from '@/src/shared/interfaces';
-import { addPage, createPageFromContent, removeContentFromPage, graphCopy, getSelectedNodes } from '@/src/shared/services/graph';
+import {
+    addPage,
+    createPageFromContent,
+    removeContentFromPage,
+    graphCopy,
+    getSelectedNodes,
+} from '@/src/shared/services/graph';
 import { saveState, saveGivenState, getCurrentState } from '@/src/shared/services/undoRedo.service';
 import { closeFormPanel, graphService } from '@/src/shared/services';
 
-const { vueFlowRef, project, updateEdge, edges, nodes, findNode, setTransform }  = useVueFlow({ id: 'main' });
-
+const { vueFlowRef, project, updateEdge, edges, nodes, findNode, setTransform } = useVueFlow({ id: 'main' });
 
 const editorStore = useEditorStore();
 const graphStore = useGraphStore();
@@ -37,13 +42,13 @@ const nodeTypes = {
     page: markRaw(PageNode),
     chapter: markRaw(ChapterNode),
     epoc: markRaw(ePocNode),
-    add: markRaw(AddChapterNode), 
+    add: markRaw(AddChapterNode),
 };
 
 const onDrop = (event: DragEvent) => {
     document.body.classList.remove('cursor-allowed', 'cursor-not-allowed');
 
-    if(!editorStore.draggedElement) return;
+    if (!editorStore.draggedElement) return;
 
     const { left, top } = vueFlowRef.value.getBoundingClientRect();
 
@@ -56,18 +61,17 @@ const onDrop = (event: DragEvent) => {
 
     saveState();
 
-    if(type === 'sideAction') addPage(position, element as SideAction[]);
-    else if(type === 'nodeElement') {
+    if (type === 'sideAction') addPage(position, element as SideAction[]);
+    else if (type === 'nodeElement') {
         createPageFromContent(position, element as NodeElement);
     }
-
 };
 
 onMounted(() => {
     graphStore.restore();
 });
 
-function onEdgeClick (event: EdgeMouseEvent) {
+function onEdgeClick(event: EdgeMouseEvent) {
     const marker = event.edge.markerEnd as EdgeMarker;
     // watch property changed to change color back
     Object.defineProperty(event.edge, 'selected', {
@@ -77,7 +81,7 @@ function onEdgeClick (event: EdgeMouseEvent) {
         set(newValue) {
             this._selected = newValue !== false;
             marker.color = this._selected ? '#00B3E9' : '#384257';
-        }
+        },
     });
 }
 
@@ -97,7 +101,7 @@ function update(event: EdgeUpdateEvent) {
 function nodeChange(event: NodeChange[]) {
     const { type } = event[0];
 
-    if(type === 'remove') closeFormPanel();
+    if (type === 'remove') closeFormPanel();
 }
 
 function onDragOver() {
@@ -108,23 +112,18 @@ function connect(event: Connection) {
     const targetNode = findNode(event.target);
     const sourceNode = findNode(event.source);
 
-    if(event.source === event.target) {
+    if (event.source === event.target) {
         const currentEdge = edges.value.find((edge) => edge.target === targetNode.id && edge.source === sourceNode.id);
-        applyEdgeChanges(
-            [{ id: currentEdge.id, type: 'remove' }],
-            edges.value
-        );
+        applyEdgeChanges([{ id: currentEdge.id, type: 'remove' }], edges.value);
         return false;
     }
 
-    const otherEdge = getConnectedEdges([targetNode], edges.value).find((edge) => edge.target === targetNode.id && edge.source !== sourceNode.id);
+    const otherEdge = getConnectedEdges([targetNode], edges.value).find(
+        (edge) => edge.target === targetNode.id && edge.source !== sourceNode.id,
+    );
 
-
-    if(otherEdge) {
-        applyEdgeChanges(
-            [{ id: otherEdge.id, type: 'remove' }],
-            edges.value
-        );
+    if (otherEdge) {
+        applyEdgeChanges([{ id: otherEdge.id, type: 'remove' }], edges.value);
     }
 
     saveGivenState(savedState);
@@ -133,37 +132,37 @@ function connect(event: Connection) {
 function nodeDrag(event: NodeDragEvent) {
     const { node } = event;
 
-    if(node.type !== 'chapter') return;
+    if (node.type !== 'chapter') return;
 
     const MIN_DISTANCE = 128;
     const epocNode = findNode('1');
-    const chapters = nodes.value.filter(n => n.type === 'chapter');
-    const draggedIndex = chapters.findIndex(n => n.id === node.id);
+    const chapters = nodes.value.filter((n) => n.type === 'chapter');
+    const draggedIndex = chapters.findIndex((n) => n.id === node.id);
     const min = epocNode.position.y + epocNode.dimensions.height + 32 + draggedIndex * MIN_DISTANCE;
 
     node.position.x = 0;
 
-    if(node.position.y < min) node.position.y = min;
+    if (node.position.y < min) node.position.y = min;
 
     const addChapterNode = findNode('2');
-    
-    if(draggedIndex === chapters.length - 1) addChapterNode.position.y = node.position.y + 125;
-    
+
+    if (draggedIndex === chapters.length - 1) addChapterNode.position.y = node.position.y + 125;
+
     // Push up the nodes above the dragged node
-    for(let i = draggedIndex - 1; i >= 0; i--) {
+    for (let i = draggedIndex - 1; i >= 0; i--) {
         const prevNode = chapters[i];
         const nextNodeMinY = node.position.y - MIN_DISTANCE * (draggedIndex - i);
-        if(prevNode.position.y > nextNodeMinY) prevNode.position.y = nextNodeMinY;
+        if (prevNode.position.y > nextNodeMinY) prevNode.position.y = nextNodeMinY;
     }
 
     // Push down the nodes below the dragged node
-    for(let i = draggedIndex + 1; i < chapters.length; i ++) {
+    for (let i = draggedIndex + 1; i < chapters.length; i++) {
         const nextNode = chapters[i];
         const nextNodeMaxY = node.position.y + MIN_DISTANCE * (i - draggedIndex);
 
-        if(nextNode.position.y < nextNodeMaxY) nextNode.position.y = nextNodeMaxY;
+        if (nextNode.position.y < nextNodeMaxY) nextNode.position.y = nextNodeMaxY;
 
-        if(i === chapters.length - 1) addChapterNode.position.y = nextNode.position.y + 125;
+        if (i === chapters.length - 1) addChapterNode.position.y = nextNode.position.y + 125;
     }
 }
 
@@ -173,17 +172,16 @@ function onDragStart(event: NodeDragEvent) {
     const mouseEvent = event.event as MouseEvent;
     const { x, y } = mouseEvent;
     startPos = { x, y };
-    
+
     savedState = getCurrentState();
 }
 
 function onDragEnd(event: NodeDragEvent) {
-
     const mouseEvent = event.event as MouseEvent;
     const { x, y } = mouseEvent;
 
-    if(startPos.x === x && startPos.y === y) return;
-    
+    if (startPos.x === x && startPos.y === y) return;
+
     saveGivenState(savedState);
 
     savedState = '';
@@ -201,8 +199,8 @@ function onConnectEnd() {
 function onKeyDown(event: KeyboardEvent) {
     const { key, metaKey, ctrlKey } = event;
 
-    if(metaKey || ctrlKey) {
-        if(key === 'c') graphCopy();
+    if (metaKey || ctrlKey) {
+        if (key === 'c') graphCopy();
     }
 }
 
@@ -211,7 +209,7 @@ function onContextMenu(event: MouseEvent) {
         x: event.clientX,
         y: event.clientY,
     });
-    
+
     graphService.openContextMenu('flow', { position });
 }
 
@@ -223,16 +221,15 @@ function onSelectionContextMenu() {
 function onPaneReady() {
     setTransform({ x: 32, y: 32, zoom: 1 });
 }
-
 </script>
 
 <template>
     <VueFlow
         v-model="graphStore.elements"
         auto-connect
-        :default-zoom=".75"
+        :default-zoom="0.75"
         :max-zoom="1.5"
-        :min-zoom=".4"
+        :min-zoom="0.4"
         :node-types="nodeTypes"
         :connection-mode="ConnectionMode.Strict"
         :connection-radius="50"
@@ -275,7 +272,7 @@ function onPaneReady() {
             <AddChapterNode :id="id" :data="data" />
         </template>
         <template #connection-line="{ sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition }">
-            <CustomConnectContent 
+            <CustomConnectContent
                 :source-x="sourceX"
                 :source-y="sourceY"
                 :targetX="targetX"

@@ -4,7 +4,7 @@ import {
     createLinkedPage,
     getElementByContentId,
     setEpocNodeData,
-    setPageContents
+    setPageContents,
 } from '@/src/shared/services/graph';
 import { generateId } from '@/src/shared/services/graph.service';
 import { questions, standardPages } from '@/src/shared/data';
@@ -14,14 +14,14 @@ import { Node } from '@vue-flow/core';
 import { Badge } from '@/src/shared/interfaces';
 
 const mapType = {
-    'video': standardPages.find(s => s.type === 'video'),
-    'html': standardPages.find(s => s.type === 'text'),
-    'multiple-choice': questions.find(s => s.type === 'choice'),
-    'choice': questions.find(s => s.type === 'choice'),
-    'drag-and-drop': questions.find(s => s.type === 'drag-and-drop'),
-    'dropdown-list': questions.find(s => s.type === 'dropdown-list'),
-    'swipe': questions.find(s => s.type === 'swipe'),
-    'reorder': questions.find(s => s.type === 'reorder')
+    video: standardPages.find((s) => s.type === 'video'),
+    html: standardPages.find((s) => s.type === 'text'),
+    'multiple-choice': questions.find((s) => s.type === 'choice'),
+    choice: questions.find((s) => s.type === 'choice'),
+    'drag-and-drop': questions.find((s) => s.type === 'drag-and-drop'),
+    'dropdown-list': questions.find((s) => s.type === 'dropdown-list'),
+    swipe: questions.find((s) => s.type === 'swipe'),
+    reorder: questions.find((s) => s.type === 'reorder'),
 };
 
 export function createGraphEpocFromData(epoc: EpocV1) {
@@ -31,13 +31,13 @@ export function createGraphEpocFromData(epoc: EpocV1) {
         let currentNode = addChapter(chapterId, chapter, maxContentHeight);
         maxContentHeight = 0;
         for (const contentId of chapter.contents) {
-            let type : 'activity'|'page' = 'page';
+            let type: 'activity' | 'page' = 'page';
             const content = epoc.contents[contentId];
             const id = generateId();
             const action = {
                 icon: '',
                 type: '',
-                label: ''
+                label: '',
             };
             const contentElements = [];
             const contentElement = {
@@ -45,10 +45,10 @@ export function createGraphEpocFromData(epoc: EpocV1) {
                 action: action,
                 formType: mapType[content.type]?.type,
                 formValues: {
-                    ...content
+                    ...content,
                 },
                 parentId: id,
-                contentId
+                contentId,
             };
             const title = content.title;
             const subtitle = content.subtitle;
@@ -66,7 +66,7 @@ export function createGraphEpocFromData(epoc: EpocV1) {
                 const contentElement = newQuestion(epoc, id, qid);
                 contentElements.push(contentElement);
             } else if (content.type === 'choice') {
-                const action = standardPages.find(s => s.type === 'legacy-condition');
+                const action = standardPages.find((s) => s.type === 'legacy-condition');
                 const choiceResolver = (content as ChoiceCondition).conditionResolver;
                 const contentElement = {
                     id: generateId(),
@@ -74,15 +74,18 @@ export function createGraphEpocFromData(epoc: EpocV1) {
                     formType: 'legacy-condition',
                     formValues: {
                         label: choiceResolver.label,
-                        choices: choiceResolver.choices.map(c => c.label),
-                        conditionalFlag: choiceResolver.conditionalFlag.flatMap(cf => {
-                            return cf.flags.map(f => {
-                                return {id: f, choice: choiceResolver.choices.find(c => c.value === cf.value).label};
+                        choices: choiceResolver.choices.map((c) => c.label),
+                        conditionalFlag: choiceResolver.conditionalFlag.flatMap((cf) => {
+                            return cf.flags.map((f) => {
+                                return {
+                                    id: f,
+                                    choice: choiceResolver.choices.find((c) => c.value === cf.value).label,
+                                };
                             });
-                        })
+                        }),
                     },
                     parentId: id,
-                    contentId
+                    contentId,
                 };
                 contentElements.push(contentElement);
             } else {
@@ -91,9 +94,20 @@ export function createGraphEpocFromData(epoc: EpocV1) {
                 contentElement.action.label = mapType[content.type].label;
                 contentElements.push(contentElement);
             }
-            currentNode = createLinkedPage(currentNode, type, contentElements, title, subtitle, id, hidden, conditional, contentId, summary);
+            currentNode = createLinkedPage(
+                currentNode,
+                type,
+                contentElements,
+                title,
+                subtitle,
+                id,
+                hidden,
+                conditional,
+                contentId,
+                summary,
+            );
             const contentHeight = (contentElements.length - 1) * 60;
-            maxContentHeight =  contentHeight > maxContentHeight ? contentHeight : maxContentHeight;
+            maxContentHeight = contentHeight > maxContentHeight ? contentHeight : maxContentHeight;
         }
     }
 
@@ -105,10 +119,10 @@ export function createGraphEpocFromData(epoc: EpocV1) {
 // to translate v1 badges to v2
 const contentVerbs = ['read', 'played', 'watched', 'listened'];
 function setBadgesData(badges: Record<string, Badge>) {
-    for(const badgeKey in badges) {
+    for (const badgeKey in badges) {
         const conditions = getConditions(badges[badgeKey]);
         conditions.forEach((condition, index) => {
-            if(contentVerbs.includes(condition.verb)) {
+            if (contentVerbs.includes(condition.verb)) {
                 const node = getElementByContentId(condition.element) as Node;
 
                 // only 1 element per page in v1
@@ -129,48 +143,48 @@ function newQuestion(epoc: any, id: string, qid: string) {
     return {
         id: generateId(),
         action: {
-            icon:mapType[question.type].icon,
-            type:mapType[question.type].type,
-            label:mapType[question.type].label
+            icon: mapType[question.type].icon,
+            type: mapType[question.type].type,
+            label: mapType[question.type].label,
         },
         formType: mapType[question.type].type,
         formValues: {
-            ...setQuestionData(mapType[question.type].type, question)
+            ...setQuestionData(mapType[question.type].type, question),
         },
         parentId: id,
-        contentId: qid
+        contentId: qid,
     };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function setQuestionData(type: string, question: any) {
-    const questionData : {
-        label: string,
-        statement: string,
-        explanation: string,
-        score: number,
-        responses: {label:string, value: string, category?:string, isCorrect?:boolean}[],
-        categories?: string[]
+    const questionData: {
+        label: string;
+        statement: string;
+        explanation: string;
+        score: number;
+        responses: { label: string; value: string; category?: string; isCorrect?: boolean }[];
+        categories?: string[];
     } = {
         label: question.label,
         statement: question.statement,
         explanation: question.explanation,
         score: question.score,
-        responses: []
+        responses: [],
     };
 
     if (type === 'choice') {
-        questionData.responses = question.responses.map(r => {
+        questionData.responses = question.responses.map((r) => {
             return {
                 ...r,
-                isCorrect: question.correctResponse.includes(r.value)
+                isCorrect: question.correctResponse.includes(r.value),
             };
         });
     } else if (type === 'swipe' || type === 'drag-and-drop' || type === 'dropdown-list') {
         questionData.responses = question.responses.map((response) => {
             return {
                 ...response,
-                category: question.correctResponse.find(cat => cat.values.includes(response.value)).label
+                category: question.correctResponse.find((cat) => cat.values.includes(response.value)).label,
             };
         });
         questionData.categories = question.correctResponse.map((cat) => {

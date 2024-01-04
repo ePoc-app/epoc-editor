@@ -6,7 +6,6 @@ const store = require('./store');
 const Store = require('electron-store');
 const electronStore = new Store();
 
-
 /**
  * Create the app main window
  * @returns {Electron.CrossProcessExports.BrowserWindow}
@@ -18,17 +17,17 @@ module.exports.createMainWindow = function () {
         icon: 'favicon.png',
         width: 1500,
         height: 1200,
-        'minHeight': 400,
-        'minWidth': 800,
+        minHeight: 400,
+        minWidth: 800,
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
             preload: path.join(__dirname, '../preload.js'),
-            partition: `persist:${Math.random()}`
+            partition: `persist:${Math.random()}`,
         },
     });
 
-    if(electronStore.get('spellcheck') === undefined) electronStore.set('spellcheck', true);
+    if (electronStore.get('spellcheck') === undefined) electronStore.set('spellcheck', true);
     mainWindow.webContents.session.setSpellCheckerEnabled(electronStore.get('spellcheck'));
 
     mainWindow.on('focus', () => {
@@ -36,13 +35,11 @@ module.exports.createMainWindow = function () {
     });
 
     // load the index.html of the app.
-    mainWindow.loadURL(
-        isDev
-            ? 'http://localhost:8000'
-            : `file://${path.join(__dirname, '../../dist/index.html')}`
-    ).then();
+    mainWindow
+        .loadURL(isDev ? 'http://localhost:8000' : `file://${path.join(__dirname, '../../dist/index.html')}`)
+        .then();
     mainWindow.center();
-    
+
     store.state.projects[mainWindow.id] = {};
 
     return mainWindow;
@@ -60,7 +57,7 @@ module.exports.setupWindow = function (window, filepath) {
         console.error('Failed to register protocol:', error);
     }
 
-    const windowsUrl= [
+    const windowsUrl = [
         `file:///${encodeURI(path.join(__dirname, '../../dist/assets/').replaceAll('\\', '/'))}*`,
         `file:///${encodeURI(path.join(__dirname, '../../dist/images/').replaceAll('\\', '/'))}*`,
         `file:///${encodeURI(path.join(__dirname, '../../dist/videos/').replaceAll('\\', '/'))}*`,
@@ -79,13 +76,13 @@ module.exports.setupWindow = function (window, filepath) {
             'http://localhost:8000/images/*',
             'http://localhost:8000/videos/*',
 
-            ...(process.platform === 'win32' ? windowsUrl : posixUrl)
-        ]
+            ...(process.platform === 'win32' ? windowsUrl : posixUrl),
+        ],
     };
-    
+
     window.webContents.session.webRequest.onBeforeRequest(filter, (details, callback) => {
-        const assetsFolder = ['assets/', 'images/', 'videos/'].find(folder => details.url.includes(folder));
-        const isAppFile = ['.js', '.css', '.html', '.ttf'].some(ext => details.url.includes(ext));
+        const assetsFolder = ['assets/', 'images/', 'videos/'].find((folder) => details.url.includes(folder));
+        const isAppFile = ['.js', '.css', '.html', '.ttf'].some((ext) => details.url.includes(ext));
         if (window.webContents.id === details.webContents.id && !isAppFile && assetsFolder) {
             const filepath = details.url.split(assetsFolder)[1];
             return callback({ redirectURL: `assets://${assetsFolder}${filepath}` });
@@ -94,7 +91,9 @@ module.exports.setupWindow = function (window, filepath) {
     });
 
     if (filepath) {
-        window.webContents.send('epocProjectPicked', JSON.stringify({name: null, modified: null, filepath: filepath, workdir: null}));
+        window.webContents.send(
+            'epocProjectPicked',
+            JSON.stringify({ name: null, modified: null, filepath: filepath, workdir: null })
+        );
     }
-
 };

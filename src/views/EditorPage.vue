@@ -4,7 +4,7 @@ import ePocFlow from '@/src/features/ePocFlow/ePocFlow.vue';
 import SideBar from '@/src/features/sideBar/SideBar.vue';
 import ResizablePanel from '@/src/features/forms/ResizablePanel.vue';
 import ValidationModal from '../components/ValidationModal.vue';
-import ConditionModal  from '@/src/features/badge/components/ConditionModal.vue';
+import ConditionModal from '@/src/features/badge/components/ConditionModal.vue';
 import IconModal from '@/src/features/badge/components/IconModal.vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { editorService, exitSelectNodeMode } from '@/src/shared/services';
@@ -20,18 +20,18 @@ editorService.setup();
 function addDeleteEvent(event: KeyboardEvent) {
     const { key, metaKey, ctrlKey } = event;
 
-    if ((key === 'Backspace' || key === 'Delete')) {
-        if((event.target as HTMLElement).className.indexOf('vue-flow') !== -1 || event.target === document.body) {
+    if (key === 'Backspace' || key === 'Delete') {
+        if ((event.target as HTMLElement).className.indexOf('vue-flow') !== -1 || event.target === document.body) {
             event.stopPropagation();
             confirmDelete();
         }
     }
-   
-    if(metaKey || ctrlKey) {
-        if(key === 'v') {
+
+    if (metaKey || ctrlKey) {
+        if (key === 'v') {
             event.preventDefault();
             saveState();
-            graphPaste(); 
+            graphPaste();
         }
     }
 }
@@ -39,7 +39,7 @@ function addDeleteEvent(event: KeyboardEvent) {
 function addEscapeEvent(event: KeyboardEvent) {
     const { key } = event;
 
-    if(key === 'Escape' && editorStore.selectNodeMode) {
+    if (key === 'Escape' && editorStore.selectNodeMode) {
         event.stopPropagation();
         exitSelectNodeMode();
     }
@@ -75,8 +75,7 @@ function onRemoveCursor() {
     document.body.classList.remove('cursor-not-allowed', 'cursor-allowed');
 }
 
-const editorDisplay = computed(() => editorStore.selectNodeMode ? 'editor-flex' : 'editor-grid');
-
+const editorDisplay = computed(() => (editorStore.selectNodeMode ? 'editor-flex' : 'editor-grid'));
 </script>
 
 <template>
@@ -92,13 +91,15 @@ const editorDisplay = computed(() => editorStore.selectNodeMode ? 'editor-flex' 
         <TopBar v-if="!editorStore.selectNodeMode" class="top-bar" @dragover="onCursorNotAllowed" />
         <div v-if="editorStore.selectNodeMode" class="flex-information">
             <h4>Cliquer sur l'élément de contenu concerné par la condition pour la sélectionner</h4>
-            <button class="btn btn-top-bar" @click="exitSelectNodeMode()">
-                Annuler
-            </button>
+            <button class="btn btn-top-bar" @click="exitSelectNodeMode()">Annuler</button>
         </div>
         <ePocFlow class="editor-content" @dragover="onCursorAllowed" />
         <Transition>
-            <ResizablePanel v-if="editorStore.formPanel.form && !editorStore.selectNodeMode" class="formPanel" @dragover="onCursorNotAllowed" />
+            <ResizablePanel
+                v-if="editorStore.formPanel.form && !editorStore.selectNodeMode"
+                class="formPanel"
+                @dragover="onCursorNotAllowed"
+            />
         </Transition>
         <ValidationModal v-if="editorStore.validationModal" />
         <ConditionModal v-if="editorStore.conditionModal && !editorStore.selectNodeMode" />
@@ -109,12 +110,12 @@ const editorDisplay = computed(() => editorStore.selectNodeMode ? 'editor-flex' 
 <style scoped lang="scss">
 .v-enter-active,
 .v-leave-active {
-  transition: opacity 0.5s ease;
+    transition: opacity 0.5s ease;
 }
 
 .v-enter-from,
 .v-leave-to {
-  opacity: 0;
+    opacity: 0;
 }
 
 .editor-grid {
@@ -138,10 +139,9 @@ const editorDisplay = computed(() => editorStore.selectNodeMode ? 'editor-flex' 
         grid-column: 2;
         margin: auto;
     }
-
 }
 
-.editor-flex{
+.editor-flex {
     display: flex;
     flex-direction: column;
     height: 100%;

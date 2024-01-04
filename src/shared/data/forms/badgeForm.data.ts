@@ -19,22 +19,22 @@ export const customBadgeForm: Form = {
                 {
                     id: 'icon',
                     type: 'icon-picker',
-                    label: 'Icône de couverture', 
+                    label: 'Icône de couverture',
                     value: '',
-                    placeholder: 'Modifier l\'icône',
+                    placeholder: "Modifier l'icône",
                 },
-            ]
+            ],
         },
         {
-            name: 'Conditions d\'obtention du badge',
+            name: "Conditions d'obtention du badge",
             inputs: [
                 {
-                    id:'conditions',
+                    id: 'conditions',
                     type: 'badge-conditions',
                     label: '',
                     value: [],
                 },
-            ]
+            ],
         },
         {
             name: 'Présentation du badge',
@@ -45,10 +45,10 @@ export const customBadgeForm: Form = {
                     label: '',
                     value: '',
                     placeholder: 'Saisissez une présentation du badge',
-                }
-            ]
-        }
-    ]
+                },
+            ],
+        },
+    ],
 };
 
 export const badgeForms: Form[] = [customBadgeForm];

@@ -26,9 +26,9 @@ contextBridge.exposeInMainWorld('api', {
         //     ipcRenderer.on(channel, (event, ...args) => func(...args));
         // }
         ipcRenderer.once(channel, (event, ...args) => func(...args));
-    }
+    },
 });
 
 contextBridge.exposeInMainWorld('env', {
-    isDev: process.env.IS_DEV === 'true'
+    isDev: process.env.IS_DEV === 'true',
 });

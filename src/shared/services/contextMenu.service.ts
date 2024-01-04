@@ -1,6 +1,22 @@
 import { standardActions } from '../data';
 import { ApiInterface } from '../interfaces/api.interface';
-import { addChapter, addContentToPage, addPage, deleteContent, deleteNode, deleteSelection, duplicatePage, graphCopy, graphPaste, insertAfter, insertAtEnd, insertAtStart, insertBefore, unselectAllContents, unselectAllNodes } from './graph';
+import {
+    addChapter,
+    addContentToPage,
+    addPage,
+    deleteContent,
+    deleteNode,
+    deleteSelection,
+    duplicatePage,
+    graphCopy,
+    graphPaste,
+    insertAfter,
+    insertAtEnd,
+    insertAtStart,
+    insertBefore,
+    unselectAllContents,
+    unselectAllNodes,
+} from './graph';
 import { useVueFlow } from '@vue-flow/core';
 import { saveState } from './undoRedo.service';
 
@@ -35,119 +51,118 @@ const extendedApi: ExtendedApiInterface = {
     receiveOnce: (channel: string, callback: (...args: any[]) => void) => {
         api.receiveOnce(channel, callback);
     },
-    beforeEachReceive: beforeEachReceive
+    beforeEachReceive: beforeEachReceive,
 };
 
 export function setupContextMenu() {
     if (initialized) return;
-    
+
     extendedApi.receive('addPage', (data: string) => {
-        const parsedData: { type: string, position: { x: number, y: number } } = JSON.parse(data);
+        const parsedData: { type: string; position: { x: number; y: number } } = JSON.parse(data);
         const { type, position } = parsedData;
 
-        const action = standardActions.find(a => a.type === type);
+        const action = standardActions.find((a) => a.type === type);
 
         addPage(position, [action]);
     });
-    
+
     extendedApi.receive('addChapter', () => {
         addChapter();
     });
-    
+
     extendedApi.receive('deleteNode', (data: string) => {
         const parsedData: { id: string } = JSON.parse(data);
         const { id } = parsedData;
 
         deleteNode(id);
     });
-    
+
     extendedApi.receive('duplicatePage', (data: string) => {
         const parsedData: { id: string } = JSON.parse(data);
         const { id } = parsedData;
-       
+
         duplicatePage(id);
     });
-    
+
     extendedApi.receive('addContent', (data: string) => {
-        const parsedData: { type: string, id: string } = JSON.parse(data);
+        const parsedData: { type: string; id: string } = JSON.parse(data);
         const { type, id } = parsedData;
 
-        const action = standardActions.find(a => a.type === type);
+        const action = standardActions.find((a) => a.type === type);
         addContentToPage(id, action);
     });
-    
+
     extendedApi.receive('deleteContent', (data: string) => {
-        const parsedData: { pageId: string, id: string } = JSON.parse(data);
+        const parsedData: { pageId: string; id: string } = JSON.parse(data);
         const { pageId, id } = parsedData;
 
         deleteContent(pageId, id);
     });
-    
+
     extendedApi.receive('insertAfter', (data: string) => {
-        const parsedData: { id: string, type: string } = JSON.parse(data);
+        const parsedData: { id: string; type: string } = JSON.parse(data);
         const { id, type } = parsedData;
-        
-        const action = standardActions.find(a => a.type === type);
+
+        const action = standardActions.find((a) => a.type === type);
         insertAfter(id, action);
-    }); 
+    });
 
     extendedApi.receive('insertBefore', (data: string) => {
-        const parsedData: { id: string, type: string } = JSON.parse(data);
-        const { id, type } = parsedData;
-        
-        const action = standardActions.find(a => a.type === type);
-        insertBefore(id, action);
-    });
-    
-    extendedApi.receive('insertAtEnd', (data: string) => {
-        const parsedData: { id: string, type: string } = JSON.parse(data);
-        const { id, type } = parsedData;
-        
-        const action = standardActions.find(a => a.type === type);
-        insertAtEnd(id, action);
-    });
-    
-    extendedApi.receive('insertAtStart', (data: string) => {
-        const parsedData: { id: string, type: string } = JSON.parse(data);
+        const parsedData: { id: string; type: string } = JSON.parse(data);
         const { id, type } = parsedData;
 
-        const action = standardActions.find(a => a.type === type);
+        const action = standardActions.find((a) => a.type === type);
+        insertBefore(id, action);
+    });
+
+    extendedApi.receive('insertAtEnd', (data: string) => {
+        const parsedData: { id: string; type: string } = JSON.parse(data);
+        const { id, type } = parsedData;
+
+        const action = standardActions.find((a) => a.type === type);
+        insertAtEnd(id, action);
+    });
+
+    extendedApi.receive('insertAtStart', (data: string) => {
+        const parsedData: { id: string; type: string } = JSON.parse(data);
+        const { id, type } = parsedData;
+
+        const action = standardActions.find((a) => a.type === type);
         insertAtStart(id, action);
     });
-    
+
     extendedApi.receive('deleteSelection', (data: string) => {
         const parsedData: { selection: string } = JSON.parse(data);
         const selection = JSON.parse(parsedData.selection);
         deleteSelection(selection);
     });
-    
+
     api.receive('copySelection', (data: string) => {
         const parsedData: { selection: string } = JSON.parse(data);
         const selection = JSON.parse(parsedData.selection);
-        
+
         graphCopy(selection);
     });
-    
+
     api.receive('copy', (data: string) => {
         const parsedData: { id: string } = JSON.parse(data);
         const { id } = parsedData;
 
         const copiedNode = findNode(id);
         graphCopy([copiedNode]);
-    }); 
-    
+    });
+
     extendedApi.receive('paste', (data: string) => {
-        const parsedData: { position: { x: number, y: number } } = JSON.parse(data);
+        const parsedData: { position: { x: number; y: number } } = JSON.parse(data);
         const { position } = parsedData;
-        
+
         graphPaste(position);
     });
-    
+
     api.receive('contextMenuClosed', () => {
         unselectAllContents();
         unselectAllNodes();
     });
-    
 
     initialized = true;
 }

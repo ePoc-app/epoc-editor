@@ -8,8 +8,8 @@ const editorStore = useEditorStore();
 function handleKeyDown(event: KeyboardEvent) {
     const { key, metaKey, ctrlKey } = event;
 
-    if(metaKey || ctrlKey) {
-        if(key === 'v') {
+    if (metaKey || ctrlKey) {
+        if (key === 'v') {
             event.stopPropagation();
         }
     }
@@ -25,14 +25,14 @@ function startResize(event: MouseEvent) {
     resizing.value = true;
     window.addEventListener('mousemove', resize);
     window.addEventListener('mouseup', stopResize);
-    if(!panel.value) return;
+    if (!panel.value) return;
 
     startWidth = panel.value.offsetWidth;
     startX = event.clientX;
 }
 
 function resize(event: MouseEvent) {
-    if(!panel.value) return;
+    if (!panel.value) return;
 
     const newWidth = startWidth - (event.clientX - startX);
     panel.value.style.width = `${newWidth}px`;
@@ -50,7 +50,7 @@ function stopResize() {
 const isMaximized = ref(false);
 
 function maximize() {
-    if(!panel.value) return;
+    if (!panel.value) return;
 
     const styles = getComputedStyle(panel.value);
     panel.value.style.width = styles.maxWidth;
@@ -60,7 +60,7 @@ function maximize() {
 }
 
 function minimize() {
-    if(!panel.value) return;
+    if (!panel.value) return;
 
     panel.value.style.width = 'auto';
 
@@ -69,12 +69,11 @@ function minimize() {
 }
 
 onMounted(() => {
-    if(!editorStore.formPanel.width) return;
+    if (!editorStore.formPanel.width) return;
 
     panel.value.style.width = `${editorStore.formPanel.width}px`;
     isMaximized.value = panel.value.getBoundingClientRect().x <= 100;
 });
-
 </script>
 
 <template>
@@ -112,7 +111,7 @@ onMounted(() => {
 
     .resize-handle {
         position: fixed;
-        width: .7rem;
+        width: 0.7rem;
         top: 80px;
         height: calc(100% - 80px);
         cursor: col-resize;

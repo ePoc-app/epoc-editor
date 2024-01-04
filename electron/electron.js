@@ -4,7 +4,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const { createMainWindow, setupWindow } = require('./components/main');
 const { createSplashWindow } = require('./components/splash');
 const { setupIpcListener } = require('./components/ipc');
-const { waitEvent, waitAll, wait} = require('./components/utils');
+const { waitEvent, waitAll, wait } = require('./components/utils');
 const { cleanAllWorkdir } = require('./components/file');
 const { cleanPreview } = require('./components/preview');
 const path = require('path');
@@ -22,7 +22,10 @@ app.on('will-finish-launching', () => {
         filepath = path;
 
         if (mainWindow) {
-            mainWindow.webContents.send('epocProjectPicked', JSON.stringify({name: null, modified: null, filepath: filepath, workdir: null}));
+            mainWindow.webContents.send(
+                'epocProjectPicked',
+                JSON.stringify({ name: null, modified: null, filepath: filepath, workdir: null })
+            );
         }
     });
 });
@@ -32,20 +35,16 @@ autoUpdater.checkForUpdatesAndNotify();
 // This method will be called when Electron has finished initialization and is ready to create browser windows.
 app.whenReady().then(() => {
     mainWindow = createMainWindow();
-    if(!headless) splashWindow = createSplashWindow();
+    if (!headless) splashWindow = createSplashWindow();
 
     setupIpcListener(mainWindow);
 
     // Display splash screen for minimum 2s then display main window
-    waitAll([
-        waitEvent(mainWindow, 'ready-to-show'),
-        wait(200)
-    ]).then(async () => {
-        if(!headless) {
+    waitAll([waitEvent(mainWindow, 'ready-to-show'), wait(200)]).then(async () => {
+        if (!headless) {
             splashWindow.destroy();
             mainWindow.show();
         }
-
     });
 
     setupWindow(mainWindow, filepath);
@@ -61,11 +60,10 @@ app.whenReady().then(() => {
     });
 
     app.setAboutPanelOptions({
-        credits: 'Logiciel distribué sous licence CeCILL-B.'
+        credits: 'Logiciel distribué sous licence CeCILL-B.',
     });
 
-
-    autoUpdater.on('update-downloaded',(e) => {
+    autoUpdater.on('update-downloaded', (e) => {
         console.log('Update ready');
         console.log(e);
     });
@@ -75,7 +73,7 @@ function createNewWindow() {
     const newWindow = createMainWindow();
     setupIpcListener(newWindow);
     setupWindow(newWindow);
-    
+
     newWindow.show();
 }
 

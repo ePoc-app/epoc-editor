@@ -18,14 +18,18 @@ const { findNode, edges, nodes } = useVueFlow({ id: 'main' });
 
 const currentNode = computed(() => findNode(props.id));
 
-const isSource = computed(() => getConnectedEdges([currentNode.value], edges.value).some((edge) => edge.source === props.id));
-const isTarget = computed(() => getConnectedEdges([currentNode.value], edges.value).some((edge) => edge.target === props.id));
+const isSource = computed(() =>
+    getConnectedEdges([currentNode.value], edges.value).some((edge) => edge.source === props.id),
+);
+const isTarget = computed(() =>
+    getConnectedEdges([currentNode.value], edges.value).some((edge) => edge.target === props.id),
+);
 
 const isCondition = ref(currentNode.value.data.type === 'condition');
 const page: Ref<HTMLElement> = ref(null);
 
 function openPageForm(id: string, formType: string) {
-    if(editorStore.selectNodeMode) {
+    if (editorStore.selectNodeMode) {
         exitSelectNodeMode(id);
     } else {
         editorStore.openFormPanel(id, formType);
@@ -43,20 +47,24 @@ function removeHoverEffect() {
 function onContextMenu(event: MouseEvent) {
     const position = {
         x: event.clientX,
-        y: event.clientY
+        y: event.clientY,
     };
-    
-    const alreadyHasQuestion = currentNode.value.data.elements.some((element: NodeElement) => questions.some((question) => question.type === element.action.type));
+
+    const alreadyHasQuestion = currentNode.value.data.elements.some((element: NodeElement) =>
+        questions.some((question) => question.type === element.action.type),
+    );
     const context = alreadyHasQuestion ? 'pageWithQuestion' : 'page';
     unselectAllNodes();
 
-    graphService.openContextMenu(context, { position, id: currentNode.value.id } );
+    graphService.openContextMenu(context, { position, id: currentNode.value.id });
     currentNode.value.selected = true;
 }
 
 const connectable = computed(() => {
-    if(isCondition.value) {
-        return getConnectedEdges([currentNode.value], edges.value).filter((edge) => edge.source === props.id).length < 2;
+    if (isCondition.value) {
+        return (
+            getConnectedEdges([currentNode.value], edges.value).filter((edge) => edge.source === props.id).length < 2
+        );
     }
     return !isSource.value;
 });
@@ -67,7 +75,6 @@ const pageIndex = computed(() => {
     const pages = nodes.value.filter((node) => node.type === 'page');
     return pages.findIndex((page) => page.id === currentNode.value.id) + 1;
 });
-
 </script>
 
 <template>
@@ -86,7 +93,12 @@ const pageIndex = computed(() => {
             @dragover.stop
         >
             <!--suppress JSUnresolvedReference -->
-            <p class="node-title" :class="{ 'active': editorStore.openedElementId ? editorStore.openedElementId === props.id : false }">{{ currentNode.data.formValues?.title || 'Page' }}</p>
+            <p
+                class="node-title"
+                :class="{ active: editorStore.openedElementId ? editorStore.openedElementId === props.id : false }"
+            >
+                {{ currentNode.data.formValues?.title || 'Page' }}
+            </p>
             <Handle
                 :data-testid="`target-page-${pageIndex}`"
                 :class="{ 'not-connected': !isTarget }"
@@ -95,7 +107,7 @@ const pageIndex = computed(() => {
                 :connectable="false"
             />
             <div v-if="connectedBadges.length > 0" class="badge-notification badge-notification-left">
-                <img src="/img/badge/notification.svg" alt="notification">
+                <img src="/img/badge/notification.svg" alt="notification" />
                 <small>{{ connectedBadges.length }}</small>
             </div>
             <DraggableNode
@@ -119,7 +131,6 @@ const pageIndex = computed(() => {
 </template>
 
 <style scoped lang="scss">
-
 .node.hover:has(.ghost) {
     &.node-list {
         padding: 1.5rem;
@@ -128,7 +139,7 @@ const pageIndex = computed(() => {
 
 .container.hover {
     .node {
-        transition: all .2s ease-in-out;
+        transition: all 0.2s ease-in-out;
         box-shadow: 0 2px 5px 0 var(--shadow-outer);
 
         &:not(.active) {
@@ -136,7 +147,7 @@ const pageIndex = computed(() => {
         }
         &.active {
             // #E1F4FA == node-active
-            background-color: darken(#E1F4FA, 5%);
+            background-color: darken(#e1f4fa, 5%);
         }
     }
 }
@@ -164,7 +175,7 @@ const pageIndex = computed(() => {
 .node-title {
     height: 1.5rem;
     margin: 0;
-    padding: .2rem;
+    padding: 0.2rem;
     top: -1.75rem;
     max-width: calc(60px + 1.8rem);
     overflow-x: hidden;
@@ -176,5 +187,4 @@ const pageIndex = computed(() => {
         color: var(--editor-blue);
     }
 }
-
 </style>

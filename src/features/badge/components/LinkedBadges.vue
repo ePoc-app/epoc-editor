@@ -18,13 +18,12 @@ const connectedBadges = computed(() => getConnectedBadges(contentId));
 function openBadge(badgeId: string) {
     editorStore.openBadgeFormPanel(badgeId, 'custom');
 }
-
 </script>
 
 <template>
     <template v-if="connectedBadges.length > 0">
         <h3 class="field-title">Badges associés</h3>
-        <hr class="separator">
+        <hr class="separator" />
         <div class="badges">
             <BadgeItem
                 v-for="(badge, index) of connectedBadges"
@@ -44,5 +43,4 @@ function openBadge(badgeId: string) {
     gap: 1rem;
     margin-bottom: 2rem;
 }
-
 </style>

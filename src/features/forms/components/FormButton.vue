@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 defineProps<{
     label: string;
     icon: string;
@@ -9,13 +8,12 @@ defineProps<{
 const emit = defineEmits<{
     (e: 'click'): void;
 }>();
-
 </script>
 
 <template>
-    <button 
+    <button
         class="btn btn-form"
-        :class="{ 'btn-delete' : label === 'Supprimer' }"
+        :class="{ 'btn-delete': label === 'Supprimer' }"
         :disabled="!!disabled"
         @click="emit('click')"
     >
@@ -26,11 +24,11 @@ const emit = defineEmits<{
 
 <style scoped lang="scss">
 .btn-delete:hover {
-    transition: color .2s ease-in-out;
+    transition: color 0.2s ease-in-out;
     color: var(--editor-red);
 }
 
-button:disabled{
+button:disabled {
     pointer-events: none;
     opacity: 0.5;
 }

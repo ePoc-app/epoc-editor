@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { getCurrentState } from '@/src/shared/services/undoRedo.service';
 
-
 const props = defineProps<{
-    id: string
+    id: string;
     label: string;
     placeholder: string;
     inputValue: string;
@@ -16,7 +15,6 @@ const emit = defineEmits<{
     (e: 'saveGivenState', state: string): void;
 }>();
 
-
 // Undo Redo
 let savedState = '';
 let startValue = '';
@@ -27,11 +25,10 @@ function onFocus() {
 }
 
 function onBlur() {
-    if(startValue !== props.inputValue) emit('saveGivenState', savedState);
+    if (startValue !== props.inputValue) emit('saveGivenState', savedState);
     savedState = '';
     startValue = '';
 }
-
 </script>
 
 <template>
@@ -39,7 +36,7 @@ function onBlur() {
     <textarea
         :id="id"
         class="input input-textarea"
-        :class="{ 'input-card' : insideCard }"
+        :class="{ 'input-card': insideCard }"
         :placeholder="placeholder"
         :value="inputValue"
         @input="emit('input', ($event.target as HTMLInputElement).value)"

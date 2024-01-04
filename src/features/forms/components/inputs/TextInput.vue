@@ -6,14 +6,13 @@ const props = defineProps<{
     label: string;
     placeholder?: string;
     inputValue: string;
-    insideCard?: boolean
+    insideCard?: boolean;
 }>();
 
 const emit = defineEmits<{
     (e: 'input', value: string): void;
     (e: 'saveGivenState', state: string): void;
 }>();
-
 
 // Undo Redo
 
@@ -27,11 +26,10 @@ function onFocus() {
 }
 
 function onBlur() {
-    if(startValue !== props.inputValue) emit('saveGivenState', savedState);
+    if (startValue !== props.inputValue) emit('saveGivenState', savedState);
     savedState = '';
     startValue = '';
 }
-
 </script>
 
 <template>
@@ -39,12 +37,12 @@ function onBlur() {
     <input
         :id="id"
         class="input"
-        :class="{ 'input-card' : insideCard }"
+        :class="{ 'input-card': insideCard }"
         type="text"
         :placeholder="placeholder"
         :value="inputValue"
         @input="emit('input', ($event.target as HTMLInputElement).value)"
         @focus="onFocus"
         @blur="onBlur"
-    >
+    />
 </template>

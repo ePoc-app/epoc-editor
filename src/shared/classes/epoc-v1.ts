@@ -33,9 +33,21 @@ export class EpocV1 implements Epoc {
     };
 
     constructor(
-        id: string, title: string, image: string, objectives: string[], summary: html, teaser: string,
-        thumbnail: string, edition: string, certificateScore: number, certificateBadgeCount: number, authors: Author[],
-        plugins: string[], chapterParameter: string, lastModif: string, license: { name: string; url: string; content: string; }
+        id: string,
+        title: string,
+        image: string,
+        objectives: string[],
+        summary: html,
+        teaser: string,
+        thumbnail: string,
+        edition: string,
+        certificateScore: number,
+        certificateBadgeCount: number,
+        authors: Author[],
+        plugins: string[],
+        chapterParameter: string,
+        lastModif: string,
+        license: { name: string; url: string; content: string },
     ) {
         this.version = '1';
         this.id = id;
@@ -51,7 +63,7 @@ export class EpocV1 implements Epoc {
         this.authors = authors;
         this.plugins = plugins;
         this.parameters = {
-            chapterParameter
+            chapterParameter,
         };
         this.chapters = {};
         this.contents = {};
@@ -70,7 +82,7 @@ export class EpocV1 implements Epoc {
         return id;
     }
 
-    addQuestion(id: string, question: Question) : uid {
+    addQuestion(id: string, question: Question): uid {
         this.questions[id] = question;
         return id;
     }

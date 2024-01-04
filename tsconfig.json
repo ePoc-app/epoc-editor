@@ -1,20 +1,15 @@
 {
-  "compilerOptions": {
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "types": [
-      "node",
-      "@wdio/globals/types",
-      "expect-webdriverio",
-      "@wdio/mocha-framework",
-      "mocha"
-    ],
-    "target": "es2022",
-    "skipLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./*"]
+    "compilerOptions": {
+        "moduleResolution": "node",
+        "module": "commonjs",
+        "types": ["node", "@wdio/globals/types", "expect-webdriverio", "@wdio/mocha-framework", "mocha"],
+        "target": "es2022",
+        "skipLibCheck": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["./*"]
+        },
+        "allowJs": true
     },
-    "allowJs": true
-  }
+    "exclude": ["/Users/nviaud/Developer/Inria/epoc-editor/dist/assets/EditorPage-f305590e.js"] // Add this line
 }

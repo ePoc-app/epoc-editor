@@ -1,5 +1,5 @@
 declare const env: {
-    isDev: boolean
+    isDev: boolean;
 };
 
 export default env;

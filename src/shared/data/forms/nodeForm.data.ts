@@ -1,5 +1,5 @@
 import { Form } from '@/src/shared/interfaces';
-import {activityButtons, baseButtons, pageButtons} from './formButtons.data';
+import { activityButtons, baseButtons, pageButtons } from './formButtons.data';
 
 export const conditionForm: Form = {
     type: 'condition',
@@ -14,18 +14,18 @@ export const conditionForm: Form = {
                     type: 'text',
                     label: '',
                     value: '',
-                    placeholder: 'Saisissez la condition 1...'
+                    placeholder: 'Saisissez la condition 1...',
                 },
                 {
                     id: 'condition2',
                     type: 'text',
                     label: '',
                     value: '',
-                    placeholder: 'Saisissez la condition 2...'
-                }
-            ]
-        }
-    ]
+                    placeholder: 'Saisissez la condition 2...',
+                },
+            ],
+        },
+    ],
 };
 
 export const legacyConditionForm: Form = {
@@ -41,8 +41,8 @@ export const legacyConditionForm: Form = {
                     type: 'text',
                     label: 'Label',
                     value: '',
-                    placeholder: 'Saisissez...'
-                }
+                    placeholder: 'Saisissez...',
+                },
             ],
         },
         {
@@ -59,11 +59,11 @@ export const legacyConditionForm: Form = {
                             type: 'text',
                             label: '',
                             placeholder: 'Parcours X',
-                            value: ''
-                        }
-                    ]
-                }
-            ]
+                            value: '',
+                        },
+                    ],
+                },
+            ],
         },
         {
             name: 'Contenus conditionnels',
@@ -88,15 +88,14 @@ export const legacyConditionForm: Form = {
                             placeholder: '',
                             value: '',
                             options: [],
-                            linkedOptions: 'choices'
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
+                            linkedOptions: 'choices',
+                        },
+                    ],
+                },
+            ],
+        },
+    ],
 };
-
 
 export const chapterForm: Form = {
     type: 'chapter',
@@ -111,8 +110,8 @@ export const chapterForm: Form = {
                     type: 'text',
                     label: 'Titre',
                     value: '',
-                    placeholder: 'Saisissez...'
-                }
+                    placeholder: 'Saisissez...',
+                },
             ],
         },
         {
@@ -129,29 +128,29 @@ export const chapterForm: Form = {
                             type: 'textarea',
                             label: '',
                             placeholder: 'Saisissez un objectif ...',
-                            value: ''
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
+                            value: '',
+                        },
+                    ],
+                },
+            ],
+        },
+    ],
 };
 
 export const epocForm: Form = {
     type: 'epoc',
-    name: 'A propos de l\'ePoc',
+    name: "A propos de l'ePoc",
     icon: 'icon-epoc',
     buttons: [],
     fields: [
         {
-            inputs :[
+            inputs: [
                 {
                     id: 'title',
                     type: 'text',
                     label: 'Titre',
                     value: '',
-                    placeholder: 'Saisissez...'
+                    placeholder: 'Saisissez...',
                 },
                 {
                     id: 'image',
@@ -159,7 +158,7 @@ export const epocForm: Form = {
                     label: 'Image de couverture',
                     placeholder: 'Ajouter une image de couverture',
                     value: '',
-                    accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp'
+                    accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
                 },
                 {
                     id: 'teaser',
@@ -167,7 +166,7 @@ export const epocForm: Form = {
                     label: 'Teaser vidéo',
                     value: '',
                     placeholder: 'Ajouter un teaser',
-                    accept: '.mp4'
+                    accept: '.mp4',
                 },
                 {
                     id: 'thumbnail',
@@ -175,22 +174,22 @@ export const epocForm: Form = {
                     label: 'Vignette de la vidéo',
                     value: '',
                     placeholder: 'Ajouter une vignette',
-                    accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp'
+                    accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
                 },
                 {
                     id: 'summary',
                     type: 'html',
                     label: 'Présentation',
                     value: '',
-                    placeholder: 'Saisissez une présentation de l\'ePoc...'
+                    placeholder: "Saisissez une présentation de l'ePoc...",
                 },
                 {
                     id: 'edition',
                     type: 'text',
                     label: 'Edition',
                     value: String(new Date().getFullYear()),
-                }
-            ]
+                },
+            ],
         },
         {
             name: 'Auteurs',
@@ -206,7 +205,7 @@ export const epocForm: Form = {
                             type: 'text',
                             label: 'Nom',
                             placeholder: 'Jeanne Dupont',
-                            value: ''
+                            value: '',
                         },
                         {
                             id: 'image',
@@ -214,13 +213,13 @@ export const epocForm: Form = {
                             label: 'Image',
                             placeholder: 'Ajouter une image',
                             value: '',
-                            accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp'
+                            accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
                         },
                         {
                             id: 'title',
                             type: 'text',
                             label: 'Titre',
-                            placeholder: 'Chercheuse à l\'Inria',
+                            placeholder: "Chercheuse à l'Inria",
                             value: '',
                         },
                         {
@@ -228,11 +227,11 @@ export const epocForm: Form = {
                             type: 'html',
                             label: 'Description',
                             placeholder: 'Saisissez une description...',
-                            value: ''
-                        }
-                    ]
-                }
-            ]
+                            value: '',
+                        },
+                    ],
+                },
+            ],
         },
         {
             name: 'Objectifs',
@@ -248,11 +247,11 @@ export const epocForm: Form = {
                             type: 'textarea',
                             label: '',
                             placeholder: 'Saisissez un objectif ...',
-                            value: ''
-                        }
-                    ]
-                }
-            ]
+                            value: '',
+                        },
+                    ],
+                },
+            ],
         },
         {
             name: 'Badges',
@@ -262,32 +261,32 @@ export const epocForm: Form = {
                     label: '',
                     type: 'badge',
                     value: [],
-                }
-            ]
+                },
+            ],
         },
         {
             name: 'Paramètres :',
-            inputs : [
+            inputs: [
                 {
                     id: 'certificateScore',
                     type: 'score',
-                    label: 'Score pour obtenir l\'attestation',
-                    value: 10
+                    label: "Score pour obtenir l'attestation",
+                    value: 10,
                 },
                 {
                     id: 'certificateBadgeCount',
                     type: 'score',
-                    label: 'Nombre de badge pour obtenir l\'attestation',
-                    value: 1
+                    label: "Nombre de badge pour obtenir l'attestation",
+                    value: 1,
                 },
                 {
                     id: 'chapterParameter',
                     type: 'text',
                     label: 'Label des chapitres',
                     value: '',
-                    placeholder: 'Saisissez...'
-                }
-            ]
+                    placeholder: 'Saisissez...',
+                },
+            ],
         },
         {
             name: 'Plugins',
@@ -305,11 +304,11 @@ export const epocForm: Form = {
                             placeholder: 'Ajouter un plugin',
                             targetDirectory: 'plugins',
                             value: '',
-                            accept: '.js'
-                        }
-                    ]
-                }
-            ]
+                            accept: '.js',
+                        },
+                    ],
+                },
+            ],
         },
         {
             name: 'Plugins templates',
@@ -327,11 +326,11 @@ export const epocForm: Form = {
                             placeholder: 'Ajouter un template',
                             targetDirectory: 'plugins',
                             value: '',
-                            accept: '.html'
-                        }
-                    ]
-                }
-            ]
+                            accept: '.html',
+                        },
+                    ],
+                },
+            ],
         },
         {
             name: 'Licence',
@@ -341,17 +340,17 @@ export const epocForm: Form = {
                     type: 'text',
                     label: 'Nom',
                     placeholder: 'CC-BY 4.0',
-                    value: ''
+                    value: '',
                 },
                 {
                     id: 'licenceUrl',
                     type: 'text',
                     label: 'URL',
                     placeholder: 'https://creativecommons.org/licenses/by/4.0/deed',
-                    value: ''
-                }
-            ]
-        }
+                    value: '',
+                },
+            ],
+        },
     ],
 };
 
@@ -364,32 +363,32 @@ export const pageForm: Form = {
         {
             inputs: [
                 {
-                    id:'title',
+                    id: 'title',
                     type: 'text',
                     label: 'Titre',
                     value: '',
-                    placeholder: 'Saisissez...'
+                    placeholder: 'Saisissez...',
                 },
                 {
-                    id:'subtitle',
+                    id: 'subtitle',
                     type: 'text',
                     label: 'Sous-titre',
                     value: '',
-                    placeholder: 'Saisissez...'
+                    placeholder: 'Saisissez...',
                 },
                 {
-                    id:'hidden',
+                    id: 'hidden',
                     type: 'checkbox',
                     label: 'Caché dans la table des matières',
-                    value: false
+                    value: false,
                 },
                 {
-                    id:'conditional',
+                    id: 'conditional',
                     type: 'checkbox',
-                    label: 'Ne s\'affiche qu\'a certaines conditions',
-                    value: false
-                }
-            ]
+                    label: "Ne s'affiche qu'a certaines conditions",
+                    value: false,
+                },
+            ],
         },
         {
             name: 'Composants',
@@ -400,11 +399,11 @@ export const pageForm: Form = {
                     type: 'repeat',
                     value: [],
                     addButton: false,
-                    inputs: []
-                }
-            ]
-        }
-    ]
+                    inputs: [],
+                },
+            ],
+        },
+    ],
 };
 
 export const activityForm: Form = {
@@ -416,39 +415,39 @@ export const activityForm: Form = {
         {
             inputs: [
                 {
-                    id:'title',
+                    id: 'title',
                     type: 'text',
                     label: 'Titre',
                     value: '',
-                    placeholder: 'Saisissez...'
+                    placeholder: 'Saisissez...',
                 },
                 {
-                    id:'subtitle',
+                    id: 'subtitle',
                     type: 'text',
                     label: 'Sous-titre',
                     value: '',
-                    placeholder: 'Saisissez...'
+                    placeholder: 'Saisissez...',
                 },
                 {
-                    id:'summary',
+                    id: 'summary',
                     type: 'textarea',
                     label: 'Résumé',
                     value: '',
-                    placeholder: 'Saisissez...'
+                    placeholder: 'Saisissez...',
                 },
                 {
-                    id:'hidden',
+                    id: 'hidden',
                     type: 'checkbox',
                     label: 'Caché dans la table des matières',
-                    value: false
+                    value: false,
                 },
                 {
-                    id:'conditional',
+                    id: 'conditional',
                     type: 'checkbox',
-                    label: 'Ne s\'affiche qu\'a certaines conditions',
-                    value: false
-                }
-            ]
+                    label: "Ne s'affiche qu'a certaines conditions",
+                    value: false,
+                },
+            ],
         },
         {
             name: 'Composants',
@@ -459,11 +458,11 @@ export const activityForm: Form = {
                     type: 'repeat',
                     value: [],
                     addButton: false,
-                    inputs: []
-                }
-            ]
-        }
-    ]
+                    inputs: [],
+                },
+            ],
+        },
+    ],
 };
 
 export const nodeForms: Form[] = [chapterForm, pageForm, epocForm, conditionForm, legacyConditionForm, activityForm];

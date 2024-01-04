@@ -3,24 +3,20 @@ import { ePocProject, Form, NodeElement, PageModel, SideAction, Condition } from
 import { GraphNode, useVueFlow } from '@vue-flow/core';
 import { formsModel, questions, standardPages } from '@/src/shared/data';
 
-const {
-    nodes,
-    findNode,
-    getTransform,
-    setTransform } = useVueFlow({ id: 'main' });
+const { nodes, findNode, getTransform, setTransform } = useVueFlow({ id: 'main' });
 
 type uid = string;
 
 interface EditorState {
     // Landing page
-    loading:boolean;
+    loading: boolean;
     recentProjects: ePocProject[];
     currentProject: ePocProject;
 
     // Save
     saving: boolean;
     loadingPreview: boolean;
-    exporting:boolean;
+    exporting: boolean;
 
     // Graph
     openedElementId: uid | null;
@@ -30,9 +26,9 @@ interface EditorState {
         //? SideAction as an array to manage the template the same way
         element?: NodeElement | SideAction[];
         source?: {
-            parentId: string,
-            index: number
-        }
+            parentId: string;
+            index: number;
+        };
     };
     openedBadgeId: string | null;
 
@@ -42,8 +38,7 @@ interface EditorState {
     formPanel: {
         form: Form | null;
         width: number;
-    }
-
+    };
 
     // Data
     pageModels: PageModel[];
@@ -67,7 +62,7 @@ export const useEditorStore = defineStore('editor', {
         // Landing page
         loading: false,
         recentProjects: [],
-        currentProject: {filepath: null, workdir: null, name: null, modified: null},
+        currentProject: { filepath: null, workdir: null, name: null, modified: null },
 
         // Save
         saving: false,
@@ -85,7 +80,7 @@ export const useEditorStore = defineStore('editor', {
         modelMenu: false,
         formPanel: {
             form: null,
-            width: 0
+            width: 0,
         },
 
         // Data
@@ -104,9 +99,9 @@ export const useEditorStore = defineStore('editor', {
         tempConditions: [],
         editingConditions: false,
     }),
-    
+
     getters: {
-        getCurrentGraphNode(): GraphNode | null  {
+        getCurrentGraphNode(): GraphNode | null {
             const nodeId = this.openedNodeId ?? this.openedElementId;
             return nodeId ? findNode(nodeId) : null;
         },
@@ -117,7 +112,7 @@ export const useEditorStore = defineStore('editor', {
 
         openedFormType(): string | null {
             return this.formPanel.form?.type ?? null;
-        }
+        },
     },
 
     actions: {
@@ -136,7 +131,7 @@ export const useEditorStore = defineStore('editor', {
             this.modelMenu = false;
             this.hamburgerMenu = false;
         },
-        
+
         openBadgeFormPanel(id: string, _type: 'custom' | 'meta', scrollPosY?: number): void {
             this.openedBadgeId = id;
             this.formPanel.form = null;
@@ -144,15 +139,19 @@ export const useEditorStore = defineStore('editor', {
             this.openedElementId = null;
 
             setTimeout(() => {
-                this.formPanel.form = formsModel.find(form => form.type === 'badge');
+                this.formPanel.form = formsModel.find((form) => form.type === 'badge');
             });
 
-            if(scrollPosY) this.scrollFormPanel(scrollPosY);
+            if (scrollPosY) this.scrollFormPanel(scrollPosY);
         },
-        
-        openFormPanel(id: string, formType: string, options?: { nodeId?: string, scrollPosY?: number, centerNode?: boolean }): void {
+
+        openFormPanel(
+            id: string,
+            formType: string,
+            options?: { nodeId?: string; scrollPosY?: number; centerNode?: boolean },
+        ): void {
             const { nodeId, scrollPosY, centerNode } = options ?? {};
-            
+
             this.openedElementId = id;
             this.openedNodeId = nodeId;
             this.openedBadgeId = null;
@@ -160,25 +159,24 @@ export const useEditorStore = defineStore('editor', {
             //? To be sure the view is notified of closing / reopening
             this.formPanel.form = null;
             setTimeout(() => {
-                this.formPanel.form = formsModel.find(form => form.type === formType);
+                this.formPanel.form = formsModel.find((form) => form.type === formType);
             });
 
-            if(scrollPosY) this.scrollFormPanel(scrollPosY);
+            if (scrollPosY) this.scrollFormPanel(scrollPosY);
 
-            nodes.value.forEach(node => node.selected = node.id === this.openedElementId);
-            
-            if(!centerNode) return;
-            
+            nodes.value.forEach((node) => (node.selected = node.id === this.openedElementId));
+
+            if (!centerNode) return;
+
             const node = nodeId ? findNode(nodeId) : findNode(id);
-            if(!node) return;
-            
+            if (!node) return;
+
             const { zoom } = getTransform();
             const { x, y } = node.position;
-            
-            setTransform({ x: -x * zoom + 200, y: -y * zoom + 200, zoom});
-            
+
+            setTransform({ x: -x * zoom + 200, y: -y * zoom + 200, zoom });
         },
-        
+
         scrollFormPanel(posY: number): void {
             const checkIfPanelReady = (): Promise<void> => {
                 return new Promise((resolve) => {
@@ -190,10 +188,10 @@ export const useEditorStore = defineStore('editor', {
                     }, 100);
                 });
             };
-            
+
             checkIfPanelReady().then(() => {
                 const formPanel = document.querySelector('.formPanel');
-                if(formPanel) formPanel.scrollTop = posY;
+                if (formPanel) formPanel.scrollTop = posY;
             });
         },
 
@@ -206,8 +204,10 @@ export const useEditorStore = defineStore('editor', {
         },
 
         savePageModel(model: SideAction[]): boolean {
-            const modelExist = this.pageModels.some((pageModel: PageModel) => JSON.stringify(pageModel.actions) === JSON.stringify(model));
-            if(modelExist) return false;
+            const modelExist = this.pageModels.some(
+                (pageModel: PageModel) => JSON.stringify(pageModel.actions) === JSON.stringify(model),
+            );
+            if (modelExist) return false;
             this.pageModels.push({ actions: model });
             return true;
         },
@@ -228,10 +228,10 @@ export const useEditorStore = defineStore('editor', {
         exitSelectNodeMode(): void {
             this.selectNodeMode = false;
         },
-        
+
         resetTempCondition(index: number) {
             this.tempConditions[index].verb = '';
             this.tempConditions[index].value = '';
-        }
-    }
+        },
+    },
 });

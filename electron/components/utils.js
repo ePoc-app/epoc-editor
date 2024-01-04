@@ -13,7 +13,7 @@ module.exports.waitAll = function (promises) {
  * @returns {Promise<unknown>}
  */
 module.exports.wait = function (ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 /**

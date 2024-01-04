@@ -16,8 +16,8 @@ const { findNode, nodes, edges } = useVueFlow({ id: 'main' });
 const currentNode = findNode(props.id);
 
 const chapterIndex = computed(() => {
-    const chapters = nodes.value.filter(node => node.type === 'chapter');
-    return chapters.findIndex(chapter => chapter.id === currentNode.id) + 1;
+    const chapters = nodes.value.filter((node) => node.type === 'chapter');
+    return chapters.findIndex((chapter) => chapter.id === currentNode.id) + 1;
 });
 
 const subtitle = computed(() => {
@@ -28,17 +28,18 @@ const subtitle = computed(() => {
     return `${label} ${chapterIndex.value}`;
 });
 
-const isSource = computed(() => getConnectedEdges([currentNode], edges.value).some((edge) => edge.sourceNode.id === props.id));
+const isSource = computed(() =>
+    getConnectedEdges([currentNode], edges.value).some((edge) => edge.sourceNode.id === props.id),
+);
 
 const classList = {
-    'clickable': true,
+    clickable: true,
     'btn-content-node': true,
     'btn-content-large': true,
 };
 
-
 function openForm() {
-    if(editorStore.selectNodeMode) {
+    if (editorStore.selectNodeMode) {
         exitSelectNodeMode(currentNode.id);
     } else {
         editorStore.openFormPanel(currentNode.id, currentNode.data.formType);
@@ -47,13 +48,13 @@ function openForm() {
 
 function mouseDown() {
     closeFormPanel();
-    
-    // unselect all nodes except current node
-    nodes.value.forEach((node) => node.selected = currentNode.id === node.id);
 
-    const chapters = nodes.value.filter(node => node.type === 'chapter');
+    // unselect all nodes except current node
+    nodes.value.forEach((node) => (node.selected = currentNode.id === node.id));
+
+    const chapters = nodes.value.filter((node) => node.type === 'chapter');
     chapters.forEach((chapter) => {
-        if(chapter.id !== currentNode.id) chapter.selected = false;
+        if (chapter.id !== currentNode.id) chapter.selected = false;
     });
 }
 
@@ -62,13 +63,12 @@ function onContextMenu() {
 }
 
 const connectedBadges = computed(() => getConnectedBadges(currentNode.data.contentId));
-
 </script>
 
 <template>
     <div class="node-chapter">
         <div v-if="connectedBadges.length > 0" class="badge-notification badge-notification-left">
-            <img src="/img/badge/notification.svg" alt="notification">
+            <img src="/img/badge/notification.svg" alt="notification" />
             <small>{{ connectedBadges.length }}</small>
         </div>
         <ContentButton
@@ -108,5 +108,4 @@ const connectedBadges = computed(() => getConnectedBadges(currentNode.data.conte
 .not-connected {
     background-color: var(--editor-red);
 }
-
 </style>

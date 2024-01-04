@@ -12,7 +12,7 @@ const { findNode } = useVueFlow({ id: 'main' });
 
 const toaster = createToaster({
     duration: 1000,
-    queue: true
+    queue: true,
 });
 
 declare const api: ApiInterface;
@@ -26,7 +26,7 @@ let currentToast: any;
 
 const waitingToast = function (message: string) {
     currentToastStartTime = performance.now();
-    currentToast = toaster.show(message, {duration: false});
+    currentToast = toaster.show(message, { duration: false });
 };
 
 const waitingToastDismiss = function () {
@@ -62,19 +62,19 @@ const setup = function () {
         waitingToastDismiss();
         toaster.success('Projet sauvegardé 💪');
         editorStore.saving = false;
-        const currentProject =  JSON.parse(data) as ePocProject;
+        const currentProject = JSON.parse(data) as ePocProject;
         if (!currentProject || !currentProject.filepath) return;
         editorStore.currentProject = currentProject;
     });
 
     api.receive('epocProjectPicked', (data: string) => {
-        const currentProject =  JSON.parse(data) as ePocProject;
+        const currentProject = JSON.parse(data) as ePocProject;
         if (!currentProject || !currentProject.filepath) return;
         openEpocProject(currentProject);
     });
 
     api.receive('epocProjectReady', (data: string) => {
-        const undoRedoStore = useUndoRedoStore(); 
+        const undoRedoStore = useUndoRedoStore();
 
         const parsedData = JSON.parse(data);
         const ePocProject = parsedData.project as ePocProject;
@@ -82,14 +82,14 @@ const setup = function () {
             editorStore.loading = false;
             return;
         }
-        
+
         closeFormPanel();
         editorStore.currentProject = ePocProject;
 
         parsedData.flow = changeScreenToPage(parsedData.flow);
 
         graphStore.setFlow(parsedData.flow);
-        
+
         undoRedoStore.reset();
         editorStore.reset();
 
@@ -97,10 +97,10 @@ const setup = function () {
             editorStore.loading = false;
         });
     });
-    
+
     api.receive('epocProjectError', () => {
         waitingToastDismiss();
-        toaster.error('😵 Une erreur s\'est produite');
+        toaster.error("😵 Une erreur s'est produite");
         editorStore.loading = false;
     });
 
@@ -111,12 +111,12 @@ const setup = function () {
     });
 
     api.receive('epocImportExtracted', (data: string) => {
-        const importedEpoc =  JSON.parse(data);
+        const importedEpoc = JSON.parse(data);
         graphStore.setFlow(null);
         router.push('/editor').then(() => {
             editorStore.loading = false;
             if (!importedEpoc || !importedEpoc.workdir) return;
-            
+
             createGraphEpocFromData(importedEpoc.epoc);
             saveState();
         });
@@ -129,7 +129,7 @@ const setup = function () {
 
     api.receive('previewError', () => {
         waitingToastDismiss();
-        toaster.error('😵 Une erreur s\'est produite');
+        toaster.error("😵 Une erreur s'est produite");
         editorStore.loadingPreview = false;
     });
 
@@ -140,10 +140,9 @@ const setup = function () {
 
     api.receive('exportError', () => {
         waitingToastDismiss();
-        toaster.error('😵 Une erreur s\'est produite');
+        toaster.error("😵 Une erreur s'est produite");
         editorStore.exporting = false;
     });
-    
 
     initialized = true;
 };
@@ -208,14 +207,14 @@ function runPreviewAtPage(): void {
             } else {
                 error = true;
                 waitingToastDismiss();
-                toaster.warning('🚨Contenu orphelin non visualisable', {duration: 3000});
+                toaster.warning('🚨Contenu orphelin non visualisable', { duration: 3000 });
             }
         }
     }
 
     if (!error) {
         editorStore.loadingPreview = true;
-        api.send('runPreview',  contentPath);
+        api.send('runPreview', contentPath);
     }
 }
 
@@ -236,14 +235,13 @@ export const editorService = {
     exportProject,
 };
 
-
 //TODO: delete backward support for old page form
 function changeScreenToPage(flow: FlowExportObject) {
-    if(!flow) return;
+    if (!flow) return;
 
-    const pages = flow.nodes.filter(node => node.type === 'content');
-    for(const page of pages) {
-        if(page.data.formType === 'screen') page.data.formType = 'page';
+    const pages = flow.nodes.filter((node) => node.type === 'content');
+    for (const page of pages) {
+        if (page.data.formType === 'screen') page.data.formType = 'page';
     }
     return flow;
 }

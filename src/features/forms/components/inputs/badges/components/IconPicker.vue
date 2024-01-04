@@ -14,7 +14,6 @@ const props = defineProps<{
 function openIconModal() {
     editorStore.iconModal = true;
 }
-
 </script>
 
 <template>
@@ -32,7 +31,7 @@ function openIconModal() {
 .container {
     display: flex;
     gap: 1.5rem;
-    
+
     button {
         height: fit-content;
         margin: auto 0;

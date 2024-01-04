@@ -1,16 +1,15 @@
 import { Verbs, ElementType, Condition, Badge } from '@/src/shared/interfaces';
 import { Operand, Operands, Rule } from '@epoc/epoc-types/src/v2';
 import { useEditorStore, useProjectStore } from '@/src/shared/stores';
-import { useVueFlow} from '@vue-flow/core';
+import { useVueFlow } from '@vue-flow/core';
 import { saveState } from '@/src/shared/services/undoRedo.service';
 import { elementVerbs, verbs } from '@/src/shared/data';
 import { generateContentId, graphService } from '@/src/shared/services';
 
-const { findNode } = useVueFlow({id: 'main'});
-
+const { findNode } = useVueFlow({ id: 'main' });
 
 export function getVerbs(type: ElementType): Verbs {
-    if(!type || !elementVerbs[type]) return;
+    if (!type || !elementVerbs[type]) return;
 
     const verbsKeys = elementVerbs[type];
     const res: Verbs = {};
@@ -22,29 +21,28 @@ export function getVerbs(type: ElementType): Verbs {
     return res;
 }
 
-export function getValueType(verbKey:string): 'number' | 'boolean' {
-    if(!verbs[verbKey]) return;
+export function getValueType(verbKey: string): 'number' | 'boolean' {
+    if (!verbs[verbKey]) return;
     return verbs[verbKey].valueType;
 }
-
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getConditions(currentBadge: any): Condition[] {
     const rules = currentBadge.rule['and'];
     const conditions: Condition[] = [];
 
-    for(const key1 in rules) {
+    for (const key1 in rules) {
         // key2 is the operator
-        for(const key2 in rules[key1]) {
+        for (const key2 in rules[key1]) {
             const [verbs, value] = rules[key1][key2];
 
-            const [type, element,verb] = verbs['var'].split('.');
+            const [type, element, verb] = verbs['var'].split('.');
 
             const conditionObj: Condition = {
                 element,
                 verb,
                 value,
-                elementType: type
+                elementType: type,
             };
 
             conditions.push(conditionObj);
@@ -56,75 +54,70 @@ export function getConditions(currentBadge: any): Condition[] {
 export function createRule(entry: Condition[]): Rule {
     const rules: Operands = entry.map((item) => {
         const entryRule: Operand = {
-            '===': [
-                { 'var': `${item.elementType}.${item.element}.${item.verb}` }, item.value
-            ]
+            '===': [{ var: `${item.elementType}.${item.element}.${item.verb}` }, item.value],
         };
         return entryRule;
     }) as Operands;
 
-    return { 'and': rules };
+    return { and: rules };
 }
 
-
 const phraseType = {
-    'video': 'la vidéo',
-    'chapter': 'le chapitre',
-    'page': 'la page',
-    'html': 'le texte',
-    'audio': 'l\'audio',
-    'activity': 'l\'activité',
-    'question': 'la question'
+    video: 'la vidéo',
+    chapter: 'le chapitre',
+    page: 'la page',
+    html: 'le texte',
+    audio: "l'audio",
+    activity: "l'activité",
+    question: 'la question',
 };
 
 const phraseVerb = {
-    'started': {
-        'true': 'Avoir commencé',
-        'false': 'Ne pas avoir pas commencé'
+    started: {
+        true: 'Avoir commencé',
+        false: 'Ne pas avoir pas commencé',
     },
-    'completed': {
-        'true': 'Avoir terminé',
-        'false': 'Ne pas avoir terminé'
+    completed: {
+        true: 'Avoir terminé',
+        false: 'Ne pas avoir terminé',
     },
-    'viewed': {
-        'true': 'Avoir vu',
-        'false': 'Ne pas avoir vu'
+    viewed: {
+        true: 'Avoir vu',
+        false: 'Ne pas avoir vu',
     },
-    'read': {
-        'true': 'Avoir lu',
-        'false': 'Ne pas avoir lu'
+    read: {
+        true: 'Avoir lu',
+        false: 'Ne pas avoir lu',
     },
-    'played': {
-        'true': 'Avoir lancé',
-        'false': 'Ne pas avoir lancé'
+    played: {
+        true: 'Avoir lancé',
+        false: 'Ne pas avoir lancé',
     },
-    'watched': {
-        'true': 'Avoir regardé',
-        'false': 'Ne pas avoir regardé'
+    watched: {
+        true: 'Avoir regardé',
+        false: 'Ne pas avoir regardé',
     },
-    'listened': {
-        'true': 'Avoir écouté',
-        'false': 'Ne pas avoir écouté'
+    listened: {
+        true: 'Avoir écouté',
+        false: 'Ne pas avoir écouté',
     },
-    'attempted': {
-        'true': 'Avoir tenté',
-        'false': 'Ne pas avoir tenté'
+    attempted: {
+        true: 'Avoir tenté',
+        false: 'Ne pas avoir tenté',
     },
-    'passed': {
-        'true': 'Avoir réussi',
-        'false': 'Avoir échoué'
-    } ,
-    'scored': 'Avoir obtenu un score d\'au moins'
+    passed: {
+        true: 'Avoir réussi',
+        false: 'Avoir échoué',
+    },
+    scored: "Avoir obtenu un score d'au moins",
 };
 
 export function createPhrase(condition: Condition, elementType: ElementType) {
-
     const { verb, value } = condition;
     let firstPart: string;
-    if(verb === 'scored') {
+    if (verb === 'scored') {
         firstPart = `${phraseVerb[verb]} ${value} à`;
-    }
-    else {
+    } else {
         firstPart = `${phraseVerb[verb][value]}`;
     }
 
@@ -137,12 +130,12 @@ export function getConnectedBadges(contentId: string): Badge[] {
 
     const res: Badge[] = [];
 
-    for(const key in badges) {
+    for (const key in badges) {
         const badge = badges[key];
         const conditions = getConditions(badge);
         const elements = conditions.map((condition) => condition.element);
 
-        if(elements.includes(contentId)) {
+        if (elements.includes(contentId)) {
             res.push({ ...badge, id: key });
         }
     }
@@ -157,10 +150,10 @@ export function saveBadge(badge: Badge) {
 }
 
 export function deleteConnectedConditions(contentId: string) {
-    const connectedBadges= getConnectedBadges(contentId);
+    const connectedBadges = getConnectedBadges(contentId);
     const badges = findNode('1').data.formValues.badges;
 
-    for(const badge of connectedBadges) {
+    for (const badge of connectedBadges) {
         const conditions = getConditions(badge);
         const newConditions = conditions.filter((condition) => condition.element !== contentId);
 
@@ -187,7 +180,7 @@ export function addNewBadge() {
     saveState(true);
 
     const epocNode = editorStore.getEpocNode;
-    if(!epocNode.data.formValues['badges']) epocNode.data.formValues['badges'] = {};
+    if (!epocNode.data.formValues['badges']) epocNode.data.formValues['badges'] = {};
 
     const id = generateContentId();
     epocNode.data.formValues['badges'][id] = {
@@ -195,8 +188,8 @@ export function addNewBadge() {
         icon: '',
         description: '',
         rule: {
-            'and': []
-        }
+            and: [],
+        },
     };
 
     openBadge(id);
@@ -216,30 +209,27 @@ export function isBadgeValid(badge): boolean {
 }
 
 export function isBadgeEmpty(badge): boolean {
-    return badge.title === ''
-        && badge.icon === ''
-        && badge.description === ''
-        && badge.rule.and.length === 0;
+    return badge.title === '' && badge.icon === '' && badge.description === '' && badge.rule.and.length === 0;
 }
 
 export function deleteEmptyBadges() {
     const epocNode = findNode('1');
     const badges = epocNode.data.formValues.badges;
 
-    for(const badgeId in badges) {
-        if(isBadgeEmpty(badges[badgeId])) delete badges[badgeId];
+    for (const badgeId in badges) {
+        if (isBadgeEmpty(badges[badgeId])) delete badges[badgeId];
     }
 }
 
-export function getValidBadges(){
+export function getValidBadges() {
     const epocNode = findNode('1');
     const badges = epocNode.data.formValues.badges;
-    if(!badges) return null;
-    
+    if (!badges) return null;
+
     const res = {};
-    for(const badgeId in badges) {
-        if(isBadgeValid(badges[badgeId])) res[badgeId] = badges[badgeId];
+    for (const badgeId in badges) {
+        if (isBadgeValid(badges[badgeId])) res[badgeId] = badges[badgeId];
     }
-    
+
     return res;
 }

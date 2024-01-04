@@ -15,18 +15,18 @@ export const useUndoRedoStore = defineStore('undoRedo', {
 
     actions: {
         undo(): void {
-            if(this.undoStack.length === 0) return;
+            if (this.undoStack.length === 0) return;
 
             const state = this.undoStack.pop();
-            
+
             const currentState = revertToState(state);
 
             this.redoStack.push(currentState);
         },
 
         redo(): void {
-            if(this.redoStack.length === 0) return;
-            
+            if (this.redoStack.length === 0) return;
+
             const state = this.redoStack.pop();
 
             const currentState = revertToState(state);
@@ -38,13 +38,13 @@ export const useUndoRedoStore = defineStore('undoRedo', {
             this.undoStack.push(state);
             this.redoStack = [];
 
-            if(this.undoStack.length > 100) this.undoStack.shift();
+            if (this.undoStack.length > 100) this.undoStack.shift();
             graphService.writeProjectData();
         },
 
         reset(): void {
             this.undoStack = [];
             this.redoStack = [];
-        }
-    }
+        },
+    },
 });

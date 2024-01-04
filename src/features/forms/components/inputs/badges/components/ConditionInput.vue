@@ -15,12 +15,11 @@ function onClick() {
     editorStore.conditionModal = true;
 }
 
-function getPhrase(condition: Condition): { phrase: string, id: string} {
+function getPhrase(condition: Condition): { phrase: string; id: string } {
     const elementType = getElementType(condition.element);
     const phrase = createPhrase(condition, elementType);
     return { phrase, id: condition.element };
 }
-
 
 let hoveredElement = null;
 function handleMouseEnter(condition: Condition) {
@@ -32,7 +31,6 @@ function handleMouseLeave() {
     hoveredElement.classList.remove('highlight');
     hoveredElement = null;
 }
-
 </script>
 
 <template>
@@ -42,7 +40,8 @@ function handleMouseLeave() {
             <a
                 @mouseenter="handleMouseEnter(condition)"
                 @mouseleave="handleMouseLeave"
-                @click="goToElement(condition.element)">
+                @click="goToElement(condition.element)"
+            >
                 {{ condition.element }}
             </a>
         </li>
@@ -60,7 +59,7 @@ ul {
 
     li {
         font-size: 1rem;
-        margin-top: .5rem;
+        margin-top: 0.5rem;
     }
 }
 

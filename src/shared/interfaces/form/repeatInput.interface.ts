@@ -1,7 +1,7 @@
-import { NodeElement } from "@/src/shared/interfaces";
+import { NodeElement } from '@/src/shared/interfaces';
 
 export interface RepeatInputEvent {
-   type: string;
+    type: string;
 }
 
 export interface RepeatAddEvent extends RepeatInputEvent {
@@ -27,14 +27,14 @@ export interface DraggableChange {
     added?: {
         element: NodeElement;
         newIndex: number;
-    }
+    };
     removed?: {
         element: NodeElement;
         oldIndex: number;
-    }
+    };
     moved?: {
         element: NodeElement;
         oldIndex: number;
         newIndex: number;
-    }
+    };
 }

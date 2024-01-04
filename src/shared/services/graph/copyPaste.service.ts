@@ -19,26 +19,26 @@ function setupCopyPaste(): void {
 setupCopyPaste();
 
 export function graphCopy(selection?: Node[]): void {
-    if(!selection) selection = getSelectedNodes();
-    const selectedPages = selection.filter(node => node.type === 'page' || node.type === 'activity');
-    
+    if (!selection) selection = getSelectedNodes();
+    const selectedPages = selection.filter((node) => node.type === 'page' || node.type === 'activity');
+
     const data = JSON.stringify({ pages: selectedPages });
-    
+
     api.send('graphCopy', data);
 }
 
-export function graphPaste(position?: { x: number, y: number }) {
+export function graphPaste(position?: { x: number; y: number }) {
     const data = JSON.stringify({ position });
     api.send('graphPaste', data);
 }
 
-function handleGraphPaste(selectedPages: GraphNode[], position: { x: number, y: number }): void {
-    if(!selectedPages) return;
-    
+function handleGraphPaste(selectedPages: GraphNode[], position: { x: number; y: number }): void {
+    if (!selectedPages) return;
+
     let offsetX: number;
     let offsetY: number;
-    
-    if(position) {
+
+    if (position) {
         offsetX = position.x - selectedPages[0].position.x;
         offsetY = position.y - selectedPages[0].position.y;
     } else {
@@ -47,10 +47,10 @@ function handleGraphPaste(selectedPages: GraphNode[], position: { x: number, y: 
     }
 
     const newPages = [];
-    for(const page of selectedPages) {
+    for (const page of selectedPages) {
         const pageId = generateId();
-        
-        const elements = page.data.elements.map((element: NodeElement)=> {
+
+        const elements = page.data.elements.map((element: NodeElement) => {
             const newElement = JSON.parse(JSON.stringify(element));
             newElement.id = generateId();
             newElement.parentId = pageId;
@@ -69,26 +69,26 @@ function handleGraphPaste(selectedPages: GraphNode[], position: { x: number, y: 
                 formValues: JSON.parse(JSON.stringify(page.data.formValues)),
             },
             position: { x: page.position.x + offsetX, y: page.position.y + offsetY },
-            deletable: true
+            deletable: true,
         };
         newPages.push(newPage);
     }
-    
+
     // deselect the old pages
-    for(const page of selectedPages) {
+    for (const page of selectedPages) {
         page.selected = false;
     }
-    
+
     // select the new pages
-    for(const page of newPages) {
+    for (const page of newPages) {
         page.selected = true;
     }
     // automatically copy the new pages so that they can be pasted again without superposition
     // api.send('graphCopy', { selectedPages: newPages, selectionRectHeight: offsetY });
 
     addNodes(newPages);
-    
-    for(const page of newPages) {
+
+    for (const page of newPages) {
         alignNode(page.id);
     }
 }

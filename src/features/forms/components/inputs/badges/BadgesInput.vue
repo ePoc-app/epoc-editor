@@ -11,7 +11,7 @@ const props = defineProps<{
 
 const badges: ComputedRef<Badge[]> = computed(() => {
     const res: Badge[] = [];
-    for(let value in props.inputValue) {
+    for (let value in props.inputValue) {
         const newBadge: Badge = {
             id: value,
             title: props.inputValue[value]['title'],
@@ -24,14 +24,10 @@ const badges: ComputedRef<Badge[]> = computed(() => {
 
     return res;
 });
-
 </script>
 
 <template>
-    <AddBadge
-        placeholder="Ajouter un nouveau badge"
-        @click="addNewBadge"
-    />
+    <AddBadge placeholder="Ajouter un nouveau badge" @click="addNewBadge" />
     <div class="badges">
         <BadgeItem
             v-for="(badge, index) in badges"

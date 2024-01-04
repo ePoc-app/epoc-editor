@@ -4,7 +4,7 @@ import { ePocState } from '../interfaces';
 import { ApiInterface } from '../interfaces/api.interface';
 import { closeFormPanel } from '.';
 
-const { toObject }  = useVueFlow({ id: 'main' });
+const { toObject } = useVueFlow({ id: 'main' });
 
 declare const api: ApiInterface;
 
@@ -29,24 +29,26 @@ export function getCurrentState(saveForm?: boolean | object): string {
 
     // noinspection JSUnusedAssignment
     let form = null;
-    
-    if(typeof saveForm === 'object') {
-        form = saveForm; 
+
+    if (typeof saveForm === 'object') {
+        form = saveForm;
     } else {
-        form = saveForm ? {
-            elementId: editorStore.openedElementId,
-            formType: editorStore.formPanel.form?.type,
-            nodeId: editorStore.openedNodeId,
-            badgeId: editorStore.openedBadgeId,
-            scrollPosY: document.querySelector('.formPanel')?.scrollTop
-        } : null;
+        form = saveForm
+            ? {
+                  elementId: editorStore.openedElementId,
+                  formType: editorStore.formPanel.form?.type,
+                  nodeId: editorStore.openedNodeId,
+                  badgeId: editorStore.openedBadgeId,
+                  scrollPosY: document.querySelector('.formPanel')?.scrollTop,
+              }
+            : null;
     }
-    
+
     const currentState: ePocState = {
         flow: toObject(),
-        form
+        form,
     };
-    
+
     return JSON.stringify(currentState);
 }
 
@@ -65,7 +67,7 @@ export function saveGivenState(state: string): void {
 export function revertToState(state: string): string {
     const graphStore = useGraphStore();
     const editorStore = useEditorStore();
-    
+
     closeFormPanel();
 
     const { flow, form } = JSON.parse(state);
@@ -73,12 +75,12 @@ export function revertToState(state: string): string {
     const currentState = getCurrentState(form);
     graphStore.setFlow(flow);
 
-    if(form) {
+    if (form) {
         const { elementId, nodeId, formType, scrollPosY, badgeId } = form;
 
-        if(formType === 'badge') editorStore.openBadgeFormPanel(badgeId, 'custom', scrollPosY);
-        else editorStore.openFormPanel(elementId, formType,{ nodeId, scrollPosY });
+        if (formType === 'badge') editorStore.openBadgeFormPanel(badgeId, 'custom', scrollPosY);
+        else editorStore.openFormPanel(elementId, formType, { nodeId, scrollPosY });
     }
-    
+
     return currentState;
 }

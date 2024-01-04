@@ -15,16 +15,16 @@ const { findNode } = useVueFlow({ id: 'main' });
 const currentNode = findNode(props.id);
 
 const classList = {
-    'clickable': true,
+    clickable: true,
     'btn-content-node': true,
     'btn-content-large': true,
 };
 
-const selected = computed(() => editorStore.openedElementId ? editorStore.openedElementId === currentNode.id : false);
+const selected = computed(() => (editorStore.openedElementId ? editorStore.openedElementId === currentNode.id : false));
 const isActive = computed(() => selected.value && !editorStore.selectNodeMode);
 
 function openForm() {
-    if(editorStore.selectNodeMode) {
+    if (editorStore.selectNodeMode) {
         exitSelectNodeMode(currentNode.id);
     } else {
         editorStore.openFormPanel(currentNode.id, currentNode.data.formType);
@@ -32,9 +32,8 @@ function openForm() {
 }
 
 function onContextMenu() {
-    graphService.openContextMenu('epoc', {});    
+    graphService.openContextMenu('epoc', {});
 }
-
 </script>
 
 <template>
@@ -58,7 +57,8 @@ function onContextMenu() {
 .rotated {
     transform: rotate(45deg);
 
-    i, span {
+    i,
+    span {
         transform: rotate(-45deg);
         color: red;
     }

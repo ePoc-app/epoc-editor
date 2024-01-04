@@ -1,6 +1,6 @@
 import { useVueFlow } from '@vue-flow/core';
 import { useEditorStore } from '../../stores';
-import {NodeElement, SideAction} from '../../interfaces';
+import { NodeElement, SideAction } from '../../interfaces';
 import { deleteNode } from './node.service';
 import { closeFormPanel, generateContentId, generateId } from '../graph.service';
 import * as forms from '@/src/shared/data/forms';
@@ -12,9 +12,9 @@ const editorStore = useEditorStore();
 
 export function deleteContent(pageId: string, id: string): void {
     const pageNode = findNode(pageId);
-    if(pageNode) {
+    if (pageNode) {
         pageNode.data.elements.forEach((value: NodeElement, index: number) => {
-            if(value.id === id) {
+            if (value.id === id) {
                 deleteConnectedConditions(value.contentId);
                 removeContentFromPage(index, pageId);
             }
@@ -24,7 +24,7 @@ export function deleteContent(pageId: string, id: string): void {
 
 export function duplicateContent(): void {
     const pageNode = findNode(editorStore.openedNodeId);
-    const element = pageNode.data.elements.find((element: NodeElement)=> element.id === editorStore.openedElementId);
+    const element = pageNode.data.elements.find((element: NodeElement) => element.id === editorStore.openedElementId);
 
     const newElement = JSON.parse(JSON.stringify(element));
     newElement.id = generateId();
@@ -52,11 +52,11 @@ export function removeContentFromPage(index: number, pageId: string, pageMoved?:
     const pageNode = findNode(pageId);
     pageNode.data.elements.splice(index, 1);
 
-    if(editorStore.openedNodeId || pageMoved) {
+    if (editorStore.openedNodeId || pageMoved) {
         pageNode.data.formValues.components.splice(index, 1);
     }
 
-    if(!pageNode.data.elements.length) {
+    if (!pageNode.data.elements.length) {
         deleteNode(pageId);
     }
 }
@@ -65,13 +65,13 @@ export function addContentToPage(pageId: string, content: SideAction | NodeEleme
     const pageNode = findNode(pageId);
     index = index ?? pageNode.data.elements.length;
 
-    if(!pageNode.data.formValues.components) pageNode.data.formValues.components = [];
+    if (!pageNode.data.formValues.components) pageNode.data.formValues.components = [];
 
     // Déplacement d'un contenu existant (depuis une autre page)
     if ('action' in content) {
         pageNode.data.elements.splice(index, 0, { ...content, parentId: pageId });
         pageNode.data.formValues.components.splice(index, 0, { action: content.action });
-    // Ajout d'un nouveau contenu depuis la sidebar
+        // Ajout d'un nouveau contenu depuis la sidebar
     } else {
         const newContent = {
             id: generateId(),
@@ -88,26 +88,26 @@ export function addContentToPage(pageId: string, content: SideAction | NodeEleme
 
 export function unselectAllContents(): void {
     const contents = document.querySelectorAll('.btn-content');
-    contents.forEach(content => content.classList.remove('selected'));
+    contents.forEach((content) => content.classList.remove('selected'));
 }
 
 export function getContentDefaultValues(type: string) {
-    const form = [...forms.questionForms, ...forms.elementForms, ...forms.nodeForms].find(f => f.type === type);
+    const form = [...forms.questionForms, ...forms.elementForms, ...forms.nodeForms].find((f) => f.type === type);
 
     return form.fields.reduce((acc, field) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const keyValues = field.inputs.reduce((_acc2: any, i) => {
-            return {[i.id] : JSON.parse(JSON.stringify(i.value))};
+            return { [i.id]: JSON.parse(JSON.stringify(i.value)) };
         }, {});
-        return {...acc, ...keyValues};
+        return { ...acc, ...keyValues };
     }, {});
 }
 
 export function getContentByContentId(contentId: string) {
-    for(const node of nodes.value) {
-        if(node.data.elements) {
-            for(const element of node.data.elements) {
-                if(element.contentId === contentId) {
+    for (const node of nodes.value) {
+        if (node.data.elements) {
+            for (const element of node.data.elements) {
+                if (element.contentId === contentId) {
                     return element;
                 }
             }
@@ -115,12 +115,11 @@ export function getContentByContentId(contentId: string) {
     }
 }
 
-
 // translate v1 content to v2
 export function setPageContents() {
-    const pages = nodes.value.filter(node => node.type === 'page');
+    const pages = nodes.value.filter((node) => node.type === 'page');
 
-    for(const page of pages) {
+    for (const page of pages) {
         // in v1 there is only one element per page
         const element: NodeElement = page.data.elements[0];
         element.contentId = generateContentId();
@@ -128,10 +127,10 @@ export function setPageContents() {
 }
 
 export function findContent(id: string): NodeElement {
-    for(const node of nodes.value) {
-        if(node.data.elements) {
-            for(const element of node.data.elements) {
-                if(element.id === id) {
+    for (const node of nodes.value) {
+        if (node.data.elements) {
+            for (const element of node.data.elements) {
+                if (element.id === id) {
                     return element;
                 }
             }

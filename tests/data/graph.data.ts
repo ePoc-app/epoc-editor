@@ -11,48 +11,35 @@ let activityIndex = 0;
 export const nodes: TestNode[] = [
     {
         type: 'chapter',
-        index: ++chapterIndex
+        index: ++chapterIndex,
     },
     {
         type: 'page',
         index: ++pageIndex,
-        contents: [
-            { type: 'text' }
-        ]
+        contents: [{ type: 'text' }],
     },
     {
         type: 'page',
         index: ++pageIndex,
-        contents: [
-            { type: 'video' }
-        ]
+        contents: [{ type: 'video' }],
     },
     {
         type: 'activity',
         index: ++activityIndex,
-        contents: [
-            { type: 'choice' },
-            { type: 'drag-and-drop' }
-        ]
+        contents: [{ type: 'choice' }, { type: 'drag-and-drop' }],
     },
     {
         type: 'chapter',
-        index: ++chapterIndex
+        index: ++chapterIndex,
     },
     {
         type: 'page',
         index: ++pageIndex,
-        contents: [
-            { type: 'audio' }
-        ]
+        contents: [{ type: 'audio' }],
     },
     {
         type: 'activity',
         index: ++activityIndex,
-        contents: [
-            { type: 'reorder' },
-            { type: 'swipe' },
-            { type: 'dropdown-list' }
-        ]
-    }
+        contents: [{ type: 'reorder' }, { type: 'swipe' }, { type: 'dropdown-list' }],
+    },
 ];

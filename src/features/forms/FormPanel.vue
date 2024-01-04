@@ -11,7 +11,7 @@ import {
     duplicatePage,
     duplicateContent,
     transformActivityToPage,
-    isFormButtonDisabled
+    isFormButtonDisabled,
 } from '@/src/shared/services/graph';
 import LinkedBadges from '@/src/features/badge/components/LinkedBadges.vue';
 
@@ -28,7 +28,7 @@ const emit = defineEmits<{
 
 const toaster = createToaster({
     duration: 1000,
-    queue: true
+    queue: true,
 });
 
 const currentNode = editorStore.getCurrentGraphNode;
@@ -56,10 +56,9 @@ function actionOnForm(action: string) {
             break;
 
         case 'save-model':
-            if(editorStore.savePageModel(currentNode.data.elements.map((element: NodeElement) => element.action))) {
+            if (editorStore.savePageModel(currentNode.data.elements.map((element: NodeElement) => element.action))) {
                 toaster.success('Modèle sauvegardé 👌');
-            }
-            else toaster.error('Le modèle existe déjà 🤔');
+            } else toaster.error('Le modèle existe déjà 🤔');
             break;
 
         case 'simple-question':
@@ -79,7 +78,6 @@ function actionOnForm(action: string) {
             addNewBadge();
             break;
     }
-
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -100,7 +98,6 @@ function maximizeFormPanel() {
 function minimizeFormPanel() {
     emit('minimize');
 }
-
 </script>
 
 <template>
@@ -123,21 +120,15 @@ function minimizeFormPanel() {
             @click="actionOnForm(button.action)"
         />
     </div>
-    <div
-        v-for="(field, index) of editorStore.formPanel.form.fields"
-        :key="index"
-        class="field"
-    >
+    <div v-for="(field, index) of editorStore.formPanel.form.fields" :key="index" class="field">
         <GenericField
-            :inputs="(field.inputs as Input[])"
+            :inputs="field.inputs as Input[]"
             :field-name="field.name"
             :field-index="index"
             :display-field-index="editorStore.formPanel.form.displayFieldIndex"
         />
     </div>
-    <LinkedBadges
-        :element-id="editorStore.openedElementId"
-    />
+    <LinkedBadges :element-id="editorStore.openedElementId" />
 </template>
 
 <style scoped lang="scss">
@@ -154,32 +145,30 @@ function minimizeFormPanel() {
     }
 }
 
-
 .command-buttons {
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: flex;
-  gap: 1rem;
-  padding: 1rem;
-
-  button {
+    position: absolute;
+    top: 0;
+    right: 0;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    width:1.5rem;
-    height:1.5rem;
-    z-index: 10;
-    border-radius: 2rem;
-    i {
-      margin: 0;
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--text);
-    }
-  }
-}
+    gap: 1rem;
+    padding: 1rem;
 
+    button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.5rem;
+        height: 1.5rem;
+        z-index: 10;
+        border-radius: 2rem;
+        i {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text);
+        }
+    }
+}
 
 .buttons {
     margin-bottom: 2.5rem;

@@ -7,7 +7,7 @@ const emit = defineEmits<{
 }>();
 
 function onClick() {
-    if(!url.value) return;
+    if (!url.value) return;
     emit('click', url.value);
 }
 
@@ -30,16 +30,11 @@ function deleteFile() {
 const url = ref('');
 const blob = ref('');
 const fileInput = ref(null);
-
 </script>
 
 <template>
     <div class="new-icon">
-        <BadgeItem
-            :icon="blob"
-            :inactive="!url"
-            @click="onClick"
-        />
+        <BadgeItem :icon="blob" :inactive="!url" @click="onClick" />
         <div>
             <p class="accepted-files">Fichier supporté: SVG</p>
             <div v-if="!url">
@@ -50,8 +45,8 @@ const fileInput = ref(null);
             </div>
             <div v-show="url">
                 <div class="input-file">
-                    <input ref="fileInput" class="file" type="file" accept="image/svg+xml" @change="changeIcon">
-                    <input class="input" type="text" readonly :value="url" @click="openFile">
+                    <input ref="fileInput" class="file" type="file" accept="image/svg+xml" @change="changeIcon" />
+                    <input class="input" type="text" readonly :value="url" @click="openFile" />
                     <i class="icon-supprimer" @click="deleteFile"></i>
                 </div>
             </div>
@@ -60,7 +55,6 @@ const fileInput = ref(null);
 </template>
 
 <style scoped lang="scss">
-
 .new-icon {
     display: flex;
     gap: 1rem;
@@ -68,26 +62,25 @@ const fileInput = ref(null);
 }
 
 .accepted-files {
-    font-size: .9rem;
+    font-size: 0.9rem;
     color: var(--text-secondary);
 }
 
-
-.input-file{
+.input-file {
     position: relative;
     margin-bottom: 1.5rem;
 
-    .input{
+    .input {
         margin-bottom: 0;
         padding-right: 1.5rem;
     }
 
-    .file{
+    .file {
         display: none;
     }
 
     i {
-        font-size: .9rem;
+        font-size: 0.9rem;
         cursor: pointer;
 
         &:hover {
@@ -96,10 +89,10 @@ const fileInput = ref(null);
     }
 }
 
-.icon-supprimer{
+.icon-supprimer {
     position: absolute;
-    right:.5rem;
-    top:50%;
+    right: 0.5rem;
+    top: 50%;
     transform: translateY(-50%);
 }
 </style>

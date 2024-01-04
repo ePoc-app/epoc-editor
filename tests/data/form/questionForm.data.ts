@@ -6,19 +6,19 @@ const choiceForm: TestForm = {
         {
             label: 'Score',
             value: '5',
-            type: 'score'
+            type: 'score',
         },
         {
             label: 'Question',
             value: 'Question test',
-            type: 'textarea'
+            type: 'textarea',
         },
         {
             label: 'Consigne',
             value: 'Consigne test',
-            type: 'textarea'
+            type: 'textarea',
         },
-    ]
+    ],
 };
 
 const dragAndDropForm: TestForm = {
@@ -27,19 +27,19 @@ const dragAndDropForm: TestForm = {
         {
             label: 'Score',
             value: '5',
-            type: 'score'
+            type: 'score',
         },
         {
             label: 'Question',
             value: 'Question test',
-            type: 'textarea'
+            type: 'textarea',
         },
         {
             label: 'Consigne',
             value: 'Consigne test',
-            type: 'textarea'
-        }
-    ]
+            type: 'textarea',
+        },
+    ],
 };
 
 const reorderForm: TestForm = {
@@ -48,19 +48,19 @@ const reorderForm: TestForm = {
         {
             label: 'Score',
             value: '5',
-            type: 'score'
+            type: 'score',
         },
         {
             label: 'Question',
             value: 'Question test',
-            type: 'textarea'
+            type: 'textarea',
         },
         {
             label: 'Consigne',
             value: 'Consigne test',
-            type: 'textarea'
-        }
-    ]
+            type: 'textarea',
+        },
+    ],
 };
 
 const swipeForm: TestForm = {
@@ -69,19 +69,19 @@ const swipeForm: TestForm = {
         {
             label: 'Score',
             value: '5',
-            type: 'score'
+            type: 'score',
         },
         {
             label: 'Question',
             value: 'Question test',
-            type: 'textarea'
+            type: 'textarea',
         },
         {
             label: 'Consigne',
             value: 'Consigne test',
-            type: 'textarea'
-        }
-    ]
+            type: 'textarea',
+        },
+    ],
 };
 
 const dropdownListForm: TestForm = {
@@ -90,19 +90,19 @@ const dropdownListForm: TestForm = {
         {
             label: 'Score',
             value: '5',
-            type: 'score'
+            type: 'score',
         },
         {
             label: 'Question',
             value: 'Question test',
-            type: 'textarea'
+            type: 'textarea',
         },
         {
             label: 'Consigne',
             value: 'Consigne test',
-            type: 'textarea'
-        }
-    ]
+            type: 'textarea',
+        },
+    ],
 };
 
 export const questionForms = [choiceForm, dragAndDropForm, reorderForm, swipeForm, dropdownListForm];

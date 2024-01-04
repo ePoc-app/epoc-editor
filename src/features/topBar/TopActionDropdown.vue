@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 defineProps<{
     icon: string;
     inputValue: number;
@@ -17,7 +16,6 @@ const onSelect = (event: Event) => {
 const emit = defineEmits<{
     (e: 'change', value: number): void;
 }>();
-
 </script>
 
 <template>
@@ -25,13 +23,7 @@ const emit = defineEmits<{
         <span v-if="textBefore" class="text-top-bar zoom-span">{{ textBefore }}</span>
         <i :class="icon" />
         <span v-if="text" class="text-top-bar">{{ text }}</span>
-        <select
-            id="select-box"
-            :value="inputValue"
-            :disabled="disabled"
-            class="select-box"
-            @change="onSelect"
-        >
+        <select id="select-box" :value="inputValue" :disabled="disabled" class="select-box" @change="onSelect">
             <option value="0">Ajuster</option>
             <option value="0.5">50%</option>
             <option value="0.75">75%</option>
@@ -42,18 +34,18 @@ const emit = defineEmits<{
 </template>
 
 <style scoped lang="scss">
-.select{
+.select {
     position: relative;
 
-    &:disabled{
+    &:disabled {
         opacity: 0.5;
     }
 }
 
 select {
     position: absolute;
-    top:0;
-    left:0;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     opacity: 0;

@@ -25,13 +25,12 @@ const emit = defineEmits<{
 function toggleMenu() {
     editorStore.hamburgerMenu = !editorStore.hamburgerMenu;
 }
-
 </script>
 
 <template>
     <button
         class="btn btn-top-bar btn-squared"
-        :class="{ 'active': editorStore.hamburgerMenu }"
+        :class="{ active: editorStore.hamburgerMenu }"
         @mousdown.stop
         @mouseup.stop
         @click.stop="toggleMenu"
@@ -39,13 +38,7 @@ function toggleMenu() {
         <i class="icon-menu"></i>
     </button>
 
-    <div
-        v-if="editorStore.hamburgerMenu"
-        class="select-menu"
-        @click.stop
-        @mouseup.stop
-        @mousedown.stop
-    >
+    <div v-if="editorStore.hamburgerMenu" class="select-menu" @click.stop @mouseup.stop @mousedown.stop>
         <button class="menu-item" :disabled="undoDisabled" @click="emit('undo')">
             <i class="icon-arriere"></i>
             <span>Undo</span>
@@ -70,9 +63,8 @@ function toggleMenu() {
 </template>
 
 <style scoped lang="scss">
-
 .btn-squared {
-    padding: .7rem;
+    padding: 0.7rem;
 
     &.active {
         background-color: var(--content);
@@ -89,7 +81,7 @@ function toggleMenu() {
     top: calc(80px + 0.3rem);
     right: 0.3rem;
     background-color: var(--content);
-    padding: .5rem;
+    padding: 0.5rem;
     border: 1px solid var(--border);
     border-radius: 8px;
     display: flex;
@@ -100,7 +92,7 @@ function toggleMenu() {
         padding: 1rem;
         border-radius: 8px;
         display: flex;
-        gap: .5rem;
+        gap: 0.5rem;
         align-items: center;
 
         border: none;
@@ -110,7 +102,7 @@ function toggleMenu() {
         color: var(--text);
 
         &:disabled {
-            opacity: .5;
+            opacity: 0.5;
         }
 
         &:hover:not(:disabled) {
@@ -119,8 +111,8 @@ function toggleMenu() {
         }
         select {
             position: absolute;
-            top:0;
-            left:0;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             opacity: 0;

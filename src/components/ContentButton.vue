@@ -26,19 +26,18 @@ function contextMenu(event: MouseEvent) {
     emit('contextmenu', event);
     contentButton.value.classList.add('selected');
 }
-
 </script>
 
 <template>
     <div
         ref="contentButton"
         class="btn btn-content"
-        :class="[classList, { 'draggable': isDraggable }, { 'active': isActive }]"
-        :draggable="isDraggable"    
+        :class="[classList, { draggable: isDraggable }, { active: isActive }]"
+        :draggable="isDraggable"
         @click.stop="click"
         @contextmenu.stop="contextMenu"
     >
-        <div class="text" :class="{ 'rotated': rotate }">
+        <div class="text" :class="{ rotated: rotate }">
             <i :class="icon" />
             <span v-if="subtitle" class="subtitle">{{ subtitle }}</span>
         </div>
@@ -56,7 +55,7 @@ function contextMenu(event: MouseEvent) {
 
 .selected {
     border: 2px solid var(--editor-blue);
-    box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);  
+    box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);
 }
 
 .text {

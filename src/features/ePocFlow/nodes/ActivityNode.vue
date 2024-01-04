@@ -16,15 +16,18 @@ const { findNode, edges, nodes } = useVueFlow({ id: 'main' });
 
 const currentNode = computed(() => findNode(props.id));
 
-const isSource = computed(() => getConnectedEdges([currentNode.value], edges.value).some((edge) => edge.source === props.id));
-const isTarget = computed(() => getConnectedEdges([currentNode.value], edges.value).some((edge) => edge.target === props.id));
-
+const isSource = computed(() =>
+    getConnectedEdges([currentNode.value], edges.value).some((edge) => edge.source === props.id),
+);
+const isTarget = computed(() =>
+    getConnectedEdges([currentNode.value], edges.value).some((edge) => edge.target === props.id),
+);
 
 const isCondition = ref(currentNode.value.data.type === 'condition');
 const page = ref(null);
 
 function openPageForm(id: string, formType: string) {
-    if(editorStore.selectNodeMode) {
+    if (editorStore.selectNodeMode) {
         exitSelectNodeMode(id);
     } else {
         editorStore.openFormPanel(id, formType);
@@ -43,10 +46,10 @@ function onContextMenu(event: MouseEvent) {
     const position = {
         x: event.clientX,
         y: event.clientY,
-    }; 
-    
+    };
+
     const selection = JSON.stringify(getSelectedNodes());
-    
+
     graphService.openContextMenu('activity', { position, id: currentNode.value.id, selection });
     currentNode.value.selected = true;
 }
@@ -59,14 +62,13 @@ const connectedBadges = computed(() => getConnectedBadges(currentNode.value.data
 
 const activityIndex = computed(() => {
     const activities = nodes.value.filter((node) => node.type === 'activity');
-    return activities.findIndex(activity => activity.id === currentNode.value.id) + 1;
+    return activities.findIndex((activity) => activity.id === currentNode.value.id) + 1;
 });
-
 </script>
 
 <template>
     <div>
-        <div 
+        <div
             ref="page"
             :data-testid="`activity-${activityIndex}`"
             class="container"
@@ -80,7 +82,12 @@ const activityIndex = computed(() => {
             @dragover.stop
         >
             <!--suppress JSUnresolvedReference -->
-            <p class="node-title" :class="{ 'active': editorStore.openedElementId ? editorStore.openedElementId === props.id : false }">{{ currentNode.data.formValues?.title || 'Activité' }}</p>
+            <p
+                class="node-title"
+                :class="{ active: editorStore.openedElementId ? editorStore.openedElementId === props.id : false }"
+            >
+                {{ currentNode.data.formValues?.title || 'Activité' }}
+            </p>
             <Handle
                 :data-testid="`target-activity-${activityIndex}`"
                 :class="{ 'not-connected': !isTarget }"
@@ -89,7 +96,7 @@ const activityIndex = computed(() => {
                 :connectable="false"
             />
             <div v-if="connectedBadges.length > 0" class="badge-notification badge-notification-left">
-                <img src="/img/badge/notification.svg" alt="notification">
+                <img src="/img/badge/notification.svg" alt="notification" />
                 <small>{{ connectedBadges.length }}</small>
             </div>
             <DraggableNode
@@ -113,8 +120,7 @@ const activityIndex = computed(() => {
 </template>
 
 <style scoped lang="scss">
-
-.node{
+.node {
     border: 2px dashed var(--dashed-border);
 }
 
@@ -130,7 +136,7 @@ const activityIndex = computed(() => {
 
 .container.hover {
     .node {
-        transition: all .2s ease-in-out;
+        transition: all 0.2s ease-in-out;
         background-color: var(--node-hover);
         box-shadow: 0 2px 5px 0 var(--shadow-outer);
     }
@@ -158,7 +164,7 @@ const activityIndex = computed(() => {
 .node-title {
     height: 1.5rem;
     margin: 0;
-    padding: .2rem;
+    padding: 0.2rem;
     top: -1.75rem;
     max-width: calc(60px + 1.8rem);
     overflow-x: hidden;
@@ -170,5 +176,4 @@ const activityIndex = computed(() => {
         color: var(--editor-blue);
     }
 }
-
 </style>

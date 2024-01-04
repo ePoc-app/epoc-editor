@@ -10,7 +10,7 @@ defineProps<Partial<NodeProps>>();
 defineEmits<Partial<Emits>>();
 
 function onClick() {
-    if(editorStore.selectNodeMode) return;
+    if (editorStore.selectNodeMode) return;
     saveState();
     addChapter();
 }
@@ -29,14 +29,14 @@ function onClick() {
     width: 31px;
     background-color: var(--content);
     border: 1px solid var(--border);
-    font-size: .7rem;
+    font-size: 0.7rem;
     cursor: pointer;
-    transition: box-shadow .1s ease-in-out;
+    transition: box-shadow 0.1s ease-in-out;
     &:hover {
         box-shadow: 0 1px 5px var(--shadow-outer);
     }
     &:active {
-        opacity: .7;
+        opacity: 0.7;
     }
 }
 </style>

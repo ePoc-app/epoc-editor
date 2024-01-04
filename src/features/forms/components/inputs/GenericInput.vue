@@ -33,13 +33,12 @@ const emit = defineEmits<{
 }>();
 
 const inputId = computed(() => {
-    if(props.pos !== undefined && props.pos !== null) {
+    if (props.pos !== undefined && props.pos !== null) {
         return `${props.input.id}-${props.pos}`;
     } else {
         return props.input.id;
     }
 });
-
 </script>
 
 <template>
@@ -63,7 +62,7 @@ const inputId = computed(() => {
         @input="emit('input', $event)"
         @save-given-state="emit('saveGivenState', $event)"
     />
-    <TextAreaInput 
+    <TextAreaInput
         v-if="input.type === 'textarea'"
         :id="inputId"
         :label="input.label"
@@ -109,7 +108,7 @@ const inputId = computed(() => {
         @change="emit('input', $event)"
         @save-given-state="emit('saveGivenState', $event)"
     />
-    <SelectInput 
+    <SelectInput
         v-if="input.type === 'select'"
         :id="inputId"
         :label="input.label"
@@ -131,17 +130,12 @@ const inputId = computed(() => {
         @change="emit('repeatInput', $event)"
         @save-given-state="emit('saveGivenState', $event)"
     />
-    <BadgesInput
-        v-if="input.type === 'badge'"
-        :input-value="inputValue as string[]"
-    />
+    <BadgesInput v-if="input.type === 'badge'" :input-value="inputValue as string[]" />
     <IconPicker
-        v-if="input.type === 'icon-picker'" 
+        v-if="input.type === 'icon-picker'"
         :label="input.label"
         :input-value="inputValue as string"
         @input="emit('input', $event)"
     />
-    <ConditionInput
-        v-if="input.type === 'badge-conditions'" 
-    />
+    <ConditionInput v-if="input.type === 'badge-conditions'" />
 </template>

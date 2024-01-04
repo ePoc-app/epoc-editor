@@ -3,14 +3,13 @@ import { enterSelectNodeMode } from '@/src/shared/services';
 
 //! Not sure if the displayed value should be the id or the name
 const props = defineProps<{
-    index: number
+    index: number;
     inputValue: string;
 }>();
 
 function onClick() {
     enterSelectNodeMode(props.index);
 }
-
 </script>
 
 <template>
@@ -28,7 +27,7 @@ function onClick() {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    margin-top: .75rem;
+    margin-top: 0.75rem;
 
     label {
         margin-bottom: 0.5rem;
@@ -37,7 +36,7 @@ function onClick() {
         display: flex;
         align-items: center;
         appearance: none;
-        padding: .5rem;
+        padding: 0.5rem;
         border: 1px solid var(--border);
         border-radius: 4px;
         background-color: var(--item-background);
@@ -51,7 +50,6 @@ function onClick() {
             padding: 0;
             line-height: 0;
         }
-
     }
 }
 </style>

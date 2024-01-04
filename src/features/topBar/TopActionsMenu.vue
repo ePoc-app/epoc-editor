@@ -22,7 +22,6 @@ const emit = defineEmits<{
     (e: 'exportProject'): void;
     (e: 'updateZoom', value: number): void;
 }>();
-
 </script>
 
 <template>
@@ -36,10 +35,10 @@ const emit = defineEmits<{
         />
 
         <div class="menu-md-container top-bar-actions">
-            <hr class="vertical-separator">
+            <hr class="vertical-separator" />
             <TopActionButton icon="icon-arriere" :disabled="undoDisabled" @click="emit('undo')" />
             <TopActionButton icon="icon-avant" :disabled="redoDisabled" @click="emit('redo')" />
-            <hr class="vertical-separator">
+            <hr class="vertical-separator" />
             <TopActionButton
                 icon="icon-save"
                 text="Sauvegarder"

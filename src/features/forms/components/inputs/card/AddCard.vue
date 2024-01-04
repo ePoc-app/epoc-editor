@@ -1,13 +1,11 @@
 <script setup lang="ts">
-
 defineProps<{
-    placeholder: string
+    placeholder: string;
 }>();
 
 const emit = defineEmits<{
-    (e: 'click'): void
+    (e: 'click'): void;
 }>();
-
 </script>
 
 <template>
@@ -18,13 +16,11 @@ const emit = defineEmits<{
 </template>
 
 <style scoped lang="scss">
-
 i {
-    font-size: .9rem;
+    font-size: 0.9rem;
 }
 
 button {
     margin-bottom: 1.5rem;
 }
-
 </style>

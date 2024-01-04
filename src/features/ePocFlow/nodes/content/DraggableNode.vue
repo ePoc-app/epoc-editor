@@ -4,7 +4,13 @@ import { useEditorStore } from '@/src/shared/stores';
 import { moveGuard } from '@/src/shared/utils/draggable';
 import { NodeElement, DraggableChange } from '@/src/shared/interfaces';
 import { saveState } from '@/src/shared/services/undoRedo.service';
-import { addContentToPage, changeContentOrder, removeContentFromPage, openFormPanel, getElementByContentId } from '@/src/shared/services/graph';
+import {
+    addContentToPage,
+    changeContentOrder,
+    removeContentFromPage,
+    openFormPanel,
+    getElementByContentId,
+} from '@/src/shared/services/graph';
 import { useVueFlow } from '@vue-flow/core';
 import { closeFormPanel, getConnectedBadges, graphService } from '@/src/shared/services';
 
@@ -21,8 +27,8 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-    (e: 'removeHoverEffect'),
-    (e: 'addHoverEffect'),
+    (e: 'removeHoverEffect');
+    (e: 'addHoverEffect');
 }>();
 
 const dragOptions = computed(() => {
@@ -37,7 +43,7 @@ const dragOptions = computed(() => {
         animation: 200,
         move: moveGuard,
         revertOnSpill: true,
-        onSpill: handleSpill
+        onSpill: handleSpill,
     };
 });
 
@@ -45,7 +51,7 @@ const dragOptions = computed(() => {
 function handleSpill(event) {
     const oldIndex = event.oldIndex;
     const parent = getElementByContentId(event.from.id);
-    
+
     removeContentFromPage(oldIndex, parent.id, true);
 }
 
@@ -53,7 +59,7 @@ const draggableClass = computed(() => {
     return {
         'page-node': props.type === 'page',
         'activity-node': props.type === 'activity',
-        'active': editorStore.openedElementId ? editorStore.openedElementId === props.nodeId : false,
+        active: editorStore.openedElementId ? editorStore.openedElementId === props.nodeId : false,
     };
 });
 
@@ -63,28 +69,28 @@ const currentNode = computed(() => findNode(props.nodeId));
 
 const isCondition = currentNode.value.data.type === 'condition';
 const classList = {
-    'clickable': true,
-    'btn-content-node': true
+    clickable: true,
+    'btn-content-node': true,
 };
 
 function change(event: DraggableChange) {
-    if(!editorStore.draggedElement) return;
+    if (!editorStore.draggedElement) return;
 
     const { added, moved, removed } = event;
 
-    if(added && dropped.value) {
+    if (added && dropped.value) {
         saveState();
         dropped.value = false;
         addContentToPage(props.nodeId, added.element, added.newIndex);
     }
 
-    if(moved) {
+    if (moved) {
         saveState();
         const { oldIndex, newIndex } = moved;
         changeContentOrder(oldIndex, newIndex, props.nodeId);
     }
 
-    if(removed) {
+    if (removed) {
         const { oldIndex } = removed;
         removeContentFromPage(oldIndex, props.nodeId, true);
     }
@@ -102,7 +108,7 @@ function dragStart(event: DragEvent, element: NodeElement, index: number) {
         source: {
             parentId: props.nodeId,
             index,
-        }
+        },
     };
     editorStore.draggedElement.type = 'nodeElement';
     editorStore.draggedElement.element = element;
@@ -111,7 +117,6 @@ function dragStart(event: DragEvent, element: NodeElement, index: number) {
 function onContextMenu(contentId: string) {
     graphService.openContextMenu('content', { pageId: currentNode.value.id, id: contentId });
 }
-
 </script>
 
 <template>
@@ -127,12 +132,12 @@ function onContextMenu(contentId: string) {
     >
         <!--suppress VueUnrecognizedSlot -->
         <template #item="{ element, index }">
-            <div class="node-item" :class="{ 'condition': isCondition }">
+            <div class="node-item" :class="{ condition: isCondition }">
                 <div
                     v-if="getConnectedBadges(element.contentId).length > 0"
                     class="badge-notification badge-notification-right"
                 >
-                    <img src="/img/badge/notification.svg" alt="notification">
+                    <img src="/img/badge/notification.svg" alt="notification" />
                     <!--suppress JSUnresolvedReference -->
                     <small>{{ getConnectedBadges(element.contentId).length }}</small>
                 </div>
@@ -158,10 +163,8 @@ function onContextMenu(contentId: string) {
 </template>
 
 <style scoped lang="scss">
-
 .node-item {
-    transition: text .2s linear;
+    transition: text 0.2s linear;
     position: relative;
 }
-
 </style>

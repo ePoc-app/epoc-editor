@@ -1,12 +1,10 @@
 <script setup lang="ts">
-
 defineProps<{
     icon: string;
     text?: string;
     position?: 'left' | 'right';
     disabled?: boolean;
 }>();
-
 </script>
 
 <template>
@@ -19,7 +17,7 @@ defineProps<{
 
 <style scoped lang="scss">
 .btn-squared {
-    padding: .7rem;
+    padding: 0.7rem;
 }
 
 button:disabled {

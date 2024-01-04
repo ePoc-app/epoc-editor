@@ -7,7 +7,6 @@ defineProps<{
     label: string;
 }>();
 
-
 const emit = defineEmits<{
     (e: 'change', value: boolean): void;
     (e: 'saveGivenState', state: string): void;
@@ -17,22 +16,15 @@ function onChange(event: Event) {
     const target = event.target as HTMLInputElement;
     const value = target.checked;
     const state = getCurrentState(true);
-    
+
     emit('change', value);
     emit('saveGivenState', state);
 }
-
 </script>
 
 <template>
     <div class="checkbox">
-        <input
-            :id="id"
-            class="checkbox-input"
-            type="checkbox"
-            :checked="inputValue"
-            @change="onChange"
-        >
+        <input :id="id" class="checkbox-input" type="checkbox" :checked="inputValue" @change="onChange" />
         <label :for="id">{{ label }}</label>
     </div>
 </template>
@@ -40,10 +32,10 @@ function onChange(event: Event) {
 <style scoped lang="scss">
 .checkbox {
     display: flex;
-    margin: 1rem 0 .5rem 0;
-    input[type="checkbox"] {
+    margin: 1rem 0 0.5rem 0;
+    input[type='checkbox'] {
         appearance: none;
-      margin: 0 .5rem 0 0;
+        margin: 0 0.5rem 0 0;
         font: inherit;
         width: 20px;
         height: 20px;
@@ -56,7 +48,7 @@ function onChange(event: Event) {
 
         display: grid;
         place-content: center;
-        
+
         &:checked::before {
             transform: scale(1);
         }
@@ -66,7 +58,7 @@ function onChange(event: Event) {
             width: 14px;
             height: 14px;
             transform: scale(0);
-            transition: .1s transform ease-in-out;
+            transition: 0.1s transform ease-in-out;
             border-radius: 4px;
             background-color: var(--editor-blue);
         }

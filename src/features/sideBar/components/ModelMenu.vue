@@ -11,10 +11,10 @@ const editorStore = useEditorStore();
             <h3>Modèles de page</h3>
             <button class="btn btn-close"><i class="icon-x"></i></button>
         </header>
-        <hr class="separator">
+        <hr class="separator" />
         <div v-if="editorStore.pageModels.length > 0" class="models">
-            <PageTemplate 
-                v-for="(model, index) in editorStore.pageModels" 
+            <PageTemplate
+                v-for="(model, index) in editorStore.pageModels"
                 :key="index"
                 :elements="model.actions"
                 :name="model.name"
@@ -46,11 +46,11 @@ const editorStore = useEditorStore();
     }
 
     hr {
-        margin-bottom: 1rem;    
+        margin-bottom: 1rem;
     }
 
     .empty {
-        width: calc(6rem + 120px); 
+        width: calc(6rem + 120px);
         text-align: center;
         padding: 1rem;
         h4 {

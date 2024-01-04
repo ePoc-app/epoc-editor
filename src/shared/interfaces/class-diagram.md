@@ -1,4 +1,3 @@
-
 <!-- ## Data structure in the menu bar
 ```mermaid
 classDiagram

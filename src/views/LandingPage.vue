@@ -17,7 +17,6 @@ function openProject(filepath: ePocProject) {
 function createProject() {
     editorService.newEpocProject();
 }
-
 </script>
 
 <template>
@@ -44,25 +43,26 @@ function createProject() {
                     <div class="card-icon">
                         <i class="icon-fichier" />
                     </div>
-                    <p><span class="tooltip" :data-text="epoc.filepath">{{ epoc.name }}</span></p>
+                    <p>
+                        <span class="tooltip" :data-text="epoc.filepath">{{ epoc.name }}</span>
+                    </p>
                     <small>{{ new Date(epoc.modified).toLocaleString() }}</small>
                     <hr class="vertical-separator" />
-                    <div class="btn-open" @click="openProject(epoc)">
-                        Ouvrir
-                    </div>
+                    <div class="btn-open" @click="openProject(epoc)">Ouvrir</div>
                 </div>
             </div>
         </div>
         <div v-if="editorStore.loading" class="loading">
             <div class="spinner"></div>
-            <span v-if="editorStore.currentProject.filepath">Chargement de "{{ editorStore.currentProject.filepath }}"</span>
+            <span v-if="editorStore.currentProject.filepath">
+                Chargement de "{{ editorStore.currentProject.filepath }}"
+            </span>
             <span v-else>Chargement de l'ePoc</span>
         </div>
     </div>
 </template>
 
 <style scoped lang="scss">
-
 .landing-page {
     margin: auto;
 }
@@ -75,68 +75,70 @@ function createProject() {
         cursor: pointer;
     }
     h3 {
-        margin-bottom: .7rem;
+        margin-bottom: 0.7rem;
     }
-    
-    .logo, .buttons {
+
+    .logo,
+    .buttons {
         display: flex;
         justify-content: space-between;
         margin-bottom: 2rem;
     }
 
-    .loading{
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .loading {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-    .spinner{
-      margin-right: 1em;
+    .spinner {
+        margin-right: 1em;
     }
 
     .tooltip {
-      position:relative;
+        position: relative;
 
-      &:before {
-        content: attr(data-text);
-        display:none;
-        position:absolute;
+        &:before {
+            content: attr(data-text);
+            display: none;
+            position: absolute;
 
-        top:50%;
-        transform:translateY(-50%);
+            top: 50%;
+            transform: translateY(-50%);
 
-        left:100%;
-        margin-left:8px;
+            left: 100%;
+            margin-left: 8px;
 
-        padding:5px;
-        border-radius:5px;
-        background:#222;
-        color: #fff;
-        font-size: .8em;
-        font-weight: normal;
-        line-height: 1;
-        text-align:center;
-      }
+            padding: 5px;
+            border-radius: 5px;
+            background: #222;
+            color: #fff;
+            font-size: 0.8em;
+            font-weight: normal;
+            line-height: 1;
+            text-align: center;
+        }
 
-      &:after {
-        content: "";
-        position:absolute;
+        &:after {
+            content: '';
+            position: absolute;
 
-        left:100%;
-        margin-left:-3px;
+            left: 100%;
+            margin-left: -3px;
 
-        top:50%;
-        transform:translateY(-50%);
+            top: 50%;
+            transform: translateY(-50%);
 
-        border:6px solid transparent;
-        border-right-color: #222;
+            border: 6px solid transparent;
+            border-right-color: #222;
 
-        display:none;
-      }
+            display: none;
+        }
 
-      &:hover:before, &:hover:after {
-        display:block;
-      }
+        &:hover:before,
+        &:hover:after {
+            display: block;
+        }
     }
 }
 </style>

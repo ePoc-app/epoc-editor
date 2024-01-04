@@ -18,11 +18,10 @@ const dragging = ref(false);
 function dragStart(event: DragEvent, elements) {
     editorStore.draggedElement = {
         type: 'sideAction',
-        element: elements
+        element: elements,
     };
     dragging.value = true;
 }
-
 </script>
 
 <template>
@@ -30,14 +29,20 @@ function dragStart(event: DragEvent, elements) {
         <p class="page-title">{{ name ? name : 'Modèle' }}</p>
         <!--suppress VueUnrecognizedDirective -->
         <div
-            v-tippy="{content: templateTooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
+            v-tippy="{
+                content: templateTooltip,
+                placement: 'right',
+                arrow: true,
+                arrowType: 'round',
+                animation: 'fade',
+            }"
             class="page-template node"
             :draggable="true"
-            :class="{ 'dragging': dragging }"
+            :class="{ dragging: dragging }"
             @dragstart="dragStart($event, elements)"
             @dragend="dragging = false"
         >
-            <ContentButton 
+            <ContentButton
                 v-for="(element, index) in elements"
                 :key="index"
                 :icon="element.icon"
@@ -58,14 +63,14 @@ function dragStart(event: DragEvent, elements) {
 
     &.dragging {
         cursor: grabbing;
-        transition: opacity .1s ease-in-out;
-        opacity: .5;
+        transition: opacity 0.1s ease-in-out;
+        opacity: 0.5;
         box-shadow: none;
     }
 }
 
 .page-title {
-    padding: .2rem;
+    padding: 0.2rem;
     margin: 0 1rem;
     max-width: calc(60px + 1.8rem);
     overflow-x: hidden;

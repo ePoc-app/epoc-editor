@@ -10,7 +10,7 @@ const editorStore = useEditorStore();
 
 const standardContent = editorStore.standardPages.filter(({ type }) => {
     const filteredPages = ['legacy-condition', 'condition', 'question', 'model', 'badge'];
-    const prodFilteredPages = env.isDev ? []:[];
+    const prodFilteredPages = env.isDev ? [] : [];
     return ![...filteredPages, ...prodFilteredPages].includes(type);
 });
 const questionContent = editorStore.standardPages.find(({ type }) => type === 'question');
@@ -21,22 +21,24 @@ const dragging = ref(false);
 
 const dragOptions = {
     group: {
-        name:'node',
+        name: 'node',
         pull: 'clone',
         put: false,
     },
     disabled: false,
     sort: false,
     ghostClass: 'ghost',
-    move: moveGuard
+    move: moveGuard,
 };
 
-const classList = (item: SideAction) => ({ 'clickable': item.type === 'question' || item.type === 'model' || item.type === 'badge' });
+const classList = (item: SideAction) => ({
+    clickable: item.type === 'question' || item.type === 'model' || item.type === 'badge',
+});
 
 function dragStart(event: DragEvent, sideAction: SideAction) {
     editorStore.draggedElement = {
         type: 'sideAction',
-        element: [sideAction]
+        element: [sideAction],
     };
     dragging.value = true;
 }
@@ -48,7 +50,6 @@ function showQuestionsMenu() {
 function showTemplateMenu() {
     editorStore.modelMenu = !editorStore.modelMenu;
 }
-
 </script>
 
 <template>
@@ -65,7 +66,13 @@ function showTemplateMenu() {
                 <!--suppress VueUnrecognizedDirective -->
                 <ContentButton
                     :key="index"
-                    v-tippy="{content: element.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
+                    v-tippy="{
+                        content: element.tooltip,
+                        placement: 'right',
+                        arrow: true,
+                        arrowType: 'round',
+                        animation: 'fade',
+                    }"
                     :data-testid="`${element.type}-content`"
                     :icon="element.icon"
                     :is-draggable="true"
@@ -78,7 +85,13 @@ function showTemplateMenu() {
     <div class="question">
         <!--suppress VueUnrecognizedDirective -->
         <ContentButton
-            v-tippy="{content: questionContent.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
+            v-tippy="{
+                content: questionContent.tooltip,
+                placement: 'right',
+                arrow: true,
+                arrowType: 'round',
+                animation: 'fade',
+            }"
             data-testid="questions-menu"
             :icon="questionContent.icon"
             :is-draggable="false"
@@ -89,8 +102,7 @@ function showTemplateMenu() {
         />
         <div v-if="editorStore.questionMenu" data-testid="floating-menu" class="floating-menu" @click.stop>
             <div class="arrow-wrapper">
-                <div class="arrow">
-                </div>
+                <div class="arrow"></div>
             </div>
             <VueDraggable
                 v-bind="dragOptions"
@@ -105,7 +117,13 @@ function showTemplateMenu() {
                         <!--suppress VueUnrecognizedDirective -->
                         <ContentButton
                             :key="index"
-                            v-tippy="{content: element.label, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
+                            v-tippy="{
+                                content: element.label,
+                                placement: 'right',
+                                arrow: true,
+                                arrowType: 'round',
+                                animation: 'fade',
+                            }"
                             :data-testid="`${element.type}-content`"
                             :icon="element.icon"
                             :class-list="{ 'btn-content-blue': true }"
@@ -120,17 +138,29 @@ function showTemplateMenu() {
     <div v-if="env.isDev">
         <!--suppress VueUnrecognizedDirective -->
         <ContentButton
-            v-tippy="{content: conditionContent.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
+            v-tippy="{
+                content: conditionContent.tooltip,
+                placement: 'right',
+                arrow: true,
+                arrowType: 'round',
+                animation: 'fade',
+            }"
             :icon="conditionContent.icon"
             :class-list="{ 'btn-content-blue': true }"
             :is-draggable="true"
             @dragstart="dragStart($event, conditionContent)"
             @dragend="dragging = false"
         />
-        <hr>
+        <hr />
         <!--suppress VueUnrecognizedDirective -->
         <ContentButton
-            v-tippy="{content: modelContent.tooltip, placement: 'right', arrow : true, arrowType : 'round', animation : 'fade'}"
+            v-tippy="{
+                content: modelContent.tooltip,
+                placement: 'right',
+                arrow: true,
+                arrowType: 'round',
+                animation: 'fade',
+            }"
             :icon="modelContent.icon"
             :is-draggable="false"
             :is-active="editorStore.modelMenu"
@@ -141,27 +171,27 @@ function showTemplateMenu() {
 </template>
 
 <style scoped lang="scss">
-
 hr {
     border-top: 1px solid var(--border);
     width: 60px;
 }
 
 .dragging {
-    transition: opacity .1s ease-in-out;
-    opacity: .5;
+    transition: opacity 0.1s ease-in-out;
+    opacity: 0.5;
     box-shadow: none;
 }
 
 .active {
     border: 2px solid var(--editor-blue);
     color: var(--editor-blue);
-    
+
     box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);
-    transition: all .15s ease-in-out;
+    transition: all 0.15s ease-in-out;
 }
 
-.questions-list, .contents-list {
+.questions-list,
+.contents-list {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -177,7 +207,7 @@ hr {
     position: absolute;
     left: 5.5rem;
     top: 50%;
-    transform: translateY(-50%); 
+    transform: translateY(-50%);
     z-index: 1;
     border-radius: 10px;
     filter: drop-shadow(0 1px 8px var(--shadow-outer));
@@ -203,5 +233,4 @@ hr {
 .container {
     position: relative;
 }
-
 </style>

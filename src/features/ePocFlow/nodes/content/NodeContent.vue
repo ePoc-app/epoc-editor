@@ -7,24 +7,23 @@ defineProps<{
     isActive?: boolean;
     classList?: object;
     isCondition: boolean;
-    connectedBadges: number
+    connectedBadges: number;
 }>();
 
 const emit = defineEmits<{
-    (e: 'closeFormPanel'),
-    (e: 'openFormPanel'),
-    (e: 'contextMenu'),
-    (e: 'dragStart', event: DragEvent),
-    (e: 'mouseEnter'),
-    (e: 'mouseLeave'),
+    (e: 'closeFormPanel');
+    (e: 'openFormPanel');
+    (e: 'contextMenu');
+    (e: 'dragStart', event: DragEvent);
+    (e: 'mouseEnter');
+    (e: 'mouseLeave');
 }>();
-
 </script>
 
 <template>
-    <div class="node-item" :class="{ 'condition': isCondition }">
+    <div class="node-item" :class="{ condition: isCondition }">
         <div v-if="connectedBadges" class="badge-notification badge-notification-right">
-            <img src="/img/badge/notification.svg" alt="notification">
+            <img src="/img/badge/notification.svg" alt="notification" />
             <small>{{ connectedBadges }}</small>
         </div>
         <ContentButton
@@ -45,10 +44,8 @@ const emit = defineEmits<{
 </template>
 
 <style scoped lang="scss">
-
 .node-item {
-    transition: all .2s linear;
+    transition: all 0.2s linear;
     position: relative;
 }
-
 </style>

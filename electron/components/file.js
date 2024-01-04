@@ -1,4 +1,4 @@
-const { dialog, BrowserWindow, shell} = require('electron');
+const { dialog, BrowserWindow, shell } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
@@ -27,9 +27,9 @@ const getRecentFiles = function () {
 const openFile = function () {
     const files = dialog.showOpenDialogSync(BrowserWindow.getFocusedWindow(), {
         properties: ['openFile'],
-        filters: [{ name: 'Markdown', extensions: ['md', 'markdown', 'txt']}]
+        filters: [{ name: 'Markdown', extensions: ['md', 'markdown', 'txt'] }],
     });
-    if(!files) return;
+    if (!files) return;
 
     const file = files[0];
     return fs.readFileSync(file).toString();
@@ -45,7 +45,7 @@ const newEpocProject = async function () {
         name: null,
         modified: null,
         filepath: null,
-        workdir: createWorkDir()
+        workdir: createWorkDir(),
     };
 
     const ellapsed = performance.now() - startTime;
@@ -62,7 +62,7 @@ const pickEpocToImport = async function () {
     const startTime = performance.now();
     const files = dialog.showOpenDialogSync(BrowserWindow.getFocusedWindow(), {
         properties: ['openFile'],
-        filters: [{name: 'ePoc export archive', extensions: ['zip']}]
+        filters: [{ name: 'ePoc export archive', extensions: ['zip'] }],
     });
     if (!files || !files[0]) return null;
     const filepath = files[0];
@@ -82,7 +82,7 @@ const pickEpocToImport = async function () {
 
     return {
         epoc,
-        workdir
+        workdir,
     };
 };
 
@@ -93,15 +93,15 @@ const pickEpocToImport = async function () {
 const pickEpocProject = function () {
     const files = dialog.showOpenDialogSync(BrowserWindow.getFocusedWindow(), {
         properties: ['openFile'],
-        filters: [{ name: 'ePoc', extensions: ['epoc']}]
+        filters: [{ name: 'ePoc', extensions: ['epoc'] }],
     });
-    if(!files || !files[0]) return null;
+    if (!files || !files[0]) return null;
 
     return {
         name: null,
         modified: fs.statSync(files[0]).mtime,
         filepath: files[0],
-        workdir: null
+        workdir: null,
     };
 };
 
@@ -124,7 +124,7 @@ const openEpocProject = async function (filepath) {
         name: path.basename(filepath),
         modified: fs.statSync(filepath).mtime,
         filepath,
-        workdir
+        workdir,
     };
 
     updateRecent(project);
@@ -153,10 +153,10 @@ const saveEpocProject = async function (project) {
  */
 const saveAsEpocProject = async function (project) {
     const files = dialog.showSaveDialogSync(BrowserWindow.getFocusedWindow(), {
-        filters: [{ name: 'ePoc', extensions: ['epoc']}]
+        filters: [{ name: 'ePoc', extensions: ['epoc'] }],
     });
 
-    if(!files) return null;
+    if (!files) return null;
 
     updateRecent(project);
 
@@ -169,18 +169,18 @@ const saveAsEpocProject = async function (project) {
  * @param {string} filepath the path to the .epoc project file
  * @param {boolean} exporting if true, the project.json file will not be included
  */
-const zipFiles = async function(workdir, filepath, exporting) {
+const zipFiles = async function (workdir, filepath, exporting) {
     // Do not use path.join here, admZIP normalize the entries path
-    const unusedAssets = getUnusedAssets(workdir).map(asset => 'assets/' + asset);
+    const unusedAssets = getUnusedAssets(workdir).map((asset) => 'assets/' + asset);
 
     const excluded = ['.DS_Store', '__MACOSX', '.git'];
     excluded.push(...unusedAssets);
 
-    if(exporting) excluded.push('project.json');
+    if (exporting) excluded.push('project.json');
 
     const zip = new AdmZip();
     zip.addLocalFolder(workdir, '', (entry) => {
-        return excluded.every(e => entry.indexOf(e) === -1) ;
+        return excluded.every((e) => entry.indexOf(e) === -1);
     });
     await zip.writeZipPromise(filepath, null);
 };
@@ -204,14 +204,16 @@ const zipEpocProject = async function (workdir, filepath) {
  * @return {string|null}
  */
 const exportProject = async function (workdir, filepath) {
-    const defaultPath = filepath ? path.join(path.dirname(filepath), path.basename(filepath, path.extname(filepath)) + '.zip') : '';
+    const defaultPath = filepath
+        ? path.join(path.dirname(filepath), path.basename(filepath, path.extname(filepath)) + '.zip')
+        : '';
 
     const exportPath = dialog.showSaveDialogSync(BrowserWindow.getFocusedWindow(), {
         defaultPath: defaultPath,
-        filters: [{ name: 'zip', extensions: ['zip']}]
+        filters: [{ name: 'zip', extensions: ['zip'] }],
     });
 
-    if(!exportPath) return null;
+    if (!exportPath) return null;
 
     await zipFiles(workdir, exportPath, true);
     shell.showItemInFolder(exportPath);
@@ -253,10 +255,10 @@ const writeEpocData = async function (workdir, data) {
  * @return {string} the path of the copied file
  */
 const copyFileToWorkdir = async function (workdir, filepath, targetDirectory) {
-    const pathEnd = targetDirectory ? path.join(...(targetDirectory.split('/'))) : 'assets';
+    const pathEnd = targetDirectory ? path.join(...targetDirectory.split('/')) : 'assets';
     const assetsPath = path.join(workdir, pathEnd);
 
-    if(!fs.existsSync(assetsPath)) fs.mkdirSync(assetsPath, {recursive: true});
+    if (!fs.existsSync(assetsPath)) fs.mkdirSync(assetsPath, { recursive: true });
 
     const copyPath = path.join(assetsPath, path.basename(filepath).replace(/[^a-z0-9.]/gi, '_'));
     if (!fs.existsSync(assetsPath)) fs.mkdirSync(assetsPath);
@@ -278,13 +280,13 @@ const createWorkDir = function () {
 const cleanAllWorkdir = function () {
     const workdirs = glob.sync(path.join(os.tmpdir(), 'epoc-editor-*'));
 
-    workdirs.forEach(dir => {
-        fs.rmSync(dir, {recursive: true, force: true});
+    workdirs.forEach((dir) => {
+        fs.rmSync(dir, { recursive: true, force: true });
     });
 };
 
 const updateRecent = function (project) {
-    const recentIndex = recentFiles.findIndex(r => r.filepath === project.filepath);
+    const recentIndex = recentFiles.findIndex((r) => r.filepath === project.filepath);
     if (recentIndex !== -1) {
         recentFiles[recentIndex] = project;
         recentFiles.unshift(recentFiles.splice(recentIndex, 1)[0]);
@@ -308,28 +310,27 @@ const getAllAssets = function (workdir) {
     try {
         const items = fs.readdirSync(assetsDir);
 
-        for(const item of items) {
+        for (const item of items) {
             const itemPath = path.join(assetsDir, item);
             const stat = fs.statSync(itemPath);
 
-            if(stat.isFile()) assetPaths.push(itemPath);
+            if (stat.isFile()) assetPaths.push(itemPath);
         }
 
         const iconItems = fs.readdirSync(iconsPath);
-        for(const item of iconItems) {
+        for (const item of iconItems) {
             const itemPath = path.join(iconsPath, item);
             const stat = fs.statSync(itemPath);
 
-            if(stat.isFile()) assetPaths.push(itemPath);
+            if (stat.isFile()) assetPaths.push(itemPath);
         }
-
-    } catch(e) {
+    } catch (e) {
         console.error('Error reading assets directory', e);
     }
 
     const assetsName = [];
 
-    for(const asset of assetPaths) {
+    for (const asset of assetPaths) {
         const pathParts = asset.split(path.sep);
         const prefix = pathParts[pathParts.length - 2] === 'icons' ? `icons${path.sep}` : '';
         const filename = prefix + pathParts[pathParts.length - 1];
@@ -343,13 +344,16 @@ const getUsedAssets = function (workdir) {
     const regex = /"assets[\\/\\\\]([^"]+)"/g;
     const matches = projectJSON.match(regex);
 
-    if(!matches) return [];
-    return matches.map(match => {
-        return match.replace('assets/', '')
-            .replaceAll('"', '')
-            // To only keep the slash after icons
-            .replace(/\/+/g, '/')
-            .replace(/\\/g, '');
+    if (!matches) return [];
+    return matches.map((match) => {
+        return (
+            match
+                .replace('assets/', '')
+                .replaceAll('"', '')
+                // To only keep the slash after icons
+                .replace(/\/+/g, '/')
+                .replace(/\\/g, '')
+        );
     });
 };
 
@@ -358,8 +362,8 @@ const getUnusedAssets = function (workdir) {
     const usedAssets = getUsedAssets(workdir);
 
     const unusedAssets = [];
-    for(const asset of allAssets) {
-        if(!usedAssets.includes(asset)) {
+    for (const asset of allAssets) {
+        if (!usedAssets.includes(asset)) {
             unusedAssets.push(asset);
         }
     }

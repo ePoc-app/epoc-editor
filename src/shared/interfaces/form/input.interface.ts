@@ -2,7 +2,7 @@ export interface Input {
     id: string;
     type: string;
     label: string;
-    value: string|boolean|number|string[];
+    value: string | boolean | number | string[];
     placeholder?: string;
     accept?: string;
     icon?: string;
@@ -10,5 +10,5 @@ export interface Input {
     addButton?: boolean;
     options?: string[];
     linkedOptions?: string;
-    targetDirectory?: string
+    targetDirectory?: string;
 }

@@ -2,7 +2,7 @@
 import Editor from '@tinymce/tinymce-vue';
 import { getTinymce } from '@tinymce/tinymce-vue/lib/cjs/main/ts/TinyMCE';
 import { Ref, ref, watch } from 'vue';
-import {graphService} from '@/src/shared/services';
+import { graphService } from '@/src/shared/services';
 import { getCurrentState } from '@/src/shared/services/undoRedo.service';
 
 const props = defineProps<{
@@ -29,14 +29,14 @@ watch(
     () => props.inputValue,
     () => {
         content.value = props.inputValue;
-    }
+    },
 );
 
 watch(
     () => content.value,
     () => {
         textChange();
-    }
+    },
 );
 
 const plugins = 'image link lists template code';
@@ -77,7 +77,6 @@ function handleFilePicker(callback: (url: string) => void) {
     });
 }
 
-
 // Undo Redo
 let savedState = '';
 let startValue = '';
@@ -91,7 +90,7 @@ function onFocus() {
 }
 
 function onBlur() {
-    if(startValue !== content.value) emit('saveGivenState', savedState);
+    if (startValue !== content.value) emit('saveGivenState', savedState);
 
     const htmlInput = document.querySelector('.tox-tinymce') as HTMLElement;
     htmlInput.classList.remove('focus');
@@ -102,7 +101,6 @@ function focusEditor() {
     const editor = getTinymce().activeEditor;
     editor.focus();
 }
-
 </script>
 
 <template>
@@ -119,7 +117,7 @@ function focusEditor() {
             max_height: 800,
             height: 350,
             templates: [
-                { title: 'Plier/déplier', content: template, description: 'Plier/déplier avec titre et contenu' }
+                { title: 'Plier/déplier', content: template, description: 'Plier/déplier avec titre et contenu' },
             ],
             file_picker_types: 'image',
             file_picker_callback: handleFilePicker,

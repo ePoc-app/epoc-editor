@@ -6,12 +6,12 @@ defineProps<{
     inputValue: string;
     label: string;
     //!Deprectated prop remove it when reimplemening the radio input
-    pos: number
+    pos: number;
 }>();
 
 const emit = defineEmits<{
     (e: 'change', value: string): void;
-    (e: 'saveGivenState', state: string): void
+    (e: 'saveGivenState', state: string): void;
 }>();
 
 function onChange(value: string) {
@@ -20,7 +20,6 @@ function onChange(value: string) {
     emit('change', value);
     emit('saveGivenState', savedState);
 }
-
 </script>
 
 <template>
@@ -35,7 +34,7 @@ function onChange(value: string) {
                     class="radio-input"
                     :checked="inputValue === '1'"
                     @change="onChange('1')"
-                >
+                />
                 <label :for="'left-' + id">Choix gauche</label>
             </div>
             <div class="radio-btn">
@@ -46,7 +45,7 @@ function onChange(value: string) {
                     class="radio-input"
                     type="radio"
                     @change="onChange('2')"
-                >
+                />
                 <label :for="'right-' + id">Choix droite</label>
             </div>
         </div>
@@ -55,24 +54,24 @@ function onChange(value: string) {
 
 <style scoped lang="scss">
 .radio {
-    margin: 1rem 0 .5rem 0;
+    margin: 1rem 0 0.5rem 0;
 
     .radio-group {
-        margin-top: .5rem;
+        margin-top: 0.5rem;
         display: flex;
         justify-content: space-between;
 
         .radio-btn {
             display: flex;
             &:last-child {
-            margin-right: 0.5rem;
+                margin-right: 0.5rem;
             }
 
             label {
-                margin-left: .5rem;
+                margin-left: 0.5rem;
                 cursor: pointer;
             }
-            input[type="radio"] {
+            input[type='radio'] {
                 appearance: none;
                 width: 20px;
                 height: 20px;
@@ -83,13 +82,13 @@ function onChange(value: string) {
                 transform: translateY(0.075rem);
                 display: grid;
                 place-content: center;
-                
+
                 &::before {
                     content: '';
                     width: 12px;
                     height: 12px;
                     transform: scale(0);
-                    transition: .1s transform ease-in-out;
+                    transition: 0.1s transform ease-in-out;
                     border-radius: 50%;
                     background-color: var(--editor-blue);
                 }

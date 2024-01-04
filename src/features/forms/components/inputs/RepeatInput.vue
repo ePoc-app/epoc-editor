@@ -1,4 +1,4 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useEditorStore } from '@/src/shared/stores';
 import GenericInput from './GenericInput.vue';
 import AddCard from './card/AddCard.vue';
@@ -9,7 +9,7 @@ import {
     RepeatChangeEvent,
     RepeatInputEvent,
     RepeatMoveEvent,
-    RepeatRemoveEvent
+    RepeatRemoveEvent,
 } from '@/src/shared/interfaces';
 import { ref } from 'vue';
 import { generateContentId } from '@/src/shared/services/graph.service';
@@ -49,24 +49,23 @@ function onInput(value: string, id: string, index: number) {
         type: 'change',
         value,
         id,
-        index
+        index,
     };
     emit('change', changeEvent);
 }
 
 function addCard() {
-    const defaultValues = props.inputs.length === 1 
-        ? props.inputs[0].value 
-        : props.inputs.reduce((defaultValues, input) => {
-            defaultValues[input.id] = input.type === 'hidden'
-                ? generateContentId()
-                : input.value;
-            return defaultValues;
-        }, {});
+    const defaultValues =
+        props.inputs.length === 1
+            ? props.inputs[0].value
+            : props.inputs.reduce((defaultValues, input) => {
+                  defaultValues[input.id] = input.type === 'hidden' ? generateContentId() : input.value;
+                  return defaultValues;
+              }, {});
 
     const addEvent: RepeatAddEvent = {
         type: 'add',
-        defaultValues
+        defaultValues,
     };
     emit('change', addEvent);
 }
@@ -74,24 +73,23 @@ function addCard() {
 function removeCard(index: number) {
     const removeEvent: RepeatRemoveEvent = {
         type: 'remove',
-        index
+        index,
     };
     emit('change', removeEvent);
 }
 
 function moveCard(oldIndex: number, newIndex: number) {
-
     const moveEvent: RepeatMoveEvent = {
         type: 'move',
         oldIndex,
-        newIndex
+        newIndex,
     };
 
     emit('change', moveEvent);
 }
 
 function dragCard(event: DraggableChange) {
-    if(!event.moved) return;
+    if (!event.moved) return;
 
     const { oldIndex, newIndex } = event.moved;
     moveCard(oldIndex, newIndex);
@@ -102,7 +100,7 @@ function onCheck(value: boolean, id: string, index: number) {
         type: 'change',
         value,
         id,
-        index
+        index,
     };
     emit('change', changeEvent);
 }
@@ -110,7 +108,7 @@ function onCheck(value: boolean, id: string, index: number) {
 function onClick(index: number, action: string) {
     const element = currentNode.data.elements?.[index];
 
-    if(element && action) {
+    if (element && action) {
         const { id, formType, parentId } = element;
         editorStore.openFormPanel(id, formType, { nodeId: parentId });
     }
@@ -128,19 +126,17 @@ function end() {
 }
 
 function dragOver(event: DragEvent) {
-    if(editorStore.draggedElement) return;
+    if (editorStore.draggedElement) return;
     event.preventDefault();
     document.body.classList.add('cursor-move');
 }
 
 // Used to get "choice left/right" on swipe choice
 function getLabelIdentifier(index) {
-    if(props.addButton === false) {
+    if (props.addButton === false) {
         return index === 0 ? 'droite' : 'gauche';
-    }
-    else return index + 1;
+    } else return index + 1;
 }
-
 </script>
 
 <template>
@@ -161,8 +157,8 @@ function getLabelIdentifier(index) {
         <template #item="{ element, index }">
             <div :key="index" class="card draggable-card" :data-testid="`${id}-${index}`">
                 <div
-                    class="card-header" 
-                    :class="{ 'border-bottom': inputs.length >= 1, 'clickable': element.action }" 
+                    class="card-header"
+                    :class="{ 'border-bottom': inputs.length >= 1, clickable: element.action }"
                     @click="onClick(index, element.action)"
                 >
                     <div v-if="element.action" class="component-container">
@@ -172,10 +168,10 @@ function getLabelIdentifier(index) {
                     <h3 v-else>{{ label }} {{ getLabelIdentifier(index) }}</h3>
                     <div v-if="addButton !== false" class="card-header-icon">
                         <i class="icon-supprimer delete" @click.stop="removeCard(index)"></i>
-                        <hr v-if="!(isLast(index) && index === 0)" class="vertical-separator">
+                        <hr v-if="!(isLast(index) && index === 0)" class="vertical-separator" />
                         <i v-if="!isLast(index)" class="icon-bas" @click.stop="moveCard(index, index + 1)"></i>
                         <i v-if="index !== 0" class="icon-haut" @click.stop="moveCard(index, index - 1)"></i>
-                        <hr v-if="!disabled" class="vertical-separator">
+                        <hr v-if="!disabled" class="vertical-separator" />
                         <i v-if="!disabled" class="icon-glisser"></i>
                     </div>
                 </div>
@@ -208,22 +204,22 @@ function getLabelIdentifier(index) {
 <!--suppress CssOverwrittenProperties -->
 <style lang="scss" scoped>
 .form-icon {
-    margin: .7rem .7rem .7rem 0;
+    margin: 0.7rem 0.7rem 0.7rem 0;
 }
 .component-container {
     display: flex;
     flex-direction: row;
-    flex-grow:1;
+    flex-grow: 1;
 }
 
 .card {
     border: 2px solid var(--border);
     border-radius: 8px;
     margin-bottom: 1rem;
-    transition: all .2s linear;
-    transition: text .2s linear;
+    transition: all 0.2s linear;
+    transition: text 0.2s linear;
     &-header {
-        padding: 0 .7rem;
+        padding: 0 0.7rem;
         display: flex;
         flex-direction: row;
         cursor: move;
@@ -235,7 +231,7 @@ function getLabelIdentifier(index) {
         &.border-bottom {
             border-bottom: 2px solid var(--border);
         }
-        
+
         h3 {
             font-weight: bold;
             font-size: 1rem;
@@ -249,14 +245,14 @@ function getLabelIdentifier(index) {
             text-align: end;
             margin: auto;
             hr {
-                margin-right: .5rem;
+                margin-right: 0.5rem;
             }
             i {
                 cursor: pointer;
                 color: var(--editor-grayblue);
                 margin: auto;
                 &:not(:last-child) {
-                    margin-right: .5rem;
+                    margin-right: 0.5rem;
                 }
 
                 &.delete:hover {
@@ -265,12 +261,12 @@ function getLabelIdentifier(index) {
             }
         }
 
-        .icon-glisser{
+        .icon-glisser {
             cursor: move;
         }
     }
     &-content {
-        padding: .7rem;
+        padding: 0.7rem;
         display: flex;
         flex-direction: column;
     }
@@ -281,7 +277,7 @@ function getLabelIdentifier(index) {
             opacity: 0;
         }
         background-size: 2.5rem auto;
-        background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHZlcnNpb249IjEuMSIgd2lkdGg9IjE2cHgiIGhlaWdodD0iMTZweCIgdmlld0JveD0iMCAwIDE2LjAgMTYuMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PGRlZnM+PGNsaXBQYXRoIGlkPSJpMCI+PHBhdGggZD0iTTUyMDAsMCBMNTIwMCwxODU2IEwwLDE4NTYgTDAsMCBMNTIwMCwwIFoiPjwvcGF0aD48L2NsaXBQYXRoPjxjbGlwUGF0aCBpZD0iaTEiPjxwYXRoIGQ9Ik03LjMxMjUsMCBDNy42MjM0MjE2NywwIDcuODc1LDAuMjUxMzY2OTczIDcuODc1LDAuNTYyMTQ4MDk0IEw3Ljg3NSw2Ljc0OTY0ODA5IEwxNC4wNjI1LDYuNzQ5NjQ4MDkgQzE0LjM3MTg3NDYsNi43NDk2NDgwOSAxNC42MjUsNy4wMDI3NzI5OSAxNC42MjUsNy4zMTIxNDgwOSBDMTQuNjI1LDcuNjIxNTIyNjcgMTQuMzcxODc0Niw3Ljg3NDY0ODA5IDE0LjA2MjUsNy44NzQ2NDgwOSBMNy44NzUsNy44NzQ2NDgwOSBMNy44NzUsMTQuMDYyMTQ4MSBDNy44NzUsMTQuMzczMDY5OCA3LjYyMzQyMTY3LDE0LjYyNSA3LjMxMjUsMTQuNjI1IEM3LjAwMTU3ODMzLDE0LjYyNSA2Ljc1LDE0LjM3MTUyMjcgNi43NSwxNC4wNjIxNDgxIEw2Ljc1LDcuODc0NjQ4MDkgTDAuNTYyNSw3Ljg3NDY0ODA5IEMwLjI1MTU3ODMzMSw3Ljg3NDY0ODA5IDAsNy42MjMyODExMiAwLDcuMzEyNSBDMCw3LjAwMjc3Mjk5IDAuMjUxNzE4ODc5LDYuNzQ5NjQ4MDkgMC41NjI1LDYuNzQ5NjQ4MDkgTDYuNzUsNi43NDk2NDgwOSBMNi43NSwwLjU2MjE0ODA5NCBDNi43NSwwLjI1MTIyNjQyNSA3LjAwMTU3ODMzLDAgNy4zMTI1LDAgWiI+PC9wYXRoPjwvY2xpcFBhdGg+PC9kZWZzPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xNjEyLjAgLTEzMzguMCkiPjxnIGNsaXAtcGF0aD0idXJsKCNpMCkiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDk3OS4wIDExMDMuMCkiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDU2MS4wIDc2LjApIj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzNS4wIDAuMCkiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMCAyMi4wKSI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjAuMCA3NS4wKSI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNC42ODc1IDUuMCkiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMCA0NC45Mzc4NTE5MDU4MjI5OCkiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEzLjAgMTMuMCkiPjxnIGNsaXAtcGF0aD0idXJsKCNpMSkiPjxwb2x5Z29uIHBvaW50cz0iMCwwIDE0LjYyNSwwIDE0LjYyNSwxNC42MjUgMCwxNC42MjUgMCwwIiBzdHJva2U9Im5vbmUiIGZpbGw9IiM4Q0ExQ0EiPjwvcG9seWdvbj48L2c+PC9nPjwvZz48L2c+PC9nPjwvZz48L2c+PC9nPjwvZz48L2c+PC9nPjwvc3ZnPg==");
+        background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHZlcnNpb249IjEuMSIgd2lkdGg9IjE2cHgiIGhlaWdodD0iMTZweCIgdmlld0JveD0iMCAwIDE2LjAgMTYuMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PGRlZnM+PGNsaXBQYXRoIGlkPSJpMCI+PHBhdGggZD0iTTUyMDAsMCBMNTIwMCwxODU2IEwwLDE4NTYgTDAsMCBMNTIwMCwwIFoiPjwvcGF0aD48L2NsaXBQYXRoPjxjbGlwUGF0aCBpZD0iaTEiPjxwYXRoIGQ9Ik03LjMxMjUsMCBDNy42MjM0MjE2NywwIDcuODc1LDAuMjUxMzY2OTczIDcuODc1LDAuNTYyMTQ4MDk0IEw3Ljg3NSw2Ljc0OTY0ODA5IEwxNC4wNjI1LDYuNzQ5NjQ4MDkgQzE0LjM3MTg3NDYsNi43NDk2NDgwOSAxNC42MjUsNy4wMDI3NzI5OSAxNC42MjUsNy4zMTIxNDgwOSBDMTQuNjI1LDcuNjIxNTIyNjcgMTQuMzcxODc0Niw3Ljg3NDY0ODA5IDE0LjA2MjUsNy44NzQ2NDgwOSBMNy44NzUsNy44NzQ2NDgwOSBMNy44NzUsMTQuMDYyMTQ4MSBDNy44NzUsMTQuMzczMDY5OCA3LjYyMzQyMTY3LDE0LjYyNSA3LjMxMjUsMTQuNjI1IEM3LjAwMTU3ODMzLDE0LjYyNSA2Ljc1LDE0LjM3MTUyMjcgNi43NSwxNC4wNjIxNDgxIEw2Ljc1LDcuODc0NjQ4MDkgTDAuNTYyNSw3Ljg3NDY0ODA5IEMwLjI1MTU3ODMzMSw3Ljg3NDY0ODA5IDAsNy42MjMyODExMiAwLDcuMzEyNSBDMCw3LjAwMjc3Mjk5IDAuMjUxNzE4ODc5LDYuNzQ5NjQ4MDkgMC41NjI1LDYuNzQ5NjQ4MDkgTDYuNzUsNi43NDk2NDgwOSBMNi43NSwwLjU2MjE0ODA5NCBDNi43NSwwLjI1MTIyNjQyNSA3LjAwMTU3ODMzLDAgNy4zMTI1LDAgWiI+PC9wYXRoPjwvY2xpcFBhdGg+PC9kZWZzPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xNjEyLjAgLTEzMzguMCkiPjxnIGNsaXAtcGF0aD0idXJsKCNpMCkiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDk3OS4wIDExMDMuMCkiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDU2MS4wIDc2LjApIj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzNS4wIDAuMCkiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMCAyMi4wKSI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjAuMCA3NS4wKSI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNC42ODc1IDUuMCkiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMCA0NC45Mzc4NTE5MDU4MjI5OCkiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEzLjAgMTMuMCkiPjxnIGNsaXAtcGF0aD0idXJsKCNpMSkiPjxwb2x5Z29uIHBvaW50cz0iMCwwIDE0LjYyNSwwIDE0LjYyNSwxNC42MjUgMCwxNC42MjUgMCwwIiBzdHJva2U9Im5vbmUiIGZpbGw9IiM4Q0ExQ0EiPjwvcG9seWdvbj48L2c+PC9nPjwvZz48L2c+PC9nPjwvZz48L2c+PC9nPjwvZz48L2c+PC9nPjwvc3ZnPg==');
         background-repeat: no-repeat;
         background-position: right 50% top 50%;
     }

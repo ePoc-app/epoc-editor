@@ -23,7 +23,9 @@ let previewWindow;
 async function runPreview(workdir, contentPath) {
     const ePocRootName = path.basename(workdir);
     const ePocRootFolder = path.join(previewEpocPath, ePocRootName);
-    const ePocContentPath = contentPath ? `epoc/play/${ePocRootName}/${contentPath}` : `epoc/preview-editor/${ePocRootName}`;
+    const ePocContentPath = contentPath
+        ? `epoc/play/${ePocRootName}/${contentPath}`
+        : `epoc/preview-editor/${ePocRootName}`;
 
     if (!previewInitialized) {
         if (!fs.existsSync(appDataPath)) {
@@ -37,7 +39,7 @@ async function runPreview(workdir, contentPath) {
         const zip = new AdmZip(previewArchive);
 
         zip.extractAllTo(previewPath, true);
-        fs.mkdirSync(previewEpocPath, {recursive: true});
+        fs.mkdirSync(previewEpocPath, { recursive: true });
         fs.symlinkSync(workdir, ePocRootFolder, 'junction');
         previewInitialized = true;
     } else {
@@ -51,7 +53,6 @@ async function runPreview(workdir, contentPath) {
         }
         fs.symlinkSync(workdir, ePocRootFolder, 'junction');
     }
-    
 
     const server = await createPreviewServer();
     await createPreviewWindow(server, ePocContentPath);
@@ -61,7 +62,7 @@ async function runPreview(workdir, contentPath) {
  * Lance un serveur pour la preview
  * @returns Promise
  */
-function createPreviewServer () {
+function createPreviewServer() {
     return new Promise((resolve) => {
         if (serverListener) {
             resolve(serverListener);
@@ -69,7 +70,7 @@ function createPreviewServer () {
         }
         const server = express();
 
-        server.use(serveStatic(previewPath, { 'index': ['index.html', 'index.htm'] }));
+        server.use(serveStatic(previewPath, { index: ['index.html', 'index.htm'] }));
 
         server.all('*', (req, res) => {
             res.status(200).sendFile(path.join(previewPath, 'index.html'));
@@ -95,8 +96,8 @@ async function createPreviewWindow(server, contentPath) {
             autoHideMenuBar: true,
             webPreferences: {
                 devTools: true,
-                nodeIntegration: true
-            }
+                nodeIntegration: true,
+            },
         });
 
         previewWindow.webContents.on('did-finish-load', () => {
@@ -122,13 +123,11 @@ async function createPreviewWindow(server, contentPath) {
  * Clean all preview files
  */
 const cleanPreview = function () {
-    fs.rmSync(previewPath, {recursive: true, force: true});
+    fs.rmSync(previewPath, { recursive: true, force: true });
 };
-
-
 
 module.exports = {
     runPreview,
     cleanPreview,
-    updatePreview
+    updatePreview,
 };

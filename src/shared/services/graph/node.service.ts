@@ -36,19 +36,19 @@ export function setEpocNodeData(epoc: EpocV1) {
 }
 
 export function addChapter(chapterId?: string, chapter?: Chapter, offsetY?: number): Node {
-    const chapters = nodes.value.filter(node => node.type === 'chapter');
+    const chapters = nodes.value.filter((node) => node.type === 'chapter');
     const data = {
-        action: {icon: 'icon-chapitre', type: 'chapter'},
+        action: { icon: 'icon-chapitre', type: 'chapter' },
         formType: 'chapter',
         formValues: {},
         title: 'Chapitre ' + (chapters.length + 1),
-        contentId: generateContentId()
+        contentId: generateContentId(),
     };
     if (chapterId && chapter) {
         data.contentId = chapterId;
         data.formValues = {
             title: chapter.title,
-            objectives: chapter.objectives
+            objectives: chapter.objectives,
         };
     }
     offsetY = offsetY ? offsetY : 0;
@@ -60,7 +60,7 @@ export function addChapter(chapterId?: string, chapter?: Chapter, offsetY?: numb
         data,
         draggable: true,
         deletable: false,
-        selectable: false
+        selectable: false,
     };
 
     addNodes([newChapter]);
@@ -68,7 +68,7 @@ export function addChapter(chapterId?: string, chapter?: Chapter, offsetY?: numb
     return newChapter;
 }
 
-export function addPage(position: { x: number, y: number }, actions: SideAction[], noAlign?: boolean): string{
+export function addPage(position: { x: number; y: number }, actions: SideAction[], noAlign?: boolean): string {
     const id = generateId();
 
     //! see if correct in v1
@@ -76,7 +76,7 @@ export function addPage(position: { x: number, y: number }, actions: SideAction[
     const isQuestion = questionTypes.includes(type);
     const isCondition = type === 'condition';
 
-    const finalType = isQuestion ? 'question' : (isCondition ? 'condition' : 'element');
+    const finalType = isQuestion ? 'question' : isCondition ? 'condition' : 'element';
 
     const newPageNode: Node = {
         id,
@@ -89,7 +89,7 @@ export function addPage(position: { x: number, y: number }, actions: SideAction[
             formValues: {},
         },
         position,
-        deletable: false
+        deletable: false,
     };
 
     addNodes([newPageNode]);
@@ -98,20 +98,31 @@ export function addPage(position: { x: number, y: number }, actions: SideAction[
         addContentToPage(id, action);
     });
 
-    if(!noAlign) alignNode(newPageNode.id);
+    if (!noAlign) alignNode(newPageNode.id);
 
     //? Conflicts with vue draggable on node edge
     document.querySelectorAll('.node .ghost').forEach((ghost) => {
         ghost.remove();
     });
-    
+
     return newPageNode.id;
 }
 
-export function createLinkedPage(sourcePage: Node, type: 'activity'|'page', contentElements: NodeElement[], title: string, subtitle: string, id: string, hidden: boolean, conditional: boolean, contentId: string, summary?: string): Node {
+export function createLinkedPage(
+    sourcePage: Node,
+    type: 'activity' | 'page',
+    contentElements: NodeElement[],
+    title: string,
+    subtitle: string,
+    id: string,
+    hidden: boolean,
+    conditional: boolean,
+    contentId: string,
+    summary?: string,
+): Node {
     const position = {
         x: sourcePage.position.x + 150,
-        y: sourcePage.position.y
+        y: sourcePage.position.y,
     };
     const newPage: Node = {
         id: id,
@@ -126,17 +137,17 @@ export function createLinkedPage(sourcePage: Node, type: 'activity'|'page', cont
                 title,
                 subtitle,
                 summary,
-                components: contentElements.map(c => {
+                components: contentElements.map((c) => {
                     return { action: c.action };
-                })
+                }),
             },
             type: 'template',
-            contentId: contentId
+            contentId: contentId,
         },
         position: position,
-        deletable: false
+        deletable: false,
     };
-    
+
     addNodes([newPage]);
 
     createEdge(sourcePage.id, newPage.id);
@@ -147,26 +158,25 @@ export function createLinkedPage(sourcePage: Node, type: 'activity'|'page', cont
 export function insertAfter(pageId: string, action: SideAction): void {
     const pageNode = findNode(pageId);
     const newPosition = {
-        x: pageNode.position.x + 200, 
-        y: pageNode.position.y
+        x: pageNode.position.x + 200,
+        y: pageNode.position.y,
     };
-    
+
     let sourceEdge = getConnectedEdges([pageNode], edges.value).find((edge) => edge.source === pageId);
 
     const newPageNodeId = addPage(newPosition, [action], true);
     createEdge(pageId, newPageNodeId);
 
-    
-    if(!sourceEdge) return;
-    
+    if (!sourceEdge) return;
+
     let targetNode = findNode(sourceEdge.target);
     applyEdgeChanges([{ id: sourceEdge.id, type: 'remove' }]);
     targetNode.position.x += 200;
     createEdge(newPageNodeId, targetNode.id);
-    
-    while(sourceEdge) {
+
+    while (sourceEdge) {
         sourceEdge = getConnectedEdges([targetNode], edges.value).find((edge) => edge.source === targetNode.id);
-        if(!sourceEdge) return;
+        if (!sourceEdge) return;
 
         targetNode = findNode(sourceEdge.target);
         targetNode.position.x += 200;
@@ -177,54 +187,54 @@ export function insertBefore(pageId: string, action: SideAction): void {
     const pageNode = findNode(pageId);
     const newPosition = {
         x: pageNode.position.x,
-        y: pageNode.position.y
+        y: pageNode.position.y,
     };
     pageNode.position.x += 200;
-    
+
     const targetEdge = getConnectedEdges([pageNode], edges.value).find((edge) => edge.target === pageId);
-   
+
     const newPageNodeId = addPage(newPosition, [action], true);
     createEdge(newPageNodeId, pageId);
-    
-    if(targetEdge) {
+
+    if (targetEdge) {
         const sourceNode = findNode(targetEdge.source);
         applyEdgeChanges([{ id: targetEdge.id, type: 'remove' }]);
         createEdge(sourceNode.id, newPageNodeId);
     }
 
     let sourceEdge = getConnectedEdges([pageNode], edges.value).find((edge) => edge.source === pageId);
-    if(!sourceEdge) return;
+    if (!sourceEdge) return;
 
     let targetNode = findNode(sourceEdge.target);
-    while(sourceEdge) {
+    while (sourceEdge) {
         targetNode = findNode(sourceEdge.target);
         targetNode.position.x += 200;
 
         sourceEdge = getConnectedEdges([targetNode], edges.value).find((edge) => edge.source === targetNode.id);
-        if(!sourceEdge) return;
+        if (!sourceEdge) return;
     }
 }
 
 export function insertAtEnd(chapterId: string, action: SideAction): void {
     let nextNode = graphService.getNextNode(findNode(chapterId));
     let savedId = chapterId;
-    
-    while(nextNode) {
+
+    while (nextNode) {
         savedId = nextNode.id;
         nextNode = graphService.getNextNode(findNode(nextNode.id));
     }
-    
+
     insertAfter(savedId, action);
 }
 
 export function insertAtStart(chapterId: string, action: SideAction): void {
     const nextNode = graphService.getNextNode(findNode(chapterId));
 
-    if(nextNode) insertBefore(nextNode.id, action);
+    if (nextNode) insertBefore(nextNode.id, action);
     else insertAfter(chapterId, action);
 }
 
-export function createPageFromContent(position: { x: number, y: number }, element: NodeElement): void {
+export function createPageFromContent(position: { x: number; y: number }, element: NodeElement): void {
     const id = generateId();
     const oldPageNode = findNode(element.parentId);
     element.parentId = id;
@@ -240,7 +250,7 @@ export function createPageFromContent(position: { x: number, y: number }, elemen
             contentId: generateContentId(),
         },
         position,
-        deletable: false
+        deletable: false,
     };
 
     addNodes([newPageNode]);
@@ -259,7 +269,7 @@ export function deleteSelectedNodes(): void {
 
     const selectedNodes = getSelectedNodes();
 
-    if(isChild) {
+    if (isChild) {
         deleteElement(editorStore.openedElementId, editorStore.openedNodeId);
     } else {
         deleteSelection(selectedNodes);
@@ -268,23 +278,21 @@ export function deleteSelectedNodes(): void {
     editorStore.closeValidationModal();
 }
 
-
 export function deleteNode(nodeId: string): void {
     const nodeToDelete = findNode(nodeId);
 
     deleteConnectedConditions(nodeToDelete.data.contentId);
 
-    if(nodeToDelete.data.elements) {
-        for(const element of nodeToDelete.data.elements) {
+    if (nodeToDelete.data.elements) {
+        for (const element of nodeToDelete.data.elements) {
             deleteConnectedConditions(element.contentId);
         }
     }
 
-    applyNodeChanges([{ id:nodeToDelete.id, type: 'remove'}]);
+    applyNodeChanges([{ id: nodeToDelete.id, type: 'remove' }]);
 
-    if(nodeToDelete.type === 'chapter') updateNextChapter(nodeToDelete.id);
+    if (nodeToDelete.type === 'chapter') updateNextChapter(nodeToDelete.id);
 }
-
 
 export function duplicatePage(pageId?: string): void {
     const pageNode = findNode(pageId ?? editorStore.openedElementId);
@@ -292,7 +300,7 @@ export function duplicatePage(pageId?: string): void {
 
     const nodeId = generateId();
 
-    for(const elements of pageNode.data.elements) {
+    for (const elements of pageNode.data.elements) {
         const newElement = JSON.parse(JSON.stringify(elements));
         newElement.id = generateId();
         newElement.parentId = nodeId;
@@ -310,7 +318,7 @@ export function duplicatePage(pageId?: string): void {
             formValues: JSON.parse(JSON.stringify(toRaw(pageNode.data.formValues))),
             type: pageNode.data.type,
             contentId: generateContentId(),
-        }
+        },
     };
 
     addNodes([newPage]);
@@ -318,10 +326,10 @@ export function duplicatePage(pageId?: string): void {
 }
 
 export function updateNextChapter(chapterId: string): void {
-    const chapters = nodes.value.filter(node => node.type === 'chapter');
+    const chapters = nodes.value.filter((node) => node.type === 'chapter');
 
-    for(const chapter of chapters) {
-        if(chapter.id <= chapterId) return;
+    for (const chapter of chapters) {
+        if (chapter.id <= chapterId) return;
 
         chapter.data.title = `Chapitre ${Number(chapter.data.title.split(' ')[1] - 1)}`;
     }
@@ -344,8 +352,11 @@ export function alignNode(nodeId: string): void {
         const stop = watch(
             () => node.dimensions,
             (dimensions) => {
-                if(dimensions.width > 0 && dimensions.height > 0) {
-                    node.position = { x: node.position.x - node.dimensions.width / 2, y: node.position.y - node.dimensions.height / 2 };
+                if (dimensions.width > 0 && dimensions.height > 0) {
+                    node.position = {
+                        x: node.position.x - node.dimensions.width / 2,
+                        y: node.position.y - node.dimensions.height / 2,
+                    };
                     stop();
                 }
             },
@@ -355,7 +366,7 @@ export function alignNode(nodeId: string): void {
 }
 
 export function getSelectedNodes(): Node[] {
-    return nodes.value.filter(node => node.selected && isNodeDeletable(node.id));
+    return nodes.value.filter((node) => node.selected && isNodeDeletable(node.id));
 }
 
 export function isNodeDeletable(id: string): boolean {
@@ -367,12 +378,12 @@ export function confirmDelete(): void {
     const isChild = Boolean(editorStore.openedNodeId);
 
     const selectedNodes = getSelectedNodes();
-    const selectedEdges = edges.value.filter(edge => edge.selected);
+    const selectedEdges = edges.value.filter((edge) => edge.selected);
 
-    if(selectedNodes.length > 0 || isChild ) {
+    if (selectedNodes.length > 0 || isChild) {
         editorStore.openValidationModal();
-    } else if(selectedEdges.length > 0) {
-        for(const edge of selectedEdges) {
+    } else if (selectedEdges.length > 0) {
+        for (const edge of selectedEdges) {
             applyEdgeChanges([{ id: edge.id, type: 'remove' }]);
         }
     }
@@ -382,19 +393,21 @@ export function confirmDelete(): void {
 export function isFormButtonDisabled(isDisabledFunction: (node: any) => boolean): boolean {
     const isChild = Boolean(editorStore.openedNodeId);
     const nodeData = isChild
-        ? findNode(editorStore.openedNodeId).data.elements.find((e: NodeElement)=> e.id === editorStore.openedElementId)
+        ? findNode(editorStore.openedNodeId).data.elements.find(
+              (e: NodeElement) => e.id === editorStore.openedElementId,
+          )
         : findNode(editorStore.openedElementId).data;
     return isDisabledFunction(nodeData);
 }
 
 export function setNodesSelectability(selectNodeMode: boolean) {
-    for(const node of nodes.value) {
-        if(node.type === 'chapter') node.selectable = selectNodeMode;
-        else if(node.type === 'epoc') node.selectable = !selectNodeMode;
-        else if(node.type === 'add') node.selectable = !selectNodeMode;
+    for (const node of nodes.value) {
+        if (node.type === 'chapter') node.selectable = selectNodeMode;
+        else if (node.type === 'epoc') node.selectable = !selectNodeMode;
+        else if (node.type === 'add') node.selectable = !selectNodeMode;
     }
 }
 
 export function unselectAllNodes(): void {
-    nodes.value.forEach(node => node.selected = false);
+    nodes.value.forEach((node) => (node.selected = false));
 }

@@ -10,51 +10,31 @@
         "plugin:vue/vue3-recommended",
         "plugin:@typescript-eslint/recommended"
     ],
-    "overrides": [
-    ],
+    "overrides": [],
     "parser": "vue-eslint-parser",
     "parserOptions": {
         "parser": "@typescript-eslint/parser"
     },
-    "plugins": [
-        "vue",
-        "@typescript-eslint"
-    ],
+    "plugins": ["vue", "@typescript-eslint"],
     "rules": {
         "@typescript-eslint/no-var-requires": "off",
         "@typescript-eslint/ban-ts-comment": "off",
-        "indent": [
-            "warn",
-            4,
-            {
-                "SwitchCase": 1
-            }
-        ],
-        "vue/html-indent": [
-            "warn",
-            4
-        ],
+        "indent": ["warn", 4, { "SwitchCase": 1 }],
+        "vue/html-indent": ["warn", 4],
         "vue/singleline-html-element-content-newline": "off",
-        "linebreak-style": [
-            "warn",
-            "unix"
-        ],
-        "quotes": [
-            "warn",
-            "single"
-        ],
-        "semi": [
-            "warn",
-            "always"
-        ],
+        "linebreak-style": ["warn", "unix"],
+        "semi": ["warn", "always"],
         "vue/html-self-closing": 0,
-        "vue/max-attributes-per-line": ["warn", {
-            "singleline": {
-                "max": 5
-            },
-            "multiline": {
-                "max": 1
+        "vue/max-attributes-per-line": [
+            "warn",
+            {
+                "singleline": {
+                    "max": 5
+                },
+                "multiline": {
+                    "max": 1
+                }
             }
-        }]
+        ]
     }
 }

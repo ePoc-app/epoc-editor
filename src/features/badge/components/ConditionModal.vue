@@ -16,11 +16,10 @@ const allConditionsValid = computed(() => {
     });
 });
 
-if(!editorStore.editingConditions) {
+if (!editorStore.editingConditions) {
     editorStore.tempConditions = getConditions(currentBadge);
     editorStore.editingConditions = true;
 }
-
 
 function addCondition() {
     editorStore.tempConditions.push({});
@@ -32,7 +31,7 @@ function close() {
     editorStore.editingConditions = false;
 }
 
-function updateCondition(values: { value: string | number | boolean, key: string }, index: number) {
+function updateCondition(values: { value: string | number | boolean; key: string }, index: number) {
     const { value, key } = values;
     editorStore.tempConditions[index][key] = value;
 }
@@ -47,7 +46,6 @@ const modalScreen = ref(null);
 onMounted(() => {
     modalScreen.value.focus();
 });
-
 </script>
 
 <template>
@@ -94,7 +92,7 @@ header {
 
 footer {
     border-top: 1px solid var(--border);
-    
+
     .content {
         display: flex;
         gap: 1.5rem;
@@ -109,9 +107,9 @@ footer {
 
 .add {
     display: flex;
-    gap: .5rem;
+    gap: 0.5rem;
     i {
-        font-size: .9rem;
+        font-size: 0.9rem;
         margin: auto;
     }
 }
@@ -175,15 +173,14 @@ h3 {
         color: var(--inria-grey);
         border: 1px solid var(--inria-grey);
     }
-    &.save{
-        background-color: #E93100;
+    &.save {
+        background-color: #e93100;
         color: #fff;
-        
+
         &:disabled {
             cursor: not-allowed;
-            filter:opacity(40%);
+            filter: opacity(40%);
         }
     }
-    
 }
 </style>

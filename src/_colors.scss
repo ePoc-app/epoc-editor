@@ -1,44 +1,44 @@
-$inria-red : #e63312;
-$inria-blue : #384257;
-$inria-grey : #6477A0;
-$inria-spe : #2EC6FA;
-$inria-light : #F4F7FB;
-$inria-dark : #23232C;
-$inria-correct: #85CE70;
-$inria-correct-shade: #5EA51F;
-$inria-correct-tint: #EBF4E8;
-$inria-incorrect: #EB7575;
-$inria-certificate: #FFA029;
-$inria-lightgrey: #D3D7E0;
+$inria-red: #e63312;
+$inria-blue: #384257;
+$inria-grey: #6477a0;
+$inria-spe: #2ec6fa;
+$inria-light: #f4f7fb;
+$inria-dark: #23232c;
+$inria-correct: #85ce70;
+$inria-correct-shade: #5ea51f;
+$inria-correct-tint: #ebf4e8;
+$inria-incorrect: #eb7575;
+$inria-certificate: #ffa029;
+$inria-lightgrey: #d3d7e0;
 $inria-darkgrey: #384156;
-$inria-black: #17191A;
-$inria-lightblue: #A6B1C9;
+$inria-black: #17191a;
+$inria-lightblue: #a6b1c9;
 
-$editor-light: #E6E9EE;
-$editor-lightgrey: #CDD3E0;
-$editor-shadow-hover: #E1E5EC;
-$editor-light-border: #DCE4F0;
-$editor-lightblue: #E8EDF3;
-$editor-shadow-outer: #ADBCD5;
-$editor-grayblue: #7789A6;
-$editor-dashed-border: #8C9AB9;
-$editor-blue: #00B3E9;
-$node-active: #E1F4FA;
-$editor-red: #E63312;
+$editor-light: #e6e9ee;
+$editor-lightgrey: #cdd3e0;
+$editor-shadow-hover: #e1e5ec;
+$editor-light-border: #dce4f0;
+$editor-lightblue: #e8edf3;
+$editor-shadow-outer: #adbcd5;
+$editor-grayblue: #7789a6;
+$editor-dashed-border: #8c9ab9;
+$editor-blue: #00b3e9;
+$node-active: #e1f4fa;
+$editor-red: #e63312;
 
-$editor-node-ghost: #D6E2F0;
+$editor-node-ghost: #d6e2f0;
 
-[color-scheme="light"] {
+[color-scheme='light'] {
     --background: #{$editor-light};
     --content: white;
     --text: #{$inria-blue};
-    --text-secondary: #8C9AB9;
+    --text-secondary: #8c9ab9;
     --border: #{$editor-light-border};
     --dashed-border: #{$editor-dashed-border};
     --shadow: #{$editor-shadow-hover};
     --shadow-outer: #{$editor-shadow-outer};
-    --item-background: #F7F8F9;
-    --list-border: #E6EAF4;
+    --item-background: #f7f8f9;
+    --list-border: #e6eaf4;
     --button-blue: #{$editor-lightblue};
     --node: #{$inria-light};
     --node-active: #{$node-active};
@@ -46,7 +46,7 @@ $editor-node-ghost: #D6E2F0;
 }
 
 // Dark theme not implemented yet
-[color-scheme="dark"] {
+[color-scheme='dark'] {
     --background: #{$inria-black};
     --content: #{$inria-dark};
     --text: #{$inria-light};
@@ -60,6 +60,6 @@ $editor-node-ghost: #D6E2F0;
     --editor-blue-shadow: rgba(0, 179, 233, 0.3);
     --editor-red: #{$editor-red};
     --inria-grey: #{$inria-grey};
-    --node-hover: #E9EFF6;
+    --node-hover: #e9eff6;
     --editor-yellow: #{$inria-certificate};
 }

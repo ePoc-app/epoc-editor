@@ -9,15 +9,15 @@ export const qcmForm: Form = {
     buttons: contentButtons,
     fields: [
         {
-            name: 'Configuration de l\'activité',
+            name: "Configuration de l'activité",
             inputs: [
                 {
                     id: 'score',
                     type: 'score',
                     label: 'Score',
                     value: 0,
-                }
-            ]
+                },
+            ],
         },
         {
             name: 'Question',
@@ -27,16 +27,16 @@ export const qcmForm: Form = {
                     type: 'textarea',
                     label: 'Question',
                     value: '',
-                    placeholder: 'Posez la question'
+                    placeholder: 'Posez la question',
                 },
                 {
                     id: 'statement',
                     type: 'textarea',
                     label: 'Consigne',
                     value: '',
-                    placeholder: 'Instruction pour répondre à la question'
-                }
-            ]
+                    placeholder: 'Instruction pour répondre à la question',
+                },
+            ],
         },
         {
             name: 'Réponses',
@@ -52,24 +52,24 @@ export const qcmForm: Form = {
                             type: 'textarea',
                             label: '',
                             placeholder: 'Saisissez une réponse ..',
-                            value: ''
+                            value: '',
                         },
                         {
                             id: 'value',
                             type: 'hidden',
                             label: '',
                             placeholder: 'Valeur cachée',
-                            value: ''
+                            value: '',
                         },
                         {
                             id: 'isCorrect',
                             type: 'checkbox',
                             label: 'Bonne réponse',
-                            value: false
-                        }
-                    ]
-                }
-            ]
+                            value: false,
+                        },
+                    ],
+                },
+            ],
         },
         {
             name: 'Explication',
@@ -79,11 +79,11 @@ export const qcmForm: Form = {
                     type: 'html',
                     label: '',
                     value: '',
-                    placeholder: 'Saisissez une explication'
-                }
-            ]
-        }
-    ]
+                    placeholder: 'Saisissez une explication',
+                },
+            ],
+        },
+    ],
 };
 
 export const dragDropForm: Form = {
@@ -94,15 +94,15 @@ export const dragDropForm: Form = {
     buttons: contentButtons,
     fields: [
         {
-            name: 'Configuration de l\'activité',
+            name: "Configuration de l'activité",
             inputs: [
                 {
                     id: 'score',
                     type: 'score',
                     label: 'Score',
                     value: 0,
-                }
-            ]
+                },
+            ],
         },
         {
             name: 'Question',
@@ -112,16 +112,16 @@ export const dragDropForm: Form = {
                     type: 'textarea',
                     label: 'Question',
                     value: '',
-                    placeholder: 'Posez la question'
+                    placeholder: 'Posez la question',
                 },
                 {
                     id: 'statement',
                     type: 'textarea',
                     label: 'Consigne',
                     value: '',
-                    placeholder: 'Instruction pour répondre à la question'
-                }
-            ]
+                    placeholder: 'Instruction pour répondre à la question',
+                },
+            ],
         },
         {
             name: 'Catégories de réponses proposées',
@@ -138,10 +138,10 @@ export const dragDropForm: Form = {
                             label: '',
                             placeholder: 'Saisissez un intitulé catégorie..',
                             value: '',
-                        }
-                    ]
-                }
-            ]
+                        },
+                    ],
+                },
+            ],
         },
         {
             name: 'Réponses proposées',
@@ -164,7 +164,7 @@ export const dragDropForm: Form = {
                             type: 'hidden',
                             label: '',
                             placeholder: 'Valeur cachée',
-                            value: ''
+                            value: '',
                         },
                         {
                             id: 'category',
@@ -173,11 +173,11 @@ export const dragDropForm: Form = {
                             placeholder: '',
                             value: '',
                             options: [],
-                            linkedOptions: 'categories'
-                        }
-                    ]
-                }
-            ]
+                            linkedOptions: 'categories',
+                        },
+                    ],
+                },
+            ],
         },
         {
             name: 'Explication',
@@ -187,11 +187,11 @@ export const dragDropForm: Form = {
                     type: 'html',
                     label: '',
                     value: '',
-                    placeholder: 'Saisissez une explication'
-                }
-            ]
-        }
-    ]
+                    placeholder: 'Saisissez une explication',
+                },
+            ],
+        },
+    ],
 };
 
 export const reorderForm: Form = {
@@ -202,15 +202,15 @@ export const reorderForm: Form = {
     buttons: contentButtons,
     fields: [
         {
-            name: 'Configuration de l\'activité',
+            name: "Configuration de l'activité",
             inputs: [
                 {
                     id: 'score',
                     type: 'score',
                     label: 'Score',
                     value: 0,
-                }
-            ]
+                },
+            ],
         },
         {
             name: 'Question',
@@ -220,16 +220,16 @@ export const reorderForm: Form = {
                     type: 'textarea',
                     label: 'Question',
                     value: '',
-                    placeholder: 'Posez la question'
+                    placeholder: 'Posez la question',
                 },
                 {
                     id: 'statement',
                     type: 'textarea',
                     label: 'Consigne',
                     value: '',
-                    placeholder: 'Instruction pour répondre à la question'
-                }
-            ]
+                    placeholder: 'Instruction pour répondre à la question',
+                },
+            ],
         },
         {
             name: 'Réponses',
@@ -245,18 +245,18 @@ export const reorderForm: Form = {
                             type: 'textarea',
                             label: '',
                             placeholder: 'Saisissez une réponse...',
-                            value: ''
+                            value: '',
                         },
                         {
                             id: 'value',
                             type: 'hidden',
                             label: '',
                             placeholder: 'Valeur cachée',
-                            value: ''
+                            value: '',
                         },
-                    ]
-                }
-            ]
+                    ],
+                },
+            ],
         },
         {
             name: 'Explication',
@@ -266,11 +266,11 @@ export const reorderForm: Form = {
                     type: 'html',
                     label: '',
                     value: '',
-                    placeholder: 'Saisissez une explication...'
-                }
-            ]
-        }
-    ]
+                    placeholder: 'Saisissez une explication...',
+                },
+            ],
+        },
+    ],
 };
 
 export const swipeForm: Form = {
@@ -281,15 +281,15 @@ export const swipeForm: Form = {
     buttons: contentButtons,
     fields: [
         {
-            name: 'Configuration de l\'activité',
+            name: "Configuration de l'activité",
             inputs: [
                 {
                     id: 'score',
                     type: 'score',
                     label: 'Score',
                     value: 0,
-                }
-            ]
+                },
+            ],
         },
         {
             name: 'Question',
@@ -299,16 +299,16 @@ export const swipeForm: Form = {
                     type: 'textarea',
                     label: 'Question',
                     value: '',
-                    placeholder: 'Posez la question'
+                    placeholder: 'Posez la question',
                 },
                 {
                     id: 'statement',
                     type: 'textarea',
                     label: 'Consigne',
                     value: '',
-                    placeholder: 'Instruction pour répondre à la question'
-                }
-            ]
+                    placeholder: 'Instruction pour répondre à la question',
+                },
+            ],
         },
         {
             name: 'Catégories de choix proposées',
@@ -325,11 +325,11 @@ export const swipeForm: Form = {
                             type: 'text',
                             label: '',
                             placeholder: 'Saisissez une réponse...',
-                            value: ''
-                        }
-                    ]
-                }
-            ]
+                            value: '',
+                        },
+                    ],
+                },
+            ],
         },
         {
             name: 'Réponse proposée',
@@ -345,14 +345,14 @@ export const swipeForm: Form = {
                             type: 'textarea',
                             label: '',
                             placeholder: 'Saisissez une proposition',
-                            value: ''
+                            value: '',
                         },
                         {
                             id: 'value',
                             type: 'hidden',
                             label: '',
                             placeholder: 'Valeur cachée',
-                            value: ''
+                            value: '',
                         },
                         {
                             id: 'category',
@@ -361,12 +361,11 @@ export const swipeForm: Form = {
                             placeholder: '',
                             value: '',
                             options: [],
-                            linkedOptions: 'categories'
-                        }
-
-                    ]
-                }
-            ]
+                            linkedOptions: 'categories',
+                        },
+                    ],
+                },
+            ],
         },
         {
             name: 'Explication',
@@ -376,11 +375,11 @@ export const swipeForm: Form = {
                     type: 'html',
                     label: '',
                     value: '',
-                    placeholder: 'Saisissez une explication...'
-                }
-            ]
-        }
-    ]
+                    placeholder: 'Saisissez une explication...',
+                },
+            ],
+        },
+    ],
 };
 
 export const listForm: Form = {
@@ -391,15 +390,15 @@ export const listForm: Form = {
     buttons: contentButtons,
     fields: [
         {
-            name: 'Configuration de l\'activité',
+            name: "Configuration de l'activité",
             inputs: [
                 {
                     id: 'score',
                     type: 'score',
                     label: 'Score',
                     value: 0,
-                }
-            ]
+                },
+            ],
         },
         {
             name: 'Question',
@@ -409,16 +408,16 @@ export const listForm: Form = {
                     type: 'textarea',
                     label: 'Question',
                     value: '',
-                    placeholder: 'Posez la question'
+                    placeholder: 'Posez la question',
                 },
                 {
                     id: 'statement',
                     type: 'textarea',
                     label: 'Consigne',
                     value: '',
-                    placeholder: 'Instruction pour répondre à la question'
-                }
-            ]
+                    placeholder: 'Instruction pour répondre à la question',
+                },
+            ],
         },
         {
             name: 'Catégories de choix proposées',
@@ -434,11 +433,11 @@ export const listForm: Form = {
                             type: 'text',
                             label: '',
                             placeholder: 'Saisissez une réponse...',
-                            value: ''
-                        }
-                    ]
-                }
-            ]
+                            value: '',
+                        },
+                    ],
+                },
+            ],
         },
         {
             name: 'Cartes',
@@ -454,14 +453,14 @@ export const listForm: Form = {
                             type: 'textarea',
                             label: '',
                             placeholder: 'Saisissez une question...',
-                            value: ''
+                            value: '',
                         },
                         {
                             id: 'value',
                             type: 'hidden',
                             label: '',
                             placeholder: 'Valeur cachée',
-                            value: ''
+                            value: '',
                         },
                         {
                             id: 'category',
@@ -470,11 +469,11 @@ export const listForm: Form = {
                             placeholder: '',
                             value: '',
                             options: [],
-                            linkedOptions: 'categories'
-                        }
-                    ]
-                }
-            ]
+                            linkedOptions: 'categories',
+                        },
+                    ],
+                },
+            ],
         },
         {
             name: 'Explication',
@@ -484,11 +483,11 @@ export const listForm: Form = {
                     type: 'html',
                     label: '',
                     value: '',
-                    placeholder: 'Saisissez une explication...'
-                }
-            ]
-        }
-    ]
+                    placeholder: 'Saisissez une explication...',
+                },
+            ],
+        },
+    ],
 };
 
 export const questionForms: Form[] = [qcmForm, swipeForm, reorderForm, dragDropForm, listForm];

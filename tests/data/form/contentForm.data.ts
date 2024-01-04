@@ -6,9 +6,9 @@ const textForm: TestForm = {
         {
             label: 'Résumé',
             value: 'Résumé test',
-            type: 'html'
+            type: 'html',
         },
-    ]
+    ],
 };
 
 const videoForm: TestForm = {
@@ -17,14 +17,14 @@ const videoForm: TestForm = {
         {
             label: 'Résumé',
             value: 'Résumé test',
-            type: 'html'
-        }
-    ]
+            type: 'html',
+        },
+    ],
 };
 
 const audioForm: TestForm = {
     type: 'audio',
-    inputs: []
+    inputs: [],
 };
 
 export const contentForms = [textForm, videoForm, audioForm];

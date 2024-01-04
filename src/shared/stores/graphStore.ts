@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { Edge, FlowExportObject, MarkerType, Node, useVueFlow } from '@vue-flow/core';
 
-const {nodes, onConnect, addEdges, findNode, setNodes, setEdges, setTransform} = useVueFlow({id: 'main'});
+const { nodes, onConnect, addEdges, findNode, setNodes, setEdges, setTransform } = useVueFlow({ id: 'main' });
 
 interface GraphState {
     elements: (Node | Edge)[];
@@ -11,9 +11,8 @@ interface GraphState {
 export const useGraphStore = defineStore('graph', {
     state: (): GraphState => ({
         elements: [epoc(), add, mainEdge],
-        flow: null
+        flow: null,
     }),
-
 
     actions: {
         setFlow(flow: FlowExportObject) {
@@ -25,47 +24,50 @@ export const useGraphStore = defineStore('graph', {
                 const [x = 0, y = 0] = this.flow.position;
                 setNodes(this.flow.nodes);
                 setEdges(this.flow.edges);
-                setTransform({x, y, zoom: this.flow.zoom || 0});
+                setTransform({ x, y, zoom: this.flow.zoom || 0 });
             } else {
                 this.elements = [epoc(), add, mainEdge];
             }
         },
-    }
-
+    },
 });
 
-const epoc = () : Node => {
+const epoc = (): Node => {
     return {
         id: '1',
         type: 'epoc',
-        data: {action: {icon: 'icon-epoc', type: 'epoc'}, formType: 'epoc', formValues: {id: `E-${(Math.random() + 1).toString(36).substring(7).toUpperCase()}`}},
-        position: {x: 0, y: 0},
+        data: {
+            action: { icon: 'icon-epoc', type: 'epoc' },
+            formType: 'epoc',
+            formValues: { id: `E-${(Math.random() + 1).toString(36).substring(7).toUpperCase()}` },
+        },
+        position: { x: 0, y: 0 },
         draggable: false,
-        deletable: false
+        deletable: false,
     };
 };
 
 const add: Node = {
     id: '2',
     type: 'add',
-    position: {x: 34, y: 128},
+    position: { x: 34, y: 128 },
     draggable: false,
-    deletable: false
+    deletable: false,
 };
 
 const mainEdge: Edge = {
     id: 'mainEdge',
     source: '1',
     target: '2',
-    style: {stroke: '#CDD3E0', strokeWidth: 2.5},
+    style: { stroke: '#CDD3E0', strokeWidth: 2.5 },
     selectable: false,
-    deletable: false
+    deletable: false,
 };
 
 // Update position of add chapter button based on number of chapters
 const graphStore = useGraphStore();
 graphStore.$subscribe(() => {
-    const chapters = nodes.value.filter(node => node.type === 'chapter');
+    const chapters = nodes.value.filter((node) => node.type === 'chapter');
     const addPositionY = chapters.length > 0 ? chapters[chapters.length - 1].position.y + 128 : 128;
     const addNode = findNode('2');
     if (addNode) {
@@ -74,10 +76,12 @@ graphStore.$subscribe(() => {
 });
 
 onConnect((params) => {
-    addEdges([{
-        ...params,
-        updatable: true,
-        style: {stroke: '#384257', strokeWidth: 2.5},
-        markerEnd: {type: MarkerType.ArrowClosed, color: '#384257'}
-    }]);
+    addEdges([
+        {
+            ...params,
+            updatable: true,
+            style: { stroke: '#384257', strokeWidth: 2.5 },
+            markerEnd: { type: MarkerType.ArrowClosed, color: '#384257' },
+        },
+    ]);
 });

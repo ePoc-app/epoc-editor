@@ -9,7 +9,7 @@ const props = defineProps<{
     label: string;
     accept: string;
     placeholder: string;
-    targetDirectory?: string
+    targetDirectory?: string;
 }>();
 
 const emit = defineEmits<{
@@ -28,7 +28,6 @@ const filetype = computed(() => {
 });
 
 async function changeImage(e: Event) {
-
     savedState = getCurrentState(true);
 
     const target = e.target as HTMLInputElement;
@@ -56,7 +55,7 @@ function openFile() {
 
 onMounted(() => {
     url.value = props.inputValue;
-    if(url.value.includes('\\')) {
+    if (url.value.includes('\\')) {
         //? Backwards support if files contains backslashes (not possible anymore)
         // TODO: Remove this in the future
         emit('input', url.value.replaceAll('\\', '/'));
@@ -67,25 +66,24 @@ watch(
     () => props.inputValue,
     () => {
         url.value = props.inputValue;
-    }
+    },
 );
 
 let savedState = '';
-
 </script>
 
 <template>
     <label class="input-label" :for="id">{{ label }}</label>
     <div v-show="url" class="show-input">
         <div class="input-file">
-            <input ref="fileInput" class="file" type="file" :accept="accept" @change="changeImage">
-            <input class="input" type="text" readonly :value="url" @click="openFile">
+            <input ref="fileInput" class="file" type="file" :accept="accept" @change="changeImage" />
+            <input class="input" type="text" readonly :value="url" @click="openFile" />
             <i class="icon-supprimer" @click="deleteFile"></i>
         </div>
         <div v-if="url" class="preview">
-            <img v-if="filetype === 'img'" :src="'assets://'+url" :alt="label" />
-            <video v-if="filetype === 'video'" :src="'assets://'+url" controls></video>
-            <audio v-if="filetype === 'audio'" :src="'assets://'+url" controls></audio>
+            <img v-if="filetype === 'img'" :src="'assets://' + url" :alt="label" />
+            <video v-if="filetype === 'video'" :src="'assets://' + url" controls></video>
+            <audio v-if="filetype === 'audio'" :src="'assets://' + url" controls></audio>
         </div>
     </div>
     <div v-if="!url">
@@ -101,9 +99,11 @@ div {
     display: flex;
 }
 .preview {
-    img, video, audio {
-        width:100%;
-        height:auto;
+    img,
+    video,
+    audio {
+        width: 100%;
+        height: auto;
         min-height: 50px;
         max-width: 100%;
         margin-bottom: 1.5rem;
@@ -112,9 +112,9 @@ div {
 }
 
 i {
-    font-size: .9rem;
+    font-size: 0.9rem;
     cursor: pointer;
-    
+
     &:hover {
         color: var(--editor-red);
     }
@@ -129,25 +129,24 @@ button {
     flex-direction: column;
 }
 
-.input-file{
+.input-file {
     position: relative;
     margin-bottom: 1.5rem;
 
-    .input{
+    .input {
         margin-bottom: 0;
         padding-right: 1.5rem;
     }
 
-    .file{
+    .file {
         display: none;
     }
 }
 
-.icon-supprimer{
+.icon-supprimer {
     position: absolute;
-    right:.5rem;
-    top:50%;
+    right: 0.5rem;
+    top: 50%;
     transform: translateY(-50%);
 }
-
 </style>

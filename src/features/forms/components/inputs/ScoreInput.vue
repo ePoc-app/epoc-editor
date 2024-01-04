@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { getCurrentState } from '@/src/shared/services/undoRedo.service';
 
-
 const props = defineProps<{
     id: string;
     inputValue: number;
@@ -29,7 +28,6 @@ function plus(inputValue: number) {
     emit('saveGivenState', savedState);
 }
 
-
 // Undo Redo
 let savedState = '';
 let savedValue = null;
@@ -44,7 +42,6 @@ function onBlur() {
         emit('saveGivenState', savedState);
     }
 }
-
 </script>
 
 <template>
@@ -55,10 +52,10 @@ function onBlur() {
             :id="id"
             type="number"
             :value="inputValue"
-            @input="emit('input',($event.target as HTMLInputElement).value)"
+            @input="emit('input', ($event.target as HTMLInputElement).value)"
             @focus="onFocus"
             @blur="onBlur"
-        >
+        />
         <button @click="plus(inputValue)"><i class="icon-plus-circle"></i></button>
     </div>
 </template>
@@ -76,9 +73,9 @@ function onBlur() {
         box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);
     }
 
-    input[type="number"] {
+    input[type='number'] {
         border: none;
-        margin: .5rem;
+        margin: 0.5rem;
         background-color: transparent;
         font-size: 1.1rem;
         outline: none;
@@ -94,7 +91,7 @@ function onBlur() {
             margin: 0;
         }
     }
-    
+
     button {
         border: none;
         background-color: transparent;
@@ -117,7 +114,7 @@ function onBlur() {
 }
 
 label {
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
     font-size: 1rem;
 }
 </style>

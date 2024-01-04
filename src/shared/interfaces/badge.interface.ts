@@ -5,7 +5,7 @@ export interface Badge {
     title: string;
     description: string;
     icon: string;
-    rule: Rule
+    rule: Rule;
 }
 
 export interface Condition {
@@ -21,6 +21,16 @@ export interface VerbDescription {
 }
 
 export type ElementType = 'chapter' | 'page' | 'html' | 'video' | 'audio' | 'activity' | 'question';
-export type VerbKey = 'started' | 'completed' | 'viewed' | 'read' | 'played' | 'watched' | 'listened' | 'attempted' | 'scored' | 'passed';
+export type VerbKey =
+    | 'started'
+    | 'completed'
+    | 'viewed'
+    | 'read'
+    | 'played'
+    | 'watched'
+    | 'listened'
+    | 'attempted'
+    | 'scored'
+    | 'passed';
 
-export type Verbs = { [key in VerbKey]?: VerbDescription; }
+export type Verbs = { [key in VerbKey]?: VerbDescription };

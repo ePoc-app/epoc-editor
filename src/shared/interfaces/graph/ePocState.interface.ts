@@ -7,5 +7,5 @@ export interface ePocState {
         formType: string;
         nodeId?: string;
         scrollPos?: number;
-    } 
- }
+    };
+}

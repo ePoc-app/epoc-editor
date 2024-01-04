@@ -15,7 +15,6 @@ function close() {
     editorStore.iconModal = false;
 }
 
-
 function chooseIcon(icon: string) {
     saveState(true);
 
@@ -36,7 +35,6 @@ const modalScreen = ref(null);
 onMounted(() => {
     modalScreen.value.focus();
 });
-
 </script>
 
 <template>
@@ -50,7 +48,7 @@ onMounted(() => {
             </header>
             <div class="content">
                 <h3>Icônes par défaut</h3>
-                <hr class="separator">
+                <hr class="separator" />
                 <div class="badges">
                     <BadgeItem
                         v-for="(icon, index) in defaultBadgeIcons"
@@ -63,7 +61,7 @@ onMounted(() => {
 
             <div class="content">
                 <h3>Icônes personnalisées</h3>
-                <hr class="separator">
+                <hr class="separator" />
                 <div class="badges">
                     <BadgeItem
                         v-for="(icon, index) in projectStore.customIcons"
@@ -72,9 +70,7 @@ onMounted(() => {
                         @click="chooseIcon(icon)"
                     />
                 </div>
-                <BadgePreview
-                    @click="chooseCustomIcon($event)"
-                />
+                <BadgePreview @click="chooseCustomIcon($event)" />
             </div>
         </article>
     </div>
@@ -92,7 +88,6 @@ footer {
     border-top: 1px solid var(--border);
 }
 
-
 hr {
     margin-top: 1rem;
 }
@@ -106,9 +101,9 @@ hr {
 .add {
     margin-top: 1rem;
     display: flex;
-    gap: .5rem;
+    gap: 0.5rem;
     i {
-        font-size: .9rem;
+        font-size: 0.9rem;
         margin: auto;
     }
 }

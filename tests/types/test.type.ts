@@ -1,13 +1,13 @@
-export type PageContent = 'text' | 'video' | 'audio'
+export type PageContent = 'text' | 'video' | 'audio';
 
 const questions = ['choice', 'drag-and-drop', 'reorder', 'swipe', 'dropdown-list'] as const;
-export type Question = typeof questions[number];
+export type Question = (typeof questions)[number];
 
 export function isQuestion(value) {
     return questions.includes(value);
 }
 
-export type Content = PageContent | Question
+export type Content = PageContent | Question;
 
 export interface TestNode {
     type: 'chapter' | 'page' | 'activity';
@@ -31,6 +31,18 @@ export interface TestRepeatInput {
 }
 
 export interface TestForm {
-    type: 'page' | 'epoc' | 'activity' | 'text' | 'audio' | 'video' | 'chapter' | 'choice' | 'drag-and-drop' | 'reorder' | 'swipe' | 'dropdown-list';
+    type:
+        | 'page'
+        | 'epoc'
+        | 'activity'
+        | 'text'
+        | 'audio'
+        | 'video'
+        | 'chapter'
+        | 'choice'
+        | 'drag-and-drop'
+        | 'reorder'
+        | 'swipe'
+        | 'dropdown-list';
     inputs: (TestInput | TestRepeatInput)[];
 }

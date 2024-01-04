@@ -10,7 +10,7 @@ import {
     Html,
     SimpleQuestion,
     uid,
-    Video
+    Video,
 } from '@epoc/epoc-types/src/v1';
 import { questions } from '@/src/shared/data';
 import { useEditorStore } from '@/src/shared/stores';
@@ -19,7 +19,7 @@ import {
     findContent,
     getContentIdFromId,
     getElementByContentId,
-    setNodesSelectability
+    setNodesSelectability,
 } from '@/src/shared/services/graph';
 import { Question } from '@epoc/epoc-types/src/v2';
 import { createRule, getConditions, getValidBadges } from '@/src/shared/services/graph/badge.service';
@@ -27,7 +27,7 @@ import { Badge, NodeElement } from '@/src/shared/interfaces';
 
 declare const api: ApiInterface;
 
-const { nodes, edges, findNode, toObject }  = useVueFlow({ id: 'main' });
+const { nodes, edges, findNode, toObject } = useVueFlow({ id: 'main' });
 
 function writeProjectData(): void {
     debounceFunction(500, () => {
@@ -55,10 +55,13 @@ const debounceFunction = function (delay: number, cb: () => void) {
     timerId = setTimeout(cb, delay);
 };
 
-function createContentJSON() : EpocV1 {
-
-    const ePocNode = nodes.value.find((node) => { return node.type === 'epoc'; });
-    const chapterNodes = nodes.value.filter((node) => { return node.type === 'chapter'; });
+function createContentJSON(): EpocV1 {
+    const ePocNode = nodes.value.find((node) => {
+        return node.type === 'epoc';
+    });
+    const chapterNodes = nodes.value.filter((node) => {
+        return node.type === 'chapter';
+    });
     const validBadges = getValidBadges();
 
     const ePocValues = ePocNode.data.formValues;
@@ -81,16 +84,16 @@ function createContentJSON() : EpocV1 {
         {
             name: ePocValues.licenceName || '',
             url: ePocValues.licenceUrl || '',
-            content: ''
-        }
+            content: '',
+        },
     );
 
-    chapterNodes.forEach(chapter => {
+    chapterNodes.forEach((chapter) => {
         const chapterValues = chapter.data.formValues;
         epoc.addChapter(chapter.data.contentId, {
             title: chapterValues.title || '',
             objectives: chapterValues.objectives || [],
-            contents: []
+            contents: [],
         });
         let pageNode = getNextNode(chapter);
         while (pageNode) {
@@ -99,21 +102,21 @@ function createContentJSON() : EpocV1 {
             pageNode = getNextNode(pageNode);
         }
     });
-    
-    if(validBadges) {
+
+    if (validBadges) {
         epoc.badges = exportBadgesToPage(validBadges);
     }
 
     return epoc;
 }
 
-function newContent(epoc: EpocV1, pageNode: GraphNode) : string {
+function newContent(epoc: EpocV1, pageNode: GraphNode): string {
     const baseContent: Content = {
         type: 'unknown',
         title: pageNode.data.formValues.title || '',
         ...(pageNode.data.formValues.subtitle && { subtitle: pageNode.data.formValues.subtitle }),
         ...(pageNode.data.formValues.hidden && { hidden: pageNode.data.formValues.hidden }),
-        ...(pageNode.data.formValues.conditional && { conditional: pageNode.data.formValues.conditional })
+        ...(pageNode.data.formValues.conditional && { conditional: pageNode.data.formValues.conditional }),
     };
     if (pageNode.type === 'page') {
         const contentNode = pageNode.data.elements[0];
@@ -126,10 +129,9 @@ function newContent(epoc: EpocV1, pageNode: GraphNode) : string {
                 subtitles: contentNode.formValues.subtitles,
                 summary: contentNode.formValues.summary,
                 transcript: contentNode.formValues.transcript,
-
             };
             return epoc.addContent(pageNode.data.contentId, content);
-        } else if(contentNode.action.type === 'audio') {
+        } else if (contentNode.action.type === 'audio') {
             const content: Audio = {
                 ...baseContent,
                 type: 'audio',
@@ -142,7 +144,7 @@ function newContent(epoc: EpocV1, pageNode: GraphNode) : string {
             const content: Html = {
                 ...baseContent,
                 type: 'html',
-                html: contentNode.formValues.html
+                html: contentNode.formValues.html,
             };
             return epoc.addContent(pageNode.data.contentId, content);
         } else if (contentNode.action.type === 'legacy-condition') {
@@ -153,7 +155,7 @@ function newContent(epoc: EpocV1, pageNode: GraphNode) : string {
                     type: 'choice',
                     label: contentNode.formValues.label,
                     choices: contentNode.formValues.choices.map((c: Choice) => {
-                        return {label: c, value: c};
+                        return { label: c, value: c };
                     }),
                     conditionalFlag: contentNode.formValues.choices.map((c: Choice) => {
                         return {
@@ -162,17 +164,17 @@ function newContent(epoc: EpocV1, pageNode: GraphNode) : string {
                             flags: contentNode.formValues.conditionalFlag.reduce((arr: any, f: any) => {
                                 if (f.choice === c) arr.push(f.id);
                                 return arr;
-                            }, [])
+                            }, []),
                         };
-                    })
-                }
+                    }),
+                },
             };
             return epoc.addContent(pageNode.data.contentId, content);
-        } else if (questions.some(q => q.type === contentNode.action.type)) {
+        } else if (questions.some((q) => q.type === contentNode.action.type)) {
             const content: SimpleQuestion = {
                 ...baseContent,
                 type: 'simple-question',
-                question: newQuestion(epoc, contentNode)
+                question: newQuestion(epoc, contentNode),
             };
             return epoc.addContent(pageNode.data.contentId, content);
         }
@@ -185,54 +187,54 @@ function newContent(epoc: EpocV1, pageNode: GraphNode) : string {
             ...baseContent,
             type: 'assessment',
             ...(pageNode.data.formValues.summary && { summary: pageNode.data.formValues.summary }),
-            questions: questions
+            questions: questions,
         };
         return epoc.addContent(pageNode.data.contentId, content);
     }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function newQuestion(epoc: EpocV1, questionNode: any) : string {
+function newQuestion(epoc: EpocV1, questionNode: any): string {
     let type = 'unknown';
     let responses = [];
     let correctResponse = [];
 
     if (questionNode.formValues && questionNode.formValues.responses) {
         if (questionNode.formType === 'choice') {
-            responses = questionNode.formValues.responses.map(r => {
+            responses = questionNode.formValues.responses.map((r) => {
                 return {
                     label: r.label,
-                    value: r.value
+                    value: r.value,
                 };
             });
-            correctResponse = questionNode.formValues.responses.filter(r => r.isCorrect).map(r => r.value);
+            correctResponse = questionNode.formValues.responses.filter((r) => r.isCorrect).map((r) => r.value);
             type = correctResponse.length > 1 ? 'multiple-choice' : 'choice';
         } else if (questionNode.formType === 'reorder') {
-            responses = questionNode.formValues.responses.map((r: { label: string, value: string }) => {
+            responses = questionNode.formValues.responses.map((r: { label: string; value: string }) => {
                 return {
                     label: r.label,
-                    value: r.value
+                    value: r.value,
                 };
             });
-            correctResponse = questionNode.formValues.responses.reduce((acc, r) => acc+r.value, '');
+            correctResponse = questionNode.formValues.responses.reduce((acc, r) => acc + r.value, '');
             type = 'reorder';
         } else if (['drag-and-drop', 'dropdown-list', 'swipe'].includes(questionNode.formType)) {
-            responses = questionNode.formValues.responses.map((r: { label: string, value: string }) => {
+            responses = questionNode.formValues.responses.map((r: { label: string; value: string }) => {
                 return {
                     label: r.label,
-                    value: r.value
+                    value: r.value,
                 };
             });
-            correctResponse = questionNode.formValues.categories.map(cat => {
+            correctResponse = questionNode.formValues.categories.map((cat) => {
                 return {
                     label: cat,
-                    values: questionNode.formValues.responses.filter(r => r.category === cat).map(r => r.value)
+                    values: questionNode.formValues.responses.filter((r) => r.category === cat).map((r) => r.value),
                 };
             });
             type = questionNode.formType;
         }
     }
-    const question : Question = {
+    const question: Question = {
         type,
         label: questionNode.formValues?.label || '',
         statement: questionNode.formValues?.statement || '',
@@ -254,12 +256,14 @@ function getPreviousNode(node: GraphNode): GraphNode | null {
     return edge ? getNodeById(edge.source) : null;
 }
 
-function getNodeById(id: string) : GraphNode {
-    return nodes.value.find((node) => { return node.id === id; });
+function getNodeById(id: string): GraphNode {
+    return nodes.value.find((node) => {
+        return node.id === id;
+    });
 }
 
 interface contextDataProps {
-    position?: { x: number, y: number };
+    position?: { x: number; y: number };
     id?: string;
     pageId?: string;
     selection?: string;
@@ -274,7 +278,7 @@ export const graphService = {
     writeProjectData,
     getPreviousNode,
     getNextNode,
-    openContextMenu
+    openContextMenu,
 };
 
 let openedConditionIndex: number | null = null;
@@ -290,14 +294,13 @@ export function enterSelectNodeMode(conditionIndex: number): void {
 const contentsType = ['audio', 'video', 'text'];
 function getConditionType(id: string): 'contents' | 'chapters' | 'pages' | 'questions' {
     const node = findNode(id);
-    if(!node) {
+    if (!node) {
         const nodeElement: NodeElement = findContent(id);
-        if(contentsType.includes(nodeElement.action.type)) return 'contents';
-
+        if (contentsType.includes(nodeElement.action.type)) return 'contents';
         else return 'questions';
     } else {
-        if(node.type === 'chapter') return 'chapters';
-        if(node.type === 'activity') return 'contents';
+        if (node.type === 'chapter') return 'chapters';
+        if (node.type === 'activity') return 'contents';
         else return 'pages';
     }
 }
@@ -306,24 +309,22 @@ export function exitSelectNodeMode(selectedId?: string): void {
     const editorStore = useEditorStore();
     editorStore.exitSelectNodeMode();
     setNodesSelectability(false);
-    
-    if(selectedId !== undefined) {
-        
-        if(openedConditionIndex) editorStore.resetTempCondition(openedConditionIndex);
-        
+
+    if (selectedId !== undefined) {
+        if (openedConditionIndex) editorStore.resetTempCondition(openedConditionIndex);
+
         editorStore.tempConditions[openedConditionIndex].elementType = getConditionType(selectedId);
         editorStore.tempConditions[openedConditionIndex].element = getContentIdFromId(selectedId);
     }
-    
 
     enableGraph();
     openedConditionIndex = null;
 }
 
 function disableGraph(): void {
-    nodes.value.forEach(node => node.draggable = false);
-    edges.value.forEach(edge => {
-        if(edge.id === 'mainEdge') return;
+    nodes.value.forEach((node) => (node.draggable = false));
+    edges.value.forEach((edge) => {
+        if (edge.id === 'mainEdge') return;
 
         edge.selectable = false;
         edge.deletable = false;
@@ -332,14 +333,14 @@ function disableGraph(): void {
 }
 
 function enableGraph(): void {
-    nodes.value.forEach(node => {
-        if(node.type === 'epoc') return;
-        if(node.type === 'add') return;
+    nodes.value.forEach((node) => {
+        if (node.type === 'epoc') return;
+        if (node.type === 'add') return;
 
         node.draggable = true;
     });
-    edges.value.forEach(edge => {
-        if(edge.id === 'mainEdge') return;
+    edges.value.forEach((edge) => {
+        if (edge.id === 'mainEdge') return;
 
         edge.selectable = true;
         edge.deletable = true;
@@ -369,26 +370,26 @@ export function generateId(): uid {
 export function exportBadgesToPage(badges: Record<string, Badge>): Record<string, Badge> {
     const res = JSON.parse(JSON.stringify(badges));
 
-    for(const badgeKey of Object.keys(res)) {
+    for (const badgeKey of Object.keys(res)) {
         let conditions = getConditions(res[badgeKey]);
         const elements = conditions.map((condition) => condition.element);
 
-        for(const element of elements) {
+        for (const element of elements) {
             const nodeElement = getElementByContentId(element);
 
             // @ts-ignore
-            if(nodeElement && nodeElement.parentId) {
+            if (nodeElement && nodeElement.parentId) {
                 //@ts-ignore
                 const parentNode = findNode(nodeElement.parentId);
 
-                if(parentNode.type !== 'activity') {
+                if (parentNode.type !== 'activity') {
                     const newElement = getContentIdFromId(parentNode.id);
 
                     conditions = conditions.map((condition) => {
                         if (condition.element === element) {
                             return {
                                 ...condition,
-                                element: newElement
+                                element: newElement,
                             };
                         }
                         return condition;
@@ -405,10 +406,10 @@ export function exportBadgesToPage(badges: Record<string, Badge>): Record<string
 
 export function closeFormPanel() {
     const editorStore = useEditorStore();
-    
-    if(editorStore.selectNodeMode) return;
-    
-    if(editorStore.formPanel.form && editorStore.formPanel.form.type === 'badge') {
+
+    if (editorStore.selectNodeMode) return;
+
+    if (editorStore.formPanel.form && editorStore.formPanel.form.type === 'badge') {
         deleteEmptyBadges();
     }
 
