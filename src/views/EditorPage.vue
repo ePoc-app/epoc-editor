@@ -17,7 +17,7 @@ const editorStore = useEditorStore();
 
 editorService.setup();
 
-function addDeleteEvent(event: KeyboardEvent) {
+function addKeyboardEvent(event: KeyboardEvent) {
     const { key, metaKey, ctrlKey } = event;
 
     if (key === 'Backspace' || key === 'Delete') {
@@ -29,6 +29,9 @@ function addDeleteEvent(event: KeyboardEvent) {
 
     if (metaKey || ctrlKey) {
         if (key === 'v') {
+            // Permits to paste in the WYSIWYG link editor modal
+            if((event.target as HTMLElement).className.indexOf('tox-textfield') !== -1) return;
+
             event.preventDefault();
             saveState();
             graphPaste();
@@ -45,8 +48,8 @@ function addEscapeEvent(event: KeyboardEvent) {
     }
 }
 
-document.body.removeEventListener('keydown', addDeleteEvent);
-document.body.addEventListener('keydown', addDeleteEvent);
+document.body.removeEventListener('keydown', addKeyboardEvent);
+document.body.addEventListener('keydown', addKeyboardEvent);
 
 document.body.removeEventListener('keydown', addEscapeEvent);
 document.body.addEventListener('keydown', addEscapeEvent);
