@@ -31,6 +31,10 @@ async function chooseCustomIcon(icon: string) {
     chooseIcon(iconPath);
 }
 
+function removeCustomIcon(index: number) {
+    projectStore.customIcons.splice(index, 1);
+}
+
 const modalScreen = ref(null);
 onMounted(() => {
     modalScreen.value.focus();
@@ -67,7 +71,9 @@ onMounted(() => {
                         v-for="(icon, index) in projectStore.customIcons"
                         :key="index"
                         :icon="icon"
+                        :delete-button="true"
                         @click="chooseIcon(icon)"
+                        @remove-icon="removeCustomIcon(index)"
                     />
                 </div>
                 <BadgePreview @click="chooseCustomIcon($event)" />

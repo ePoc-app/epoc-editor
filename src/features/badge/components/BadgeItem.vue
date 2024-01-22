@@ -9,10 +9,12 @@ const props = defineProps<{
     inactive?: boolean;
     badge?: Badge;
     invalid?: boolean;
+    deleteButton?: boolean;
 }>();
 
 const emit = defineEmits<{
     (e: 'click'): void;
+    (e: 'remove-icon'): void;
 }>();
 
 function onClick() {
@@ -37,6 +39,7 @@ function getIconPath() {
 
 <template>
     <div class="badge">
+        <button v-if="deleteButton" class="btn btn-close" @click="emit('remove-icon')"><i class="icon-x"></i></button>
         <div
             class="badge-background"
             :class="{ clickable: !viewMode && !inactive, inactive: inactive }"
@@ -60,8 +63,16 @@ function getIconPath() {
 
 <style scoped lang="scss">
 .badge {
+    position: relative;
     display: flex;
     flex-direction: column;
+
+    .btn-close {
+        left: 0;
+        top: 0;
+        transform: translate(-50%, -50%);
+        z-index: 200;
+    }
 
     .clickable {
         cursor: pointer;
