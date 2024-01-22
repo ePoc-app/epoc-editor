@@ -114,13 +114,6 @@ export const dragDropForm: Form = {
                     value: '',
                     placeholder: 'Posez la question',
                 },
-                {
-                    id: 'statement',
-                    type: 'textarea',
-                    label: 'Consigne',
-                    value: '',
-                    placeholder: 'Instruction pour répondre à la question',
-                },
             ],
         },
         {
@@ -300,13 +293,6 @@ export const swipeForm: Form = {
                     label: 'Question',
                     value: '',
                     placeholder: 'Posez la question',
-                },
-                {
-                    id: 'statement',
-                    type: 'textarea',
-                    label: 'Consigne',
-                    value: '',
-                    placeholder: 'Instruction pour répondre à la question',
                 },
             ],
         },
