@@ -5,6 +5,7 @@ defineProps<{
     id: string;
     inputValue: boolean;
     label: string;
+    hint?: string;
 }>();
 
 const emit = defineEmits<{
@@ -25,7 +26,21 @@ function onChange(event: Event) {
 <template>
     <div class="checkbox">
         <input :id="id" class="checkbox-input" type="checkbox" :checked="inputValue" @change="onChange" />
-        <label :for="id">{{ label }}</label>
+        <div class="input-label">
+            <label :for="id">{{ label }}</label>
+            <i
+                v-if="hint"
+                v-tippy="{
+                    content: hint,
+                    placement: 'top',
+                    allowHTML: true,
+                    arrow: true,
+                    arrowType: 'round',
+                    animation: 'fade',
+                }"
+                class="icon-help-circle"
+            />
+        </div>
     </div>
 </template>
 

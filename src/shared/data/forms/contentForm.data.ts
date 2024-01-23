@@ -12,7 +12,7 @@ export const textForm: Form = {
                 {
                     id: 'html',
                     type: 'html',
-                    label: 'Résumé',
+                    label: '',
                     value: '',
                     placeholder: 'Saisissez un résumé...',
                 },
@@ -36,6 +36,7 @@ export const videoForm: Form = {
                     placeholder: 'Ajouter une vidéo',
                     value: '',
                     accept: '.mp4',
+                    hint: 'Format recommandé: 16:9 (720x480)'
                 },
                 {
                     id: 'summary',
@@ -51,6 +52,7 @@ export const videoForm: Form = {
                     value: '',
                     placeholder: 'Ajouter une transcription',
                     accept: '.txt,.vtt',
+                    hint: 'Extensions acceptés: .vtt, .txt <br>Pour les utilisateurs qui ne souhaitent pas ou ne sont pas en capacité écouter la vidéo'
                 },
                 {
                     id: 'poster',
@@ -59,6 +61,7 @@ export const videoForm: Form = {
                     value: '',
                     placeholder: 'Ajouter une vignette',
                     accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
+                    hint: 'Format recommandé: idem à la vidéo'
                 },
             ],
         },
@@ -92,6 +95,7 @@ export const videoForm: Form = {
                             value: '',
                             placeholder: 'Ajouter des sous-titres',
                             accept: '.vtt',
+                            hint: 'Extensions acceptés: .vtt'
                         },
                     ],
                 },
@@ -123,6 +127,7 @@ export const audioForm: Form = {
                     value: '',
                     placeholder: 'Ajouter une transcription',
                     accept: '.txt,.vtt',
+                    hint: 'Extensions acceptés: .vtt, .txt <br>Pour les utilisateurs qui ne souhaitent pas ou ne sont pas en capacité écouter la piste audio'
                 },
                 {
                     id: 'poster',
@@ -131,6 +136,7 @@ export const audioForm: Form = {
                     value: '',
                     placeholder: 'Ajouter une vignette',
                     accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
+                    hint: 'Format recommandé: 16:9 (720x480)'
                 },
                 {
                     id: 'subtitles',
@@ -139,6 +145,7 @@ export const audioForm: Form = {
                     value: '',
                     placeholder: 'Ajouter des sous-titres',
                     accept: '.vtt',
+                    hint: 'Extensions acceptés: .vtt'
                 },
             ],
         },

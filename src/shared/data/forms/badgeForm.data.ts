@@ -19,7 +19,7 @@ export const customBadgeForm: Form = {
                 {
                     id: 'icon',
                     type: 'icon-picker',
-                    label: 'Icône de couverture',
+                    label: 'Icône du badge',
                     value: '',
                     placeholder: "Modifier l'icône",
                 },

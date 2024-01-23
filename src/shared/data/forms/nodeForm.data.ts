@@ -115,7 +115,7 @@ export const chapterForm: Form = {
             ],
         },
         {
-            name: 'Objectifs',
+            name: 'Objectifs pédagogiques',
             inputs: [
                 {
                     id: 'objectives',
@@ -159,6 +159,7 @@ export const epocForm: Form = {
                     placeholder: 'Ajouter une image de couverture',
                     value: '',
                     accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
+                    hint: 'Format recommandé : carré (180x180)<br> Image visible dans la liste des ePocs',
                 },
                 {
                     id: 'teaser',
@@ -167,6 +168,7 @@ export const epocForm: Form = {
                     value: '',
                     placeholder: 'Ajouter un teaser',
                     accept: '.mp4',
+                    hint: 'Format recommandé : 16:9 (720x480) <br> Vidéo visible dans la page de présentation de l\'ePoc'
                 },
                 {
                     id: 'thumbnail',
@@ -175,6 +177,7 @@ export const epocForm: Form = {
                     value: '',
                     placeholder: 'Ajouter une vignette',
                     accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
+                    hint: 'Format recommandé : idem que la vidéo <br> Image visible dans la page de présentation de l\'ePoc'
                 },
                 {
                     id: 'summary',
@@ -214,6 +217,7 @@ export const epocForm: Form = {
                             placeholder: 'Ajouter une image',
                             value: '',
                             accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
+                            hint: 'Format recommandé : carré (100x100)<br> Image visible dans la page de présentation de l\'ePoc',
                         },
                         {
                             id: 'title',
@@ -221,6 +225,7 @@ export const epocForm: Form = {
                             label: 'Titre',
                             placeholder: "Chercheuse à l'Inria",
                             value: '',
+                            hint: 'Titre ou fonction affichée sous le nom de l\'auteur',
                         },
                         {
                             id: 'description',
@@ -234,7 +239,7 @@ export const epocForm: Form = {
             ],
         },
         {
-            name: 'Objectifs',
+            name: 'Objectifs pédagogiques',
             inputs: [
                 {
                     id: 'objectives',
@@ -268,16 +273,17 @@ export const epocForm: Form = {
             name: 'Paramètres :',
             inputs: [
                 {
-                    id: 'certificateScore',
-                    type: 'score',
-                    label: "Score pour obtenir l'attestation",
-                    value: 10,
-                },
-                {
                     id: 'certificateBadgeCount',
                     type: 'score',
                     label: "Nombre de badge pour obtenir l'attestation",
                     value: 1,
+                },
+                {
+                    id: 'certificateScore',
+                    type: 'score',
+                    label: "Score pour obtenir l'attestation",
+                    value: 10,
+                    hint: 'N\'est pas pris en compte si le nombre de badge pour obtenir l\'attestation est supérieur à 0',
                 },
                 {
                     id: 'chapterParameter',
@@ -341,6 +347,7 @@ export const epocForm: Form = {
                     label: 'Nom',
                     placeholder: 'CC-BY 4.0',
                     value: '',
+                    hint: 'Nom de la licence de votre contenu ePoc'
                 },
                 {
                     id: 'licenceUrl',
@@ -348,6 +355,7 @@ export const epocForm: Form = {
                     label: 'URL',
                     placeholder: 'https://creativecommons.org/licenses/by/4.0/deed',
                     value: '',
+                    hint: 'Texte complet de la licence choisie'
                 },
             ],
         },
@@ -387,6 +395,7 @@ export const pageForm: Form = {
                     type: 'checkbox',
                     label: "Ne s'affiche qu'a certaines conditions",
                     value: false,
+                    hint: 'Option utilisé pour l\'affichage conditionnel'
                 },
             ],
         },
@@ -446,6 +455,7 @@ export const activityForm: Form = {
                     type: 'checkbox',
                     label: "Ne s'affiche qu'a certaines conditions",
                     value: false,
+                    hint: 'Option utilisé pour l\'affichage conditionnel'
                 },
             ],
         },

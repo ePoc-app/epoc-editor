@@ -69,7 +69,8 @@ function showLabel(inputType: string) {
                 v-if="input.hint"
                 v-tippy="{
                     content: input.hint,
-                    placement: 'right',
+                    placement: 'top',
+                    allowHTML: true,
                     arrow: true,
                     arrowType: 'round',
                     animation: 'fade',
@@ -132,6 +133,7 @@ function showLabel(inputType: string) {
             v-if="input.type === 'checkbox'"
             :id="inputId"
             :label="input.label"
+            :hint="input.hint"
             :input-value="inputValue as boolean"
             @change="emit('check', $event)"
             @save-given-state="emit('saveGivenState', $event)"
