@@ -35,7 +35,6 @@ function onChange(event: Event) {
 
 <template>
     <div class="select">
-        <label :for="id">{{ label }}</label>
         <select :id="id" :value="inputValue" class="select-box" @change="onChange">
             <option value="">Sélectionnez</option>
             <option v-for="(option, index) in getOptions()" :key="index" :value="option">{{ option }}</option>

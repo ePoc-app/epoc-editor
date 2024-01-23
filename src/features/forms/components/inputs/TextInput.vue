@@ -33,7 +33,6 @@ function onBlur() {
 </script>
 
 <template>
-    <label v-if="label !== ''" class="input-label" :for="id">{{ label }}</label>
     <input
         :id="id"
         class="input"

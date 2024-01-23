@@ -73,7 +73,6 @@ let savedState = '';
 </script>
 
 <template>
-    <label class="input-label" :for="id">{{ label }}</label>
     <div v-show="url" class="show-input">
         <div class="input-file">
             <input ref="fileInput" class="file" type="file" :accept="accept" @change="changeImage" />

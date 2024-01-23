@@ -24,7 +24,6 @@ function onChange(value: string) {
 
 <template>
     <div class="radio">
-        <label class="group-label" :for="String(pos)">Réponse</label>
         <div :id="String(pos)" class="radio-group">
             <div class="radio-btn">
                 <input

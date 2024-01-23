@@ -297,9 +297,19 @@ hr {
 }
 
 .input-label {
-    margin-bottom: 0.5rem;
+    display: flex;
+    gap: .3rem;
+    margin-bottom: 0.7rem;
     font-size: 1rem;
     font-family: 'Open Sans', sans-serif;
+    line-height: 1;
+
+    i {
+        display: flex;
+        align-items: center;
+        margin: 0;
+        color: var(--text-secondary);
+    }
 }
 
 .form-icon {

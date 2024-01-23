@@ -45,7 +45,6 @@ function onBlur() {
 </script>
 
 <template>
-    <label :for="id">{{ label }}</label>
     <div class="input-score">
         <button @click="minus(inputValue)"><i class="icon-minus-circle"></i></button>
         <input

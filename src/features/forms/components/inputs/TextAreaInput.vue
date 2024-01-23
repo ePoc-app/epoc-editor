@@ -32,7 +32,6 @@ function onBlur() {
 </script>
 
 <template>
-    <label class="input-label" :for="id">{{ label }}</label>
     <textarea
         :id="id"
         class="input input-textarea"

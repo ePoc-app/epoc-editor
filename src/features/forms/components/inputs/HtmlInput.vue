@@ -101,10 +101,13 @@ function focusEditor() {
     const editor = getTinymce().activeEditor;
     editor.focus();
 }
+
+defineExpose({
+    focusEditor
+});
 </script>
 
 <template>
-    <label @click="focusEditor">{{ label }}</label>
     <Editor
         ref="editor"
         v-model="content"

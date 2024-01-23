@@ -11,4 +11,5 @@ export interface Input {
     options?: string[];
     linkedOptions?: string;
     targetDirectory?: string;
+    hint?: string;
 }
