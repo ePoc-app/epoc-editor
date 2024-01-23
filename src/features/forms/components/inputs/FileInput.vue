@@ -113,10 +113,6 @@ div {
 i {
     font-size: 0.9rem;
     cursor: pointer;
-
-    &:hover {
-        color: var(--editor-red);
-    }
 }
 
 button {
@@ -135,6 +131,7 @@ button {
     .input {
         margin-bottom: 0;
         padding-right: 1.5rem;
+        width: 100%;
     }
 
     .file {
@@ -147,5 +144,9 @@ button {
     right: 0.5rem;
     top: 50%;
     transform: translateY(-50%);
+
+    &:hover {
+        color: var(--editor-red);
+    }
 }
 </style>
