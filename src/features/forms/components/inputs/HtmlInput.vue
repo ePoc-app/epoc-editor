@@ -23,6 +23,9 @@ const content: Ref<string> = ref('');
 
 function textChange() {
     emit('input', content.value);
+
+    // Writing the project data at every input & letting the debounce handle the rest
+    graphService.writeProjectData();
 }
 
 watch(
@@ -105,6 +108,7 @@ function focusEditor() {
 defineExpose({
     focusEditor
 });
+
 </script>
 
 <template>
