@@ -176,13 +176,15 @@ function openEpocProject(project: ePocProject): void {
 
 function saveEpocProject(): void {
     editorStore.saving = true;
-    api.send('saveEpocProject');
+    const data = graphService.getProjectJSON();
+    api.send('saveEpocProject', data);
 }
 
 function runPreview(): void {
     waitingToast('🔭 Démarrage de la prévisualisation...');
     editorStore.loadingPreview = true;
-    api.send('runPreview');
+    const data = graphService.getProjectJSON();
+    api.send('runPreview', { data });
 }
 
 function runPreviewAtPage(): void {
@@ -214,14 +216,16 @@ function runPreviewAtPage(): void {
 
     if (!error) {
         editorStore.loadingPreview = true;
-        api.send('runPreview', contentPath);
+        const projectJSON= graphService.getProjectJSON();
+        api.send('runPreview', { contentPath, projectJSON });
     }
 }
 
 function exportProject(): void {
     waitingToast('⚙️ Export en cours...');
     editorStore.exporting = true;
-    api.send('exportProject');
+    const data = graphService.getProjectJSON();
+    api.send('exportProject', data);
 }
 
 export const editorService = {

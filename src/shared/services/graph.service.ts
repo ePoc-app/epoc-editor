@@ -31,11 +31,16 @@ const { nodes, edges, findNode, toObject } = useVueFlow({ id: 'main' });
 
 function writeProjectData(): void {
     debounceFunction(500, () => {
-        const data = JSON.stringify(toObject());
-        const content = JSON.stringify(createContentJSON());
+        const { data, content } = getProjectJSON();
         api.send('writeProjectData', data);
         api.send('writeEpocData', content);
     });
+}
+
+function getProjectJSON(): { data: string; content: string } {
+    const data = JSON.stringify(toObject());
+    const content = JSON.stringify(createContentJSON());
+    return { data, content };
 }
 
 function importFile(filepath: string, targetDirectory?: string): Promise<string> {
@@ -279,6 +284,7 @@ export const graphService = {
     getPreviousNode,
     getNextNode,
     openContextMenu,
+    getProjectJSON
 };
 
 let openedConditionIndex: number | null = null;

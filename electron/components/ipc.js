@@ -69,17 +69,27 @@ const setupIpcListener = function (targetWindow) {
         store.updateState('projects', { [targetWindow.id]: project });
     });
 
-    ipcMain.on('saveEpocProject', async (event) => {
+    ipcMain.on('saveEpocProject', async (event, data) => {
         if (event.sender !== targetWindow.webContents) return;
 
         sendToFrontend(event.sender, 'epocProjectSaving');
+
+        const { data: projectData, content } = data;
+        await writeProjectData(store.state.projects[targetWindow.id].workdir, projectData);
+        await writeEpocData(store.state.projects[targetWindow.id].workdir, content);
+
         updateSavedProject(event.sender, await saveEpocProject(store.state.projects[targetWindow.id]));
     });
 
-    ipcMain.on('runPreview', async (event, contentPath) => {
+    ipcMain.on('runPreview', async (event, data) => {
         if (event.sender !== targetWindow.webContents) return;
 
         try {
+            const { contentPath, projectJSON } = data;
+            const { data: projectData, content } = projectJSON;
+            await writeProjectData(store.state.projects[targetWindow.id].workdir, projectData);
+            await writeEpocData(store.state.projects[targetWindow.id].workdir, content);
+
             await runPreview(store.state.projects[targetWindow.id].workdir, contentPath);
             sendToFrontend(event.sender, 'previewReady');
         } catch (e) {
@@ -88,10 +98,14 @@ const setupIpcListener = function (targetWindow) {
         }
     });
 
-    ipcMain.on('exportProject', async (event) => {
+    ipcMain.on('exportProject', async (event, data) => {
         if (event.sender !== targetWindow.webContents) return;
 
         try {
+            const { data: projectData, content } = data;
+            await writeProjectData(store.state.projects[targetWindow.id].workdir, projectData);
+            await writeEpocData(store.state.projects[targetWindow.id].workdir, content);
+
             await exportProject(
                 store.state.projects[targetWindow.id].workdir,
                 store.state.projects[targetWindow.id].filepath
