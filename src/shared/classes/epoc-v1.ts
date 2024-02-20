@@ -5,6 +5,7 @@ import { Badge } from '@epoc/epoc-types/src/v1/badge';
 
 export class EpocV1 implements Epoc {
     id: string;
+    editorVersion: string;
     title: string;
     image: string;
     objectives: string[];
@@ -34,6 +35,7 @@ export class EpocV1 implements Epoc {
 
     constructor(
         id: string,
+        editorVersion: string,
         title: string,
         image: string,
         objectives: string[],
@@ -50,6 +52,7 @@ export class EpocV1 implements Epoc {
         license: { name: string; url: string; content: string },
     ) {
         this.version = '1';
+        this.editorVersion = editorVersion;
         this.id = id;
         this.title = title;
         this.image = image;

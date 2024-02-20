@@ -143,6 +143,15 @@ const setup = function () {
         toaster.error("😵 Une erreur s'est produite");
         editorStore.exporting = false;
     });
+    
+    api.receive('editorVersion', (data: string) => {
+        const { version } = JSON.parse(data);
+        
+        editorStore.version = version;
+    });
+    
+    // Adding the version to the editorStore
+    api.send('getEditorVersion');
 
     initialized = true;
 };

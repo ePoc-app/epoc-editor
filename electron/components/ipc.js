@@ -17,6 +17,8 @@ const {
 const { Menu } = require('electron');
 const contextMenu = require('./contextMenu');
 
+const { app } = require('electron');
+
 const copyData = {
     pages: null,
     sourceId: null,
@@ -179,6 +181,12 @@ const setupIpcListener = function (targetWindow) {
         popupMenu.on('menu-will-close', () => {
             sendToFrontend(targetWindow.webContents, 'contextMenuClosed');
         });
+    });
+
+    ipcMain.on('getEditorVersion', async(event) => {
+        if(event.sender !== targetWindow.webContents) return;
+
+        sendToFrontend(event.sender, 'editorVersion', { version: app.getVersion() });
     });
 };
 

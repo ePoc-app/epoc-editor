@@ -61,6 +61,8 @@ const debounceFunction = function (delay: number, cb: () => void) {
 };
 
 function createContentJSON(): EpocV1 {
+    const editorStore = useEditorStore();
+  
     const ePocNode = nodes.value.find((node) => {
         return node.type === 'epoc';
     });
@@ -73,6 +75,7 @@ function createContentJSON(): EpocV1 {
 
     const epoc = new EpocV1(
         ePocValues.id || 'E000XX',
+        editorStore.version || 'NotFound',
         ePocValues.title || 'Title',
         ePocValues.image || '',
         ePocValues.objectives || [],

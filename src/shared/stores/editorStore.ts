@@ -55,6 +55,9 @@ interface EditorState {
     selectNodeMode: boolean;
     tempConditions: Condition[];
     editingConditions: boolean;
+    
+    // Info
+    version: string;
 }
 
 export const useEditorStore = defineStore('editor', {
@@ -98,6 +101,9 @@ export const useEditorStore = defineStore('editor', {
         selectNodeMode: false,
         tempConditions: [],
         editingConditions: false,
+        
+        // Info
+        version: '',
     }),
 
     getters: {
