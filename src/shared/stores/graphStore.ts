@@ -8,6 +8,7 @@ interface GraphState {
     flow: FlowExportObject;
 }
 
+//! Not really sure if this store is up to date at all time with the graph data
 export const useGraphStore = defineStore('graph', {
     state: (): GraphState => ({
         elements: [epoc(), add, mainEdge],

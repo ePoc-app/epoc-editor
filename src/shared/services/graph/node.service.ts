@@ -1,6 +1,6 @@
 import { Chapter } from '@epoc/epoc-types/src/v1';
 import { EpocV1 } from '../../classes/epoc-v1';
-import { useEditorStore, useGraphStore } from '../../stores';
+import { useEditorStore } from '../../stores';
 import { useVueFlow, Node, getConnectedEdges } from '@vue-flow/core';
 import { NodeElement, SideAction } from '../../interfaces';
 import { nextTick, toRaw, watch } from 'vue';
@@ -17,22 +17,20 @@ const editorStore = useEditorStore();
 const questionTypes = ['choice', 'drag-and-drop', 'reorder', 'swipe', 'dropdown-list'];
 
 export function setEpocNodeData(epoc: EpocV1) {
-    const { elements } = useGraphStore();
-
-    const ePocValues = elements[0].data.formValues;
-    ePocValues.id = epoc.id;
-    ePocValues.title = epoc.title;
-    ePocValues.image = epoc.image;
-    ePocValues.objectives = epoc.objectives;
-    ePocValues.summary = epoc.summary;
-    ePocValues.teaser = epoc.teaser;
-    ePocValues.thumbnail = epoc.thumbnail;
-    ePocValues.version = epoc.version;
-    ePocValues.certificateScore = epoc.certificateScore;
-    ePocValues.authors = Object.values(epoc.authors);
-    ePocValues.chapterParameter = epoc.parameters?.chapterParameter;
-    ePocValues.plugins = epoc.plugins;
-    ePocValues.badges = epoc.badges;
+    const epocNode = findNode('1');
+    epocNode.data.formValues.id = epoc.id;
+    epocNode.data.formValues.title = epoc.title;
+    epocNode.data.formValues.image = epoc.image;
+    epocNode.data.formValues.objectives = epoc.objectives;
+    epocNode.data.formValues.summary = epoc.summary;
+    epocNode.data.formValues.teaser = epoc.teaser;
+    epocNode.data.formValues.thumbnail = epoc.thumbnail;
+    epocNode.data.formValues.version = epoc.version;
+    epocNode.data.formValues.certificateScore = epoc.certificateScore;
+    epocNode.data.formValues.authors = Object.values(epoc.authors);
+    epocNode.data.formValues.chapterParameter = epoc.parameters?.chapterParameter;
+    epocNode.data.formValues.plugins = epoc.plugins;
+    epocNode.data.formValues.badges = epoc.badges;
 }
 
 export function addChapter(chapterId?: string, chapter?: Chapter, offsetY?: number): Node {
