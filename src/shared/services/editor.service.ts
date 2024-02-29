@@ -216,6 +216,9 @@ function runPreviewAtPage(): void {
             if (prevNode) {
                 contentPath = `${prevNode.data.contentId}/content/${openedNode.data.contentId}`;
             } else {
+                // Here to launch orphan preview
+                // contentPath = `content/${openedNode.data.contentId}`;
+                // console.log('Launching orphan preview at', contentPath);
                 error = true;
                 waitingToastDismiss();
                 toaster.warning('🚨Contenu orphelin non visualisable', { duration: 3000 });
