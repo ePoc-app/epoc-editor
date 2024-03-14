@@ -137,15 +137,6 @@ export const audioForm: Form = {
                     hint: 'Extensions acceptés: .vtt, .txt <br>Pour les utilisateurs qui ne souhaitent pas ou ne sont pas en capacité écouter la piste audio'
                 },
                 {
-                    id: 'poster',
-                    type: 'file',
-                    label: 'Vignette',
-                    value: '',
-                    placeholder: 'Ajouter une vignette',
-                    accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
-                    hint: 'Format recommandé: 16:9 (720x480)'
-                },
-                {
                     id: 'subtitles',
                     type: 'file',
                     label: 'Sous-titres',
