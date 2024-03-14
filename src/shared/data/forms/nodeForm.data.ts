@@ -304,36 +304,23 @@ export const epocForm: Form = {
                     value: [],
                     inputs: [
                         {
-                            id: '',
+                            id: 'script',
                             type: 'file',
-                            label: 'Fichier de plugin',
-                            placeholder: 'Ajouter un plugin',
+                            label: 'Fichier de script',
+                            placeholder: 'Ajouter un script',
                             targetDirectory: 'plugins',
                             value: '',
                             accept: '.js',
                         },
-                    ],
-                },
-            ],
-        },
-        {
-            name: 'Plugins templates',
-            inputs: [
-                {
-                    id: 'templates',
-                    label: 'Plugin templates',
-                    type: 'repeat',
-                    value: [],
-                    inputs: [
                         {
-                            id: '',
+                            id: 'template',
                             type: 'file',
-                            label: 'Template html de plugin',
+                            label: 'Template html du plugin',
                             placeholder: 'Ajouter un template',
                             targetDirectory: 'plugins',
                             value: '',
-                            accept: '.html',
-                        },
+                            accept: 'html'
+                        }
                     ],
                 },
             ],

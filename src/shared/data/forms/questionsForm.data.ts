@@ -476,4 +476,69 @@ export const listForm: Form = {
     ],
 };
 
-export const questionForms: Form[] = [qcmForm, swipeForm, reorderForm, dragDropForm, listForm];
+
+export const customQuestionForm: Form = {
+    type: 'custom-question',
+    name: 'Question personnalisée',
+    icon: 'icon-terminal',
+    displayFieldIndex: true,
+    buttons: contentButtons,
+    fields: [
+        {
+            name: "Configuration de l'activité",
+            inputs: [
+                {
+                    id: 'score',
+                    type: 'score',
+                    label: 'Score',
+                    value: 0,
+                },
+            ],
+        },
+        {
+            name: 'Question',
+            inputs: [
+                {
+                    id: 'label',
+                    type: 'textarea',
+                    label: 'Question',
+                    value: '',
+                    placeholder: 'Posez la question',
+                },
+                {
+                    id: 'plugin',
+                    type: 'select',
+                    label: 'Selectionnez un plugin',
+                    value: '',
+                    options: [],
+                    linkedOptions: "plugins.*.template",
+                }
+            ],
+        },
+        {
+            name: 'Réponses',
+            inputs: [
+                {
+                    id: 'response',
+                    label: 'Réponse',
+                    type: 'text',
+                    value: ''
+                }
+            ],
+        },
+        {
+            name: 'Explication',
+            inputs: [
+                {
+                    id: 'explanation',
+                    type: 'html',
+                    label: '',
+                    value: '',
+                    placeholder: 'Saisissez une explication',
+                },
+            ],
+        },
+    ],
+};
+
+export const questionForms: Form[] = [qcmForm, swipeForm, reorderForm, dragDropForm, listForm, customQuestionForm];

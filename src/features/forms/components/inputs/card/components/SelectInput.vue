@@ -21,7 +21,34 @@ const emit = defineEmits<{
 const currentNode = editorStore.getCurrentGraphNode;
 const currentContent = currentNode.data.elements.find(({ id }) => id === editorStore.openedElementId);
 
-const getOptions = () => (props.linkedOptions ? currentContent.formValues[props.linkedOptions] : props.options);
+function getOptions() {
+    if(!props.linkedOptions) return props.options;
+
+    // In this case we have to change the epoc formValues
+    //? refactor this if another case is needed
+    if(props.id === 'plugin') {
+        const epocNode = editorStore.getEpocNode;
+
+        return walkObjectPath(epocNode.data.formValues, props.linkedOptions);
+    } else {
+        return currentContent.formValues[props.linkedOptions];
+
+    }
+}
+
+function walkObjectPath(object: any, path: string) {
+    const currentKey = path.split('.')[0];
+
+    if(!currentKey) {
+        return object;
+    }
+
+    if(currentKey === '*') {
+        return object.map((item: any) => walkObjectPath(item, path.slice(2)));
+    } else {
+        return walkObjectPath(object[currentKey], path.slice(currentKey.length + 1));
+    }
+}
 
 function onChange(event: Event) {
     const target = event.target as HTMLInputElement;

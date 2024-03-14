@@ -26,6 +26,11 @@ export const questions: SideAction[] = [
         type: 'dropdown-list',
         label: 'Liste déroulantes',
     },
+    {
+        icon: 'icon-terminal',
+        type: 'custom-question',
+        label: 'Question personnalisée',
+    }
 ];
 
 const contents: SideAction[] = [
