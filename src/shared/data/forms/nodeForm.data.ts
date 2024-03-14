@@ -181,7 +181,7 @@ export const epocForm: Form = {
                 },
                 {
                     id: 'summary',
-                    type: 'html',
+                    type: 'textarea',
                     label: 'Présentation',
                     value: '',
                     placeholder: "Saisissez une présentation de l'ePoc...",
