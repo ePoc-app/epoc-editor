@@ -121,6 +121,13 @@ export const audioForm: Form = {
                     accept: '.mp3',
                 },
                 {
+                    id: 'summary',
+                    type: 'html',
+                    label: 'Résumé',
+                    value: '',
+                    placeholder: 'Saisissez...',
+                },
+                {
                     id: 'transcript',
                     type: 'file',
                     label: 'Transcription',
