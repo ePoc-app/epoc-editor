@@ -24,6 +24,7 @@ import {
 import { Question } from '@epoc/epoc-types/src/v2';
 import { createRule, getConditions, getValidBadges } from '@/src/shared/services/graph/badge.service';
 import { Badge, NodeElement } from '@/src/shared/interfaces';
+import { CustomQuestion } from '@epoc/epoc-types/dist/v2';
 
 declare const api: ApiInterface;
 
@@ -86,7 +87,7 @@ function createContentJSON(): EpocV1 {
         ePocValues.certificateScore || 10,
         ePocValues.certificateBadgeCount || 1,
         ePocValues.authors || {},
-        ePocValues.plugins,
+        ePocValues.plugins.map((plugin: any) => plugin.script),
         ePocValues.chapterParameter,
         new Date().toISOString(),
         {
@@ -201,13 +202,16 @@ function newContent(epoc: EpocV1, pageNode: GraphNode): string {
     }
 }
 
+//TODO: refactor this function
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function newQuestion(epoc: EpocV1, questionNode: any): string {
     let type = 'unknown';
     let responses = [];
     let correctResponse = [];
+    let template = '';
 
-    if (questionNode.formValues && questionNode.formValues.responses) {
+    //? Custom question don't save responses only correctResponse
+    if (questionNode.formValues && (questionNode.formValues.responses || questionNode.formType === 'custom')) {
         if (questionNode.formType === 'choice') {
             responses = questionNode.formValues.responses.map((r) => {
                 return {
@@ -240,8 +244,18 @@ function newQuestion(epoc: EpocV1, questionNode: any): string {
                 };
             });
             type = questionNode.formType;
+        } else if (questionNode.formType === 'custom'){
+            //? responses need to contain values but we don't need them for custom questions
+            responses = ['sample response'];
+            
+            correctResponse = questionNode.formValues.correctResponse;
+            const path = questionNode.formValues.template.split('/');
+            template = path[path.length - 1];
+            
+            type = 'custom';
         }
     }
+    
     const question: Question = {
         type,
         label: questionNode.formValues?.label || '',
@@ -251,6 +265,11 @@ function newQuestion(epoc: EpocV1, questionNode: any): string {
         correctResponse,
         explanation: questionNode.formValues?.explanation || '',
     };
+    
+    if(questionNode.formType === 'custom') {
+        (question as CustomQuestion).template = template;
+    }
+    
     return epoc.addQuestion(questionNode.contentId, question);
 }
 

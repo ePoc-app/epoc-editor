@@ -14,7 +14,7 @@ const { nodes, edges, addNodes, findNode, applyEdgeChanges, applyNodeChanges } =
 
 const editorStore = useEditorStore();
 
-const questionTypes = ['choice', 'drag-and-drop', 'reorder', 'swipe', 'dropdown-list'];
+const questionTypes = ['choice', 'drag-and-drop', 'reorder', 'swipe', 'dropdown-list', 'custom'];
 
 export function setEpocNodeData(epoc: EpocV1) {
     const epocNode = findNode('1');

@@ -26,7 +26,7 @@ function getOptions() {
 
     // In this case we have to change the epoc formValues
     //? refactor this if another case is needed
-    if(props.id === 'plugin') {
+    if(props.id === 'template') {
         const epocNode = editorStore.getEpocNode;
 
         return walkObjectPath(epocNode.data.formValues, props.linkedOptions);
@@ -44,6 +44,8 @@ function walkObjectPath(object: any, path: string) {
     }
 
     if(currentKey === '*') {
+        if(!object) return [];
+
         return object.map((item: any) => walkObjectPath(item, path.slice(2)));
     } else {
         return walkObjectPath(object[currentKey], path.slice(currentKey.length + 1));

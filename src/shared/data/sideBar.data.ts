@@ -28,7 +28,7 @@ export const questions: SideAction[] = [
     },
     {
         icon: 'icon-terminal',
-        type: 'custom-question',
+        type: 'custom',
         label: 'Question personnalisée',
     }
 ];

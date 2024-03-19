@@ -478,7 +478,7 @@ export const listForm: Form = {
 
 
 export const customQuestionForm: Form = {
-    type: 'custom-question',
+    type: 'custom',
     name: 'Question personnalisée',
     icon: 'icon-terminal',
     displayFieldIndex: true,
@@ -506,20 +506,32 @@ export const customQuestionForm: Form = {
                     placeholder: 'Posez la question',
                 },
                 {
-                    id: 'plugin',
-                    type: 'select',
-                    label: 'Selectionnez un plugin',
+                    id: 'statement',
+                    type: 'textarea',
+                    label: 'Consigne',
                     value: '',
-                    options: [],
-                    linkedOptions: "plugins.*.template",
-                }
+                    placeholder: 'Instruction pour répondre à la question',
+                },
             ],
         },
         {
-            name: 'Réponses',
+            name: 'Template',
             inputs: [
                 {
-                    id: 'response',
+                    id: 'template',
+                    type: 'select',
+                    label: 'Selectionnez un template',
+                    value: '',
+                    options: [],
+                    linkedOptions: "plugins.*.template"
+                }
+            ]
+        },
+        {
+            name: 'Réponse',
+            inputs: [
+                {
+                    id: 'correctResponse',
                     label: 'Réponse',
                     type: 'text',
                     value: ''
