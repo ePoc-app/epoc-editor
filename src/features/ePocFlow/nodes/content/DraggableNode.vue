@@ -24,6 +24,7 @@ const props = defineProps<{
     contents: NodeElement[];
     type: 'page' | 'activity';
     parentTestId: string;
+    disableDrag?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -102,6 +103,12 @@ function drop() {
 }
 
 function dragStart(event: DragEvent, element: NodeElement, index: number) {
+    if(props.disableDrag) {
+        event.preventDefault()
+        event.stopPropagation()
+        return;
+    }
+
     editorStore.draggedElement = {
         type: 'nodeElement',
         element,

@@ -116,6 +116,7 @@ const pageIndex = computed(() => {
                 :node-id="id"
                 :contents="data.elements"
                 type="page"
+                :disable-drag="true"
                 @add-hover-effect="addHoverEffect"
                 @remove-hover-effect="removeHoverEffect"
             />
