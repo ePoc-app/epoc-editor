@@ -112,6 +112,7 @@ function createContentJSON(): EpocV1 {
         }
     });
     
+    // TODO: remove this part to use createFalseContentJSON instead
     // Adding orphan content to contentJSON
     const pageNodes = nodes.value.filter((node) => {
         return node.type === 'page' || node.type === 'activity';
@@ -133,6 +134,43 @@ function createContentJSON(): EpocV1 {
     }
 
     return epoc;
+}
+
+/*
+ * Create a false contentJSON for orphan content
+ */
+function createFalseContentJSON(nodeId) {
+    const epoc = new EpocV1(
+        'E000XX',
+        'NotFound',
+        'Title',
+        '',
+        [],
+        '',
+        '',
+        '',
+        String(new Date().getFullYear()),
+        10,
+        1,
+        [],
+        [],
+        '',
+        new Date().toISOString(),
+        {
+            name: '',
+            url: '',
+            content: '',
+        },
+    );
+    
+    const pageNode = getNodeById(nodeId);
+    const contentId = newContent(epoc, pageNode);
+    
+    epoc.addChapter('falseid', {
+        title: 'Orphan',
+        objectives: [],
+        contents: [contentId]
+    });
 }
 
 function newContent(epoc: EpocV1, pageNode: GraphNode): string {
