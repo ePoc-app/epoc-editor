@@ -126,8 +126,16 @@ const cleanPreview = function () {
     fs.rmSync(previewPath, { recursive: true, force: true });
 };
 
+/*
+ * Fetch the current commit hash
+ */
+const getCommitHash = function () {
+    return fs.readFileSync(path.join(previewPath, 'commit-hash.txt'), 'utf-8');
+};
+
 module.exports = {
     runPreview,
     cleanPreview,
     updatePreview,
+    getCommitHash
 };

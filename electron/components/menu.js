@@ -2,9 +2,10 @@ const { app, shell, BrowserWindow, Menu } = require('electron');
 const { sendToFrontend, updateSavedProject } = require('./ipc');
 const { pickEpocToImport, pickEpocProject, getRecentFiles, saveEpocProject, saveAsEpocProject } = require('./file');
 const store = require('./store');
-const { ipcMain } = require('electron');
+const { ipcMain, dialog } = require('electron');
 const Store = require('electron-store');
 const electronStore = new Store();
+const { getCommitHash } = require('./preview');
 
 module.exports.setupMenu = function () {
     const mainMenuTemplate = [
@@ -261,6 +262,19 @@ module.exports.setupMenuPreview = function () {
                     accelerator: 'CmdOrCtrl+R',
                     click: function () {
                         BrowserWindow.getFocusedWindow().webContents.reload();
+                    },
+                },
+                {
+                    label: 'Commit hash',
+                    click: function () {
+                        const hash = getCommitHash();
+                        if(!hash) return;
+
+                        dialog.showMessageBox({
+                            title: 'Commit hash',
+                            message: hash,
+                            buttons: ['OK']
+                        });
                     },
                 },
                 {
