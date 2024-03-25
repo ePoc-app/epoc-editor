@@ -73,6 +73,7 @@ function createContentJSON(): EpocV1 {
     const validBadges = getValidBadges();
 
     const ePocValues = ePocNode.data.formValues;
+    const plugins = ePocValues.plugins ? ePocValues.plugins.map((plugin: any) => plugin.script) : [];
 
     const epoc = new EpocV1(
         ePocValues.id || 'E000XX',
@@ -87,7 +88,7 @@ function createContentJSON(): EpocV1 {
         ePocValues.certificateScore || 10,
         ePocValues.certificateBadgeCount || 1,
         ePocValues.authors || {},
-        ePocValues.plugins.map((plugin: any) => plugin.script),
+        plugins,
         ePocValues.chapterParameter,
         new Date().toISOString(),
         {
