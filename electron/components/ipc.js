@@ -226,17 +226,16 @@ const detectAssets = function (data) {
         }
     }
 
-    const regex = /assets\//;
+    const regex = /assets\/[^"\\]*/g;
     const assetPaths = [];
-    formValues.forEach((item) => {
-        Object.values(item).forEach((value) => {
-            if (regex.test(value)) {
-                if (!assetPaths.includes(value)) {
-                    assetPaths.push(value);
-                }
-            }
-        });
-    });
+    const jsonFormValues = JSON.stringify(formValues);
+    const matches = jsonFormValues.matchAll(regex);
+    for (const match of matches) {
+        const path = match[0];
+        if (!assetPaths.includes(path)) {
+            assetPaths.push(path);
+        }
+    }
 
     return assetPaths;
 };
