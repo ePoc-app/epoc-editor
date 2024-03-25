@@ -317,12 +317,15 @@ const getAllAssets = function (workdir) {
             if (stat.isFile()) assetPaths.push(itemPath);
         }
 
-        const iconItems = fs.readdirSync(iconsPath);
-        for (const item of iconItems) {
-            const itemPath = path.join(iconsPath, item);
-            const stat = fs.statSync(itemPath);
+        // return if icons folder does not exist
+        if (fs.existsSync(iconsPath))  {
+            const iconItems = fs.readdirSync(iconsPath);
+            for (const item of iconItems) {
+                const itemPath = path.join(iconsPath, item);
+                const stat = fs.statSync(itemPath);
 
-            if (stat.isFile()) assetPaths.push(itemPath);
+                if (stat.isFile()) assetPaths.push(itemPath);
+            }
         }
     } catch (e) {
         console.error('Error reading assets directory', e);
@@ -340,6 +343,8 @@ const getAllAssets = function (workdir) {
 };
 
 const getUsedAssets = function (workdir) {
+    // if(!fs.existsSync(path.join(workdir, 'project.json'))) return [];
+
     const projectJSON = fs.readFileSync(path.join(workdir, 'project.json'), 'utf8');
     const regex = /"assets[\\/\\\\]([^"]+)"/g;
     const matches = projectJSON.match(regex);
@@ -357,7 +362,11 @@ const getUsedAssets = function (workdir) {
     });
 };
 
+// TODO: Add a parameter to see if exporting or not to get data from content.json instead of project.json
 const getUnusedAssets = function (workdir) {
+    //? On first save this function is called before project.json is created
+    if(!fs.existsSync(path.join(workdir, 'project.json'))) return [];
+
     const allAssets = getAllAssets(workdir);
     const usedAssets = getUsedAssets(workdir);
 
