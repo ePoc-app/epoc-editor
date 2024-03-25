@@ -2,7 +2,7 @@ const cp = require('child_process');
 const fs = require('fs');
 const packageJson = require('./package.json');
 require('dotenv').config();
-const { notarize } = require('electron-notarize');
+const { notarize } = require('@electron/notarize');
 
 /**
  * @type {import('electron-builder').Configuration}
@@ -88,7 +88,7 @@ module.exports = {
         const appName = context.packager.appInfo.productFilename;
 
         return await notarize({
-            tool: 'legacy',
+            tool: 'notarytool',
             appBundleId: 'fr.inria.epoc-editor',
             appPath: `${appOutDir}/${appName}.app`,
             appleId: process.env.APPLE_ID,
