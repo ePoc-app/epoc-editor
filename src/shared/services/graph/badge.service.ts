@@ -8,7 +8,13 @@ import { generateContentId, graphService } from '@/src/shared/services';
 
 const { findNode } = useVueFlow({ id: 'main' });
 
-export function getVerbs(type: ElementType): Verbs {
+/**
+ * Get the verbs associated with an element type
+ * @param {ElementType} type
+ * @returns {Verbs} - An object containing the verbs with the associated ElementType
+ * @returns {undefined} - If the type is not found
+ */
+export function getVerbs(type: ElementType): Verbs | undefined {
     if (!type || !elementVerbs[type]) return;
 
     const verbsKeys = elementVerbs[type];
@@ -21,11 +27,22 @@ export function getVerbs(type: ElementType): Verbs {
     return res;
 }
 
-export function getValueType(verbKey: string): 'number' | 'boolean' {
+/**
+ * Get the type of the value associated with a verb
+ * @param {string} verbKey
+ * @returns {number | boolean} - The value type of the verb
+ * @returns {undefined} - If the verb is not found
+ */
+export function getValueType(verbKey: string): 'number' | 'boolean' | undefined {
     if (!verbs[verbKey]) return;
     return verbs[verbKey].valueType;
 }
 
+/**
+ * Get the formatted conditions of a badge
+ * @param {any} currentBadge
+ * @returns {Condition[]} - An array containing the conditions of the badge
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getConditions(currentBadge: any): Condition[] {
     const rules = currentBadge.rule['and'];
@@ -51,6 +68,11 @@ export function getConditions(currentBadge: any): Condition[] {
     return conditions;
 }
 
+/**
+ * Create a new rule from an array of conditions
+ * @param entry
+ * @returns {Rule} - The rule created from the conditions
+ */
 export function createRule(entry: Condition[]): Rule {
     const rules: Operands = entry.map((item) => {
         const entryRule: Operand = {
@@ -112,7 +134,13 @@ const phraseVerb = {
     scored: "Avoir obtenu un score d'au moins",
 };
 
-export function createPhrase(condition: Condition, elementType: ElementType) {
+/**
+ * Create a natural language phrase from a condition and an element type
+ * @param {Condition} condition
+ * @param {ElementType} elementType
+ * @returns {string} - The phrase created from the condition and the element type
+ */
+export function createPhrase(condition: Condition, elementType: ElementType): string {
     const { verb, value } = condition;
     let firstPart: string;
     if (verb === 'scored') {
@@ -124,6 +152,11 @@ export function createPhrase(condition: Condition, elementType: ElementType) {
     return `${firstPart} ${phraseType[elementType]}`;
 }
 
+/**
+ * Get the badges connected to a content
+ * @param {string} contentId
+ * @returns {Badge[]}
+ */
 export function getConnectedBadges(contentId: string): Badge[] {
     const epocNode = findNode('1');
     const badges = epocNode.data.formValues.badges;
@@ -143,12 +176,20 @@ export function getConnectedBadges(contentId: string): Badge[] {
     return res;
 }
 
+/**
+ * Save badge by creating the rule from the conditions
+ * @param {Badge} badge
+ */
 export function saveBadge(badge: Badge) {
     const editorStore = useEditorStore();
 
     badge.rule = createRule(editorStore.tempConditions);
 }
 
+/**
+ * Delete conditions connected to a content & recalculate the related rules
+ * @param {string} contentId
+ */
 export function deleteConnectedConditions(contentId: string) {
     const connectedBadges = getConnectedBadges(contentId);
     const badges = findNode('1').data.formValues.badges;
@@ -161,6 +202,10 @@ export function deleteConnectedConditions(contentId: string) {
     }
 }
 
+/**
+ * Delete a badge
+ * @param {string} id
+ */
 export function deleteBadge(id: string) {
     saveState(true);
 
@@ -168,12 +213,19 @@ export function deleteBadge(id: string) {
     delete epocNode.data.formValues.badges[id];
 }
 
+/**
+ * Open the badge form panel
+ * @param {string} badgeId
+ */
 export function openBadge(badgeId: string) {
     const editorStore = useEditorStore();
 
     editorStore.openBadgeFormPanel(badgeId, 'custom');
 }
 
+/**
+ * Add a new empty badge
+ */
 export function addNewBadge() {
     const editorStore = useEditorStore();
 
@@ -195,7 +247,12 @@ export function addNewBadge() {
     openBadge(id);
 }
 
-export async function saveCustomIcon(icon: string) {
+/**
+ * Save & add a custom icon to the project
+ * @param {string} icon
+ * @returns {Promise<string>} - The path of the icon
+ */
+export async function saveCustomIcon(icon: string): Promise<string> {
     const projectStore = useProjectStore();
 
     const iconPath = await graphService.importFile(icon, 'assets/icons');
@@ -204,14 +261,27 @@ export async function saveCustomIcon(icon: string) {
     return iconPath;
 }
 
-export function isBadgeValid(badge): boolean {
+/**
+ * Verify if a badge is valid
+ * @param {Badge} badge
+ * @returns {boolean}
+ */
+export function isBadgeValid(badge: Badge): boolean {
     return badge.rule.and.length > 0;
 }
 
-export function isBadgeEmpty(badge): boolean {
+/**
+ * Verify if a badge is empty
+ * @param {Badge} badge
+ * @returns {boolean}
+ */
+export function isBadgeEmpty(badge: Badge): boolean {
     return badge.title === '' && badge.icon === '' && badge.description === '' && badge.rule.and.length === 0;
 }
 
+/**
+ * Delete all empty badges
+ */
 export function deleteEmptyBadges() {
     const epocNode = findNode('1');
     const badges = epocNode.data.formValues.badges;
@@ -221,7 +291,12 @@ export function deleteEmptyBadges() {
     }
 }
 
-export function getValidBadges() {
+/**
+ * Get all valid badges
+ * @returns {object} - an object containing the valid badges
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getValidBadges(): object{
     const epocNode = findNode('1');
     const badges = epocNode.data.formValues.badges;
     if (!badges) return null;
