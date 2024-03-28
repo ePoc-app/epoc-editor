@@ -187,5 +187,9 @@ const pageIndex = computed(() => {
     &.active {
         color: var(--editor-blue);
     }
+
+    &:hover {
+        overflow-x: visible;
+    }
 }
 </style>

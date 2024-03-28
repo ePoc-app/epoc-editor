@@ -175,5 +175,9 @@ const activityIndex = computed(() => {
     &.active {
         color: var(--editor-blue);
     }
+
+    &:hover {
+        overflow-x: visible;
+    }
 }
 </style>
