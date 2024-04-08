@@ -172,7 +172,14 @@ const pageIndex = computed(() => {
 
 .container {
     position: relative;
+
+    &:hover {
+        .node-title {
+            overflow-x: visible;
+        }
+    }
 }
+
 .node-title {
     height: 1.5rem;
     margin: 0;
@@ -186,10 +193,6 @@ const pageIndex = computed(() => {
 
     &.active {
         color: var(--editor-blue);
-    }
-
-    &:hover {
-        overflow-x: visible;
     }
 }
 </style>
