@@ -84,6 +84,14 @@ function getTemplateFromContext(callback, data) {
                 submenu: getPagesFromContext(onClick, { id: data.id }, 'insertAtStart', data.context),
             },
             {
+                label: 'Intervertir avec le précédent',
+                click: () => onClick('swapChapterWithPrevious', { id: data.id })
+            },
+            {
+                label: 'Intervertir avec le suivant',
+                click: () => onClick('swapChapterWithNext', { id: data.id })
+            },
+            {
                 label: 'Supprimer',
                 click: () => onClick('deleteNode', { id: data.id }),
             }

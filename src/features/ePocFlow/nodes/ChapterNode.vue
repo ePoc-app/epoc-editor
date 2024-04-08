@@ -15,17 +15,12 @@ const { findNode, nodes, edges } = useVueFlow({ id: 'main' });
 
 const currentNode = findNode(props.id);
 
-const chapterIndex = computed(() => {
-    const chapters = nodes.value.filter((node) => node.type === 'chapter');
-    return chapters.findIndex((chapter) => chapter.id === currentNode.id) + 1;
-});
-
 const subtitle = computed(() => {
     const epocNode = findNode('1');
     const chapterParameter = epocNode?.data?.formValues?.chapterParameter || 'Chapitre';
     const label = chapterParameter.length > 8 ? chapterParameter.substring(0, 7) + '...' : chapterParameter;
 
-    return `${label} ${chapterIndex.value}`;
+    return `${label} ${currentNode.data.index}`;
 });
 
 const isSource = computed(() =>
@@ -73,7 +68,7 @@ const connectedBadges = computed(() => getConnectedBadges(currentNode.data.conte
         </div>
         <ContentButton
             :id="currentNode.data.contentId"
-            :data-testid="`chapter-${chapterIndex}`"
+            :data-testid="`chapter-${currentNode.data.index}`"
             :icon="currentNode.data.action.icon"
             :is-draggable="false"
             :class-list="classList"
@@ -86,7 +81,7 @@ const connectedBadges = computed(() => getConnectedBadges(currentNode.data.conte
     </div>
     <!-- ! mousedown.stop important in vue-flow v1.16.4 on non draggable node -->
     <Handle
-        :data-testid="`source-chapter-${chapterIndex}`"
+        :data-testid="`source-chapter-${currentNode.data.index}`"
         type="source"
         :position="Position.Right"
         :connectable="!isSource && !editorStore.selectNodeMode"

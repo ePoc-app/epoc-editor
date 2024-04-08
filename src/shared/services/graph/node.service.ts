@@ -1,4 +1,3 @@
-import { Chapter } from '@epoc/epoc-types/src/v1';
 import { EpocV1 } from '../../classes/epoc-v1';
 import { useEditorStore } from '../../stores';
 import { useVueFlow, Node, getConnectedEdges } from '@vue-flow/core';
@@ -9,6 +8,7 @@ import { closeFormPanel, deleteConnectedConditions } from '@/src/shared/services
 import { addContentToPage } from './content.service';
 import { generateContentId, generateId, graphService } from '../graph.service';
 import { deleteElement, deleteSelection, createEdge } from '.';
+import { updateNextChapters } from '@/src/shared/services/graph/chapter.service';
 
 const { nodes, edges, addNodes, findNode, applyEdgeChanges, applyNodeChanges } = useVueFlow({ id: 'main' });
 
@@ -31,39 +31,6 @@ export function setEpocNodeData(epoc: EpocV1) {
     epocNode.data.formValues.chapterParameter = epoc.parameters?.chapterParameter;
     epocNode.data.formValues.plugins = epoc.plugins;
     epocNode.data.formValues.badges = epoc.badges;
-}
-
-export function addChapter(chapterId?: string, chapter?: Chapter, offsetY?: number): Node {
-    const chapters = nodes.value.filter((node) => node.type === 'chapter');
-    const data = {
-        action: { icon: 'icon-chapitre', type: 'chapter' },
-        formType: 'chapter',
-        formValues: {},
-        title: 'Chapitre ' + (chapters.length + 1),
-        contentId: generateContentId(),
-    };
-    if (chapterId && chapter) {
-        data.contentId = chapterId;
-        data.formValues = {
-            title: chapter.title,
-            objectives: chapter.objectives,
-        };
-    }
-    offsetY = offsetY ? offsetY : 0;
-    const newYPos = chapters.length > 0 ? chapters[chapters.length - 1].position.y + 200 + offsetY : 200 + offsetY;
-    const newChapter: Node = {
-        id: (nodes.value.length + 1).toString(),
-        type: 'chapter',
-        position: { x: 0, y: newYPos },
-        data,
-        draggable: true,
-        deletable: false,
-        selectable: false,
-    };
-
-    addNodes([newChapter]);
-
-    return newChapter;
 }
 
 export function addPage(position: { x: number; y: number }, actions: SideAction[], noAlign?: boolean): string {
@@ -286,10 +253,10 @@ export function deleteNode(nodeId: string): void {
             deleteConnectedConditions(element.contentId);
         }
     }
+    
+    if (nodeToDelete.type === 'chapter') updateNextChapters(nodeToDelete.id);
 
     applyNodeChanges([{ id: nodeToDelete.id, type: 'remove' }]);
-
-    if (nodeToDelete.type === 'chapter') updateNextChapter(nodeToDelete.id);
 }
 
 export function duplicatePage(pageId?: string): void {
@@ -323,15 +290,6 @@ export function duplicatePage(pageId?: string): void {
     closeFormPanel();
 }
 
-export function updateNextChapter(chapterId: string): void {
-    const chapters = nodes.value.filter((node) => node.type === 'chapter');
-
-    for (const chapter of chapters) {
-        if (chapter.id <= chapterId) return;
-
-        chapter.data.title = `Chapitre ${Number(chapter.data.title.split(' ')[1] - 1)}`;
-    }
-}
 
 export function transformActivityToPage(): void {
     const pageNode = findNode(editorStore.openedElementId);
@@ -392,8 +350,8 @@ export function isFormButtonDisabled(isDisabledFunction: (node: any) => boolean)
     const isChild = Boolean(editorStore.openedNodeId);
     const nodeData = isChild
         ? findNode(editorStore.openedNodeId).data.elements.find(
-              (e: NodeElement) => e.id === editorStore.openedElementId,
-          )
+            (e: NodeElement) => e.id === editorStore.openedElementId,
+        )
         : findNode(editorStore.openedElementId).data;
     return isDisabledFunction(nodeData);
 }

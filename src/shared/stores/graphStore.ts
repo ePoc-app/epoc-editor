@@ -69,7 +69,8 @@ const mainEdge: Edge = {
 const graphStore = useGraphStore();
 graphStore.$subscribe(() => {
     const chapters = nodes.value.filter((node) => node.type === 'chapter');
-    const addPositionY = chapters.length > 0 ? chapters[chapters.length - 1].position.y + 128 : 128;
+    const lastChapter = chapters.sort((a, b) => a.data.index - b.data.index).pop();
+    const addPositionY = lastChapter ? lastChapter.position.y + 128 : 128;
     const addNode = findNode('2');
     if (addNode) {
         addNode.position.y = addPositionY;

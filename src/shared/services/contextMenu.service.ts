@@ -13,9 +13,9 @@ import {
     insertAfter,
     insertAtEnd,
     insertAtStart,
-    insertBefore,
+    insertBefore, swapChapterWithNext, swapChapterWithPrevious,
     unselectAllContents,
-    unselectAllNodes,
+    unselectAllNodes
 } from './graph';
 import { useVueFlow } from '@vue-flow/core';
 import { saveState } from './undoRedo.service';
@@ -157,6 +157,18 @@ export function setupContextMenu() {
         const { position } = parsedData;
 
         graphPaste(position);
+    });
+    
+    extendedApi.receive('swapChapterWithNext', (data: string) => {
+        const { id } = JSON.parse(data);
+        
+        swapChapterWithNext(id);
+    });
+    
+    extendedApi.receive('swapChapterWithPrevious', (data: string) => {
+        const { id } = JSON.parse(data);
+        
+        swapChapterWithPrevious(id);
     });
 
     api.receive('contextMenuClosed', () => {

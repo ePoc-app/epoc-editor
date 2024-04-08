@@ -25,14 +25,13 @@ import { NodeElement, SideAction } from '@/src/shared/interfaces';
 import {
     addPage,
     createPageFromContent,
-    removeContentFromPage,
     graphCopy,
-    getSelectedNodes,
+    getSelectedNodes, handleChapterDrag
 } from '@/src/shared/services/graph';
 import { saveState, saveGivenState, getCurrentState } from '@/src/shared/services/undoRedo.service';
 import { closeFormPanel, graphService } from '@/src/shared/services';
 
-const { vueFlowRef, project, updateEdge, edges, nodes, findNode, setTransform } = useVueFlow({ id: 'main' });
+const { vueFlowRef, project, updateEdge, edges, findNode, setTransform } = useVueFlow({ id: 'main' });
 
 const editorStore = useEditorStore();
 const graphStore = useGraphStore();
@@ -134,36 +133,7 @@ function nodeDrag(event: NodeDragEvent) {
 
     if (node.type !== 'chapter') return;
 
-    const MIN_DISTANCE = 128;
-    const epocNode = findNode('1');
-    const chapters = nodes.value.filter((n) => n.type === 'chapter');
-    const draggedIndex = chapters.findIndex((n) => n.id === node.id);
-    const min = epocNode.position.y + epocNode.dimensions.height + 32 + draggedIndex * MIN_DISTANCE;
-
-    node.position.x = 0;
-
-    if (node.position.y < min) node.position.y = min;
-
-    const addChapterNode = findNode('2');
-
-    if (draggedIndex === chapters.length - 1) addChapterNode.position.y = node.position.y + 125;
-
-    // Push up the nodes above the dragged node
-    for (let i = draggedIndex - 1; i >= 0; i--) {
-        const prevNode = chapters[i];
-        const nextNodeMinY = node.position.y - MIN_DISTANCE * (draggedIndex - i);
-        if (prevNode.position.y > nextNodeMinY) prevNode.position.y = nextNodeMinY;
-    }
-
-    // Push down the nodes below the dragged node
-    for (let i = draggedIndex + 1; i < chapters.length; i++) {
-        const nextNode = chapters[i];
-        const nextNodeMaxY = node.position.y + MIN_DISTANCE * (i - draggedIndex);
-
-        if (nextNode.position.y < nextNodeMaxY) nextNode.position.y = nextNodeMaxY;
-
-        if (i === chapters.length - 1) addChapterNode.position.y = nextNode.position.y + 125;
-    }
+    handleChapterDrag(node.id);
 }
 
 let startPos = { x: 0, y: 0 };
