@@ -25,6 +25,8 @@ const emit = defineEmits<{
 function toggleMenu() {
     editorStore.hamburgerMenu = !editorStore.hamburgerMenu;
 }
+
+const modifier = editorStore.platform === 'darwin' ? '⌘' : 'Ctrl';
 </script>
 
 <template>
@@ -39,15 +41,48 @@ function toggleMenu() {
     </button>
 
     <div v-if="editorStore.hamburgerMenu" class="select-menu" @click.stop @mouseup.stop @mousedown.stop>
-        <button class="menu-item" :disabled="undoDisabled" @click="emit('undo')">
+        <button
+            v-tippy="{
+                content: `${modifier} + z`,
+                placement: 'left',
+                arrow: true,
+                arrowType: 'round',
+                animation: 'fade',
+            }"
+            class="menu-item"
+            :disabled="undoDisabled"
+            @click="emit('undo')"
+        >
             <i class="icon-arriere"></i>
             <span>Undo</span>
         </button>
-        <button class="menu-item" :disabled="redoDisabled" @click="emit('redo')">
+        <button
+            v-tippy="{
+                content: `${modifier} + ${editorStore.platform === 'darwin' ? '⇧ + z' : 'y' }`,
+                placement: 'left',
+                arrow: true,
+                arrowType: 'round',
+                animation: 'fade',
+            }"
+            class="menu-item"
+            :disabled="redoDisabled"
+            @click="emit('redo')"
+        >
             <i class="icon-avant"></i>
             <span>Redo</span>
         </button>
-        <button class="menu-item" :disabled="saving" @click="emit('save')">
+        <button
+            v-tippy="{
+                content: `${modifier} + s`,
+                placement: 'left',
+                arrow: true,
+                arrowType: 'round',
+                animation: 'fade',
+            }"
+            class="menu-item"
+            :disabled="saving"
+            @click="emit('save')"
+        >
             <i class="icon-save"></i>
             <span>Sauvegarder</span>
         </button>
@@ -57,7 +92,7 @@ function toggleMenu() {
         </button>
         <button class="menu-item" :disabled="exporting" @click="emit('exportProject')">
             <i class="icon-export"></i>
-            <span>Exporter</span>
+            <span>Publier</span>
         </button>
     </div>
 </template>

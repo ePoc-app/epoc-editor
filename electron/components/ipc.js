@@ -188,6 +188,13 @@ const setupIpcListener = function (targetWindow) {
 
         sendToFrontend(event.sender, 'editorVersion', { version: app.getVersion() });
     });
+
+
+    ipcMain.on('getPlatform', async(event) => {
+        if(event.sender !== targetWindow.webContents) return;
+
+        sendToFrontend(event.sender, 'platform', { platform: process.platform });
+    });
 };
 
 const sendToFrontend = function (webContents, channel, data) {

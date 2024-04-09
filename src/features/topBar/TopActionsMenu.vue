@@ -2,7 +2,10 @@
 import TopActionButton from '@/src/features/topBar/TopActionButton.vue';
 import TopActionDropdown from '@/src/features/topBar/TopActionDropdown.vue';
 import HamburgerMenu from '@/src/features/topBar/HamburgerMenu.vue';
-import { editorService } from '@/src/shared/services';
+import { useEditorStore } from '@/src/shared/stores';
+import { computed } from 'vue';
+
+const editorStore = useEditorStore();
 
 defineProps<{
     undoDisabled: boolean;
@@ -22,6 +25,9 @@ const emit = defineEmits<{
     (e: 'exportProject'): void;
     (e: 'updateZoom', value: number): void;
 }>();
+
+// detect the platform
+const modifier = computed(() => editorStore.platform === 'darwin' ? '⌘' : 'Ctrl');
 </script>
 
 <template>
@@ -36,10 +42,41 @@ const emit = defineEmits<{
 
         <div class="menu-md-container top-bar-actions">
             <hr class="vertical-separator" />
-            <TopActionButton icon="icon-arriere" :disabled="undoDisabled" @click="emit('undo')" />
-            <TopActionButton icon="icon-avant" :disabled="redoDisabled" @click="emit('redo')" />
-            <hr class="vertical-separator" />
             <TopActionButton
+                v-tippy="{
+                    content: `${modifier} + z`,
+                    placement: 'bottom',
+                    arrow: true,
+                    arrowType: 'round',
+                    animation: 'fade',
+                }"
+                icon="icon-arriere"
+                :disabled="undoDisabled"
+                @click="emit('undo')"
+            />
+            <TopActionButton
+                v-tippy="{
+                    content: `${modifier} + ${editorStore.platform === 'darwin' ? '⇧ + z' : 'y' }`,
+                    placement: 'bottom',
+                    arrow: true,
+                    arrowType: 'round',
+                    animation: 'fade',
+                }"
+                icon="icon-avant"
+                :disabled="redoDisabled"
+                @click="emit('redo')"
+            />
+
+            <hr class="vertical-separator" />
+
+            <TopActionButton
+                v-tippy="{
+                    content: `${modifier} + s`,
+                    placement: 'bottom',
+                    arrow: true,
+                    arrowType: 'round',
+                    animation: 'fade',
+                }"
                 icon="icon-save"
                 text="Sauvegarder"
                 position="right"
@@ -55,7 +92,7 @@ const emit = defineEmits<{
             />
             <TopActionButton
                 icon="icon-export"
-                text="Exporter archive"
+                text="Publier"
                 position="right"
                 :disabled="exporting"
                 @click="emit('exportProject')"

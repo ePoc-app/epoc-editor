@@ -58,6 +58,7 @@ interface EditorState {
     
     // Info
     version: string;
+    platform: string;
 }
 
 export const useEditorStore = defineStore('editor', {
@@ -104,6 +105,7 @@ export const useEditorStore = defineStore('editor', {
         
         // Info
         version: '',
+        platform: '',
     }),
 
     getters: {

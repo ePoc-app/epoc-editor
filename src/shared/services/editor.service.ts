@@ -151,8 +151,15 @@ const setup = function () {
         editorStore.version = version;
     });
     
+    api.receive('platform', (data: string) => {
+        const { platform } = JSON.parse(data);
+        
+        editorStore.platform = platform;
+    });
+    
     // Adding the version to the editorStore
     api.send('getEditorVersion');
+    api.send('getPlatform');
 
     initialized = true;
 };
