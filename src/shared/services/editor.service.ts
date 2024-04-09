@@ -5,8 +5,9 @@ import { ePocProject } from '@/src/shared/interfaces';
 import { createToaster } from '@meforma/vue-toaster';
 import { closeFormPanel, graphService } from '.';
 import { createGraphEpocFromData } from '@/src/shared/services/import.service';
-import { FlowExportObject, useVueFlow } from '@vue-flow/core';
+import { useVueFlow } from '@vue-flow/core';
 import { saveState } from '@/src/shared/services/undoRedo.service';
+import { applyBackwardCompatibility } from '@/src/shared/utils/backwardCompability';
 
 const { findNode } = useVueFlow({ id: 'main' });
 
@@ -86,7 +87,7 @@ const setup = function () {
         closeFormPanel();
         editorStore.currentProject = ePocProject;
 
-        parsedData.flow = changeScreenToPage(parsedData.flow);
+        applyBackwardCompatibility(editorStore.version);
 
         graphStore.setFlow(parsedData.flow);
 
@@ -247,14 +248,3 @@ export const editorService = {
     runPreviewAtPage,
     exportProject,
 };
-
-//TODO: delete backward support for old page form
-function changeScreenToPage(flow: FlowExportObject) {
-    if (!flow) return;
-
-    const pages = flow.nodes.filter((node) => node.type === 'content');
-    for (const page of pages) {
-        if (page.data.formType === 'screen') page.data.formType = 'page';
-    }
-    return flow;
-}
