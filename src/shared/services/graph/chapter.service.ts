@@ -1,6 +1,6 @@
 import { Node, useVueFlow } from '@vue-flow/core';
 import { Chapter } from '@epoc/epoc-types/src/v1';
-import { generateContentId } from '@/src/shared/services';
+import { generateContentId, graphService } from '@/src/shared/services';
 const { nodes, findNode, addNodes } = useVueFlow({ id: 'main' });
 
 /**
@@ -113,6 +113,9 @@ export function swapChapterWithPrevious(id: string) {
     
     if(!previousChapter) return;
     
+    moveChapterContents(chapter.id, previousChapter.position.y - chapter.position.y);
+    moveChapterContents(previousChapter.id, chapter.position.y - previousChapter.position.y);
+    
     chapter.data.index --;
     previousChapter.data.index ++;
     
@@ -130,6 +133,9 @@ export function swapChapterWithNext(id: string) {
     const nextChapter = getNextChapter(id);
     
     if(!nextChapter) return;
+    
+    moveChapterContents(chapter.id, nextChapter.position.y - chapter.position.y);
+    moveChapterContents(nextChapter.id, chapter.position.y - nextChapter.position.y);
     
     chapter.data.index ++;
     nextChapter.data.index --;
@@ -178,5 +184,20 @@ export function handleChapterDrag(id: string) {
         // Get the max distance for the current c
         const maxY = chapter.position.y  + MIN_DISTANCE * (i + 1);
         if(c.position.y < maxY) c.position.y = maxY;
+    }
+}
+
+/**
+ * Move the contents of the chapter by the given offset
+ * @param chapterId
+ * @param offsetY
+ */
+export function moveChapterContents(chapterId: string, offsetY: number) {
+    const chapter = findNode(chapterId);
+    
+    let nextNode = graphService.getNextNode(chapter);
+    while(nextNode) {
+        nextNode.position.y += offsetY;
+        nextNode = graphService.getNextNode(nextNode);
     }
 }
