@@ -62,10 +62,21 @@ const pickEpocToImport = async function () {
     const startTime = performance.now();
     const files = dialog.showOpenDialogSync(BrowserWindow.getFocusedWindow(), {
         properties: ['openFile'],
-        filters: [{ name: 'ePoc export archive', extensions: ['zip'] }],
+        filters: [{ name: 'ePoc export archive', extensions: ['zip', 'epoc'] }],
     });
     if (!files || !files[0]) return null;
     const filepath = files[0];
+
+    return importEpoc(filepath, startTime);
+};
+
+/**
+ * Import an ePoc project to the workdir
+ * @param {string} filepath - the path to the ePoc
+ * @param {number} startTime - the time when the import started
+ * @returns {Promise<void>}
+ */
+const importEpoc = async function(filepath, startTime) {
     const workdir = createWorkDir();
     const zip = new AdmZip(filepath, {});
     zip.extractAllTo(workdir, true, false, null);
@@ -93,7 +104,7 @@ const pickEpocToImport = async function () {
 const pickEpocProject = function () {
     const files = dialog.showOpenDialogSync(BrowserWindow.getFocusedWindow(), {
         properties: ['openFile'],
-        filters: [{ name: 'ePoc', extensions: ['epoc'] }],
+        filters: [{ name: 'ePoc', extensions: ['epocproject', 'epoc'] }],
     });
     if (!files || !files[0]) return null;
 
@@ -112,6 +123,12 @@ const pickEpocProject = function () {
 const openEpocProject = async function (filepath) {
     if (!filepath) return null;
     const startTime = performance.now();
+
+    // Detect if the project.json file exists in the project
+    if (!fs.existsSync(path.join(filepath, 'project.json'))) {
+        return importEpoc(filepath, startTime);
+    }
+
     const workdir = createWorkDir();
     const zip = new AdmZip(filepath, {});
     try {
@@ -136,7 +153,7 @@ const openEpocProject = async function (filepath) {
 };
 
 /**
- * Save the content of the ePoc project workdir to the currently opened .epoc file or call for saveAs
+ * Save the content of the ePoc project workdir to the currently opened .epocproject file or call for saveAs
  * @returns {string}
  */
 const saveEpocProject = async function (project) {
@@ -148,12 +165,12 @@ const saveEpocProject = async function (project) {
 };
 
 /**
- * Save the content of the ePoc project workdir to a new .epoc file
+ * Save the content of the ePoc project workdir to a new .epocproject file
  * @returns {string}
  */
 const saveAsEpocProject = async function (project) {
     const files = dialog.showSaveDialogSync(BrowserWindow.getFocusedWindow(), {
-        filters: [{ name: 'ePoc', extensions: ['epoc'] }],
+        filters: [{ name: 'ePoc', extensions: ['epocproject'] }],
     });
 
     if (!files) return null;
@@ -166,7 +183,7 @@ const saveAsEpocProject = async function (project) {
 /**
  * Zip files of an ePoc project
  * @param {string} workdir the path to the workdir
- * @param {string} filepath the path to the .epoc project file
+ * @param {string} filepath the path to the .epocproject file
  * @param {boolean} exporting if true, the project.json file will not be included
  */
 const zipFiles = async function (workdir, filepath, exporting) {
@@ -198,19 +215,19 @@ const zipEpocProject = async function (workdir, filepath) {
 };
 
 /**
- * Export the content of an ePoc next to the .epoc file
+ * Export the content of an ePoc next to the .epocproject file
  * @param {string} workdir the path to the workdir
- * @param {string} filepath the path to the .epoc project file
+ * @param {string} filepath the path to the .epocproject file
  * @return {string|null}
  */
 const exportProject = async function (workdir, filepath) {
     const defaultPath = filepath
-        ? path.join(path.dirname(filepath), path.basename(filepath, path.extname(filepath)) + '.zip')
+        ? path.join(path.dirname(filepath), path.basename(filepath, path.extname(filepath)) + '.epoc')
         : '';
 
     const exportPath = dialog.showSaveDialogSync(BrowserWindow.getFocusedWindow(), {
         defaultPath: defaultPath,
-        filters: [{ name: 'zip', extensions: ['zip'] }],
+        filters: [{ name: 'epoc', extensions: ['epoc'] }],
     });
 
     if (!exportPath) return null;
