@@ -5,6 +5,7 @@ import { useVueFlow } from '@vue-flow/core';
 import { saveState } from '@/src/shared/services/undoRedo.service';
 import { elementVerbs, verbs } from '@/src/shared/data';
 import { generateContentId, graphService } from '@/src/shared/services';
+import { Operators } from '@epoc/epoc-types/dist/v2';
 
 const { findNode } = useVueFlow({ id: 'main' });
 
@@ -53,8 +54,9 @@ export function getConditions(currentBadge: any): Condition[] {
 
 export function createRule(entry: Condition[]): Rule {
     const rules: Operands = entry.map((item) => {
+        const operator: Operators = item.verb === 'scored' ? '>=' : '===';
         const entryRule: Operand = {
-            '===': [{ var: `${item.elementType}.${item.element}.${item.verb}` }, item.value],
+            [operator]: [{ var: `${item.elementType}.${item.element}.${item.verb}` }, item.value],
         };
         return entryRule;
     }) as Operands;
