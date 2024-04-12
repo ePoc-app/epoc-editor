@@ -13,7 +13,7 @@ import {
     insertAfter,
     insertAtEnd,
     insertAtStart,
-    insertBefore, swapChapterWithNext, swapChapterWithPrevious,
+    insertBefore, swapChapterWithNext, swapChapterWithPrevious, swapNodeWithNext, swapNodeWithPrevious,
     unselectAllContents,
     unselectAllNodes
 } from './graph';
@@ -169,6 +169,18 @@ export function setupContextMenu() {
         const { id } = JSON.parse(data);
         
         swapChapterWithPrevious(id);
+    });
+    
+    extendedApi.receive('swapNodeWithNext', (data: string) => {
+        const { id } = JSON.parse(data);
+        
+        swapNodeWithNext(id);
+    });
+    
+    extendedApi.receive('swapNodeWithPrevious', (data: string) => {
+        const { id } = JSON.parse(data);
+        
+        swapNodeWithPrevious(id);
     });
 
     api.receive('contextMenuClosed', () => {

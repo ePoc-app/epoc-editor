@@ -60,6 +60,14 @@ function getTemplateFromContext(callback, data) {
             {
                 label: 'Copier',
                 click: () => onClick('copy', { id: data.id }),
+            },
+            {
+                label: 'Intervertir avec le suivant',
+                click: () => onClick('swapNodeWithNext', { id: data.id }),
+            },
+            {
+                label: 'Intervertir avec le précédent',
+                click: () => onClick('swapNodeWithPrevious', { id: data.id }),
             }
         );
     } else if (data.context === 'content') {

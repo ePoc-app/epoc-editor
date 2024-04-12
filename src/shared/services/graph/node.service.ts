@@ -1,6 +1,6 @@
 import { EpocV1 } from '../../classes/epoc-v1';
 import { useEditorStore } from '../../stores';
-import { useVueFlow, Node, getConnectedEdges } from '@vue-flow/core';
+import { useVueFlow, Node, getConnectedEdges, Edge } from '@vue-flow/core';
 import { NodeElement, SideAction } from '../../interfaces';
 import { nextTick, toRaw, watch } from 'vue';
 
@@ -366,4 +366,64 @@ export function setNodesSelectability(selectNodeMode: boolean) {
 
 export function unselectAllNodes(): void {
     nodes.value.forEach((node) => (node.selected = false));
+}
+
+/**
+ * Swaps the edges of two nodes, used when swapping nodes
+ * @param node1
+ * @param node2
+ * @param edges1
+ * @param edges2
+ */
+export function swapEdges(node1: Node, node2: Node, edges1: Edge[], edges2: Edge[]) {
+    for (const edge of [...edges1, ...edges2]) {
+        applyEdgeChanges([{ id: edge.id, type: 'remove' }]);
+    }
+    
+    for (const edge of [...edges1, ...edges2]) {
+        const source = edge.source === node1.id ? node2.id : edge.source === node2.id ? node1.id : edge.source;
+        const target = edge.target === node1.id ? node2.id : edge.target === node2.id ? node1.id : edge.target;
+        createEdge(source, target);
+    }
+}
+
+/**
+ * Swaps a node with the next one
+ * @param nodeId
+ */
+export function swapNodeWithNext(nodeId: string): void {
+    const node = findNode(nodeId);
+    const nextNode = graphService.getNextNode(node);
+    
+    if (!nextNode) return;
+
+    const tempPosition = node.position;
+    node.position = nextNode.position;
+    nextNode.position = tempPosition;
+    
+    const nodeEdges = getConnectedEdges([node], edges.value);
+    const nextNodeEdges = getConnectedEdges([nextNode], edges.value);
+    
+    swapEdges(node, nextNode, nodeEdges, nextNodeEdges);
+}
+
+/**
+ * Swap a node with the previous one
+ * @remarks The function is cancelled if the previous node is a chapter
+ * @param nodeId
+ */
+export function swapNodeWithPrevious(nodeId: string): void {
+    const node = findNode(nodeId);
+    const previousNode = graphService.getPreviousNode(node);
+    
+    if(!previousNode || previousNode.type === 'chapter') return;
+    
+    const tempPosition = node.position;
+    node.position = previousNode.position;
+    previousNode.position = tempPosition;
+    
+    const nodeEdges = getConnectedEdges([node], edges.value);
+    const previousNodeEdges = getConnectedEdges([previousNode], edges.value);
+    
+    swapEdges(node, previousNode, nodeEdges, previousNodeEdges);
 }
