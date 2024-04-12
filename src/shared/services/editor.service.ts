@@ -4,7 +4,7 @@ import { useEditorStore, useGraphStore, useUndoRedoStore } from '@/src/shared/st
 import { ePocProject } from '@/src/shared/interfaces';
 import { createToaster } from '@meforma/vue-toaster';
 import { closeFormPanel, graphService } from '.';
-import { createGraphEpocFromData } from '@/src/shared/services/import.service';
+import { createGraphEpocFromData, createGraphFromImport } from '@/src/shared/services/import.service';
 import { useVueFlow } from '@vue-flow/core';
 import { saveState } from '@/src/shared/services/undoRedo.service';
 import { applyBackwardCompatibility } from '@/src/shared/utils/backwardCompability';
@@ -112,15 +112,11 @@ const setup = function () {
     });
 
     api.receive('epocImportExtracted', (data: string) => {
-        const importedEpoc = JSON.parse(data);
-        graphStore.setFlow(null);
-        router.push('/editor').then(() => {
-            editorStore.loading = false;
-            if (!importedEpoc || !importedEpoc.workdir) return;
-
-            createGraphEpocFromData(importedEpoc.epoc);
-            saveState();
-        });
+        createGraphFromImport(JSON.parse(data));
+    });
+    
+    api.receive('importRequired', (data: string) => {
+        editorStore.projectToImport = data;
     });
 
     api.receive('previewReady', () => {
@@ -186,6 +182,7 @@ function pickEpocProject(): void {
 function openEpocProject(project: ePocProject): void {
     editorStore.currentProject = project;
     editorStore.loading = true;
+    
     router.push('/landingpage').then(() => {
         api.send('openEpocProject', project.filepath);
     });

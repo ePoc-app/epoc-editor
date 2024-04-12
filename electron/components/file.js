@@ -67,17 +67,18 @@ const pickEpocToImport = async function () {
     if (!files || !files[0]) return null;
     const filepath = files[0];
 
-    return importEpoc(filepath, startTime);
+    const workdir = createWorkDir();
+    return importEpoc(filepath, startTime, workdir);
 };
 
 /**
  * Import an ePoc project to the workdir
  * @param {string} filepath - the path to the ePoc
  * @param {number} startTime - the time when the import started
- * @returns {Promise<void>}
+ * @param {string} workdir - the path to the workdir
+ * @returns {{filepath: null, workdir: string, name: null, modified: Date} | null}
  */
-const importEpoc = async function(filepath, startTime) {
-    const workdir = createWorkDir();
+const importEpoc = async function(filepath, startTime, workdir) {
     const zip = new AdmZip(filepath, {});
     zip.extractAllTo(workdir, true, false, null);
 
@@ -118,24 +119,28 @@ const pickEpocProject = function () {
 
 /**
  * Unzip the content of an ePoc project file to the project workdir
- * @returns {{filepath: string, workdir: null, name: null, modified: Date}}
+ * @returns {{project: {filepath: string, workdir: null, name: null, modified: Date} | null, import: boolean} | null}
  */
 const openEpocProject = async function (filepath) {
     if (!filepath) return null;
     const startTime = performance.now();
 
-    // Detect if the project.json file exists in the project
-    if (!fs.existsSync(path.join(filepath, 'project.json'))) {
-        return importEpoc(filepath, startTime);
-    }
-
     const workdir = createWorkDir();
     const zip = new AdmZip(filepath, {});
     try {
         zip.extractAllTo(workdir, true, false, null);
+        if(!fs.existsSync(path.join(workdir, 'project.json'))) {
+            const project = await importEpoc(filepath, startTime, workdir);
+            return {
+                project,
+                imported: true
+            };
+        }
     } catch (err) {
         return null;
     }
+
+    console.log('continuing the function');
 
     const project = {
         name: path.basename(filepath),
@@ -149,7 +154,10 @@ const openEpocProject = async function (filepath) {
     const ellapsed = performance.now() - startTime;
     if (ellapsed < 500) await wait(500 - ellapsed);
 
-    return project;
+    return {
+        project,
+        imported: false,
+    };
 };
 
 /**

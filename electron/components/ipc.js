@@ -52,15 +52,21 @@ const setupIpcListener = function (targetWindow) {
     ipcMain.on('openEpocProject', async (event, epocProjectPath) => {
         if (event.sender !== targetWindow.webContents) return;
 
-        const project = await openEpocProject(epocProjectPath);
+        const { project, imported } = await openEpocProject(epocProjectPath);
         if (!project) {
             sendToFrontend(event.sender, 'epocProjectError');
             return;
         }
 
-        const flow = await readProjectData(project.workdir);
-        sendToFrontend(event.sender, 'epocProjectReady', { project, flow });
-        store.updateState('projects', { [targetWindow.id]: project });
+
+        if(imported) {
+            sendToFrontend(event.sender, 'importRequired', project);
+        } else {
+            const flow = await readProjectData(project.workdir);
+            sendToFrontend(event.sender, 'epocProjectReady', { project, flow });
+            store.updateState('projects', { [targetWindow.id]: project });
+        }
+
     });
 
     ipcMain.on('newEpocProject', async (event) => {

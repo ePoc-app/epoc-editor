@@ -2,6 +2,8 @@
 import { useEditorStore } from '@/src/shared/stores';
 import { editorService } from '@/src/shared/services';
 import { ePocProject } from '@/src/shared/interfaces';
+import ChoiceModal from '@/src/components/ChoiceModal.vue';
+import { createGraphFromImport } from '@/src/shared/services/import.service';
 
 const editorStore = useEditorStore();
 
@@ -17,6 +19,16 @@ function openProject(filepath: ePocProject) {
 function createProject() {
     editorService.newEpocProject();
 }
+
+function cancelImport() {
+    editorStore.projectToImport = null;
+    editorStore.loading = false;
+}
+
+function importProject() {
+    createGraphFromImport(JSON.parse(editorStore.projectToImport));
+    editorStore.projectToImport = null;
+}
 </script>
 
 <template>
@@ -25,7 +37,25 @@ function createProject() {
             <img alt="logo epoc" src="/img/epoc.svg" />
             <img alt="logo inria" src="/img/inria.svg" />
         </div>
-        <div v-if="!editorStore.loading">
+
+        <ChoiceModal
+            v-if="editorStore.projectToImport"
+            accept-label="Importer"
+            @accept="importProject"
+            @cancel="cancelImport"
+        >
+            <h3>Cet ePoc est une publication, vous devez l'importer avant de pouvoir l'éditer ici</h3>
+        </ChoiceModal>
+
+        <div v-if="editorStore.loading" class="loading">
+            <div class="spinner"></div>
+            <span v-if="editorStore.currentProject.filepath">
+                Chargement de "{{ editorStore.currentProject.filepath }}"
+            </span>
+            <span v-else>Chargement de l'ePoc</span>
+        </div>
+
+        <div v-else>
             <div class="buttons">
                 <button class="btn btn-outline btn-large" @click="pickProject">
                     <i class="icon-ouvrir" />
@@ -51,13 +81,6 @@ function createProject() {
                     <div class="btn-open" @click="openProject(epoc)">Ouvrir</div>
                 </div>
             </div>
-        </div>
-        <div v-if="editorStore.loading" class="loading">
-            <div class="spinner"></div>
-            <span v-if="editorStore.currentProject.filepath">
-                Chargement de "{{ editorStore.currentProject.filepath }}"
-            </span>
-            <span v-else>Chargement de l'ePoc</span>
         </div>
     </div>
 </template>
