@@ -43,7 +43,7 @@ const extendedApi: ExtendedApiInterface = {
     receive: (channel: string, callback: (...args: any[]) => void) => {
         api.receive(channel, (...args) => {
             // noinspection BadExpressionStatementJS
-            beforeEachReceive; // Call beforeEachReceive before receiving data
+            beforeEachReceive(); // Call beforeEachReceive before receiving data
             callback(...args);
         });
     },
