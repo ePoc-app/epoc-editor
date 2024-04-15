@@ -12,6 +12,9 @@ import { Assessment, ChoiceCondition, SimpleQuestion } from '@epoc/epoc-types/sr
 import { createRule, getConditions } from '@/src/shared/services/graph/badge.service';
 import { Node } from '@vue-flow/core';
 import { Badge } from '@/src/shared/interfaces';
+import { router } from '@/src/router';
+import { saveState } from '@/src/shared/services/undoRedo.service';
+import { useEditorStore, useGraphStore } from '@/src/shared/stores';
 
 const mapType = {
     video: standardPages.find((s) => s.type === 'video'),
@@ -195,4 +198,18 @@ function setQuestionData(type: string, question: any) {
     }
 
     return questionData;
+}
+
+export function createGraphFromImport(importedEpoc) {
+    const graphStore = useGraphStore();
+    const editorStore = useEditorStore();
+    
+    graphStore.setFlow(null);
+    router.push('/editor').then(() => {
+        editorStore.loading = false;
+        if (!importedEpoc || !importedEpoc.workdir) return;
+        
+        createGraphEpocFromData(importedEpoc.epoc);
+        saveState();
+    });
 }

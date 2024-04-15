@@ -10,6 +10,7 @@ type uid = string;
 interface EditorState {
     // Landing page
     loading: boolean;
+    projectToImport: string | null;
     recentProjects: ePocProject[];
     currentProject: ePocProject;
 
@@ -65,6 +66,7 @@ export const useEditorStore = defineStore('editor', {
     state: (): EditorState => ({
         // Landing page
         loading: false,
+        projectToImport: null,
         recentProjects: [],
         currentProject: { filepath: null, workdir: null, name: null, modified: null },
 

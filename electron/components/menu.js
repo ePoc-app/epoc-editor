@@ -59,7 +59,7 @@ module.exports.setupMenu = function () {
                     ],
                 },
                 {
-                    label: 'Importer un fichier zip',
+                    label: 'Importer un fichier .epoc',
                     click: async function () {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportPicked');
                         const project = await pickEpocToImport();

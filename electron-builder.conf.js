@@ -58,15 +58,26 @@ module.exports = {
         };
         fs.writeFileSync('dist/appInfo.json', JSON.stringify(appInfo, null, 2));
     },
-    fileAssociations: {
-        ext: 'epoc',
-        name: 'ePoc Project',
-        description: 'ePoc project content package',
-        mimeType: 'application/zip',
-        role: 'Editor',
-        isPackage: false,
-        rank: 'Default'
-    },
+    fileAssociations: [
+        {
+            ext: 'epoc',
+            name: 'ePoc',
+            description: 'ePoc publication',
+            mimeType: 'application/zip',
+            role: 'Mobile Application',
+            isPackage: false,
+            rank: 'Default'
+        },
+        {
+            ext: 'epocproject',
+            name: 'ePoc Project',
+            description: 'ePoc project content package',
+            mimeType: 'application/zip',
+            role: 'Editor',
+            isPackage: false,
+            rank: 'Default'
+        }
+    ],
     afterSign: async (context) => {
         const { electronPlatformName, appOutDir } = context;
         if (electronPlatformName !== 'darwin' || process.env.NO_NOTARIZE) {
