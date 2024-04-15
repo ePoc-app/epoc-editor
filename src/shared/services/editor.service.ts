@@ -87,10 +87,10 @@ const setup = function () {
         closeFormPanel();
         editorStore.currentProject = ePocProject;
 
-        applyBackwardCompatibility(editorStore.version);
-
         graphStore.setFlow(parsedData.flow);
-
+        
+        applyBackwardCompatibility(editorStore.version);
+        
         undoRedoStore.reset();
         editorStore.reset();
 

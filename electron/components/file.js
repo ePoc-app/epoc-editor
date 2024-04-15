@@ -140,8 +140,6 @@ const openEpocProject = async function (filepath) {
         return null;
     }
 
-    console.log('continuing the function');
-
     const project = {
         name: path.basename(filepath),
         modified: fs.statSync(filepath).mtime,
