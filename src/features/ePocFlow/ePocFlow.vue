@@ -211,6 +211,8 @@ function onPaneReady() {
         @node-drag-start="onDragStart"
         @node-drag-stop="onDragEnd"
         @node-drag="nodeDrag"
+        @selection-drag-start="onDragStart"
+        @selection-drag-stop="onDragEnd"
         @selection-start="selectionStart"
         @drop="onDrop"
         @dragover.prevent="onDragOver"
