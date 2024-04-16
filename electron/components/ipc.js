@@ -1,7 +1,7 @@
 const path = require('path');
 const store = require('./store');
 const { ipcMain } = require('electron');
-const { runPreview, updatePreview } = require('./preview');
+const { updatePreview, createPreview } = require('./preview');
 const {
     getRecentFiles,
     pickEpocProject,
@@ -98,7 +98,7 @@ const setupIpcListener = function (targetWindow) {
             await writeProjectData(store.state.projects[targetWindow.id].workdir, projectData);
             await writeEpocData(store.state.projects[targetWindow.id].workdir, content);
 
-            await runPreview(store.state.projects[targetWindow.id].workdir, contentPath);
+            await createPreview(store.state.projects[targetWindow.id].workdir, contentPath);
             sendToFrontend(event.sender, 'previewReady');
         } catch (e) {
             console.error(e);

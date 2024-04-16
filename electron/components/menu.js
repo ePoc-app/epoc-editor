@@ -6,6 +6,7 @@ const { ipcMain, dialog } = require('electron');
 const Store = require('electron-store');
 const electronStore = new Store();
 const { getCommitHash } = require('./preview');
+const { createGlobalPreview, createPreview } = require('./preview');
 
 module.exports.setupMenu = function () {
     const mainMenuTemplate = [
@@ -171,6 +172,23 @@ module.exports.setupMenu = function () {
                     },
                 },
             ],
+        },
+        {
+            label: 'Aperçu',
+            submenu: [
+                {
+                    label: 'Lancer l\'aperçu',
+                    click: function () {
+                        createPreview(store.state.projects[BrowserWindow.getFocusedWindow().id].workdir);
+                    }
+                },
+                {
+                    label: 'Lancer l\'aperçu global',
+                    click: function () {
+                        createGlobalPreview(store.state.projects[BrowserWindow.getFocusedWindow().id].workdir);
+                    }
+                }
+            ]
         },
         {
             label: 'Aide',

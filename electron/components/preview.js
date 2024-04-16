@@ -18,15 +18,10 @@ let previewWindow;
 /**
  * Init preview files
  * @param {string} workdir
- * @param {string} contentPath the path to the ePoc content to preview
+ * @param {string} ePocRootFolder - The path to the ePoc root folder
+ * @param {string} ePocContentPath - The path to the ePoc content
  */
-async function runPreview(workdir, contentPath) {
-    const ePocRootName = path.basename(workdir);
-    const ePocRootFolder = path.join(previewEpocPath, ePocRootName);
-    const ePocContentPath = contentPath
-        ? `epoc/play/${ePocRootName}/${contentPath}`
-        : `epoc/preview-editor/${ePocRootName}`;
-
+async function runPreview(workdir, ePocRootFolder, ePocContentPath) {
     if (!previewInitialized) {
         if (!fs.existsSync(appDataPath)) {
             fs.mkdirSync(appDataPath);
@@ -56,6 +51,33 @@ async function runPreview(workdir, contentPath) {
 
     const server = await createPreviewServer();
     await createPreviewWindow(server, ePocContentPath);
+}
+
+/**
+ * Create & run the global preview
+ * @param {string} workdir
+ */
+async function createGlobalPreview(workdir) {
+    const ePocRootName = path.basename(workdir);
+    const ePocRootFolder = path.join(previewEpocPath, ePocRootName);
+    const ePocContentPath = `epoc/preview/${ePocRootName}`;
+
+    runPreview(workdir, ePocRootFolder, ePocContentPath);
+}
+
+/**
+ * Create & run the preview
+ * @param workdir
+ * @param contentPath - The path to the ePoc content to preview
+ */
+async function createPreview(workdir, contentPath) {
+    const ePocRootName = path.basename(workdir);
+    const ePocRootFolder = path.join(previewEpocPath, ePocRootName);
+    const ePocContentPath = contentPath
+        ? `epoc/preview/${ePocRootName}/${contentPath}`
+        : `epoc/preview-editor/${ePocRootName}`;
+
+    runPreview(workdir, ePocRootFolder, ePocContentPath);
 }
 
 /**
@@ -134,7 +156,9 @@ const getCommitHash = function () {
 };
 
 module.exports = {
-    runPreview,
+    createPreview,
+    createGlobalPreview,
+    // runPreview,
     cleanPreview,
     updatePreview,
     getCommitHash
