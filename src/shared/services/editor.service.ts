@@ -4,9 +4,8 @@ import { useEditorStore, useGraphStore, useUndoRedoStore } from '@/src/shared/st
 import { ePocProject } from '@/src/shared/interfaces';
 import { createToaster } from '@meforma/vue-toaster';
 import { closeFormPanel, graphService } from '.';
-import { createGraphEpocFromData, createGraphFromImport } from '@/src/shared/services/import.service';
+import { createGraphFromImport } from '@/src/shared/services/import.service';
 import { useVueFlow } from '@vue-flow/core';
-import { saveState } from '@/src/shared/services/undoRedo.service';
 import { applyBackwardCompatibility } from '@/src/shared/utils/backwardCompability';
 
 const { findNode } = useVueFlow({ id: 'main' });

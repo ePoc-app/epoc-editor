@@ -6,9 +6,10 @@ const AdmZip = require('adm-zip');
 const glob = require('glob');
 const { wait } = require('./utils');
 const Store = require('electron-store');
-const store = new Store();
+const electronStore = new Store();
+const store = require('./store');
 
-const recentFiles = store.get('recentFiles', []).filter((r) => {
+const recentFiles = electronStore.get('recentFiles', []).filter((r) => {
     return fs.existsSync(r.filepath);
 });
 
@@ -131,31 +132,46 @@ const openEpocProject = async function (filepath) {
         zip.extractAllTo(workdir, true, false, null);
         if(!fs.existsSync(path.join(workdir, 'project.json'))) {
             const project = await importEpoc(filepath, startTime, workdir);
+            store.updateState('projects', { [BrowserWindow.getFocusedWindow().id]: project });
+            console.log('filepath', filepath);
             return {
                 project,
                 imported: true
             };
         }
     } catch (err) {
+        console.log('error', err);
         return null;
     }
 
-    const project = {
-        name: path.basename(filepath),
-        modified: fs.statSync(filepath).mtime,
-        filepath,
-        workdir,
-    };
+    try {
+        // if extenions is .epoc rename it to .epocproject
+        if (path.extname(filepath) === '.epoc') {
+            const newFilepath = filepath.replace('.epoc', '.epocproject');
+            fs.renameSync(filepath, newFilepath);
 
-    updateRecent(project);
+            filepath = newFilepath;
+        }
 
-    const ellapsed = performance.now() - startTime;
-    if (ellapsed < 500) await wait(500 - ellapsed);
+        const project = {
+            name: path.basename(filepath),
+            modified: fs.statSync(filepath).mtime,
+            filepath,
+            workdir,
+        };
 
-    return {
-        project,
-        imported: false,
-    };
+        updateRecent(project);
+
+        const ellapsed = performance.now() - startTime;
+        if (ellapsed < 500) await wait(500 - ellapsed);
+
+        return {
+            project,
+            imported: false,
+        };
+    } catch(e) {
+        return null;
+    }
 };
 
 /**
@@ -316,7 +332,7 @@ const updateRecent = function (project) {
     } else {
         recentFiles.unshift(project);
     }
-    store.set('recentFiles', recentFiles);
+    electronStore.set('recentFiles', recentFiles);
 };
 
 /**

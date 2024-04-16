@@ -44,7 +44,7 @@ function importProject() {
             @accept="importProject"
             @cancel="cancelImport"
         >
-            <h3>Cet ePoc est une publication, vous devez l'importer avant de pouvoir l'éditer ici</h3>
+            <h3>Cet ePoc est une version publiée, vous devez l'importer avant de pouvoir l'éditer ici</h3>
         </ChoiceModal>
 
         <div v-if="editorStore.loading" class="loading">
