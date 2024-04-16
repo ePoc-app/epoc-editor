@@ -24,7 +24,7 @@ export const questions: SideAction[] = [
     {
         icon: 'icon-liste',
         type: 'dropdown-list',
-        label: 'Liste déroulantes',
+        label: 'Liste déroulante',
     },
     {
         icon: 'icon-terminal',

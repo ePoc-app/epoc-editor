@@ -370,7 +370,7 @@ export const swipeForm: Form = {
 
 export const listForm: Form = {
     type: 'dropdown-list',
-    name: 'Listes déroulantes',
+    name: 'Liste déroulante',
     icon: 'icon-liste',
     displayFieldIndex: true,
     buttons: contentButtons,
