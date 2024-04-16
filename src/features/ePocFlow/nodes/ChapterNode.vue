@@ -61,33 +61,42 @@ const connectedBadges = computed(() => getConnectedBadges(currentNode.data.conte
 </script>
 
 <template>
-    <div class="node-chapter">
-        <div v-if="connectedBadges.length > 0" class="badge-notification badge-notification-left">
-            <img src="/img/badge/notification.svg" alt="notification" />
-            <small>{{ connectedBadges.length }}</small>
+    <div>
+        <div class="node-chapter">
+            <div v-if="connectedBadges.length > 0" class="badge-notification badge-notification-left">
+                <img src="/img/badge/notification.svg" alt="notification" />
+                <small>{{ connectedBadges.length }}</small>
+            </div>
+
+            <p
+                class="node-title"
+                :class="{ active: editorStore.openedElementId ? editorStore.openedElementId === props.id : false }"
+            >
+                {{ currentNode.data.formValues.title }}
+            </p>
+            <ContentButton
+                :id="currentNode.data.contentId"
+                :data-testid="`chapter-${currentNode.data.index}`"
+                :icon="currentNode.data.action.icon"
+                :is-draggable="false"
+                :class-list="classList"
+                :is-active="editorStore.openedElementId ? editorStore.openedElementId === currentNode.id : false"
+                :subtitle="subtitle"
+                @click="openForm()"
+                @mousedown="mouseDown"
+                @contextmenu="onContextMenu"
+            />
         </div>
-        <ContentButton
-            :id="currentNode.data.contentId"
-            :data-testid="`chapter-${currentNode.data.index}`"
-            :icon="currentNode.data.action.icon"
-            :is-draggable="false"
-            :class-list="classList"
-            :is-active="editorStore.openedElementId ? editorStore.openedElementId === currentNode.id : false"
-            :subtitle="subtitle"
-            @click="openForm()"
-            @mousedown="mouseDown"
-            @contextmenu="onContextMenu"
+        <!-- ! mousedown.stop important in vue-flow v1.16.4 on non draggable node -->
+        <Handle
+            :data-testid="`source-chapter-${currentNode.data.index}`"
+            type="source"
+            :position="Position.Right"
+            :connectable="!isSource && !editorStore.selectNodeMode"
+            :class="{ 'not-connected': !isSource }"
+            @mousedown.stop
         />
     </div>
-    <!-- ! mousedown.stop important in vue-flow v1.16.4 on non draggable node -->
-    <Handle
-        :data-testid="`source-chapter-${currentNode.data.index}`"
-        type="source"
-        :position="Position.Right"
-        :connectable="!isSource && !editorStore.selectNodeMode"
-        :class="{ 'not-connected': !isSource }"
-        @mousedown.stop
-    />
 </template>
 
 <style scoped lang="scss">
