@@ -528,6 +528,33 @@ export const customQuestionForm: Form = {
             ]
         },
         {
+            name: 'Données',
+            inputs: [
+                {
+                    type: 'repeat',
+                    id: 'data',
+                    label: 'Données',
+                    value: [],
+                    inputs: [
+                        {
+                            id: 'key',
+                            type: 'text',
+                            label: 'Clé',
+                            placeholder: 'Clé',
+                            value: ''
+                        },
+                        {
+                            id: 'value',
+                            type: 'textarea',
+                            label: 'Valeur',
+                            placeholder: 'Valeur',
+                            value: ''
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             name: 'Réponse',
             inputs: [
                 {

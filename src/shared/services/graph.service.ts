@@ -11,7 +11,7 @@ import {
     SimpleQuestion,
     uid,
     Video,
-} from '@epoc/epoc-types/src/v1';
+} from '@epoc/epoc-types/dist/v1';
 import { questions } from '@/src/shared/data';
 import { useEditorStore } from '@/src/shared/stores';
 import {
@@ -269,6 +269,10 @@ function newQuestion(epoc: EpocV1, questionNode: any): string {
     
     if(questionNode.formType === 'custom') {
         (question as CustomQuestion).template = template;
+        (question as CustomQuestion).data = {};
+        for(const value of questionNode.formValues.data) {
+            (question as CustomQuestion).data[value.key] = value.value;
+        }
     }
     
     return epoc.addQuestion(questionNode.contentId, question);
