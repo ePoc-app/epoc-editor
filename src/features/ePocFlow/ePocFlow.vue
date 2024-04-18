@@ -29,7 +29,7 @@ import {
     getSelectedNodes, handleChapterDrag
 } from '@/src/shared/services/graph';
 import { saveState, saveGivenState, getCurrentState } from '@/src/shared/services/undoRedo.service';
-import { closeFormPanel, graphService } from '@/src/shared/services';
+import { closeAllPanels, closeFormPanel, graphService } from '@/src/shared/services';
 
 const { vueFlowRef, project, updateEdge, edges, findNode, setTransform } = useVueFlow({ id: 'main' });
 
@@ -218,7 +218,7 @@ function onPaneReady() {
         @dragover.prevent="onDragOver"
         @dragenter.prevent
         @edge-click="onEdgeClick"
-        @pane-click="closeFormPanel()"
+        @pane-click="closeAllPanels()"
         @connect="connect"
         @connect-start="onConnectStart"
         @connect-end="onConnectEnd"

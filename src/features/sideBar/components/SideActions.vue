@@ -16,6 +16,7 @@ const standardContent = editorStore.standardPages.filter(({ type }) => {
 const questionContent = editorStore.standardPages.find(({ type }) => type === 'question');
 const conditionContent = editorStore.standardPages.find(({ type }) => type === 'condition');
 const modelContent = editorStore.standardPages.find(({ type }) => type === 'model');
+const badgeContent = editorStore.standardPages.find(({ type }) => type === 'badge');
 
 const dragging = ref(false);
 
@@ -44,72 +45,28 @@ function dragStart(event: DragEvent, sideAction: SideAction) {
 }
 
 function showQuestionsMenu() {
-    editorStore.questionMenu = !editorStore.questionMenu;
+    editorStore.openSideMenu('question');
 }
 
 function showTemplateMenu() {
-    editorStore.modelMenu = !editorStore.modelMenu;
+    editorStore.openSideMenu('model');
 }
+
+function showBadgeMenu() {
+    editorStore.openSideMenu('badge');
+}
+
 </script>
 
 <template>
-    <VueDraggable
-        v-bind="dragOptions"
-        key="draggable"
-        :model-value="standardContent"
-        item-key="index"
-        class="contents-list"
-    >
-        <!--suppress VueUnrecognizedSlot -->
-        <template #item="{ element, index }">
-            <div>
-                <!--suppress VueUnrecognizedDirective -->
-                <ContentButton
-                    :key="index"
-                    v-tippy="{
-                        content: element.tooltip,
-                        placement: 'right',
-                        arrow: true,
-                        arrowType: 'round',
-                        animation: 'fade',
-                    }"
-                    :data-testid="`${element.type}-content`"
-                    :icon="element.icon"
-                    :is-draggable="true"
-                    :class-list="{ 'btn-content-blue': true }"
-                    @dragstart="dragStart($event, element)"
-                />
-            </div>
-        </template>
-    </VueDraggable>
-    <div class="question">
-        <!--suppress VueUnrecognizedDirective -->
-        <ContentButton
-            v-tippy="{
-                content: questionContent.tooltip,
-                placement: 'right',
-                arrow: true,
-                arrowType: 'round',
-                animation: 'fade',
-            }"
-            data-testid="questions-menu"
-            :icon="questionContent.icon"
-            :is-draggable="false"
-            :class-list="classList(questionContent)"
-            :is-active="editorStore.questionMenu"
-            @mouseup.stop
-            @click="showQuestionsMenu"
-        />
-        <div v-if="editorStore.questionMenu" data-testid="floating-menu" class="floating-menu" @click.stop>
-            <div class="arrow-wrapper">
-                <div class="arrow"></div>
-            </div>
+    <div class="actions-lists">
+        <div class="actions-list">
             <VueDraggable
                 v-bind="dragOptions"
                 key="draggable"
-                :model-value="editorStore.questions"
-                item-key="id"
-                class="questions-list"
+                :model-value="standardContent"
+                item-key="index"
+                class="contents-list"
             >
                 <!--suppress VueUnrecognizedSlot -->
                 <template #item="{ element, index }">
@@ -118,7 +75,7 @@ function showTemplateMenu() {
                         <ContentButton
                             :key="index"
                             v-tippy="{
-                                content: element.label,
+                                content: element.tooltip,
                                 placement: 'right',
                                 arrow: true,
                                 arrowType: 'round',
@@ -126,47 +83,117 @@ function showTemplateMenu() {
                             }"
                             :data-testid="`${element.type}-content`"
                             :icon="element.icon"
-                            :class-list="{ 'btn-content-blue': true }"
                             :is-draggable="true"
+                            :class-list="{ 'btn-content-blue': true }"
                             @dragstart="dragStart($event, element)"
                         />
                     </div>
                 </template>
             </VueDraggable>
+            <div class="question">
+                <!--suppress VueUnrecognizedDirective -->
+                <ContentButton
+                    v-tippy="{
+                        content: questionContent.tooltip,
+                        placement: 'right',
+                        arrow: true,
+                        arrowType: 'round',
+                        animation: 'fade',
+                    }"
+                    data-testid="questions-menu"
+                    :icon="questionContent.icon"
+                    :is-draggable="false"
+                    :class-list="classList(questionContent)"
+                    :is-active="editorStore.questionMenu"
+                    @mouseup.stop
+                    @click="showQuestionsMenu"
+                />
+                <div v-if="editorStore.questionMenu" data-testid="floating-menu" class="floating-menu" @click.stop>
+                    <div class="arrow-wrapper">
+                        <div class="arrow"></div>
+                    </div>
+                    <VueDraggable
+                        v-bind="dragOptions"
+                        key="draggable"
+                        :model-value="editorStore.questions"
+                        item-key="id"
+                        class="questions-list"
+                    >
+                        <!--suppress VueUnrecognizedSlot -->
+                        <template #item="{ element, index }">
+                            <div>
+                                <!--suppress VueUnrecognizedDirective -->
+                                <ContentButton
+                                    :key="index"
+                                    v-tippy="{
+                                        content: element.label,
+                                        placement: 'right',
+                                        arrow: true,
+                                        arrowType: 'round',
+                                        animation: 'fade',
+                                    }"
+                                    :data-testid="`${element.type}-content`"
+                                    :icon="element.icon"
+                                    :class-list="{ 'btn-content-blue': true }"
+                                    :is-draggable="true"
+                                    @dragstart="dragStart($event, element)"
+                                />
+                            </div>
+                        </template>
+                    </VueDraggable>
+                </div>
+            </div>
+            <!--suppress VueUnrecognizedDirective -->
+            <ContentButton
+                v-tippy="{
+                    content: conditionContent.tooltip,
+                    placement: 'right',
+                    arrow: true,
+                    arrowType: 'round',
+                    animation: 'fade',
+                }"
+                :icon="conditionContent.icon"
+                :class-list="{ 'btn-content-blue': true }"
+                :is-draggable="true"
+                @dragstart="dragStart($event, conditionContent)"
+                @dragend="dragging = false"
+            />
+            <hr />
+            <!--suppress VueUnrecognizedDirective -->
+            <ContentButton
+                v-tippy="{
+                    content: modelContent.tooltip,
+                    placement: 'right',
+                    arrow: true,
+                    arrowType: 'round',
+                    animation: 'fade',
+                }"
+                class="model-menu"
+                :icon="modelContent.icon"
+                :is-draggable="false"
+                :is-active="editorStore.modelMenu"
+                :class-list="classList(modelContent)"
+                @click="showTemplateMenu"
+            />
         </div>
-    </div>
-    <div v-if="env.isDev">
-        <!--suppress VueUnrecognizedDirective -->
-        <ContentButton
-            v-tippy="{
-                content: conditionContent.tooltip,
-                placement: 'right',
-                arrow: true,
-                arrowType: 'round',
-                animation: 'fade',
-            }"
-            :icon="conditionContent.icon"
-            :class-list="{ 'btn-content-blue': true }"
-            :is-draggable="true"
-            @dragstart="dragStart($event, conditionContent)"
-            @dragend="dragging = false"
-        />
-        <hr />
-        <!--suppress VueUnrecognizedDirective -->
-        <ContentButton
-            v-tippy="{
-                content: modelContent.tooltip,
-                placement: 'right',
-                arrow: true,
-                arrowType: 'round',
-                animation: 'fade',
-            }"
-            :icon="modelContent.icon"
-            :is-draggable="false"
-            :is-active="editorStore.modelMenu"
-            :class-list="classList(modelContent)"
-            @click="showTemplateMenu"
-        />
+        <div class="actions-list">
+            <!--suppress VueUnrecognizedDirective -->
+            <ContentButton
+                v-tippy="{
+                    content: badgeContent.tooltip,
+                    placement: 'right',
+                    arrow: true,
+                    arrowType: 'round',
+                    animation: 'fade',
+                }"
+                class="badge-menu"
+                :icon="badgeContent.icon"
+                :is-draggable="false"
+                :is-active="editorStore.badgeMenu"
+                :class-list="classList(badgeContent)"
+                @click="showBadgeMenu"
+            />
+        </div>
     </div>
 </template>
 
@@ -190,11 +217,17 @@ hr {
     transition: all 0.15s ease-in-out;
 }
 
-.questions-list,
-.contents-list {
+.questions-list, .actions-list, .contents-list {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+
+.actions-lists {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
 }
 
 .question {
@@ -233,4 +266,9 @@ hr {
 .container {
     position: relative;
 }
+
+.model-menu {
+    flex: 1;
+}
+
 </style>

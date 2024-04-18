@@ -7,6 +7,13 @@ const { nodes, findNode, getTransform, setTransform } = useVueFlow({ id: 'main' 
 
 type uid = string;
 
+const sideMenus = {
+    question: 'questionMenu',
+    model: 'modelMenu',
+    badge: 'badgeMenu',
+};
+type SideMenu = keyof typeof sideMenus;
+
 interface EditorState {
     // Landing page
     loading: boolean;
@@ -36,6 +43,7 @@ interface EditorState {
     // Panel/ Menu
     questionMenu: boolean;
     modelMenu: boolean;
+    badgeMenu: boolean;
     formPanel: {
         form: Form | null;
         width: number;
@@ -84,6 +92,7 @@ export const useEditorStore = defineStore('editor', {
         // Panel/ Menu
         questionMenu: false,
         modelMenu: false,
+        badgeMenu: false,
         formPanel: {
             form: null,
             width: 0,
@@ -123,6 +132,10 @@ export const useEditorStore = defineStore('editor', {
         openedFormType(): string | null {
             return this.formPanel.form?.type ?? null;
         },
+        
+        sideMenuOpen(): boolean {
+            return this.modelMenu || this.badgeMenu;
+        }
     },
 
     actions: {
@@ -139,6 +152,7 @@ export const useEditorStore = defineStore('editor', {
         dismissModals(): void {
             this.questionMenu = false;
             this.modelMenu = false;
+            this.badgeMenu = false;
             this.hamburgerMenu = false;
         },
 
@@ -243,5 +257,11 @@ export const useEditorStore = defineStore('editor', {
             this.tempConditions[index].verb = '';
             this.tempConditions[index].value = '';
         },
+        
+        openSideMenu(type: SideMenu) {
+            for(const key in sideMenus) {
+                this[sideMenus[key]] = key === type;
+            }
+        }
     },
 });

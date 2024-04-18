@@ -122,6 +122,10 @@ const activityIndex = computed(() => {
 <style scoped lang="scss">
 .node {
     border: 2px dashed var(--dashed-border);
+
+    &.highlight{
+        border: 2px dashed var(--editor-yellow) !important;
+    }
 }
 
 .vue-flow__node.selected .node {

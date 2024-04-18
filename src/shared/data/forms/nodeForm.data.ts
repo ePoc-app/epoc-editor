@@ -259,17 +259,6 @@ export const epocForm: Form = {
             ],
         },
         {
-            name: 'Badges',
-            inputs: [
-                {
-                    id: 'badges',
-                    label: '',
-                    type: 'badge',
-                    value: [],
-                },
-            ],
-        },
-        {
             name: 'Paramètres :',
             inputs: [
                 {

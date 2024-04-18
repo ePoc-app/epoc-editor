@@ -2,6 +2,8 @@
 import { Badge } from '@/src/shared/interfaces';
 import { computed } from 'vue';
 import { iconsPath } from '@/src/shared/data';
+import { useEditorStore } from '@/src/shared/stores';
+
 
 const props = defineProps<{
     viewMode?: boolean;
@@ -16,6 +18,8 @@ const emit = defineEmits<{
     (e: 'click'): void;
     (e: 'remove-icon'): void;
 }>();
+
+const editorStore = useEditorStore();
 
 function onClick() {
     if (props.viewMode) return;
@@ -35,6 +39,11 @@ function getIconPath() {
     if (icon.startsWith('blob')) return icon;
     return icon.endsWith('.svg') ? `assets://${icon}` : `${iconsPath}/${icon}.svg`;
 }
+
+const isActive = computed(() => {
+    return editorStore.openedBadgeId === props.badge?.id;
+});
+
 </script>
 
 <template>
@@ -42,7 +51,7 @@ function getIconPath() {
         <button v-if="deleteButton" class="btn btn-close" @click="emit('remove-icon')"><i class="icon-x"></i></button>
         <div
             class="badge-background"
-            :class="{ clickable: !viewMode && !inactive, inactive: inactive }"
+            :class="{ clickable: !viewMode && !inactive, inactive: inactive, active: isActive }"
             @mouseup.stop
             @click="onClick"
         >
@@ -85,7 +94,9 @@ function getIconPath() {
     }
 
     &-name {
-        width: calc(80px + 2rem);
+        width: calc(100px + 4px);
+        bottom: -1.5rem;
+
         text-overflow: ellipsis;
         overflow: hidden;
         margin: 0;
@@ -94,7 +105,7 @@ function getIconPath() {
 
     &-background {
         user-select: none;
-        background: var(--node);
+        background: var(--content);
         border-radius: 8px;
         position: relative;
         width: 100px;
@@ -104,6 +115,10 @@ function getIconPath() {
 
         &.inactive {
             border: 2px dashed var(--border);
+        }
+
+        &.active {
+            border: 2px solid var(--editor-yellow)
         }
     }
 

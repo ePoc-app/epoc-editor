@@ -437,6 +437,13 @@ export function exportBadgesToPage(badges: Record<string, Badge>): Record<string
     return res;
 }
 
+export function closeAllPanels() {
+    const editorStore = useEditorStore();
+    
+    closeFormPanel();
+    editorStore.dismissModals();
+}
+
 export function closeFormPanel() {
     const editorStore = useEditorStore();
 
@@ -449,4 +456,5 @@ export function closeFormPanel() {
     editorStore.formPanel.form = null;
     editorStore.openedElementId = null;
     editorStore.openedNodeId = null;
+    editorStore.openedBadgeId = null;
 }

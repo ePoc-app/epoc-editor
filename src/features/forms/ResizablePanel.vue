@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import FormPanel from './FormPanel.vue';
-import { computed, onMounted, ref, Ref, watch } from 'vue';
+import { onMounted, ref, Ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
+import ResizeOverlay from '@/src/components/ResizeOverlay.vue';
 
 const editorStore = useEditorStore();
 
@@ -22,6 +23,9 @@ const resizing = ref(false);
 let startWidth = 0;
 let startX = 0;
 function startResize(event: MouseEvent) {
+    // Close the question menu when resizing
+    editorStore.questionMenu = false;
+
     resizing.value = true;
     window.addEventListener('mousemove', resize);
     window.addEventListener('mouseup', stopResize);
@@ -77,7 +81,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div v-if="resizing" class="overlay" @mouseup="stopResize"></div>
+    <ResizeOverlay v-if="resizing" @mouseup="stopResize" />
     <div ref="panel" class="panel" @keydown="handleKeyDown">
         <div ref="resizeHandle" class="resize-handle" @mousedown="startResize"></div>
         <FormPanel :is-maximized="isMaximized" @maximize="maximize" @minimize="minimize" />
@@ -85,14 +89,11 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    z-index: 999;
+
+.side-menu-open {
+    .panel {
+        max-width: calc(100% - 80px - 2rem - 104px* 2 - 4rem);
+    }
 }
 
 .panel {

@@ -12,6 +12,8 @@ import { confirmDelete, graphPaste } from '@/src/shared/services/graph';
 import { saveState, setupUndo } from '../shared/services/undoRedo.service';
 import { setupContextMenu } from '../shared/services/contextMenu.service';
 import { computed } from 'vue';
+import ModelMenu from '@/src/features/sideBar/components/ModelMenu.vue';
+import BadgeMenu from '@/src/features/sideBar/components/BadgeMenu.vue';
 
 const editorStore = useEditorStore();
 
@@ -80,16 +82,15 @@ function onRemoveCursor() {
 }
 
 const editorDisplay = computed(() => (editorStore.selectNodeMode ? 'editor-flex' : 'editor-grid'));
+const sideMenuOpen = computed(() => editorStore.sideMenuOpen ? 'side-menu-open' : '');
 </script>
 
 <template>
     <div
-        :class="editorDisplay"
+        :class="[editorDisplay, sideMenuOpen]"
         class="editor-container"
         @drop="onRemoveCursor"
         @dragend="onRemoveCursor"
-        @mouseup="editorStore.dismissModals"
-        @click="editorStore.dismissModals"
     >
         <SideBar v-if="!editorStore.selectNodeMode" class="side-bar" @dragover="onCursorNotAllowed" />
         <TopBar v-if="!editorStore.selectNodeMode" class="top-bar" @dragover="onCursorNotAllowed" />
@@ -108,6 +109,9 @@ const editorDisplay = computed(() => (editorStore.selectNodeMode ? 'editor-flex'
         <ValidationModal v-if="editorStore.validationModal" />
         <ConditionModal v-if="editorStore.conditionModal && !editorStore.selectNodeMode" />
         <IconModal v-if="editorStore.iconModal" />
+
+        <ModelMenu v-if="editorStore.modelMenu" />
+        <BadgeMenu v-if="editorStore.badgeMenu" />
     </div>
 </template>
 

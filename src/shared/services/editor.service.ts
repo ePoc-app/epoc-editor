@@ -3,7 +3,7 @@ import { router } from '@/src/router';
 import { useEditorStore, useGraphStore, useUndoRedoStore } from '@/src/shared/stores';
 import { ePocProject } from '@/src/shared/interfaces';
 import { createToaster } from '@meforma/vue-toaster';
-import { closeFormPanel, graphService } from '.';
+import { closeAllPanels, graphService } from '.';
 import { createGraphFromImport } from '@/src/shared/services/import.service';
 import { useVueFlow } from '@vue-flow/core';
 import { applyBackwardCompatibility } from '@/src/shared/utils/backwardCompability';
@@ -83,7 +83,7 @@ const setup = function () {
             return;
         }
 
-        closeFormPanel();
+        closeAllPanels();
         editorStore.currentProject = ePocProject;
 
         graphStore.setFlow(parsedData.flow);
