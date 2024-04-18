@@ -66,7 +66,8 @@ module.exports = {
             mimeType: 'application/zip',
             role: 'Mobile Application',
             isPackage: false,
-            rank: 'Default'
+            rank: 'Default',
+            icon: 'assets/icon-mobile.png'
         },
         {
             ext: 'epocproject',
@@ -75,7 +76,7 @@ module.exports = {
             mimeType: 'application/zip',
             role: 'Editor',
             isPackage: false,
-            rank: 'Default'
+            rank: 'Default',
         }
     ],
     afterSign: async (context) => {
