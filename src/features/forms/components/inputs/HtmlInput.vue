@@ -11,6 +11,7 @@ const props = defineProps<{
     inputValue: string;
     placeholder?: string;
     insideCard?: boolean;
+    textOnly?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -43,8 +44,10 @@ watch(
 );
 
 const plugins = 'image link lists template code';
+const textPlugins = 'link lists code';
 // noinspection SpellCheckingInspection
 const toolbar = 'bold italic alignleft aligncenter alignright link image bullist numlist outdent indent template code';
+const textToolbar = 'bold italic link bullist numlist';
 
 const template = `
     <details style="border: 1px solid lightgray; border-radius: 4px; padding: .5em .5em 0 .5em">
@@ -59,6 +62,8 @@ function init() {
 }
 
 async function drop(event: DragEvent) {
+    if(props.textOnly) return;
+
     const file = event.dataTransfer.files[0];
     if (!file) return;
     const url = await graphService.importFile(file.path);
@@ -67,6 +72,8 @@ async function drop(event: DragEvent) {
 }
 
 function handleFilePicker(callback: (url: string) => void) {
+    if(props.textOnly) return;
+
     const input = document.createElement('input');
     input.type = 'file';
     document.body.appendChild(input);
@@ -109,6 +116,31 @@ defineExpose({
     focusEditor
 });
 
+const standardOptions = {
+    menubar: false,
+    min_height: 150,
+    max_height: 800,
+    height: 350,
+    templates: [
+        { title: 'Plier/déplier', content: template, description: 'Plier/déplier avec titre et contenu' },
+    ],
+    file_picker_types: 'image',
+    file_picker_callback: handleFilePicker,
+    link_default_target: '_blank',
+    link_target_list: false,
+    paste_data_images: true,
+};
+
+const textOptions = {
+    menubar: false,
+    min_height: 150,
+    max_height: 800,
+    height: 350,
+    link_target_list: false,
+    paste_data_images: false,
+};
+
+
 </script>
 
 <template>
@@ -116,22 +148,9 @@ defineExpose({
         ref="editor"
         v-model="content"
         api-key="no-api-key"
-        :plugins="plugins"
-        :toolbar="toolbar"
-        :init="{
-            menubar: false,
-            min_height: 150,
-            max_height: 800,
-            height: 350,
-            templates: [
-                { title: 'Plier/déplier', content: template, description: 'Plier/déplier avec titre et contenu' },
-            ],
-            file_picker_types: 'image',
-            file_picker_callback: handleFilePicker,
-            link_default_target: '_blank',
-            link_target_list: false,
-            paste_data_images: false,
-        }"
+        :plugins="textOnly ? textPlugins : plugins"
+        :toolbar="textOnly ? textToolbar : toolbar"
+        :init="textOnly ? textOptions : standardOptions"
         @init="init"
         @drop.stop.prevent="drop"
         @focus="onFocus"

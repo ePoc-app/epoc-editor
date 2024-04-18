@@ -90,13 +90,14 @@ function showLabel(inputType: string) {
             @save-given-state="emit('saveGivenState', $event)"
         />
         <HtmlInput
-            v-if="input.type === 'html'"
+            v-if="input.type === 'html' || input.type === 'html-text'"
             :id="inputId"
             ref="htmlInput"
             :label="input.label"
             :placeholder="input.placeholder"
             :input-value="inputValue as string"
             :inside-card="insideCard"
+            :text-only="input.type === 'html-text'"
             @input="emit('input', $event)"
             @save-given-state="emit('saveGivenState', $event)"
         />
