@@ -120,6 +120,7 @@ async function createPreviewWindow(server, contentPath) {
                 devTools: true,
                 nodeIntegration: true,
             },
+            parent: BrowserWindow.getFocusedWindow(),
         });
 
         previewWindow.webContents.on('did-finish-load', () => {
