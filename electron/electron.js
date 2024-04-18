@@ -16,17 +16,20 @@ let mainWindow;
 let splashWindow;
 let filepath = process.argv[1] ? path.normalize(process.argv[1]) : null;
 
+// Triggered when opening a file & the app is already running
 app.on('will-finish-launching', () => {
     app.on('open-file', async (event, path) => {
         event.preventDefault();
         filepath = path;
 
-        if (mainWindow) {
-            mainWindow.webContents.send(
+        const newWindow = createNewWindow();
+
+        newWindow.webContents.once('did-finish-load', () => {
+            newWindow.webContents.send(
                 'epocProjectPicked',
-                JSON.stringify({ name: null, modified: null, filepath: filepath, workdir: null })
+                JSON.stringify({ name: null, modified: null, filepath, workdir: null })
             );
-        }
+        });
     });
 });
 
@@ -48,6 +51,16 @@ app.whenReady().then(() => {
     });
 
     setupWindow(mainWindow, filepath);
+
+    // Triggered when launching the app from a file
+    mainWindow.webContents.on('did-finish-load', function() {
+        if (filepath) {
+            mainWindow.webContents.send(
+                'epocProjectPicked',
+                JSON.stringify({ name: null, modified: null, filepath, workdir: null })
+            );
+        }
+    });
 
     app.on('activate', function () {
         // On macOS it's common to re-create a window in the app when the dock icon is clicked and there are no other windows open.
@@ -74,7 +87,11 @@ function createNewWindow() {
     setupIpcListener(newWindow);
     setupWindow(newWindow);
 
-    newWindow.show();
+    newWindow.on('ready-to-show', () => {
+        newWindow.show();
+    });
+
+    return newWindow;
 }
 
 ipcMain.on('newWindow', () => {
