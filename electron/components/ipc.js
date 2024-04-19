@@ -29,29 +29,30 @@ const copyData = {
  * @param targetWindow
  */
 const setupIpcListener = function (targetWindow) {
-    ipcMain.on('getRecentProjects', (event) => {
-        if (event.sender !== targetWindow.webContents) return;
+
+    function ipcGuard(handler) {
+        return (event, ...args) => {
+            if(targetWindow.isDestroyed() || event.sender !== targetWindow.webContents) return;
+            handler(event, ...args);
+        };
+    }
+
+    ipcMain.on('getRecentProjects', ipcGuard((event) => {
         sendToFrontend(event.sender, 'getRecentProjects', getRecentFiles());
-    });
+    }));
 
-    ipcMain.on('getCurrentProject', async (event) => {
-        if (event.sender !== targetWindow.webContents) return;
-
+    ipcMain.on('getCurrentProject', ipcGuard(async (event) => {
         if (store.state.projects[targetWindow.id] && store.state.projects[targetWindow.id].workdir) {
             const flow = await readProjectData(store.state.projects[targetWindow.id].workdir);
             sendToFrontend(event.sender, 'epocProjectReady', { project: store.state.projects[targetWindow.id], flow });
         }
-    });
+    }));
 
-    ipcMain.on('pickEpocProject', (event) => {
-        if (event.sender !== targetWindow.webContents) return;
-
+    ipcMain.on('pickEpocProject', ipcGuard((event) => {
         sendToFrontend(event.sender, 'epocProjectPicked', pickEpocProject());
-    });
+    }));
 
-    ipcMain.on('openEpocProject', async (event, epocProjectPath) => {
-        if (event.sender !== targetWindow.webContents) return;
-
+    ipcMain.on('openEpocProject', ipcGuard(async (event, epocProjectPath) => {
         const { project, imported } = await openEpocProject(epocProjectPath);
         if (!project) {
             sendToFrontend(event.sender, 'epocProjectError');
@@ -67,19 +68,15 @@ const setupIpcListener = function (targetWindow) {
             store.updateState('projects', { [targetWindow.id]: project });
         }
 
-    });
+    }));
 
-    ipcMain.on('newEpocProject', async (event) => {
-        if (event.sender !== targetWindow.webContents) return;
-
+    ipcMain.on('newEpocProject', ipcGuard(async (event) => {
         const project = await newEpocProject();
         sendToFrontend(event.sender, 'epocProjectReady', { project });
         store.updateState('projects', { [targetWindow.id]: project });
-    });
+    }));
 
-    ipcMain.on('saveEpocProject', async (event, data) => {
-        if (event.sender !== targetWindow.webContents) return;
-
+    ipcMain.on('saveEpocProject', ipcGuard(async (event, data) => {
         sendToFrontend(event.sender, 'epocProjectSaving');
 
         const { data: projectData, content } = data;
@@ -87,11 +84,9 @@ const setupIpcListener = function (targetWindow) {
         await writeEpocData(store.state.projects[targetWindow.id].workdir, content);
 
         updateSavedProject(event.sender, await saveEpocProject(store.state.projects[targetWindow.id]));
-    });
+    }));
 
-    ipcMain.on('runPreview', async (event, data) => {
-        if (event.sender !== targetWindow.webContents) return;
-
+    ipcMain.on('runPreview', ipcGuard(async (event, data) => {
         try {
             const { contentPath, projectJSON } = data;
             const { data: projectData, content } = projectJSON;
@@ -104,11 +99,9 @@ const setupIpcListener = function (targetWindow) {
             console.error(e);
             sendToFrontend(event.sender, 'previewError');
         }
-    });
+    }));
 
-    ipcMain.on('exportProject', async (event, data) => {
-        if (event.sender !== targetWindow.webContents) return;
-
+    ipcMain.on('exportProject', ipcGuard(async (event, data) => {
         try {
             const { data: projectData, content } = data;
             await writeProjectData(store.state.projects[targetWindow.id].workdir, projectData);
@@ -123,44 +116,35 @@ const setupIpcListener = function (targetWindow) {
             console.error(e);
             sendToFrontend(event.sender, 'exportError');
         }
-    });
+    }));
 
-    ipcMain.on('writeProjectData', async (event, data) => {
-        if (event.sender !== targetWindow.webContents) return;
-
+    ipcMain.on('writeProjectData', ipcGuard(async (event, data) => {
         await writeProjectData(store.state.projects[targetWindow.id].workdir, data);
-    });
+    }));
 
-    ipcMain.on('writeEpocData', async (event, data) => {
-        if (event.sender !== targetWindow.webContents) return;
-
+    ipcMain.on('writeEpocData', ipcGuard(async (event, data) => {
         await writeEpocData(store.state.projects[targetWindow.id].workdir, data);
         updatePreview();
-    });
+    }));
 
-    ipcMain.on('importFile', async (event, data) => {
-        if (event.sender !== targetWindow.webContents) return;
-
+    ipcMain.on('importFile', ipcGuard(async (event, data) => {
         const { filepath, targetDirectory } = data;
         sendToFrontend(
             event.sender,
             'fileImported',
             await copyFileToWorkdir(store.state.projects[targetWindow.id].workdir, filepath, targetDirectory)
         );
-    });
+    }));
 
-    ipcMain.on('graphCopy', async (event, data) => {
-        if (event.sender !== targetWindow.webContents) return;
-
+    ipcMain.on('graphCopy', ipcGuard(async (event, data) => {
         const parsedData = JSON.parse(data);
         const { pages } = parsedData;
 
         copyData.pages = pages;
         copyData.sourceId = targetWindow.id;
-    });
+    }));
 
-    ipcMain.on('graphPaste', async (event, data) => {
-        if (event.sender !== targetWindow.webContents) return;
+    ipcMain.on('graphPaste', ipcGuard(async (event, data) => {
         if (!copyData.pages) return;
 
         const parsedData = JSON.parse(data);
@@ -178,29 +162,25 @@ const setupIpcListener = function (targetWindow) {
 
         copyData.pages = null;
         copyData.sourceId = null;
-    });
+    }));
 
-    ipcMain.on('contextMenu', async (event, data) => {
+    ipcMain.on('contextMenu', ipcGuard(async (event, data) => {
         const popupMenu = Menu.buildFromTemplate(contextMenu.getTemplateFromContext(sendToFrontend, data));
         popupMenu.popup(targetWindow.webContents);
 
         popupMenu.on('menu-will-close', () => {
             sendToFrontend(targetWindow.webContents, 'contextMenuClosed');
         });
-    });
+    }));
 
-    ipcMain.on('getEditorVersion', async(event) => {
-        if(event.sender !== targetWindow.webContents) return;
-
+    ipcMain.on('getEditorVersion', ipcGuard(async(event) => {
         sendToFrontend(event.sender, 'editorVersion', { version: app.getVersion() });
-    });
+    }));
 
 
-    ipcMain.on('getPlatform', async(event) => {
-        if(event.sender !== targetWindow.webContents) return;
-
+    ipcMain.on('getPlatform', ipcGuard(async(event) => {
         sendToFrontend(event.sender, 'platform', { platform: process.platform });
-    });
+    }));
 };
 
 const sendToFrontend = function (webContents, channel, data) {
