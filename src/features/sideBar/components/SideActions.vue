@@ -45,15 +45,15 @@ function dragStart(event: DragEvent, sideAction: SideAction) {
 }
 
 function showQuestionsMenu() {
-    editorStore.openSideMenu('question');
+    editorStore.toggleSideMenu('question');
 }
 
 function showTemplateMenu() {
-    editorStore.openSideMenu('model');
+    editorStore.toggleSideMenu('model');
 }
 
 function showBadgeMenu() {
-    editorStore.openSideMenu('badge');
+    editorStore.toggleSideMenu('badge');
 }
 
 </script>

@@ -258,9 +258,9 @@ export const useEditorStore = defineStore('editor', {
             this.tempConditions[index].value = '';
         },
         
-        openSideMenu(type: SideMenu) {
+        toggleSideMenu(type: SideMenu) {
             for(const key in sideMenus) {
-                this[sideMenus[key]] = key === type;
+                this[sideMenus[key]] = (key === type) ? !this[sideMenus[key]] : false;
             }
         }
     },
