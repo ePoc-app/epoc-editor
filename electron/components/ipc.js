@@ -1,6 +1,6 @@
 const path = require('path');
 const store = require('./store');
-const { ipcMain } = require('electron');
+const { ipcMain, BrowserWindow } = require('electron');
 const { updatePreview, createPreview } = require('./preview');
 const {
     getRecentFiles,
@@ -53,12 +53,13 @@ const setupIpcListener = function (targetWindow) {
     }));
 
     ipcMain.on('openEpocProject', ipcGuard(async (event, epocProjectPath) => {
+        targetWindow.filepath = epocProjectPath;
+
         const { project, imported } = await openEpocProject(epocProjectPath);
         if (!project) {
             sendToFrontend(event.sender, 'epocProjectError');
             return;
         }
-
 
         if(imported) {
             sendToFrontend(event.sender, 'importRequired', project);
@@ -129,6 +130,7 @@ const setupIpcListener = function (targetWindow) {
 
     ipcMain.on('importFile', ipcGuard(async (event, data) => {
         const { filepath, targetDirectory } = data;
+        targetWindow.filepath = filepath;
         sendToFrontend(
             event.sender,
             'fileImported',
@@ -232,6 +234,16 @@ const detectAssets = function (data) {
 
     return assetPaths;
 };
+
+function focusWindowIfExists(filepath) {
+    const allWindows = BrowserWindow.getAllWindows();
+    const existingWindow = allWindows.find((window) => window.filepath === filepath);
+    if(existingWindow) {
+        existingWindow.focus();
+        return true;
+    }
+    return false;
+}
 
 module.exports = {
     setupIpcListener,

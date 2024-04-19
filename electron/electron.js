@@ -22,13 +22,28 @@ app.on('will-finish-launching', () => {
         event.preventDefault();
         filepath = path;
 
-        const newWindow = createNewWindow();
+        // Focus window instead of creating a new one if already exists
+        const allWindows = BrowserWindow.getAllWindows();
+        const existingWindow = allWindows.find((window) => window.filepath === filepath);
+        if(existingWindow) {
+            existingWindow.focus();
+            return;
+        }
 
-        newWindow.webContents.once('did-finish-load', () => {
-            newWindow.webContents.send(
-                'epocProjectPicked',
-                JSON.stringify({ name: null, modified: null, filepath, workdir: null })
-            );
+        createNewWindow().then((newWindow) => {
+            if(newWindow.isDestroyed()) return;
+
+            newWindow.webContents.once('did-finish-load', () => {
+                newWindow.filepath = filepath;
+
+                // did finish load should have all ipcListener correctly set up but doesn't work correctly so a timeout correctly wait long enough to set up eventListeners
+                setTimeout(() => {
+                    newWindow.webContents.send(
+                        'epocProjectPicked',
+                        JSON.stringify({ name: null, modified: null, filepath, workdir: null })
+                    );
+                }, 10);
+            });
         });
     });
 });
@@ -55,6 +70,7 @@ app.whenReady().then(() => {
     // Triggered when launching the app from a file
     mainWindow.webContents.on('did-finish-load', function() {
         if (filepath) {
+            mainWindow.filepath = filepath;
             mainWindow.webContents.send(
                 'epocProjectPicked',
                 JSON.stringify({ name: null, modified: null, filepath, workdir: null })
