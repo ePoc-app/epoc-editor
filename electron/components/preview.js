@@ -74,7 +74,7 @@ async function createPreview(workdir, contentPath) {
     const ePocRootName = path.basename(workdir);
     const ePocRootFolder = path.join(previewEpocPath, ePocRootName);
     const ePocContentPath = contentPath
-        ? `epoc/preview/${ePocRootName}/${contentPath}`
+        ? `epoc/play/${ePocRootName}/${contentPath}`
         : `epoc/preview-editor/${ePocRootName}`;
 
     runPreview(workdir, ePocRootFolder, ePocContentPath);
