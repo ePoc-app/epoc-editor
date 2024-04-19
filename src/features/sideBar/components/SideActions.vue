@@ -145,6 +145,7 @@ function showBadgeMenu() {
             </div>
             <!--suppress VueUnrecognizedDirective -->
             <ContentButton
+                v-if="env.isDev"
                 v-tippy="{
                     content: conditionContent.tooltip,
                     placement: 'right',
@@ -161,6 +162,7 @@ function showBadgeMenu() {
             <hr />
             <!--suppress VueUnrecognizedDirective -->
             <ContentButton
+                v-if="env.isDev"
                 v-tippy="{
                     content: modelContent.tooltip,
                     placement: 'right',
