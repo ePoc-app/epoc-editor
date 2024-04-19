@@ -88,7 +88,8 @@ const setup = function () {
 
         graphStore.setFlow(parsedData.flow);
         
-        applyBackwardCompatibility(editorStore.version);
+        // TODO: get the version from the content.json or put the version in the project.json
+        applyBackwardCompatibility('0.1.8-beta');
         
         undoRedoStore.reset();
         editorStore.reset();
