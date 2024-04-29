@@ -22,7 +22,7 @@ const fileInput = ref(null);
 const filetype = computed(() => {
     const ext = url.value.split('.').pop().toLowerCase();
     if (['png', 'jpg', 'jpeg', 'gif', 'bmp', 'svg', 'webp'].includes(ext)) return 'img';
-    if (['mp4'].includes(ext)) return 'video';
+    if (['mp4', 'm4v'].includes(ext)) return 'video';
     if (['mp3'].includes(ext)) return 'audio';
     return null;
 });
