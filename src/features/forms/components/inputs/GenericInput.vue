@@ -15,6 +15,7 @@ import IconPicker from './badges/components/IconPicker.vue';
 import ConditionInput from './badges/components/ConditionInput.vue';
 import { Input, RepeatInputEvent } from '@/src/shared/interfaces';
 import { computed, ref } from 'vue';
+import AIChat from '@/src/features/forms/components/inputs/AIChat.vue';
 
 const props = defineProps<{
     input: Input;
@@ -178,10 +179,11 @@ function showLabel(inputType: string) {
             @input="emit('input', $event)"
         />
         <ConditionInput v-if="input.type === 'badge-conditions'" />
+        <AIChat v-if="input.type === 'ai-chat'" />
     </div>
 </template>
 
-<style lang="scss" scoped >
+<style lang="scss" scoped>
 .input-group {
     display: flex;
     flex-direction: column;

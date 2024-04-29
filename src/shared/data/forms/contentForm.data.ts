@@ -16,6 +16,13 @@ export const textForm: Form = {
                     value: '',
                     placeholder: 'Saisissez un résumé...',
                 },
+                {
+                    id: 'ai-chat',
+                    type: 'ai-chat',
+                    label: 'Assistant',
+                    value: '',
+                    placeholder: 'Posez une question...',
+                }
             ],
         },
     ],
