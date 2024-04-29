@@ -1,0 +1,16 @@
+html,
+body,
+#app {
+    scroll-behavior: smooth;
+    margin: 0;
+    height: 100%;
+    color: var(--text);
+    background-color: var(--background);
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+}

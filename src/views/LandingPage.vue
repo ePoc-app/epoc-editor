@@ -66,11 +66,11 @@ function importProject() {
                     Créer un nouveau projet
                 </button>
             </div>
-            <div>
+            <div class="file-list">
                 <h3>Fichiers récents</h3>
                 <hr class="separator" />
-                <div v-for="epoc of editorStore.recentProjects" :key="epoc.name" class="card-list-item">
-                    <div class="card-icon">
+                <div v-for="epoc of editorStore.recentProjects" :key="epoc.name" class="file-list-item">
+                    <div class="file-icon">
                         <i class="icon-fichier" />
                     </div>
                     <p>
@@ -86,8 +86,21 @@ function importProject() {
 </template>
 
 <style scoped lang="scss">
+@import '@/src/assets/sass/app.scss';
+
 .landing-page {
     margin: auto;
+    //width: 100%;
+}
+
+.buttons {
+    @include flexbox($justify-content: space-between, $gap: spacer(2));
+    width: 100%;
+}
+
+.logo {
+    @include flexbox($justify-content: space-between, $gap: spacer(2));
+    width: 100%;
 }
 
 .card {
@@ -101,12 +114,12 @@ function importProject() {
         margin-bottom: 0.7rem;
     }
 
-    .logo,
-    .buttons {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 2rem;
-    }
+    //.logo,
+    //.buttons {
+    //    display: flex;
+    //    justify-content: space-between;
+    //    margin-bottom: 2rem;
+    //}
 
     .loading {
         white-space: nowrap;
@@ -163,5 +176,6 @@ function importProject() {
             display: block;
         }
     }
+
 }
 </style>

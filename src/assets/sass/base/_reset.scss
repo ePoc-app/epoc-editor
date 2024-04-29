@@ -1,0 +1,63 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+ul,
+ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+    transition: color 0.3s ease-in;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    appearance: none;
+    background: transparent;
+    border-radius: 0;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+img,
+video,
+figure {
+    max-width: 100%;
+    object-fit: cover;
+}

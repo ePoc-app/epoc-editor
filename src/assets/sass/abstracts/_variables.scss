@@ -1,0 +1,67 @@
+$inria-red: #e63312;
+$inria-blue: #384257;
+$inria-grey: #6477a0;
+$inria-spe: #2ec6fa;
+$inria-light: #f4f7fb;
+$inria-dark: #23232c;
+$inria-correct: #85ce70;
+$inria-correct-shade: #5ea51f;
+$inria-correct-tint: #ebf4e8;
+$inria-incorrect: #eb7575;
+$inria-certificate: #ffa029;
+$inria-lightgrey: #d3d7e0;
+$inria-darkgrey: #384156;
+$inria-black: #17191a;
+$inria-lightblue: #a6b1c9;
+
+$editor-light: #e6e9ee;
+$editor-lightgrey: #cdd3e0;
+$editor-shadow-hover: #e1e5ec;
+$editor-light-border: #dce4f0;
+$editor-lightblue: #e8edf3;
+$editor-shadow-outer: #adbcd5;
+$editor-grayblue: #7789a6;
+$editor-dashed-border: #8c9ab9;
+$editor-blue: #00b3e9;
+$node-active: #e1f4fa;
+$editor-red: #e63312;
+
+$editor-node-ghost: #d6e2f0;
+
+[color-scheme='light'] {
+    --background: #{$editor-light};
+    --content: white;
+    --text: #{$inria-blue};
+    --text-secondary: #8c9ab9;
+    --border: #{$editor-light-border};
+    --dashed-border: #{$editor-dashed-border};
+    --shadow: #{$editor-shadow-hover};
+    --shadow-outer: #{$editor-shadow-outer};
+    --item-background: #f7f8f9;
+    --list-border: #e6eaf4;
+    --button-blue: #{$editor-lightblue};
+    --node: #{$inria-light};
+    --node-active: #{$node-active};
+    --node-ghost: #{$editor-node-ghost};
+}
+
+// Dark theme not implemented yet
+[color-scheme='dark'] {
+    --background: #{$inria-black};
+    --content: #{$inria-dark};
+    --text: #{$inria-light};
+    --border: #{$inria-darkgrey};
+}
+
+:root {
+    --inria-red: #{$inria-red};
+    --editor-grayblue: #{$editor-grayblue};
+    --editor-blue: #{$editor-blue};
+    --editor-blue-shadow: rgba(0, 179, 233, 0.3);
+    --editor-red: #{$editor-red};
+    --inria-grey: #{$inria-grey};
+    --node-hover: #e9eff6;
+    --editor-yellow: #{$inria-certificate};
+}
+
+$default-box-shadow: 0 1px 8px var(--shadow);

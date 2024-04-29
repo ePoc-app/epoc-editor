@@ -1,0 +1,33 @@
+.btn {
+    @include flexbox($align-items: center, $justify-content: center);
+
+    cursor: pointer;
+    color: var(--text);
+    border-radius: 6px;
+    transition: box-shadow 0.2s ease-in-out;
+    padding: spacer(2);
+
+    i {
+        margin-right: spacer(2);
+        font-size: 1.5rem;
+        font-weight: 500;
+    }
+
+    &-outline {
+        border: 2px solid var(--border);
+        background-color: var(--content);
+
+        &:hover {
+            box-shadow: 0 1px 8px 0 var(--shadow-outer);
+        }
+        &:active {
+            opacity: .7;
+        }
+    }
+
+    &-outline {
+        font-weight: bold;
+        padding: spacer(3);
+        //width: 100%
+    }
+}
