@@ -110,8 +110,8 @@ const sideMenuOpen = computed(() => editorStore.sideMenuOpen ? 'side-menu-open' 
         <ConditionModal v-if="editorStore.conditionModal && !editorStore.selectNodeMode" />
         <IconModal v-if="editorStore.iconModal" />
 
-        <ModelMenu v-if="editorStore.modelMenu" />
-        <BadgeMenu v-if="editorStore.badgeMenu" />
+        <ModelMenu v-if="editorStore.modelMenu && !editorStore.selectNodeMode" />
+        <BadgeMenu v-if="editorStore.badgeMenu && !editorStore.selectNodeMode" />
     </div>
 </template>
 
