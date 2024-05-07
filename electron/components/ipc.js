@@ -16,6 +16,8 @@ const {
 } = require('./file');
 const { Menu } = require('electron');
 const contextMenu = require('./contextMenu');
+const fs = require('fs');
+const { shell } = require('electron');
 
 const { app } = require('electron');
 
@@ -134,6 +136,19 @@ const setupIpcListener = function (targetWindow) {
             'fileImported',
             await copyFileToWorkdir(store.state.projects[targetWindow.id].workdir, filepath, targetDirectory)
         );
+    }));
+
+    ipcMain.on('editFile', ipcGuard(async (event, data) => {
+        const { filepath } = data;
+        const absolutePath = path.join(store.state.projects[targetWindow.id].workdir, filepath);
+
+        shell.showItemInFolder(absolutePath);
+
+        fs.watch(absolutePath, (eventType) => {
+            if (eventType === 'change') {
+                sendToFrontend(event.sender, 'writeContentJSON');
+            }
+        });
     }));
 
     ipcMain.on('graphCopy', ipcGuard(async (event, data) => {
