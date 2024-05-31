@@ -52,7 +52,7 @@ export const videoForm: Form = {
                     value: '',
                     placeholder: 'Ajouter une transcription',
                     accept: '.txt,.vtt',
-                    hint: 'Extensions acceptés: .vtt, .txt <br>Pour les utilisateurs qui ne souhaitent pas ou ne sont pas en capacité écouter la vidéo'
+                    hint: 'Extensions acceptées : .vtt, .txt <br>Pour les utilisateurs qui ne souhaitent pas ou ne sont pas en capacité d\'écouter la vidéo'
                 },
                 {
                     id: 'poster',
@@ -95,7 +95,7 @@ export const videoForm: Form = {
                             value: '',
                             placeholder: 'Ajouter des sous-titres',
                             accept: '.vtt',
-                            hint: 'Extensions acceptés: .vtt'
+                            hint: 'Extensions acceptées : .vtt'
                         },
                     ],
                 },
@@ -134,7 +134,7 @@ export const audioForm: Form = {
                     value: '',
                     placeholder: 'Ajouter une transcription',
                     accept: '.txt,.vtt',
-                    hint: 'Extensions acceptés: .vtt, .txt <br>Pour les utilisateurs qui ne souhaitent pas ou ne sont pas en capacité écouter la piste audio'
+                    hint: 'Extensions acceptées : .vtt, .txt <br>Pour les utilisateurs qui ne souhaitent pas ou ne sont pas en capacité d\'écouter la piste audio'
                 },
                 {
                     id: 'subtitles',
@@ -143,7 +143,7 @@ export const audioForm: Form = {
                     value: '',
                     placeholder: 'Ajouter des sous-titres',
                     accept: '.vtt',
-                    hint: 'Extensions acceptés: .vtt'
+                    hint: 'Extensions acceptées: .vtt'
                 },
             ],
         },
