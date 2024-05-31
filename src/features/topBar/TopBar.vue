@@ -51,13 +51,20 @@ function since(date: string) {
 setInterval(() => {
     savedSince.value = since(editorStore.currentProject.modified);
 }, 60000);
+
+function separateFilePath(filepath: string) {
+    const file = filepath.split('/').pop();
+    return [filepath.replace('/' + file, ''), '/' + file];
+}
+
 </script>
 
 <template>
     <div class="top-bar">
         <div class="top-bar-content">
             <div class="top-bar-title">
-                <h3>{{ editorStore.currentProject.filepath ? editorStore.currentProject.filepath : 'Nouvel ePoc' }}</h3>
+                <h3 v-if="!editorStore.currentProject.filepath">Nouvel ePoc</h3>
+                <h3 v-else><span>{{ separateFilePath(editorStore.currentProject.filepath)[0] }}</span>{{ separateFilePath(editorStore.currentProject.filepath)[1] }}</h3>
                 <small>Dernière sauvegarde : {{ savedSince }}</small>
             </div>
             <TopActionsMenu
@@ -90,20 +97,36 @@ setInterval(() => {
 
     &-content {
         display: flex;
+        justify-content: space-between;
         height: 100%;
+        overflow: hidden;
     }
     &-title {
         display: flex;
         flex-direction: column;
         height: 100%;
         justify-content: center;
+        min-width: 0;
+        flex: 1;
+        margin-right: 1rem;
+        transition: all 0.2s ease-in-out;
+
         * {
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
             display: block;
         }
-        min-width: 0;
+
+        h3 {
+            display: flex;
+            max-width: 25rem;
+            transition: all 0.1s ease-in-out;
+
+            &:hover {
+                max-width: 100vw;
+            }
+        }
     }
     h3 {
         margin: 0 0 0.2rem 0;
