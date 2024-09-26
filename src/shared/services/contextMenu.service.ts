@@ -134,7 +134,7 @@ export function setupContextMenu() {
     extendedApi.receive('deleteSelection', (data: string) => {
         const parsedData: { selection: string } = JSON.parse(data);
         const selection = JSON.parse(parsedData.selection);
-        deleteSelection(selection);
+        deleteSelection(selection.pages);
     });
 
     api.receive('copySelection', (data: string) => {
@@ -149,7 +149,7 @@ export function setupContextMenu() {
         const { id } = parsedData;
 
         const copiedNode = findNode(id);
-        graphCopy([copiedNode]);
+        graphCopy({ pages: [copiedNode] });
     });
 
     extendedApi.receive('paste', (data: string) => {
@@ -158,28 +158,28 @@ export function setupContextMenu() {
 
         graphPaste(position);
     });
-    
+
     extendedApi.receive('swapChapterWithNext', (data: string) => {
         const { id } = JSON.parse(data);
-        
+
         swapChapterWithNext(id);
     });
-    
+
     extendedApi.receive('swapChapterWithPrevious', (data: string) => {
         const { id } = JSON.parse(data);
-        
+
         swapChapterWithPrevious(id);
     });
-    
+
     extendedApi.receive('swapNodeWithNext', (data: string) => {
         const { id } = JSON.parse(data);
-        
+
         swapNodeWithNext(id);
     });
-    
+
     extendedApi.receive('swapNodeWithPrevious', (data: string) => {
         const { id } = JSON.parse(data);
-        
+
         swapNodeWithPrevious(id);
     });
 

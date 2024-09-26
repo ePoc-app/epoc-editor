@@ -11,6 +11,8 @@ import {
     EdgeUpdateEvent,
     EdgeMouseEvent,
     EdgeMarker,
+    GraphNode,
+    GraphEdge,
 } from '@vue-flow/core';
 
 import { markRaw, onMounted } from 'vue';
@@ -29,7 +31,7 @@ import {
     getSelectedNodes, handleChapterDrag
 } from '@/src/shared/services/graph';
 import { saveState, saveGivenState, getCurrentState } from '@/src/shared/services/undoRedo.service';
-import { closeAllPanels, closeFormPanel, graphService } from '@/src/shared/services';
+import { closeAllPanels, closeFormPanel, graphService, getSelectedEdges } from '@/src/shared/services';
 
 const { vueFlowRef, project, updateEdge, edges, findNode, setTransform } = useVueFlow({ id: 'main' });
 
@@ -184,8 +186,9 @@ function onContextMenu(event: MouseEvent) {
 }
 
 function onSelectionContextMenu() {
-    const selectedNodes = JSON.stringify(getSelectedNodes());
-    graphService.openContextMenu('selection', { selection: selectedNodes });
+    const selectedNodes = getSelectedNodes();
+    const selectedEdges = getSelectedEdges();
+    graphService.openContextMenu('selection', { selection: JSON.stringify({ pages: selectedNodes, edges: selectedEdges }) });
 }
 
 function onPaneReady() {

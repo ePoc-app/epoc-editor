@@ -1,10 +1,10 @@
-import { useVueFlow, Node, MarkerType, Edge } from '@vue-flow/core';
+import { useVueFlow, Node, MarkerType, Edge, GraphEdge } from '@vue-flow/core';
 import { deleteContent, deleteNode, getContentByContentId } from './';
 import { useEditorStore } from '@/src/shared/stores';
 import { closeFormPanel, exitSelectNodeMode, generateId } from '../graph.service';
 import { ElementType, NodeElement } from '../../interfaces';
 
-const { nodes, findNode, addEdges } = useVueFlow({ id: 'main' });
+const { nodes, findNode, addEdges, edges } = useVueFlow({ id: 'main' });
 const editorStore = useEditorStore();
 
 export function deleteSelection(selection: Node[]) {
@@ -32,6 +32,10 @@ export function createEdge(sourceId: string, targetId: string): void {
     };
 
     addEdges([newEdge]);
+}
+
+export function getSelectedEdges(): GraphEdge[] {
+    return edges.value.filter((edge) => edge.selected);
 }
 
 export function getContentIdFromId(id: string): string {
