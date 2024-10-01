@@ -49,6 +49,10 @@ function deleteFile() {
     emit('saveGivenState', savedState);
 }
 
+function editFile() {
+    graphService.editFile(url.value);
+}
+
 function openFile() {
     fileInput.value.click();
 }
@@ -77,8 +81,12 @@ let savedState = '';
         <div class="input-file">
             <input ref="fileInput" class="file" type="file" :accept="accept" @change="changeImage" />
             <input class="input" type="text" readonly :value="url" @click="openFile" />
-            <i class="icon-supprimer" @click="deleteFile"></i>
+            <div class="icons">
+                <i class="icon-supprimer" @click="deleteFile"></i>
+                <i class="icon-folder" @click="editFile"></i>
+            </div>
         </div>
+
         <div v-if="url" class="preview">
             <img v-if="filetype === 'img'" :src="'assets://' + url" :alt="label" />
             <video v-if="filetype === 'video'" :src="'assets://' + url" controls></video>
@@ -97,6 +105,26 @@ let savedState = '';
 div {
     display: flex;
 }
+
+.icons {
+    display: flex;
+    gap: .7rem;
+    align-items: center;
+    position: absolute;
+
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0.5rem;
+
+    .icon-supprimer:hover {
+        color: var(--editor-red);
+    }
+
+    .icon-folder:hover {
+        color: var(--editor-blue);
+    }
+}
+
 .preview {
     img,
     video,
@@ -139,14 +167,14 @@ button {
     }
 }
 
-.icon-supprimer {
-    position: absolute;
-    right: 0.5rem;
-    top: 50%;
-    transform: translateY(-50%);
-
-    &:hover {
-        color: var(--editor-red);
-    }
-}
+//.icon-supprimer {
+//    position: absolute;
+//    right: 0.5rem;
+//    top: 50%;
+//    transform: translateY(-50%);
+//
+//    &:hover {
+//        color: var(--editor-red);
+//    }
+//}
 </style>

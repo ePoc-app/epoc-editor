@@ -153,6 +153,10 @@ const setup = function () {
         editorStore.platform = platform;
     });
     
+    api.receive( 'writeContentJSON', () => {
+        graphService.writeProjectData();
+    });
+    
     // Adding the version to the editorStore
     api.send('getEditorVersion');
     api.send('getPlatform');

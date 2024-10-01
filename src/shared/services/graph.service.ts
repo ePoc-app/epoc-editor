@@ -54,6 +54,10 @@ function importFile(filepath: string, targetDirectory?: string): Promise<string>
     });
 }
 
+async function editFile(filepath: string): Promise<void> {
+    api.send('editFile', { filepath });
+}
+
 let timerId = null;
 
 const debounceFunction = function (delay: number, cb: () => void) {
@@ -307,6 +311,7 @@ function openContextMenu(context: string, data: contextDataProps): void {
 
 export const graphService = {
     importFile,
+    editFile,
     writeProjectData,
     getPreviousNode,
     getNextNode,
