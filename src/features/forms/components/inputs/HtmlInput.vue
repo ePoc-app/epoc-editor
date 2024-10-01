@@ -52,7 +52,7 @@ const textToolbar = 'bold italic link bullist numlist';
 const template = `
     <details style="border: 1px solid lightgray; border-radius: 4px; padding: .5em .5em 0 .5em">
         <summary style="font-weight: bold; border-bottom: 1px solid lightgray; padding 1em;">Titre</summary>
-        <div>content</div>    
+        <div>content</div>
     </details>
     <p></p>
 `;
@@ -129,6 +129,9 @@ const standardOptions = {
     link_default_target: '_blank',
     link_target_list: false,
     paste_data_images: true,
+    paste_preprocess: (editor, args) => {
+        args.content = args.content.replace(/font-family:[^;"]+;?/gi, '');
+    }
 };
 
 const textOptions = {
