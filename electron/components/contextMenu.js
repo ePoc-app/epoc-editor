@@ -164,6 +164,10 @@ function getPagesFromContext(onClick, data, event, context) {
             label: 'Ajouter une activité Liste Déroulante',
             click: () => onClick(event, { type: 'dropdown-list', ...data }),
         },
+        {
+            label: 'Ajouter une activité personnalisée',
+            click: () => onClick(event, { type: 'custom', ...data })
+        }
     ];
 
     const menu = [...contents, { type: 'separator' }, ...questions];
@@ -204,6 +208,10 @@ function getContentFromContext(onClick, data, context) {
             label: 'Ajouter une question Liste Déroulante',
             click: () => onClick('addContent', { type: 'dropdown-list', ...data }),
         },
+        {
+            label: 'Ajouter une question personnalisée',
+            click: () => onClick('addContent', { type: 'custom', ...data })
+        }
     ];
 
     const contents = [

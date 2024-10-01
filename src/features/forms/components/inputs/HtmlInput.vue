@@ -143,7 +143,6 @@ const textOptions = {
     paste_data_images: false,
 };
 
-
 </script>
 
 <template>
