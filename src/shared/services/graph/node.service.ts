@@ -10,7 +10,7 @@ import { generateContentId, generateId, graphService } from '../graph.service';
 import { deleteElement, deleteSelection, createEdge } from '.';
 import { updateNextChapters } from '@/src/shared/services/graph/chapter.service';
 
-const { nodes, edges, addNodes, findNode, applyEdgeChanges, applyNodeChanges } = useVueFlow({ id: 'main' });
+const { nodes, edges, addNodes, findNode, applyNodeChanges, removeEdges } = useVueFlow('main');
 
 const editorStore = useEditorStore();
 
@@ -135,7 +135,7 @@ export function insertAfter(pageId: string, action: SideAction): void {
     if (!sourceEdge) return;
 
     let targetNode = findNode(sourceEdge.target);
-    applyEdgeChanges([{ id: sourceEdge.id, type: 'remove' }]);
+    removeEdges(sourceEdge);
     targetNode.position.x += 200;
     createEdge(newPageNodeId, targetNode.id);
 
@@ -163,7 +163,7 @@ export function insertBefore(pageId: string, action: SideAction): void {
 
     if (targetEdge) {
         const sourceNode = findNode(targetEdge.source);
-        applyEdgeChanges([{ id: targetEdge.id, type: 'remove' }]);
+        removeEdges(targetEdge);
         createEdge(sourceNode.id, newPageNodeId);
     }
 
@@ -231,12 +231,14 @@ export function createPageFromContent(position: { x: number; y: number }, elemen
 
 export function deleteSelectedNodes(): void {
     const isChild = Boolean(editorStore.openedNodeId);
-
     const selectedNodes = getSelectedNodes();
 
     if (isChild) {
         deleteElement(editorStore.openedElementId, editorStore.openedNodeId);
     } else {
+        for (const node of selectedNodes) {
+            removeEdges(getConnectedEdges([node], edges.value));
+        }
         deleteSelection(selectedNodes);
     }
 
@@ -253,7 +255,7 @@ export function deleteNode(nodeId: string): void {
             deleteConnectedConditions(element.contentId);
         }
     }
-    
+
     if (nodeToDelete.type === 'chapter') updateNextChapters(nodeToDelete.id);
 
     applyNodeChanges([{ id: nodeToDelete.id, type: 'remove' }]);
@@ -340,7 +342,7 @@ export function confirmDelete(): void {
         editorStore.openValidationModal();
     } else if (selectedEdges.length > 0) {
         for (const edge of selectedEdges) {
-            applyEdgeChanges([{ id: edge.id, type: 'remove' }]);
+            removeEdges(edge);
         }
     }
 }
@@ -377,9 +379,9 @@ export function unselectAllNodes(): void {
  */
 export function swapEdges(node1: Node, node2: Node, edges1: Edge[], edges2: Edge[]) {
     for (const edge of [...edges1, ...edges2]) {
-        applyEdgeChanges([{ id: edge.id, type: 'remove' }]);
+        removeEdges(edge);
     }
-    
+
     for (const edge of [...edges1, ...edges2]) {
         const source = edge.source === node1.id ? node2.id : edge.source === node2.id ? node1.id : edge.source;
         const target = edge.target === node1.id ? node2.id : edge.target === node2.id ? node1.id : edge.target;
@@ -394,16 +396,16 @@ export function swapEdges(node1: Node, node2: Node, edges1: Edge[], edges2: Edge
 export function swapNodeWithNext(nodeId: string): void {
     const node = findNode(nodeId);
     const nextNode = graphService.getNextNode(node);
-    
+
     if (!nextNode) return;
 
     const tempPosition = node.position;
     node.position = nextNode.position;
     nextNode.position = tempPosition;
-    
+
     const nodeEdges = getConnectedEdges([node], edges.value);
     const nextNodeEdges = getConnectedEdges([nextNode], edges.value);
-    
+
     swapEdges(node, nextNode, nodeEdges, nextNodeEdges);
 }
 
@@ -415,15 +417,15 @@ export function swapNodeWithNext(nodeId: string): void {
 export function swapNodeWithPrevious(nodeId: string): void {
     const node = findNode(nodeId);
     const previousNode = graphService.getPreviousNode(node);
-    
+
     if(!previousNode || previousNode.type === 'chapter') return;
-    
+
     const tempPosition = node.position;
     node.position = previousNode.position;
     previousNode.position = tempPosition;
-    
+
     const nodeEdges = getConnectedEdges([node], edges.value);
     const previousNodeEdges = getConnectedEdges([previousNode], edges.value);
-    
+
     swapEdges(node, previousNode, nodeEdges, previousNodeEdges);
 }

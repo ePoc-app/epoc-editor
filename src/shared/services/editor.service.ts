@@ -8,7 +8,7 @@ import { createGraphFromImport } from '@/src/shared/services/import.service';
 import { useVueFlow } from '@vue-flow/core';
 import { applyBackwardCompatibility } from '@/src/shared/utils/backwardCompability';
 
-const { findNode } = useVueFlow({ id: 'main' });
+const { findNode } = useVueFlow('main');
 
 const toaster = createToaster({
     duration: 1000,
@@ -87,10 +87,10 @@ const setup = function () {
         editorStore.currentProject = ePocProject;
 
         graphStore.setFlow(parsedData.flow);
-        
+
         // TODO: get the version from the content.json or put the version in the project.json
         applyBackwardCompatibility('0.1.8-beta');
-        
+
         undoRedoStore.reset();
         editorStore.reset();
 
@@ -114,7 +114,7 @@ const setup = function () {
     api.receive('epocImportExtracted', (data: string) => {
         createGraphFromImport(JSON.parse(data));
     });
-    
+
     api.receive('importRequired', (data: string) => {
         editorStore.projectToImport = data;
     });
@@ -140,19 +140,19 @@ const setup = function () {
         toaster.error("😵 Une erreur s'est produite");
         editorStore.exporting = false;
     });
-    
+
     api.receive('editorVersion', (data: string) => {
         const { version } = JSON.parse(data);
-        
+
         editorStore.version = version;
     });
-    
+
     api.receive('platform', (data: string) => {
         const { platform } = JSON.parse(data);
-        
+
         editorStore.platform = platform;
     });
-    
+
     // Adding the version to the editorStore
     api.send('getEditorVersion');
     api.send('getPlatform');
@@ -182,7 +182,7 @@ function pickEpocProject(): void {
 function openEpocProject(project: ePocProject): void {
     editorStore.currentProject = project;
     editorStore.loading = true;
-    
+
     router.push('/landingpage').then(() => {
         api.send('openEpocProject', project.filepath);
     });

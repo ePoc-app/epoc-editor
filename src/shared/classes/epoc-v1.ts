@@ -27,11 +27,9 @@ export class EpocV1 implements Epoc {
     questions: Record<uid, Question>;
     badges: Record<uid, Badge>;
     certificateBadgeCount: number;
-    license: {
-        name: string;
-        url: string;
-        content: string;
-    };
+    chapterDuration: number;
+    prerequisites: string[];
+    license: { name: string; url: string; content: string };
 
     constructor(
         id: string,

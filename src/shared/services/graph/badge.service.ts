@@ -7,7 +7,7 @@ import { elementVerbs, verbs } from '@/src/shared/data';
 import { generateContentId, graphService } from '@/src/shared/services';
 import { Operators } from '@epoc/epoc-types/dist/v2';
 
-const { findNode } = useVueFlow({ id: 'main' });
+const { findNode } = useVueFlow('main');
 
 export function getVerbs(type: ElementType): Verbs {
     if (!type || !elementVerbs[type]) return;

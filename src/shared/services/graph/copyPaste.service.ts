@@ -5,7 +5,7 @@ import { generateId, generateContentId } from '../graph.service';
 import { NodeElement } from '@/src/shared/interfaces';
 import { createEdge, getSelectedEdges } from '@/src/shared/services';
 
-const { addNodes } = useVueFlow({ id: 'main' });
+const { addNodes } = useVueFlow('main');
 
 declare const api: ApiInterface;
 

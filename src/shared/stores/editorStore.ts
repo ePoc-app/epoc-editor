@@ -3,7 +3,7 @@ import { ePocProject, Form, NodeElement, PageModel, SideAction, Condition } from
 import { GraphNode, useVueFlow } from '@vue-flow/core';
 import { formsModel, questions, standardPages } from '@/src/shared/data';
 
-const { nodes, findNode, getTransform, setTransform } = useVueFlow({ id: 'main' });
+const { nodes, findNode, getTransform, setTransform } = useVueFlow('main');
 
 type uid = string;
 
@@ -64,7 +64,7 @@ interface EditorState {
     selectNodeMode: boolean;
     tempConditions: Condition[];
     editingConditions: boolean;
-    
+
     // Info
     version: string;
     platform: string;
@@ -113,7 +113,7 @@ export const useEditorStore = defineStore('editor', {
         selectNodeMode: false,
         tempConditions: [],
         editingConditions: false,
-        
+
         // Info
         version: '',
         platform: '',
@@ -132,7 +132,7 @@ export const useEditorStore = defineStore('editor', {
         openedFormType(): string | null {
             return this.formPanel.form?.type ?? null;
         },
-        
+
         sideMenuOpen(): boolean {
             return this.modelMenu || this.badgeMenu;
         }
@@ -257,7 +257,7 @@ export const useEditorStore = defineStore('editor', {
             this.tempConditions[index].verb = '';
             this.tempConditions[index].value = '';
         },
-        
+
         toggleSideMenu(type: SideMenu) {
             for(const key in sideMenus) {
                 this[sideMenus[key]] = (key === type) ? !this[sideMenus[key]] : false;

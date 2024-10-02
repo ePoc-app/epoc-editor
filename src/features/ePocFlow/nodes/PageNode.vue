@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Handle, Position, getConnectedEdges, useVueFlow, NodeProps, Emits } from '@vue-flow/core';
+import { Handle, Position, getConnectedEdges, useVueFlow, NodeProps } from '@vue-flow/core';
 import { computed, Ref, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { NodeElement } from '@/src/shared/interfaces';
@@ -12,9 +12,8 @@ import DraggableNode from './content/DraggableNode.vue';
 const editorStore = useEditorStore();
 
 const props = defineProps<Partial<NodeProps>>();
-defineEmits<Partial<Emits>>();
 
-const { findNode, edges, nodes } = useVueFlow({ id: 'main' });
+const { findNode, edges, nodes } = useVueFlow('main');
 
 const currentNode = computed(() => findNode(props.id));
 
@@ -104,7 +103,6 @@ const pageIndex = computed(() => {
                 :class="{ 'not-connected': !isTarget }"
                 type="target"
                 :position="Position.Left"
-                :connectable="false"
             />
             <div v-if="connectedBadges.length > 0" class="badge-notification badge-notification-left">
                 <img src="/img/badge/notification.svg" alt="notification" />

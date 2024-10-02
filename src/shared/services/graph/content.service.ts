@@ -6,7 +6,7 @@ import { closeFormPanel, generateContentId, generateId } from '../graph.service'
 import * as forms from '@/src/shared/data/forms';
 import { deleteConnectedConditions } from '@/src/shared/services';
 
-const { nodes, findNode } = useVueFlow({ id: 'main' });
+const { nodes, findNode } = useVueFlow('main');
 
 const editorStore = useEditorStore();
 

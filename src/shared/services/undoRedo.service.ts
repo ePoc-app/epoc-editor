@@ -4,7 +4,7 @@ import { ePocState } from '../interfaces';
 import { ApiInterface } from '../interfaces/api.interface';
 import { closeAllPanels } from '.';
 
-const { toObject } = useVueFlow({ id: 'main' });
+const { toObject } = useVueFlow('main');
 
 declare const api: ApiInterface;
 
@@ -12,12 +12,12 @@ let initialized = false;
 
 export function setupUndo() {
     if (initialized) return;
-    
+
     const undoRedoStore = useUndoRedoStore();
     api.receive('undo', () => {
         undoRedoStore.undo();
     });
-    
+
     api.receive('redo', () => {
         undoRedoStore.redo();
     });
@@ -26,10 +26,10 @@ export function setupUndo() {
 
 export function getCurrentState(saveForm?: boolean | object): string {
     const editorStore = useEditorStore();
-    
+
     // noinspection JSUnusedAssignment
     let form = null;
-    
+
     if (typeof saveForm === 'object') {
         form = saveForm;
     } else {
@@ -43,19 +43,19 @@ export function getCurrentState(saveForm?: boolean | object): string {
             }
             : null;
     }
-    
+
     const currentState: ePocState = {
         flow: toObject(),
         form
     };
-    
+
     return JSON.stringify(currentState);
 }
 
 export function saveState(saveForm?: boolean): void {
     const undoRedoStore = useUndoRedoStore();
     const currentState = getCurrentState(saveForm);
-    
+
     undoRedoStore.addState(currentState);
 }
 
@@ -67,20 +67,20 @@ export function saveGivenState(state: string): void {
 export function revertToState(state: string): string {
     const graphStore = useGraphStore();
     const editorStore = useEditorStore();
-    
+
     closeAllPanels();
-    
+
     const { flow, form } = JSON.parse(state);
-    
+
     const currentState = getCurrentState(form);
     graphStore.setFlow(flow);
-    
+
     if (form) {
         const { elementId, nodeId, formType, scrollPosY, badgeId } = form;
-        
+
         if (formType === 'badge') editorStore.openBadgeFormPanel(badgeId, 'custom', scrollPosY);
         else editorStore.openFormPanel(elementId, formType, { nodeId, scrollPosY });
     }
-    
+
     return currentState;
 }

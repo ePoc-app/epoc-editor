@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { Edge, FlowExportObject, MarkerType, Node, useVueFlow } from '@vue-flow/core';
 
-const { nodes, onConnect, addEdges, findNode, setNodes, setEdges, setTransform } = useVueFlow({ id: 'main' });
+const { nodes, onConnect, addEdges, findNode, setNodes, setEdges, setTransform } = useVueFlow('main');
 
 interface GraphState {
     elements: (Node | Edge)[];

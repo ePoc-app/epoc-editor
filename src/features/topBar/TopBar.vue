@@ -8,7 +8,7 @@ import TopActionsMenu from '@/src/features/topBar/TopActionsMenu.vue';
 const editorStore = useEditorStore();
 const undoRedoStore = useUndoRedoStore();
 
-const { zoomTo, fitView, onViewportChangeEnd } = useVueFlow({ id: 'main' });
+const { zoomTo, fitView, onViewportChangeEnd } = useVueFlow('main');
 
 editorStore.$subscribe(() => {
     savedSince.value = since(editorStore.currentProject.modified);

@@ -16,7 +16,7 @@ import { closeFormPanel, getConnectedBadges, graphService } from '@/src/shared/s
 
 import ContentButton from '@/src/components/ContentButton.vue';
 
-const { findNode } = useVueFlow({ id: 'main' });
+const { findNode } = useVueFlow('main');
 const editorStore = useEditorStore();
 
 const props = defineProps<{

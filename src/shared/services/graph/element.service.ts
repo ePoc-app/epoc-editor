@@ -4,7 +4,7 @@ import { useEditorStore } from '@/src/shared/stores';
 import { closeFormPanel, exitSelectNodeMode, generateId } from '../graph.service';
 import { ElementType, NodeElement } from '../../interfaces';
 
-const { nodes, findNode, addEdges, edges } = useVueFlow({ id: 'main' });
+const { nodes, findNode, addEdges, edges } = useVueFlow('main');
 const editorStore = useEditorStore();
 
 export function deleteSelection(selection: Node[]) {

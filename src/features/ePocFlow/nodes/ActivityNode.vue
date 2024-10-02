@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Handle, Position, getConnectedEdges, useVueFlow, NodeProps, Emits } from '@vue-flow/core';
+import { Handle, Position, getConnectedEdges, useVueFlow, NodeProps } from '@vue-flow/core';
 import { computed, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { getSelectedNodes } from '@/src/shared/services/graph';
@@ -10,9 +10,8 @@ import DraggableNode from '@/src/features/ePocFlow/nodes/content/DraggableNode.v
 const editorStore = useEditorStore();
 
 const props = defineProps<Partial<NodeProps>>();
-defineEmits<Partial<Emits>>();
 
-const { findNode, edges, nodes } = useVueFlow({ id: 'main' });
+const { findNode, edges, nodes } = useVueFlow('main');
 
 const currentNode = computed(() => findNode(props.id));
 
@@ -93,7 +92,6 @@ const activityIndex = computed(() => {
                 :class="{ 'not-connected': !isTarget }"
                 type="target"
                 :position="Position.Left"
-                :connectable="false"
             />
             <div v-if="connectedBadges.length > 0" class="badge-notification badge-notification-left">
                 <img src="/img/badge/notification.svg" alt="notification" />

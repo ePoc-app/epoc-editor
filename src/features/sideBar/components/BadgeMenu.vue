@@ -7,7 +7,7 @@ import { useEditorStore } from '@/src/shared/stores';
 import BadgeItem from '@/src/features/badge/components/BadgeItem.vue';
 import { addNewBadge, isBadgeValid, openBadge } from '@/src/shared/services';
 
-const { findNode } = useVueFlow({ id: 'main' });
+const { findNode } = useVueFlow('main');
 
 const editorStore = useEditorStore();
 

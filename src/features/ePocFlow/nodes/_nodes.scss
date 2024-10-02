@@ -15,13 +15,6 @@
 .vue-flow__handle {
   width: 12px;
   height: 12px;
-  top: calc(30px + 1rem + 1px);
-  &-left {
-    left: -6px;
-  }
-  &-right {
-    right: -6px;
-  }
 }
 
 .not-connected {

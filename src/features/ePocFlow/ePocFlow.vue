@@ -4,15 +4,12 @@ import {
     useVueFlow,
     VueFlow,
     getConnectedEdges,
-    applyEdgeChanges,
     NodeDragEvent,
     Connection,
     NodeChange,
     EdgeUpdateEvent,
     EdgeMouseEvent,
     EdgeMarker,
-    GraphNode,
-    GraphEdge,
 } from '@vue-flow/core';
 
 import { markRaw, onMounted } from 'vue';
@@ -33,7 +30,7 @@ import {
 import { saveState, saveGivenState, getCurrentState } from '@/src/shared/services/undoRedo.service';
 import { closeAllPanels, closeFormPanel, graphService, getSelectedEdges } from '@/src/shared/services';
 
-const { vueFlowRef, project, updateEdge, edges, findNode, setTransform } = useVueFlow({ id: 'main' });
+const { vueFlowRef, project, updateEdge, edges, findNode, setTransform, removeEdges } = useVueFlow('main');
 
 const editorStore = useEditorStore();
 const graphStore = useGraphStore();
@@ -91,6 +88,7 @@ function selectionStart() {
 }
 
 function update(event: EdgeUpdateEvent) {
+    console.log('update', event);
     updateEdge(event.edge, {
         source: event.connection.source,
         target: event.connection.target,
@@ -100,6 +98,8 @@ function update(event: EdgeUpdateEvent) {
 }
 
 function nodeChange(event: NodeChange[]) {
+    if (!event[0]) return;
+
     const { type } = event[0];
 
     if (type === 'remove') closeFormPanel();
@@ -115,7 +115,7 @@ function connect(event: Connection) {
 
     if (event.source === event.target) {
         const currentEdge = edges.value.find((edge) => edge.target === targetNode.id && edge.source === sourceNode.id);
-        applyEdgeChanges([{ id: currentEdge.id, type: 'remove' }], edges.value);
+        removeEdges(currentEdge);
         return false;
     }
 
@@ -124,7 +124,7 @@ function connect(event: Connection) {
     );
 
     if (otherEdge) {
-        applyEdgeChanges([{ id: otherEdge.id, type: 'remove' }], edges.value);
+        removeEdges(otherEdge.id);
     }
 
     saveGivenState(savedState);

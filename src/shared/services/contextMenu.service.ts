@@ -20,7 +20,7 @@ import {
 import { useVueFlow } from '@vue-flow/core';
 import { saveState } from './undoRedo.service';
 
-const { findNode } = useVueFlow({ id: 'main' });
+const { findNode } = useVueFlow('main');
 
 declare const api: ApiInterface;
 

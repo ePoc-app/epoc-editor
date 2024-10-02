@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useEditorStore } from '@/src/shared/stores';
-import { Handle, useVueFlow, getConnectedEdges, NodeProps, Emits } from '@vue-flow/core';
+import { Handle, useVueFlow, getConnectedEdges, NodeProps } from '@vue-flow/core';
 import { Position } from '@vue-flow/core';
 import { computed } from 'vue';
 import ContentButton from '@/src/components/ContentButton.vue';
@@ -9,9 +9,8 @@ import { closeFormPanel, exitSelectNodeMode, getConnectedBadges, graphService } 
 const editorStore = useEditorStore();
 
 const props = defineProps<Partial<NodeProps>>();
-defineEmits<Partial<Emits>>();
 
-const { findNode, nodes, edges } = useVueFlow({ id: 'main' });
+const { findNode, nodes, edges } = useVueFlow('main');
 
 const currentNode = findNode(props.id);
 
@@ -24,7 +23,7 @@ const subtitle = computed(() => {
 });
 
 const isSource = computed(() =>
-    getConnectedEdges([currentNode], edges.value).some((edge) => edge.sourceNode.id === props.id),
+    getConnectedEdges([currentNode], edges.value).some((edge) => edge.source === props.id),
 );
 
 const classList = {
@@ -98,18 +97,3 @@ const connectedBadges = computed(() => getConnectedBadges(currentNode.data.conte
         />
     </div>
 </template>
-
-<style scoped lang="scss">
-.vue-flow__handle {
-    width: 12px;
-    height: 12px;
-    top: calc(30px + 1rem + 1px);
-    &-right {
-        right: -6px;
-    }
-}
-
-.not-connected {
-    background-color: var(--editor-red);
-}
-</style>

@@ -28,7 +28,7 @@ import { CustomQuestion } from '@epoc/epoc-types/dist/v2';
 
 declare const api: ApiInterface;
 
-const { nodes, edges, findNode, toObject } = useVueFlow({ id: 'main' });
+const { nodes, edges, findNode, toObject } = useVueFlow('main');
 
 function writeProjectData(): void {
     debounceFunction(500, () => {
@@ -63,7 +63,7 @@ const debounceFunction = function (delay: number, cb: () => void) {
 
 function createContentJSON(): EpocV1 {
     const editorStore = useEditorStore();
-  
+
     const ePocNode = nodes.value.find((node) => {
         return node.type === 'epoc';
     });
@@ -104,6 +104,7 @@ function createContentJSON(): EpocV1 {
             title: chapterValues.title || '',
             objectives: chapterValues.objectives || [],
             contents: [],
+            duration: chapterValues.duration || 0,
         });
         let pageNode = getNextNode(chapter);
         while (pageNode) {
@@ -248,15 +249,15 @@ function newQuestion(epoc: EpocV1, questionNode: any): string {
         } else if (questionNode.formType === 'custom'){
             //? responses need to contain values but we don't need them for custom questions
             responses = ['sample response'];
-            
+
             correctResponse = questionNode.formValues.correctResponse;
             const path = questionNode.formValues.template.split('/');
             template = path[path.length - 1];
-            
+
             type = 'custom';
         }
     }
-    
+
     const question: Question = {
         type,
         label: questionNode.formValues?.label || '',
@@ -266,7 +267,7 @@ function newQuestion(epoc: EpocV1, questionNode: any): string {
         correctResponse,
         explanation: questionNode.formValues?.explanation || '',
     };
-    
+
     if(questionNode.formType === 'custom') {
         (question as CustomQuestion).template = template;
         (question as CustomQuestion).data = {};
@@ -274,7 +275,7 @@ function newQuestion(epoc: EpocV1, questionNode: any): string {
             (question as CustomQuestion).data[value.key] = value.value;
         }
     }
-    
+
     return epoc.addQuestion(questionNode.contentId, question);
 }
 
@@ -439,7 +440,7 @@ export function exportBadgesToPage(badges: Record<string, Badge>): Record<string
 
 export function closeAllPanels() {
     const editorStore = useEditorStore();
-    
+
     closeFormPanel();
     editorStore.dismissModals();
 }
