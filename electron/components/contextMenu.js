@@ -102,6 +102,10 @@ function getTemplateFromContext(callback, data) {
             {
                 label: 'Supprimer',
                 click: () => onClick('deleteNode', { id: data.id }),
+            },
+            {
+                label: 'Copier le chapitre',
+                click: () => onClick('copyChapter', { id: data.id })
             }
         );
     } else if (data.context === 'epoc') {

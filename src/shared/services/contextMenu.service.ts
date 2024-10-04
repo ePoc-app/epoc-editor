@@ -8,6 +8,7 @@ import {
     deleteNode,
     deleteSelection,
     duplicatePage,
+    graphChapterCopy,
     graphCopy,
     graphPaste,
     insertAfter,
@@ -182,6 +183,12 @@ export function setupContextMenu() {
 
         swapNodeWithPrevious(id);
     });
+
+    extendedApi.receive('copyChapter', (data: string) => {
+        const { id } = JSON.parse(data);
+
+        graphChapterCopy(id)
+    })
 
     api.receive('contextMenuClosed', () => {
         unselectAllContents();

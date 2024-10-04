@@ -120,6 +120,11 @@ export function createLinkedPage(
     return newPage;
 }
 
+export function addLinkedPage(sourceNode: Node, node: Node) {
+    addNodes(node);
+    createEdge(sourceNode.id, node.id);
+}
+
 export function insertAfter(pageId: string, action: SideAction): void {
     const pageNode = findNode(pageId);
     const newPosition = {

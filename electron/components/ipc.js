@@ -21,6 +21,7 @@ const { app } = require('electron');
 
 const copyData = {
     pages: null,
+    chapter: null,
     sourceId: null,
     edges: null
 };
@@ -139,9 +140,10 @@ const setupIpcListener = function (targetWindow) {
 
     ipcMain.on('graphCopy', ipcGuard(async (event, data) => {
         const parsedData = JSON.parse(data);
-        const { pages, edges } = parsedData;
+        const { pages, edges, chapter } = parsedData;
 
         copyData.pages = pages;
+        copyData.chapter = chapter || null;
         copyData.edges = edges;
         copyData.sourceId = targetWindow.id;
     }));
@@ -160,9 +162,10 @@ const setupIpcListener = function (targetWindow) {
             }
         }
 
-        sendToFrontend(event.sender, 'graphPasted', { selectedPages: copyData.pages, selectedEdges: copyData.edges, position });
+        sendToFrontend(event.sender, 'graphPasted', { selectedPages: copyData.pages, selectedEdges: copyData.edges, position, chapter: copyData.chapter });
 
         copyData.pages = null;
+        copyData.chapter = null;
         copyData.edges = null;
         copyData.sourceId = null;
     }));

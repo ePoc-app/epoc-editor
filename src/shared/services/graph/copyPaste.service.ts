@@ -1,19 +1,20 @@
 import { ApiInterface } from '@/src/shared/interfaces/api.interface';
 import { getSelectedNodes, alignNode } from '.';
 import { useVueFlow, Node, GraphNode, GraphEdge, addEdge } from '@vue-flow/core';
-import { generateId, generateContentId } from '../graph.service';
+import { generateId, generateContentId, graphService } from '../graph.service';
 import { NodeElement } from '@/src/shared/interfaces';
-import { createEdge, getSelectedEdges } from '@/src/shared/services';
+import { createEdge, getSelectedEdges, addChapter, createLinkedPage, addLinkedPage } from '@/src/shared/services';
 
-const { addNodes } = useVueFlow('main');
+const { addNodes, nodes, findNode } = useVueFlow('main');
 
 declare const api: ApiInterface;
 
 function setupCopyPaste(): void {
     api.receive('graphPasted', (data: string) => {
         const parsedData = JSON.parse(data);
-        const { selectedPages, selectedEdges, position } = parsedData;
-        handleGraphPaste(selectedPages, selectedEdges, position);
+        const { selectedPages, selectedEdges, position, chapter } = parsedData;
+        if (chapter) handleGraphChapterPaste(chapter, selectedPages);
+        else handleGraphPaste(selectedPages, selectedEdges, position);
     });
 }
 
@@ -107,5 +108,59 @@ function handleGraphPaste(selectedPages: GraphNode[], selectedEdges: GraphEdge[]
 
     for (const page of newPages) {
         alignNode(page.id);
+    }
+}
+
+export function graphChapterCopy(id: string) {
+    const chapter = findNode(id);
+    const pages = [];
+
+    let nextNode = graphService.getNextNode(chapter);
+    while (nextNode) {
+        pages.push(nextNode);
+        nextNode = graphService.getNextNode(nextNode);
+    }
+
+    const data = JSON.stringify({ chapter, pages });
+
+    api.send('graphCopy', data);
+}
+
+export function handleGraphChapterPaste(chapter: GraphNode, pages: GraphNode[]) {
+    const newChapter = addChapter(String(nodes.value.length + 1), {
+        title: chapter.data.formValues.title,
+        contents: [],
+        duration: chapter.data.formValues.duration,
+        objectives: chapter.data.formValues.objectives,
+    });
+
+    let previousPage = newChapter;
+    for (const page of pages) {
+        const pageId = generateId();
+
+        const elements = page.data.elements.map((element: NodeElement) => {
+            const newElement = JSON.parse(JSON.stringify(element));
+            newElement.id = generateId();
+            newElement.parentId = pageId;
+            newElement.contentId = generateContentId();
+            return newElement;
+        });
+
+        const newPage: Node = {
+            id: pageId,
+            type: page.type,
+            data: {
+                type: page.data.type,
+                elements,
+                contentId: generateContentId(),
+                formType: page.data.formType,
+                formValues: JSON.parse(JSON.stringify(page.data.formValues)),
+            },
+            position: { x: previousPage.position.x + 150, y: previousPage.position.y },
+            deletable: true,
+        };
+
+        addLinkedPage(previousPage, newPage);
+        previousPage = newPage;
     }
 }
