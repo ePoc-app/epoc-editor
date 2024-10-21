@@ -90,6 +90,7 @@ function createContentJSON(): EpocV1 {
         ePocValues.authors || {},
         plugins,
         ePocValues.chapterParameter,
+        ePocValues.chapterDuration,
         new Date().toISOString(),
         {
             name: ePocValues.licenceName || '',

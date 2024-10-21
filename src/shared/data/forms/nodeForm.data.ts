@@ -112,6 +112,12 @@ export const chapterForm: Form = {
                     value: '',
                     placeholder: 'Saisissez...',
                 },
+                {
+                    id: 'duration',
+                    type: 'score',
+                    label: 'Durée (en minutes)',
+                    value: 0,
+                }
             ],
         },
         {
@@ -281,6 +287,12 @@ export const epocForm: Form = {
                     value: '',
                     placeholder: 'Saisissez...',
                 },
+                {
+                    id: 'chapterDuration',
+                    type: 'score',
+                    label: 'Durée des chapitres (en minutes)',
+                    value: 0,
+                }
             ],
         },
         {

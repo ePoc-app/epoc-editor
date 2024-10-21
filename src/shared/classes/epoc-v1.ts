@@ -46,6 +46,7 @@ export class EpocV1 implements Epoc {
         authors: Author[],
         plugins: string[],
         chapterParameter: string,
+        chapterDuration: number,
         lastModif: string,
         license: { name: string; url: string; content: string },
     ) {
@@ -66,6 +67,7 @@ export class EpocV1 implements Epoc {
         this.parameters = {
             chapterParameter,
         };
+        this.chapterDuration = chapterDuration;
         this.chapters = {};
         this.contents = {};
         this.badges = {};

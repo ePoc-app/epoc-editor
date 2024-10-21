@@ -157,7 +157,9 @@ const setup = function () {
     api.receive('settings', (data: string) => {
         const { settings } = JSON.parse(data);
         const settingsStore = useSettingsStore();
-        settingsStore.settings = settings;
+        settingsStore.settings = {
+            spellcheck: settings?.spellcheck === undefined ? true : settings.spellcheck,
+        }
     })
 
     // Adding the version to the editorStore
