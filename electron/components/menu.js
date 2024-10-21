@@ -15,12 +15,6 @@ module.exports.setupMenu = function () {
             submenu: [
                 { label: 'À propos', role: 'about' },
                 {
-                    label: 'Nouvelle fenêtre',
-                    click: function () {
-                        ipcMain.emit('newWindow');
-                    },
-                },
-                {
                     label: 'Quitter',
                     accelerator: 'CmdOrCtrl+Q',
                     click: function () {
@@ -39,6 +33,13 @@ module.exports.setupMenu = function () {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectNew');
                     },
                 },
+                {
+                    label: 'Nouvelle fenêtre',
+                    click: function () {
+                        ipcMain.emit('newWindow');
+                    },
+                },
+                { type: 'separator' },
                 {
                     label: 'Ouvrir',
                     accelerator: 'CmdOrCtrl+O',
@@ -95,6 +96,7 @@ module.exports.setupMenu = function () {
                 //         // }
                 //     ]
                 // },
+                { type: 'separator' },
                 {
                     id: 'save',
                     label: 'Sauvegarder',
