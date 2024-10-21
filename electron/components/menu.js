@@ -157,20 +157,6 @@ module.exports.setupMenu = function () {
                 { label: 'Copier', accelerator: 'CmdOrCtrl+C', role: 'copy' },
                 { label: 'Coller', accelerator: 'CmdOrCtrl+V', role: 'paste' },
                 { label: 'Tout sélectionner', accelerator: 'CmdOrCtrl+A', role: 'selectAll' },
-                { type: 'separator' },
-                {
-                    label: "Vérifier l'orthographe lors de la saisie",
-                    type: 'checkbox',
-                    checked: electronStore.get('spellcheck'),
-                    click: function () {
-                        electronStore.set('spellcheck', !electronStore.get('spellcheck'));
-
-                        const webContents = BrowserWindow.getFocusedWindow().webContents;
-
-                        webContents.session.setSpellCheckerEnabled(electronStore.get('spellcheck'));
-                        webContents.reload();
-                    },
-                },
             ],
         },
         {

@@ -16,6 +16,8 @@ const {
 } = require('./file');
 const { Menu } = require('electron');
 const contextMenu = require('./contextMenu');
+const Store = require('electron-store');
+const electronStore = new Store();
 
 const { app } = require('electron');
 
@@ -187,6 +189,17 @@ const setupIpcListener = function (targetWindow) {
     ipcMain.on('getPlatform', ipcGuard(async(event) => {
         sendToFrontend(event.sender, 'platform', { platform: process.platform });
     }));
+
+    ipcMain.on('getSettings', ipcGuard(async(event) => {
+        sendToFrontend(event.sender, 'settings', { settings: electronStore.get('settings') });
+    }));
+
+    ipcMain.on('setSettings', ipcGuard(async(event, data) => {
+        electronStore.set('settings', data)
+
+        targetWindow.webContents.session.setSpellCheckerEnabled(electronStore.get('settings.spellcheck'));
+        targetWindow.webContents.reload();
+    }))
 };
 
 const sendToFrontend = function (webContents, channel, data) {

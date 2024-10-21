@@ -1,12 +1,13 @@
 import { ApiInterface } from '@/src/shared/interfaces/api.interface';
 import { router } from '@/src/router';
 import { useEditorStore, useGraphStore, useUndoRedoStore } from '@/src/shared/stores';
-import { ePocProject } from '@/src/shared/interfaces';
+import { ePocProject, Settings } from '@/src/shared/interfaces';
 import { createToaster } from '@meforma/vue-toaster';
 import { closeAllPanels, graphService } from '.';
 import { createGraphFromImport } from '@/src/shared/services/import.service';
 import { useVueFlow } from '@vue-flow/core';
 import { applyBackwardCompatibility } from '@/src/shared/utils/backwardCompability';
+import { useSettingsStore } from '@/src/shared/stores';
 
 const { findNode } = useVueFlow('main');
 
@@ -153,6 +154,12 @@ const setup = function () {
         editorStore.platform = platform;
     });
 
+    api.receive('settings', (data: string) => {
+        const { settings } = JSON.parse(data);
+        const settingsStore = useSettingsStore();
+        settingsStore.settings = settings;
+    })
+
     // Adding the version to the editorStore
     api.send('getEditorVersion');
     api.send('getPlatform');
@@ -242,6 +249,15 @@ function exportProject(): void {
     api.send('exportProject', data);
 }
 
+function fetchSettings() {
+    api.send('getSettings');
+
+}
+
+function setSettings(settings: Settings) {
+    api.send('setSettings', settings);
+}
+
 export const editorService = {
     setup,
     newEpocProject,
@@ -251,4 +267,6 @@ export const editorService = {
     runPreview,
     runPreviewAtPage,
     exportProject,
+    fetchSettings,
+    setSettings
 };

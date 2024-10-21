@@ -5,6 +5,7 @@ import ContentButton from '@/src/components/ContentButton.vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { moveGuard } from '@/src/shared/utils/draggable';
 import env from '@/src/shared/utils/env';
+import SettingsModal from '@/src/features/settings/SettingsModal.vue';
 
 const editorStore = useEditorStore();
 
@@ -195,6 +196,7 @@ function showBadgeMenu() {
                 :class-list="classList(badgeContent)"
                 @click="showBadgeMenu"
             />
+            <SettingsModal />
         </div>
     </div>
 </template>
