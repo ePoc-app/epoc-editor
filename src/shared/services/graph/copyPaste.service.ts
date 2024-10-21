@@ -1,11 +1,11 @@
 import { ApiInterface } from '@/src/shared/interfaces/api.interface';
 import { getSelectedNodes, alignNode } from '.';
-import { useVueFlow, Node, GraphNode, GraphEdge, addEdge } from '@vue-flow/core';
+import { useVueFlow, Node, GraphNode, GraphEdge } from '@vue-flow/core';
 import { generateId, generateContentId, graphService } from '../graph.service';
 import { NodeElement } from '@/src/shared/interfaces';
-import { createEdge, getSelectedEdges, addChapter, createLinkedPage, addLinkedPage } from '@/src/shared/services';
+import { createEdge, getSelectedEdges, addChapter, addLinkedPage } from '@/src/shared/services';
 
-const { addNodes, nodes, findNode } = useVueFlow('main');
+const { addNodes, findNode } = useVueFlow('main');
 
 declare const api: ApiInterface;
 
@@ -127,7 +127,7 @@ export function graphChapterCopy(id: string) {
 }
 
 export function handleGraphChapterPaste(chapter: GraphNode, pages: GraphNode[]) {
-    const newChapter = addChapter(String(nodes.value.length + 1), {
+    const newChapter = addChapter(generateId(), {
         title: chapter.data.formValues.title,
         contents: [],
         duration: chapter.data.formValues.duration,

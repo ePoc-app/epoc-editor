@@ -1,6 +1,6 @@
 import { Node, useVueFlow } from '@vue-flow/core';
 import { Chapter } from '@epoc/epoc-types/src/v1';
-import { generateContentId, graphService } from '@/src/shared/services';
+import { generateContentId, generateId, graphService } from '@/src/shared/services';
 const { nodes, findNode, addNodes } = useVueFlow('main');
 
 /**
@@ -30,7 +30,7 @@ export function addChapter(chapterId?: string, chapter?: Chapter, offsetY?: numb
     offsetY = offsetY ? offsetY : 0;
     const newYPos = chapters.length > 0 ? chapters[chapters.length - 1].position.y + 200 + offsetY : 200 + offsetY;
     const newChapter: Node = {
-        id: (nodes.value.length + 1).toString(),
+        id: generateId(),
         type: 'chapter',
         position: { x: 0, y: newYPos },
         data,
