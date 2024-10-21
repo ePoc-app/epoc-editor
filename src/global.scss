@@ -397,13 +397,13 @@ textarea {
 
 .node {
     .ghost {
-        * {
-            opacity: 0;
-        }
-
         opacity: 0.8;
         border-radius: 12px;
         background-color: var(--node-ghost);
+
+        * {
+            opacity: 0;
+        }
     }
 }
 
