@@ -1,10 +1,13 @@
 import { useVueFlow } from '@vue-flow/core';
 
-const { nodes } = useVueFlow('main');
+const { nodes, edges } = useVueFlow('main');
 
 const backwardCompatibilityMap = {
     '0.1.9-beta': () => {
         addChapterIndex();
+    },
+    '0.1.10-beta': () => {
+        redrawEdges();
     }
 };
 
@@ -16,10 +19,40 @@ export function applyBackwardCompatibility(version: string) {
     if(!version) version = '0.0.0-beta';
 
     for (const [versionKey, backwardCompatabilityFunction] of Object.entries(backwardCompatibilityMap)) {
-        if (version < versionKey) {
+        if (compareVersions(version, versionKey) < 0) {
             backwardCompatabilityFunction();
         }
     }
+}
+function compareVersions(version1: string, version2: string): number {
+    const v1Parts = version1.split('-')[0].split('.');
+    const v2Parts = version2.split('-')[0].split('.');
+
+    const maxLength = Math.max(v1Parts.length, v2Parts.length);
+
+    for (let i = 0; i < maxLength; i++) {
+        const v1Part = parseInt(v1Parts[i] || '0', 10);
+        const v2Part = parseInt(v2Parts[i] || '0', 10);
+
+        if (v1Part > v2Part) {
+            return 1;
+        } else if (v1Part < v2Part) {
+            return -1;
+        }
+    }
+
+    const v1PreRelease = version1.split('-')[1] || '';
+    const v2PreRelease = version2.split('-')[1] || '';
+
+    if (v1PreRelease && !v2PreRelease) {
+        return -1;
+    } else if (!v1PreRelease && v2PreRelease) {
+        return 1;
+    } else if (v1PreRelease && v2PreRelease) {
+        return v1PreRelease.localeCompare(v2PreRelease);
+    }
+
+    return 0;
 }
 
 /**
@@ -35,4 +68,11 @@ export function addChapterIndex() {
     chapters.forEach((chapter, index) => {
         chapter.data.index = index + 1;
     });
+}
+
+export function redrawEdges() {
+    for (const edge of edges.value) {
+        edge.targetHandle = undefined;
+        edge.sourceHandle = undefined;
+    }
 }
