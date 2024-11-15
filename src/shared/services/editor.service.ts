@@ -89,14 +89,14 @@ const setup = function () {
 
         graphStore.setFlow(parsedData.flow);
 
-        // TODO: get the version from the content.json or put the version in the project.json
-        applyBackwardCompatibility('0.1.8-beta');
-
         undoRedoStore.reset();
         editorStore.reset();
 
         router.push('/editor').then(() => {
             editorStore.loading = false;
+
+            // TODO: get the version from the content.json or put the version in the project.json
+            applyBackwardCompatibility('0.1.8-beta');
         });
     });
 
