@@ -99,7 +99,8 @@ function createContentJSON(): EpocV1 {
         },
     );
 
-    chapterNodes.forEach((chapter) => {
+    const orderedChapters = chapterNodes.sort((a, b) => a.position.y - b.position.y);
+    orderedChapters.forEach((chapter) => {
         const chapterValues = chapter.data.formValues;
         epoc.addChapter(chapter.data.contentId, {
             title: chapterValues.title || '',

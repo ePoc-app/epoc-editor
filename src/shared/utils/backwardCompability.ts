@@ -1,4 +1,5 @@
 import { useVueFlow } from '@vue-flow/core';
+import { generateId } from '@/src/shared/services';
 
 const { nodes, edges } = useVueFlow('main');
 
@@ -8,6 +9,7 @@ const backwardCompatibilityMap = {
     },
     '0.1.10-beta': () => {
         redrawEdges();
+        fixChapterId();
     }
 };
 
@@ -75,4 +77,21 @@ export function redrawEdges() {
         edge.targetHandle = undefined;
         edge.sourceHandle = undefined;
     }
+}
+
+export function fixChapterId() {
+    const chapters = nodes.value.filter((node) => node.type === 'chapter');
+
+    chapters.forEach((chapter) => {
+        const oldId = chapter.id;
+        chapter.id = generateId();
+        edges.value.forEach((edge) => {
+            if (edge.target === oldId) {
+                edge.target = chapter.id;
+            }
+            if (edge.source === oldId) {
+                edge.source = chapter.id;
+            }
+        });
+    });
 }
