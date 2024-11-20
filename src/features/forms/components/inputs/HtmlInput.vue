@@ -43,10 +43,10 @@ watch(
     },
 );
 
-const plugins = 'image link lists template code';
+const plugins = 'image link lists template code table';
 const textPlugins = 'link lists code';
 // noinspection SpellCheckingInspection
-const toolbar = 'bold italic alignleft aligncenter alignright link image bullist numlist outdent indent template code';
+const toolbar = 'link image bullist numlist outdent indent template code table | bold italic strikethrough alignleft aligncenter alignright ';
 const textToolbar = 'bold italic link bullist numlist';
 
 const template = `
