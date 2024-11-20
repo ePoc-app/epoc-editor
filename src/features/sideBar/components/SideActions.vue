@@ -196,7 +196,6 @@ function showBadgeMenu() {
                 :class-list="classList(badgeContent)"
                 @click="showBadgeMenu"
             />
-            <SettingsModal />
         </div>
     </div>
 </template>

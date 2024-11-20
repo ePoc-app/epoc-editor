@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import SettingsModal from '../settings/SettingsModal.vue';
 import { useEditorStore } from '@/src/shared/stores';
+import { ref } from 'vue';
 
 const editorStore = useEditorStore();
 
@@ -27,6 +29,8 @@ function toggleMenu() {
 }
 
 const modifier = editorStore.platform === 'darwin' ? '⌘' : 'Ctrl';
+
+const settingsModal = ref(null);
 </script>
 
 <template>
@@ -94,6 +98,15 @@ const modifier = editorStore.platform === 'darwin' ? '⌘' : 'Ctrl';
             <i class="icon-export"></i>
             <span>Publier</span>
         </button>
+
+        <SettingsModal ref="settingsModal">
+            <template #trigger>
+                <button class="menu-item" @click="settingsModal.open">
+                    <i class="icon-settings"></i>
+                    <span>Paramètre</span>
+                </button>
+            </template>
+        </SettingsModal>
     </div>
 </template>
 
@@ -124,6 +137,7 @@ const modifier = editorStore.platform === 'darwin' ? '⌘' : 'Ctrl';
     box-shadow: 0 1px 8px var(--shadow);
 
     .menu-item {
+        flex: 1;
         padding: 1rem;
         border-radius: 8px;
         display: flex;

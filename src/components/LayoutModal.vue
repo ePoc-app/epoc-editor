@@ -25,7 +25,7 @@ defineExpose({
 </script>
 
 <template>
-    <div>
+    <div class="modal-container">
         <slot name="trigger" />
         <div v-if="isOpen" class="modal-backdrop" tabindex="0" @keyup.esc="close" @click="() => { if(closeOnUnfocus) close() }">
             <section role="dialog" class="modal" @click.stop>
@@ -69,6 +69,10 @@ footer {
     justify-content: center;
     align-items: center;
     z-index: 500;
+}
+
+.modal-container {
+    display: flex;
 }
 
 .content {

@@ -2,6 +2,7 @@
 import Modal from '@/src/components/LayoutModal.vue'
 import SettingsInput from './SettingsInput.vue';
 import ContentButton from '@/src/components/ContentButton.vue';
+import TopActionButton from '@/src/features/topBar/TopActionButton.vue';
 import { ref, onMounted, watch } from 'vue';
 import { useSettingsStore } from '@/src/shared/stores';
 
@@ -18,29 +19,24 @@ function save() {
     modal.value.close();
 }
 
+function open() {
+    modal.value.open();
+}
+
 watch(() => modal.value?.isOpen, (isOpen) => {
     if (isOpen) spellcheck.value = settingsStore?.settings?.spellcheck;
+})
+
+defineExpose({
+    open
 })
 
 </script>
 
 <template>
-    <Modal ref="modal" title="Paramètres" trigger-class-list="btn btn-content clickable">
+    <Modal ref="modal" title="Paramètres">
         <template v-if="modal" #trigger>
-            <ContentButton
-                v-tippy="{
-                    content: 'Ouvrir les paramètres',
-                    placement: 'right',
-                    arrow: true,
-                    arrowType: 'round',
-                    animation: 'fade'
-                }"
-                icon="icon-settings"
-                :is-active="modal.isOpen"
-                :is-draggable="false"
-                :class-list="{ clickable: true}"
-                @click="modal.open"
-            />
+            <slot name="trigger" />
         </template>
 
         <div class="settings">

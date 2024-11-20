@@ -2,8 +2,9 @@
 import TopActionButton from '@/src/features/topBar/TopActionButton.vue';
 import TopActionDropdown from '@/src/features/topBar/TopActionDropdown.vue';
 import HamburgerMenu from '@/src/features/topBar/HamburgerMenu.vue';
+import SettingsModal from '../settings/SettingsModal.vue';
 import { useEditorStore } from '@/src/shared/stores';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 const editorStore = useEditorStore();
 
@@ -28,6 +29,8 @@ const emit = defineEmits<{
 
 // detect the platform
 const modifier = computed(() => editorStore.platform === 'darwin' ? '⌘' : 'Ctrl');
+
+const settingsModal = ref(null);
 </script>
 
 <template>
@@ -97,6 +100,17 @@ const modifier = computed(() => editorStore.platform === 'darwin' ? '⌘' : 'Ctr
                 :disabled="exporting"
                 @click="emit('exportProject')"
             />
+
+            <SettingsModal ref="settingsModal">
+                <template #trigger>
+                    <TopActionButton
+                        icon="icon-settings"
+                        text="Paramètres"
+                        position="right"
+                        @click="settingsModal.open"
+                    />
+                </template>
+            </SettingsModal>
         </div>
 
         <div class="menu-xs-container top-bar-actions">
