@@ -70,7 +70,7 @@ const phraseType = {
     page: 'la page',
     html: 'le texte',
     audio: "l'audio",
-    activity: "l'activité",
+    activity: "l'évaluation",
     question: 'la question',
 };
 

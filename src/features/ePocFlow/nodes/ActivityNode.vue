@@ -85,7 +85,7 @@ const activityIndex = computed(() => {
                 class="node-title"
                 :class="{ active: editorStore.openedElementId ? editorStore.openedElementId === props.id : false }"
             >
-                {{ currentNode.data.formValues?.title || 'Activité' }}
+                {{ currentNode.data.formValues?.title || 'Évaluation' }}
             </p>
             <Handle
                 :data-testid="`target-activity-${activityIndex}`"
@@ -121,7 +121,7 @@ const activityIndex = computed(() => {
 .node {
     border: 2px dashed var(--dashed-border);
 
-    &.highlight{
+    &.highlight {
         border: 2px dashed var(--editor-yellow) !important;
     }
 }

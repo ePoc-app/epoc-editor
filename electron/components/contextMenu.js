@@ -28,7 +28,7 @@ function getTemplateFromContext(callback, data) {
             {
                 label: 'Coller ici',
                 click: () => onClick('paste', { position: data.position }),
-            }
+            },
         );
     } else if (data.context === 'page' || data.context === 'activity' || data.context === 'pageWithQuestion') {
         if (isDev) {
@@ -68,14 +68,14 @@ function getTemplateFromContext(callback, data) {
             {
                 label: 'Intervertir avec le précédent',
                 click: () => onClick('swapNodeWithPrevious', { id: data.id }),
-            }
+            },
         );
     } else if (data.context === 'content') {
         menu.push(
             {
                 label: 'Supprimer',
                 click: () => onClick('deleteContent', { pageId: data.pageId, id: data.id }),
-            }
+            },
             // {
             //     label: 'Dupliquer',
             //     click: () => onClick('duplicateContent', { pageId: data.pageId, id: data.id })
@@ -93,11 +93,11 @@ function getTemplateFromContext(callback, data) {
             },
             {
                 label: 'Intervertir avec le précédent',
-                click: () => onClick('swapChapterWithPrevious', { id: data.id })
+                click: () => onClick('swapChapterWithPrevious', { id: data.id }),
             },
             {
                 label: 'Intervertir avec le suivant',
-                click: () => onClick('swapChapterWithNext', { id: data.id })
+                click: () => onClick('swapChapterWithNext', { id: data.id }),
             },
             {
                 label: 'Supprimer',
@@ -105,8 +105,8 @@ function getTemplateFromContext(callback, data) {
             },
             {
                 label: 'Copier le chapitre',
-                click: () => onClick('copyChapter', { id: data.id })
-            }
+                click: () => onClick('copyChapter', { id: data.id }),
+            },
         );
     } else if (data.context === 'epoc') {
         menu.push({
@@ -122,7 +122,7 @@ function getTemplateFromContext(callback, data) {
             {
                 label: 'Copier',
                 click: () => onClick('copySelection', { selection: data.selection }),
-            }
+            },
         );
     }
 
@@ -149,29 +149,29 @@ function getPagesFromContext(onClick, data, event, context) {
 
     const questions = [
         {
-            label: 'Ajouter une activité QCM',
+            label: 'Ajouter une évaluation QCM',
             click: () => onClick(event, { type: 'choice', ...data }),
         },
         {
-            label: 'Ajouter une activité Drag & Drop',
+            label: 'Ajouter une évaluation Drag & Drop',
             click: () => onClick(event, { type: 'drag-and-drop', ...data }),
         },
         {
-            label: 'Ajouter une activité Reorder',
+            label: 'Ajouter une évaluation Reorder',
             click: () => onClick(event, { type: 'reorder', ...data }),
         },
         {
-            label: 'Ajouter une activité Swipe',
+            label: 'Ajouter une évaluation Swipe',
             click: () => onClick(event, { type: 'swipe', ...data }),
         },
         {
-            label: 'Ajouter une activité Liste Déroulante',
+            label: 'Ajouter une évaluation Liste Déroulante',
             click: () => onClick(event, { type: 'dropdown-list', ...data }),
         },
         {
-            label: 'Ajouter une activité personnalisée',
-            click: () => onClick(event, { type: 'custom', ...data })
-        }
+            label: 'Ajouter une évaluation personnalisée',
+            click: () => onClick(event, { type: 'custom', ...data }),
+        },
     ];
 
     const menu = [...contents, { type: 'separator' }, ...questions];
@@ -214,8 +214,8 @@ function getContentFromContext(onClick, data, context) {
         },
         {
             label: 'Ajouter une question personnalisée',
-            click: () => onClick('addContent', { type: 'custom', ...data })
-        }
+            click: () => onClick('addContent', { type: 'custom', ...data }),
+        },
     ];
 
     const contents = [

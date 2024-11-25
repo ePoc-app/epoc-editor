@@ -9,7 +9,7 @@ export const qcmForm: Form = {
     buttons: contentButtons,
     fields: [
         {
-            name: "Configuration de l'activité",
+            name: "Configuration de l'évaluation",
             inputs: [
                 {
                     id: 'score',
@@ -94,7 +94,7 @@ export const dragDropForm: Form = {
     buttons: contentButtons,
     fields: [
         {
-            name: "Configuration de l'activité",
+            name: "Configuration de l'évaluation",
             inputs: [
                 {
                     id: 'score',
@@ -195,7 +195,7 @@ export const reorderForm: Form = {
     buttons: contentButtons,
     fields: [
         {
-            name: "Configuration de l'activité",
+            name: "Configuration de l'évaluation",
             inputs: [
                 {
                     id: 'score',
@@ -274,7 +274,7 @@ export const swipeForm: Form = {
     buttons: contentButtons,
     fields: [
         {
-            name: "Configuration de l'activité",
+            name: "Configuration de l'évaluation",
             inputs: [
                 {
                     id: 'score',
@@ -376,7 +376,7 @@ export const listForm: Form = {
     buttons: contentButtons,
     fields: [
         {
-            name: "Configuration de l'activité",
+            name: "Configuration de l'évaluation",
             inputs: [
                 {
                     id: 'score',
@@ -476,7 +476,6 @@ export const listForm: Form = {
     ],
 };
 
-
 export const customQuestionForm: Form = {
     type: 'custom',
     name: 'Question personnalisée',
@@ -485,7 +484,7 @@ export const customQuestionForm: Form = {
     buttons: contentButtons,
     fields: [
         {
-            name: "Configuration de l'activité",
+            name: "Configuration de l'évaluation",
             inputs: [
                 {
                     id: 'score',
@@ -523,9 +522,9 @@ export const customQuestionForm: Form = {
                     label: 'Selectionnez un template',
                     value: '',
                     options: [],
-                    linkedOptions: "plugins.*.template"
-                }
-            ]
+                    linkedOptions: 'plugins.*.template',
+                },
+            ],
         },
         {
             name: 'Données',
@@ -541,18 +540,18 @@ export const customQuestionForm: Form = {
                             type: 'text',
                             label: 'Clé',
                             placeholder: 'Clé',
-                            value: ''
+                            value: '',
                         },
                         {
                             id: 'value',
                             type: 'textarea',
                             label: 'Valeur',
                             placeholder: 'Valeur',
-                            value: ''
-                        }
-                    ]
-                }
-            ]
+                            value: '',
+                        },
+                    ],
+                },
+            ],
         },
         {
             name: 'Réponse',
@@ -561,8 +560,8 @@ export const customQuestionForm: Form = {
                     id: 'correctResponse',
                     label: 'Réponse',
                     type: 'text',
-                    value: ''
-                }
+                    value: '',
+                },
             ],
         },
         {

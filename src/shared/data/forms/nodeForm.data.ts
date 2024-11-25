@@ -117,7 +117,7 @@ export const chapterForm: Form = {
                     type: 'score',
                     label: 'Durée (en minutes)',
                     value: 0,
-                }
+                },
             ],
         },
         {
@@ -174,7 +174,7 @@ export const epocForm: Form = {
                     value: '',
                     placeholder: 'Ajouter un teaser',
                     accept: '.mp4',
-                    hint: 'Format recommandé : 16:9 (720x480) <br> Vidéo visible dans la page de présentation de l\'ePoc'
+                    hint: "Format recommandé : 16:9 (720x480) <br> Vidéo visible dans la page de présentation de l'ePoc",
                 },
                 {
                     id: 'thumbnail',
@@ -183,7 +183,7 @@ export const epocForm: Form = {
                     value: '',
                     placeholder: 'Ajouter une vignette',
                     accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
-                    hint: 'Format recommandé : idem que la vidéo <br> Image visible dans la page de présentation de l\'ePoc'
+                    hint: "Format recommandé : idem que la vidéo <br> Image visible dans la page de présentation de l'ePoc",
                 },
                 {
                     id: 'summary',
@@ -223,7 +223,7 @@ export const epocForm: Form = {
                             placeholder: 'Ajouter une image',
                             value: '',
                             accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
-                            hint: 'Format recommandé : carré (100x100)<br> Image visible dans la page de présentation de l\'ePoc',
+                            hint: "Format recommandé : carré (100x100)<br> Image visible dans la page de présentation de l'ePoc",
                         },
                         {
                             id: 'title',
@@ -278,7 +278,7 @@ export const epocForm: Form = {
                     type: 'score',
                     label: "Score pour obtenir l'attestation",
                     value: 10,
-                    hint: 'N\'est pas pris en compte si le nombre de badge pour obtenir l\'attestation est supérieur à 0',
+                    hint: "N'est pas pris en compte si le nombre de badge pour obtenir l'attestation est supérieur à 0",
                 },
                 {
                     id: 'chapterParameter',
@@ -292,7 +292,7 @@ export const epocForm: Form = {
                     type: 'score',
                     label: 'Durée des chapitres (en minutes)',
                     value: 0,
-                }
+                },
             ],
         },
         {
@@ -320,8 +320,8 @@ export const epocForm: Form = {
                             placeholder: 'Ajouter un template',
                             targetDirectory: 'plugins',
                             value: '',
-                            accept: 'html'
-                        }
+                            accept: 'html',
+                        },
                     ],
                 },
             ],
@@ -335,7 +335,7 @@ export const epocForm: Form = {
                     label: 'Nom',
                     placeholder: 'CC-BY 4.0',
                     value: '',
-                    hint: 'Nom de la licence de votre contenu ePoc'
+                    hint: 'Nom de la licence de votre contenu ePoc',
                 },
                 {
                     id: 'licenceUrl',
@@ -343,7 +343,7 @@ export const epocForm: Form = {
                     label: 'URL',
                     placeholder: 'https://creativecommons.org/licenses/by/4.0/deed',
                     value: '',
-                    hint: 'Texte complet de la licence choisie'
+                    hint: 'Texte complet de la licence choisie',
                 },
             ],
         },
@@ -383,7 +383,7 @@ export const pageForm: Form = {
                     type: 'checkbox',
                     label: "Ne s'affiche qu'a certaines conditions",
                     value: false,
-                    hint: 'Option utilisé pour l\'affichage conditionnel'
+                    hint: "Option utilisé pour l'affichage conditionnel",
                 },
             ],
         },
@@ -405,7 +405,7 @@ export const pageForm: Form = {
 
 export const activityForm: Form = {
     type: 'activity',
-    name: 'Activité',
+    name: 'Évaluation',
     icon: 'icon-ecran',
     buttons: activityButtons,
     fields: [
@@ -443,7 +443,7 @@ export const activityForm: Form = {
                     type: 'checkbox',
                     label: "Ne s'affiche qu'a certaines conditions",
                     value: false,
-                    hint: 'Option utilisé pour l\'affichage conditionnel'
+                    hint: "Option utilisé pour l'affichage conditionnel",
                 },
             ],
         },
