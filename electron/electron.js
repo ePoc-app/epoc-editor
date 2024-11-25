@@ -16,17 +16,35 @@ let mainWindow;
 let splashWindow;
 let filepath = process.argv[1] ? path.normalize(process.argv[1]) : null;
 
+// Triggered when opening a file & the app is already running
 app.on('will-finish-launching', () => {
     app.on('open-file', async (event, path) => {
         event.preventDefault();
         filepath = path;
 
-        if (mainWindow) {
-            mainWindow.webContents.send(
-                'epocProjectPicked',
-                JSON.stringify({ name: null, modified: null, filepath: filepath, workdir: null })
-            );
+        // Focus window instead of creating a new one if already exists
+        const allWindows = BrowserWindow.getAllWindows();
+        const existingWindow = allWindows.find((window) => window.filepath === filepath);
+        if(existingWindow) {
+            existingWindow.focus();
+            return;
         }
+
+        createNewWindow().then((newWindow) => {
+            if(newWindow.isDestroyed()) return;
+
+            newWindow.webContents.once('did-finish-load', () => {
+                newWindow.filepath = filepath;
+
+                // did finish load should have all ipcListener correctly set up but doesn't work correctly so a timeout correctly wait long enough to set up eventListeners
+                setTimeout(() => {
+                    newWindow.webContents.send(
+                        'epocProjectPicked',
+                        JSON.stringify({ name: null, modified: null, filepath, workdir: null })
+                    );
+                }, 10);
+            });
+        });
     });
 });
 
@@ -48,6 +66,17 @@ app.whenReady().then(() => {
     });
 
     setupWindow(mainWindow, filepath);
+
+    // Triggered when launching the app from a file
+    mainWindow.webContents.on('did-finish-load', function() {
+        if (filepath) {
+            mainWindow.filepath = filepath;
+            mainWindow.webContents.send(
+                'epocProjectPicked',
+                JSON.stringify({ name: null, modified: null, filepath, workdir: null })
+            );
+        }
+    });
 
     app.on('activate', function () {
         // On macOS it's common to re-create a window in the app when the dock icon is clicked and there are no other windows open.
@@ -74,7 +103,11 @@ function createNewWindow() {
     setupIpcListener(newWindow);
     setupWindow(newWindow);
 
-    newWindow.show();
+    newWindow.on('ready-to-show', () => {
+        newWindow.show();
+    });
+
+    return newWindow;
 }
 
 ipcMain.on('newWindow', () => {

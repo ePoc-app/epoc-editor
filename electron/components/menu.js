@@ -54,7 +54,9 @@ module.exports.setupMenu = function () {
                             return {
                                 label: project.filepath,
                                 click: function () {
-                                    sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectPicked', project);
+                                    const currentWindow = BrowserWindow.getFocusedWindow();
+                                    currentWindow.filepath = project.filepath;
+                                    sendToFrontend(currentWindow, 'epocProjectPicked', project);
                                 },
                             };
                         }),
@@ -63,10 +65,12 @@ module.exports.setupMenu = function () {
                 {
                     label: 'Importer un fichier .epoc',
                     click: async function () {
-                        sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportPicked');
+                        const currentWindow = BrowserWindow.getFocusedWindow();
+                        sendToFrontend(currentWindow, 'epocImportPicked');
                         const project = await pickEpocToImport();
-                        store.updateState('projects', { [BrowserWindow.getFocusedWindow().id]: project });
-                        sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportExtracted', project);
+                        store.updateState('projects', { [currentWindow.id]: project });
+                        currentWindow.filepath = project.filepath;
+                        sendToFrontend(currentWindow, 'epocImportExtracted', project);
                     },
                 },
                 // {
@@ -124,14 +128,16 @@ module.exports.setupMenu = function () {
                         store.state.projects[BrowserWindow.getFocusedWindow().id].workdir
                     ),
                     click: async function () {
-                        sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectSaving');
+                        const currentWindow = BrowserWindow.getFocusedWindow();
+                        sendToFrontend(currentWindow, 'epocProjectSaving');
                         const result = await saveAsEpocProject(
-                            store.state.projects[BrowserWindow.getFocusedWindow().id]
+                            store.state.projects[currentWindow.id]
                         );
                         if (result) {
-                            updateSavedProject(BrowserWindow.getFocusedWindow().webContents, result);
+                            currentWindow.filepath = result;
+                            updateSavedProject(currentWindow.webContents, result);
                         } else {
-                            sendToFrontend(BrowserWindow.getFocusedWindow().webContents, 'epocProjectSaveCanceled');
+                            sendToFrontend(currentWindow.webContents, 'epocProjectSaveCanceled');
                         }
                     },
                 },

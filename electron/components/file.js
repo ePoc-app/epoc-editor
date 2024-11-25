@@ -61,13 +61,15 @@ const newEpocProject = async function () {
  */
 const pickEpocToImport = async function () {
     const startTime = performance.now();
-    const files = dialog.showOpenDialogSync(BrowserWindow.getFocusedWindow(), {
+    const currentWindow = BrowserWindow.getFocusedWindow();
+    const files = dialog.showOpenDialogSync(currentWindow, {
         properties: ['openFile'],
         filters: [{ name: 'ePoc export archive', extensions: ['zip', 'epoc'] }],
     });
     if (!files || !files[0]) return null;
     const filepath = files[0];
 
+    currentWindow.filepath = filepath;
     const workdir = createWorkDir();
     return importEpoc(filepath, startTime, workdir);
 };
@@ -104,12 +106,14 @@ const importEpoc = async function(filepath, startTime, workdir) {
  * @returns {{filepath: string, workdir: null, name: null, modified: Date} | null}
  */
 const pickEpocProject = function () {
-    const files = dialog.showOpenDialogSync(BrowserWindow.getFocusedWindow(), {
+    const currentWindow = BrowserWindow.getFocusedWindow();
+    const files = dialog.showOpenDialogSync(currentWindow, {
         properties: ['openFile'],
         filters: [{ name: 'ePoc', extensions: ['epocproject', 'epoc'] }],
     });
     if (!files || !files[0]) return null;
 
+    currentWindow.filepath = files[0];
     return {
         name: null,
         modified: fs.statSync(files[0]).mtime,
@@ -191,12 +195,14 @@ const saveEpocProject = async function (project) {
  * @returns {string}
  */
 const saveAsEpocProject = async function (project) {
-    const files = dialog.showSaveDialogSync(BrowserWindow.getFocusedWindow(), {
+    const currentWindow = BrowserWindow.getFocusedWindow();
+    const files = dialog.showSaveDialogSync(currentWindow, {
         filters: [{ name: 'ePoc', extensions: ['epocproject'] }],
     });
 
     if (!files) return null;
 
+    currentWindow.filepath = files;
     updateRecent(project);
 
     return zipEpocProject(project.workdir, files);
