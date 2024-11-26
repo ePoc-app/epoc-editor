@@ -6,12 +6,12 @@ import { graphService } from '@/src/shared/services';
 import { getCurrentState } from '@/src/shared/services/undoRedo.service';
 
 const props = defineProps<{
+    type: 'html' | 'html-text' | 'html-inline';
     id: string;
     label: string;
     inputValue: string;
     placeholder?: string;
     insideCard?: boolean;
-    textOnly?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -43,12 +43,6 @@ watch(
     },
 );
 
-const plugins = 'image link lists template code table';
-const textPlugins = 'link lists code';
-// noinspection SpellCheckingInspection
-const toolbar = 'link image bullist numlist outdent indent template code table | bold italic strikethrough alignleft aligncenter alignright ';
-const textToolbar = 'bold italic link bullist numlist';
-
 const template = `
     <details style="border: 1px solid lightgray; border-radius: 4px; padding: .5em .5em 0 .5em">
         <summary style="font-weight: bold; border-bottom: 1px solid lightgray; padding 1em;">Titre</summary>
@@ -57,12 +51,81 @@ const template = `
     <p></p>
 `;
 
+const standardPlugins = 'image link lists template code table';
+// noinspection SpellCheckingInspection
+const standardToolbar =
+    'link image bullist numlist outdent indent template code table | bold italic strikethrough alignleft aligncenter alignright ';
+const textToolbar = 'bold italic link bullist numlist';
+const textPlugins = 'link lists code';
+
+const inlinePlugins = 'image link';
+const inlineToolbar = 'link image bold italic strikethrough ';
+
+const standardOptions = {
+    menubar: false,
+    min_height: 150,
+    max_height: 800,
+    height: 350,
+    templates: [{ title: 'Plier/déplier', content: template, description: 'Plier/déplier avec titre et contenu' }],
+    file_picker_types: 'image',
+    file_picker_callback: handleFilePicker,
+    link_default_target: '_blank',
+    link_target_list: false,
+    paste_data_images: true,
+    paste_preprocess: (editor, args) => {
+        args.content = args.content.replace(/font-family:[^;"]+;?/gi, '');
+    },
+};
+
+const textOptions = {
+    menubar: false,
+    min_height: 150,
+    max_height: 800,
+    height: 350,
+    link_target_list: false,
+    paste_data_images: false,
+};
+
+const inlineOptions = {
+    menubar: false,
+    min_height: 150,
+    max_height: 800,
+    height: 200,
+    file_picker_types: 'image',
+    file_picker_callback: handleFilePicker,
+    link_default_target: '_blank',
+    link_target_list: false,
+    paste_data_images: true,
+    paste_preprocess: (editor, args) => {
+        args.content = args.content.replace(/font-family:[^;"]+;?/gi, '');
+    },
+};
+
+const typeMappings = {
+    html: {
+        toolbar: standardToolbar,
+        plugins: standardPlugins,
+        options: standardOptions,
+    },
+    'html-text': {
+        toolbar: textToolbar,
+        plugins: textPlugins,
+        options: textOptions,
+    },
+    'html-inline': {
+        toolbar: inlineToolbar,
+        plugins: inlinePlugins,
+        options: inlineOptions,
+    },
+};
+const { toolbar, plugins, options } = typeMappings[props.type];
+
 function init() {
     content.value = props.inputValue;
 }
 
 async function drop(event: DragEvent) {
-    if(props.textOnly) return;
+    if (props.type === 'html-text') return;
 
     const file = event.dataTransfer.files[0];
     if (!file) return;
@@ -72,7 +135,7 @@ async function drop(event: DragEvent) {
 }
 
 function handleFilePicker(callback: (url: string) => void) {
-    if(props.textOnly) return;
+    if (props.type === 'html-text') return;
 
     const input = document.createElement('input');
     input.type = 'file';
@@ -113,36 +176,8 @@ function focusEditor() {
 }
 
 defineExpose({
-    focusEditor
+    focusEditor,
 });
-
-const standardOptions = {
-    menubar: false,
-    min_height: 150,
-    max_height: 800,
-    height: 350,
-    templates: [
-        { title: 'Plier/déplier', content: template, description: 'Plier/déplier avec titre et contenu' },
-    ],
-    file_picker_types: 'image',
-    file_picker_callback: handleFilePicker,
-    link_default_target: '_blank',
-    link_target_list: false,
-    paste_data_images: true,
-    paste_preprocess: (editor, args) => {
-        args.content = args.content.replace(/font-family:[^;"]+;?/gi, '');
-    }
-};
-
-const textOptions = {
-    menubar: false,
-    min_height: 150,
-    max_height: 800,
-    height: 350,
-    link_target_list: false,
-    paste_data_images: false,
-};
-
 </script>
 
 <template>
@@ -150,9 +185,9 @@ const textOptions = {
         ref="editor"
         v-model="content"
         api-key="no-api-key"
-        :plugins="textOnly ? textPlugins : plugins"
-        :toolbar="textOnly ? textToolbar : toolbar"
-        :init="textOnly ? textOptions : standardOptions"
+        :plugins="plugins"
+        :toolbar="toolbar"
+        :init="options"
         @init="init"
         @drop.stop.prevent="drop"
         @focus="onFocus"

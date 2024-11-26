@@ -1,6 +1,21 @@
 export interface Input {
     id: string;
-    type: string;
+    type:
+        | 'file'
+        | 'html'
+        | 'repeat'
+        | 'text'
+        | 'score'
+        | 'textarea'
+        | 'hidden'
+        | 'checkbox'
+        | 'select'
+        | 'html-text'
+        | 'html-inline'
+        | 'icon-picker'
+        | 'badge-conditions'
+        | 'radio-group'
+        | 'badge';
     label: string;
     value: string | boolean | number | string[];
     placeholder?: string;

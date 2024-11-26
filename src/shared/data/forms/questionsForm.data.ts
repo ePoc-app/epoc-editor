@@ -31,7 +31,7 @@ export const qcmForm: Form = {
                 },
                 {
                     id: 'statement',
-                    type: 'textarea',
+                    type: 'html-inline',
                     label: 'Consigne',
                     value: '',
                     placeholder: 'Instruction pour répondre à la question',
@@ -113,6 +113,13 @@ export const dragDropForm: Form = {
                     label: 'Question',
                     value: '',
                     placeholder: 'Posez la question',
+                },
+                {
+                    id: 'statement',
+                    type: 'html-inline',
+                    label: 'Consigne',
+                    value: '',
+                    placeholder: 'Instruction pour répondre à la question',
                 },
             ],
         },
@@ -217,7 +224,7 @@ export const reorderForm: Form = {
                 },
                 {
                     id: 'statement',
-                    type: 'textarea',
+                    type: 'html-inline',
                     label: 'Consigne',
                     value: '',
                     placeholder: 'Instruction pour répondre à la question',
@@ -293,6 +300,13 @@ export const swipeForm: Form = {
                     label: 'Question',
                     value: '',
                     placeholder: 'Posez la question',
+                },
+                {
+                    id: 'statement',
+                    type: 'html-inline',
+                    label: 'Consigne',
+                    value: '',
+                    placeholder: 'Instruction pour répondre à la question',
                 },
             ],
         },
@@ -398,7 +412,7 @@ export const listForm: Form = {
                 },
                 {
                     id: 'statement',
-                    type: 'textarea',
+                    type: 'html-inline',
                     label: 'Consigne',
                     value: '',
                     placeholder: 'Instruction pour répondre à la question',
@@ -506,7 +520,7 @@ export const customQuestionForm: Form = {
                 },
                 {
                     id: 'statement',
-                    type: 'textarea',
+                    type: 'html-inline',
                     label: 'Consigne',
                     value: '',
                     placeholder: 'Instruction pour répondre à la question',

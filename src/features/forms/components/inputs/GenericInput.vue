@@ -43,26 +43,20 @@ const inputId = computed(() => {
 //? This is a workaround to focus the WYSIWYG editor when clicking on the label
 const htmlInput = ref(null);
 function onLabelClick(inputType: string) {
-    if(inputType !== 'html') return;
+    if (inputType !== 'html') return;
 
     htmlInput.value.focusEditor();
 }
 
 function showLabel(inputType: string) {
-    return inputType !== 'checkbox' && inputType !== 'repeat'
+    return inputType !== 'checkbox' && inputType !== 'repeat';
 }
 </script>
 
 <template>
     <div class="input-group">
-        <div
-            v-if="input.label && showLabel(input.type)"
-            class="input-label"
-        >
-            <label
-                :for="inputId"
-                @click="onLabelClick(input.type)"
-            >
+        <div v-if="input.label && showLabel(input.type)" class="input-label">
+            <label :for="inputId" @click="onLabelClick(input.type)">
                 {{ input.label }}
             </label>
             <i
@@ -90,14 +84,14 @@ function showLabel(inputType: string) {
             @save-given-state="emit('saveGivenState', $event)"
         />
         <HtmlInput
-            v-if="input.type === 'html' || input.type === 'html-text'"
+            v-if="input.type === 'html' || input.type === 'html-text' || input.type === 'html-inline'"
             :id="inputId"
             ref="htmlInput"
             :label="input.label"
             :placeholder="input.placeholder"
             :input-value="inputValue as string"
             :inside-card="insideCard"
-            :text-only="input.type === 'html-text'"
+            :type="input.type"
             @input="emit('input', $event)"
             @save-given-state="emit('saveGivenState', $event)"
         />
@@ -181,10 +175,9 @@ function showLabel(inputType: string) {
     </div>
 </template>
 
-<style lang="scss" scoped >
+<style lang="scss" scoped>
 .input-group {
     display: flex;
     flex-direction: column;
 }
-
 </style>
