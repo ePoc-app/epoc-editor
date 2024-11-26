@@ -159,14 +159,15 @@ const setup = function () {
         const settingsStore = useSettingsStore();
         settingsStore.settings = {
             spellcheck: settings?.spellcheck === undefined ? true : settings.spellcheck,
-        }
-    })
+        };
+    });
 
     // Adding the version to the editorStore
     api.send('getEditorVersion');
     api.send('getPlatform');
 
     initialized = true;
+    api.send('initialized');
 };
 
 function newEpocProject(): void {
@@ -239,7 +240,7 @@ function runPreviewAtPage(): void {
 
     if (!error) {
         editorStore.loadingPreview = true;
-        const projectJSON= graphService.getProjectJSON();
+        const projectJSON = graphService.getProjectJSON();
         api.send('runPreview', { contentPath, projectJSON });
     }
 }
@@ -253,7 +254,6 @@ function exportProject(): void {
 
 function fetchSettings() {
     api.send('getSettings');
-
 }
 
 function setSettings(settings: Settings) {
@@ -270,5 +270,5 @@ export const editorService = {
     runPreviewAtPage,
     exportProject,
     fetchSettings,
-    setSettings
+    setSettings,
 };

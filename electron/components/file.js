@@ -79,7 +79,7 @@ const pickEpocToImport = async function () {
  * @param {string} workdir - the path to the workdir
  * @returns {{filepath: null, workdir: string, name: null, modified: Date} | null}
  */
-const importEpoc = async function(filepath, startTime, workdir) {
+const importEpoc = async function (filepath, startTime, workdir) {
     const zip = new AdmZip(filepath, {});
     zip.extractAllTo(workdir, true, false, null);
 
@@ -130,13 +130,13 @@ const openEpocProject = async function (filepath) {
     const zip = new AdmZip(filepath, {});
     try {
         zip.extractAllTo(workdir, true, false, null);
-        if(!fs.existsSync(path.join(workdir, 'project.json'))) {
+        if (!fs.existsSync(path.join(workdir, 'project.json'))) {
             const project = await importEpoc(filepath, startTime, workdir);
             store.updateState('projects', { [BrowserWindow.getFocusedWindow().id]: project });
             console.log('filepath', filepath);
             return {
                 project,
-                imported: true
+                imported: true,
             };
         }
     } catch (err) {
@@ -169,7 +169,7 @@ const openEpocProject = async function (filepath) {
             project,
             imported: false,
         };
-    } catch(e) {
+    } catch (e) {
         return null;
     }
 };
@@ -243,9 +243,8 @@ const zipEpocProject = async function (workdir, filepath) {
  * @return {string|null}
  */
 const exportProject = async function (workdir, filepath) {
-    const defaultPath = filepath
-        ? path.join(path.dirname(filepath), path.basename(filepath, path.extname(filepath)) + '.epoc')
-        : '';
+    const defaultPath =
+        filepath ? path.join(path.dirname(filepath), path.basename(filepath, path.extname(filepath)) + '.epoc') : '';
 
     const exportPath = dialog.showSaveDialogSync(BrowserWindow.getFocusedWindow(), {
         defaultPath: defaultPath,
@@ -357,7 +356,7 @@ const getAllAssets = function (workdir) {
         }
 
         // return if icons folder does not exist
-        if (fs.existsSync(iconsPath))  {
+        if (fs.existsSync(iconsPath)) {
             const iconItems = fs.readdirSync(iconsPath);
             for (const item of iconItems) {
                 const itemPath = path.join(iconsPath, item);
@@ -404,7 +403,7 @@ const getUsedAssets = function (workdir) {
 // TODO: Add a parameter to see if exporting or not to get data from content.json instead of project.json
 const getUnusedAssets = function (workdir) {
     //? On first save this function is called before project.json is created
-    if(!fs.existsSync(path.join(workdir, 'project.json'))) return [];
+    if (!fs.existsSync(path.join(workdir, 'project.json'))) return [];
 
     const allAssets = getAllAssets(workdir);
     const usedAssets = getUsedAssets(workdir);

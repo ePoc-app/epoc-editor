@@ -1,14 +1,127 @@
-const { app, shell, BrowserWindow, Menu } = require('electron');
-const { sendToFrontend, updateSavedProject } = require('./ipc');
-const { pickEpocToImport, pickEpocProject, getRecentFiles, saveEpocProject, saveAsEpocProject } = require('./file');
+const { BrowserWindow, ipcMain, shell } = require('electron');
+const path = require('path');
+const { setupIpcListener, sendToFrontend } = require('./ipc');
 const store = require('./store');
-const { ipcMain, dialog } = require('electron');
+const { Menu, app } = require('electron');
+const {
+    pickEpocProject,
+    pickEpocToImport,
+    getRecentFiles,
+    saveEpocProject,
+    updateSavedProject,
+    saveAsEpocProject,
+    createPreview,
+    createGlobalPreview,
+} = require('./file');
+
 const Store = require('electron-store');
 const electronStore = new Store();
-const { getCommitHash } = require('./preview');
-const { createGlobalPreview, createPreview } = require('./preview');
 
-module.exports.setupMenu = function () {
+/**
+ * Create the app main window
+ * @returns {Electron.CrossProcessExports.BrowserWindow}
+ */
+const createMainWindow = function () {
+    const isDev = process.env.IS_DEV === 'true';
+    const mainWindow = new BrowserWindow({
+        show: false,
+        icon: 'favicon.png',
+        width: 1500,
+        height: 1200,
+        minHeight: 400,
+        minWidth: 800,
+        webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: true,
+            preload: path.join(__dirname, '../preload.js'),
+            partition: `persist:${Math.random()}`,
+        },
+    });
+
+    if (electronStore.get('spellcheck') === undefined) electronStore.set('spellcheck', true);
+    mainWindow.webContents.session.setSpellCheckerEnabled(electronStore.get('spellcheck'));
+
+    mainWindow.on('focus', () => {
+        setupMenu();
+    });
+
+    // load the index.html of the app.
+    mainWindow
+        .loadURL(isDev ? 'http://localhost:8000' : `file://${path.join(__dirname, '../../dist/index.html')}`)
+        .then();
+    mainWindow.center();
+
+    store.state.projects[mainWindow.id] = {};
+
+    return mainWindow;
+};
+
+const setupWindow = function (window, filepath) {
+    // Intercept assets:// protocol to serve local files from workdir
+    try {
+        window.webContents.session.protocol.registerFileProtocol('assets', (request, callback) => {
+            const workdir = store.state.projects[window.id].workdir;
+            const filepath = request.url.substring(9);
+            callback({ path: path.join(workdir, filepath) });
+        });
+    } catch (error) {
+        console.error('Failed to register protocol:', error);
+    }
+
+    const windowsUrl = [
+        `file:///${encodeURI(path.join(__dirname, '../../dist/assets/').replaceAll('\\', '/'))}*`,
+        `file:///${encodeURI(path.join(__dirname, '../../dist/images/').replaceAll('\\', '/'))}*`,
+        `file:///${encodeURI(path.join(__dirname, '../../dist/videos/').replaceAll('\\', '/'))}*`,
+    ];
+
+    const posixUrl = [
+        `file://${encodeURI(path.join(__dirname, '../../dist/assets/'))}*`,
+        `file://${encodeURI(path.join(__dirname, '../../dist/images/'))}*`,
+        `file://${encodeURI(path.join(__dirname, '../../dist/videos/'))}*`,
+    ];
+
+    // Intercept all url starting with assets/ and redirect it to custom protocol (wysiwyg/quill)
+    const filter = {
+        urls: [
+            'http://localhost:8000/assets/*',
+            'http://localhost:8000/images/*',
+            'http://localhost:8000/videos/*',
+
+            ...(process.platform === 'win32' ? windowsUrl : posixUrl),
+        ],
+    };
+
+    window.webContents.session.webRequest.onBeforeRequest(filter, (details, callback) => {
+        const assetsFolder = ['assets/', 'images/', 'videos/'].find((folder) => details.url.includes(folder));
+        const isAppFile = ['.js', '.css', '.html', '.ttf'].some((ext) => details.url.includes(ext));
+        if (window.webContents.id === details.webContents.id && !isAppFile && assetsFolder) {
+            const filepath = details.url.split(assetsFolder)[1];
+            return callback({ redirectURL: `assets://${assetsFolder}${filepath}` });
+        }
+        callback({});
+    });
+
+    if (filepath) {
+        window.webContents.send(
+            'epocProjectPicked',
+            JSON.stringify({ name: null, modified: null, filepath: filepath, workdir: null }),
+        );
+    }
+};
+
+const createNewWindow = () => {
+    const newWindow = createMainWindow();
+    setupIpcListener(newWindow);
+    setupWindow(newWindow);
+
+    newWindow.show();
+
+    return newWindow;
+};
+
+// Menu management
+
+const setupMenu = () => {
     const mainMenuTemplate = [
         {
             label: 'App',
@@ -45,6 +158,16 @@ module.exports.setupMenu = function () {
                     accelerator: 'CmdOrCtrl+O',
                     click: function () {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectPicked', pickEpocProject());
+                    },
+                },
+                {
+                    label: 'Ouvrir dans une nouvelle fenêtre',
+                    click: () => {
+                        const newWindow = createNewWindow();
+                        const project = pickEpocProject();
+                        ipcMain.on('initialized', () => {
+                            sendToFrontend(newWindow, 'epocProjectPicked', project);
+                        });
                     },
                 },
                 {
@@ -102,8 +225,8 @@ module.exports.setupMenu = function () {
                     label: 'Sauvegarder',
                     accelerator: 'CmdOrCtrl+S',
                     enabled: !!(
-                        store.state.projects[BrowserWindow.getFocusedWindow().id] &&
-                        store.state.projects[BrowserWindow.getFocusedWindow().id].workdir
+                        store.state.projects[BrowserWindow.getFocusedWindow()?.id] &&
+                        store.state.projects[BrowserWindow.getFocusedWindow()?.id].workdir
                     ),
                     click: async function () {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectSaving');
@@ -120,13 +243,13 @@ module.exports.setupMenu = function () {
                     label: 'Sauvegarder sous...',
                     accelerator: 'Shift+CmdOrCtrl+S',
                     enabled: !!(
-                        store.state.projects[BrowserWindow.getFocusedWindow().id] &&
-                        store.state.projects[BrowserWindow.getFocusedWindow().id].workdir
+                        store.state.projects[BrowserWindow.getFocusedWindow()?.id] &&
+                        store.state.projects[BrowserWindow.getFocusedWindow()?.id].workdir
                     ),
                     click: async function () {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectSaving');
                         const result = await saveAsEpocProject(
-                            store.state.projects[BrowserWindow.getFocusedWindow().id]
+                            store.state.projects[BrowserWindow.getFocusedWindow().id],
                         );
                         if (result) {
                             updateSavedProject(BrowserWindow.getFocusedWindow().webContents, result);
@@ -165,18 +288,18 @@ module.exports.setupMenu = function () {
             label: 'Aperçu',
             submenu: [
                 {
-                    label: 'Lancer l\'aperçu',
+                    label: "Lancer l'aperçu",
                     click: function () {
                         createPreview(store.state.projects[BrowserWindow.getFocusedWindow().id].workdir);
-                    }
+                    },
                 },
                 {
-                    label: 'Lancer l\'aperçu global',
+                    label: "Lancer l'aperçu global",
                     click: function () {
                         createGlobalPreview(store.state.projects[BrowserWindow.getFocusedWindow().id].workdir);
-                    }
-                }
-            ]
+                    },
+                },
+            ],
         },
         {
             label: 'Aide',
@@ -198,12 +321,12 @@ module.exports.setupMenu = function () {
                         if (isDev) {
                             const appVersion = app.getVersion();
                             emailBody = encodeURIComponent(
-                                `Version: ${appVersion}\n---\n\nDécrivez votre problème ci-dessous:\n\n`
+                                `Version: ${appVersion}\n---\n\nDécrivez votre problème ci-dessous:\n\n`,
                             );
                         } else {
                             const appInfo = require('../../dist/appInfo.json');
                             emailBody = encodeURIComponent(
-                                `Version: ${appInfo.version}\nBuild: ${appInfo.buildNumber}\n ---\n\nDécrivez votre problème ci-dessous:\n\n`
+                                `Version: ${appInfo.version}\nBuild: ${appInfo.buildNumber}\n ---\n\nDécrivez votre problème ci-dessous:\n\n`,
                             );
                         }
 
@@ -245,65 +368,8 @@ module.exports.setupMenu = function () {
     });
 };
 
-module.exports.setupMenuPreview = function () {
-    const previewMenuTemplate = [
-        {
-            label: 'App',
-            submenu: [
-                { label: 'About Application', role: 'about' },
-                {
-                    label: 'Quit',
-                    accelerator: 'CmdOrCtrl+Q',
-                    click: function () {
-                        app.quit();
-                    },
-                },
-            ],
-        },
-        {
-            label: 'Preview',
-            submenu: [
-                {
-                    label: 'Reload',
-                    accelerator: 'CmdOrCtrl+R',
-                    click: function () {
-                        BrowserWindow.getFocusedWindow().webContents.reload();
-                    },
-                },
-                {
-                    label: 'Commit hash',
-                    click: function () {
-                        const hash = getCommitHash();
-                        if(!hash) return;
-
-                        dialog.showMessageBox({
-                            title: 'Commit hash',
-                            message: hash,
-                            buttons: ['OK']
-                        });
-                    },
-                },
-                {
-                    label: 'Reset data',
-                    click: function () {
-                        BrowserWindow.getFocusedWindow().webContents.executeJavaScript(`
-                          // Clear IndexedDB
-                          indexedDB.deleteDatabase('__epocdb');
-                          console.log('clear db');
-                          location.reload();
-                        `);
-                    },
-                },
-                {
-                    label: 'Dev Tools',
-                    accelerator: 'CmdOrCtrl+D',
-                    click: function () {
-                        BrowserWindow.getFocusedWindow().webContents.toggleDevTools();
-                    },
-                },
-            ],
-        },
-    ];
-    const previewMenu = Menu.buildFromTemplate(previewMenuTemplate);
-    Menu.setApplicationMenu(previewMenu);
+module.exports = {
+    createMainWindow,
+    setupWindow,
+    createNewWindow,
 };

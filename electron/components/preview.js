@@ -3,7 +3,7 @@ const path = require('path');
 const express = require('express');
 const serveStatic = require('serve-static');
 const AdmZip = require('adm-zip');
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, Menu, dialog } = require('electron');
 
 const isDev = process.env.IS_DEV === 'true';
 const resourcePath = isDev ? path.join(__dirname, '../../public') : process.resourcesPath;
@@ -73,9 +73,8 @@ async function createGlobalPreview(workdir) {
 async function createPreview(workdir, contentPath) {
     const ePocRootName = path.basename(workdir);
     const ePocRootFolder = path.join(previewEpocPath, ePocRootName);
-    const ePocContentPath = contentPath
-        ? `epoc/play/${ePocRootName}/${contentPath}`
-        : `epoc/preview-editor/${ePocRootName}`;
+    const ePocContentPath =
+        contentPath ? `epoc/play/${ePocRootName}/${contentPath}` : `epoc/preview-editor/${ePocRootName}`;
 
     runPreview(workdir, ePocRootFolder, ePocContentPath);
 }
@@ -121,7 +120,7 @@ async function createPreviewWindow(server, contentPath) {
                 nodeIntegration: true,
             },
             parent: BrowserWindow.getFocusedWindow(),
-            fullscreenable: false
+            fullscreenable: false,
         });
 
         previewWindow.webContents.on('did-finish-load', () => {
@@ -134,7 +133,6 @@ async function createPreviewWindow(server, contentPath) {
     }
 
     previewWindow.on('focus', () => {
-        const { setupMenuPreview } = require('./menu');
         setupMenuPreview();
     });
 
@@ -157,11 +155,74 @@ const getCommitHash = function () {
     return fs.readFileSync(path.join(previewPath, 'commit-hash.txt'), 'utf-8');
 };
 
+const setupMenuPreview = () => {
+    const previewMenuTemplate = [
+        {
+            label: 'App',
+            submenu: [
+                { label: 'About Application', role: 'about' },
+                {
+                    label: 'Quit',
+                    accelerator: 'CmdOrCtrl+Q',
+                    click: function () {
+                        app.quit();
+                    },
+                },
+            ],
+        },
+        {
+            label: 'Preview',
+            submenu: [
+                {
+                    label: 'Reload',
+                    accelerator: 'CmdOrCtrl+R',
+                    click: function () {
+                        BrowserWindow.getFocusedWindow().webContents.reload();
+                    },
+                },
+                {
+                    label: 'Commit hash',
+                    click: function () {
+                        const hash = getCommitHash();
+                        if (!hash) return;
+
+                        dialog.showMessageBox({
+                            title: 'Commit hash',
+                            message: hash,
+                            buttons: ['OK'],
+                        });
+                    },
+                },
+                {
+                    label: 'Reset data',
+                    click: function () {
+                        BrowserWindow.getFocusedWindow().webContents.executeJavaScript(`
+                          // Clear IndexedDB
+                          indexedDB.deleteDatabase('__epocdb');
+                          console.log('clear db');
+                          location.reload();
+                        `);
+                    },
+                },
+                {
+                    label: 'Dev Tools',
+                    accelerator: 'CmdOrCtrl+D',
+                    click: function () {
+                        BrowserWindow.getFocusedWindow().webContents.toggleDevTools();
+                    },
+                },
+            ],
+        },
+    ];
+    const previewMenu = Menu.buildFromTemplate(previewMenuTemplate);
+    Menu.setApplicationMenu(previewMenu);
+};
+
 module.exports = {
     createPreview,
     createGlobalPreview,
     // runPreview,
     cleanPreview,
     updatePreview,
-    getCommitHash
+    getCommitHash,
 };

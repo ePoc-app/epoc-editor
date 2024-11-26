@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { app, BrowserWindow, ipcMain } = require('electron');
-const { createMainWindow, setupWindow } = require('./components/main');
+const { createMainWindow, setupWindow, createNewWindow } = require('./components/window');
 const { createSplashWindow } = require('./components/splash');
 const { setupIpcListener } = require('./components/ipc');
 const { waitEvent, waitAll, wait } = require('./components/utils');
@@ -24,7 +24,7 @@ app.on('will-finish-launching', () => {
         if (mainWindow) {
             mainWindow.webContents.send(
                 'epocProjectPicked',
-                JSON.stringify({ name: null, modified: null, filepath: filepath, workdir: null })
+                JSON.stringify({ name: null, modified: null, filepath: filepath, workdir: null }),
             );
         }
     });
@@ -68,14 +68,6 @@ app.whenReady().then(() => {
         console.log(e);
     });
 });
-
-function createNewWindow() {
-    const newWindow = createMainWindow();
-    setupIpcListener(newWindow);
-    setupWindow(newWindow);
-
-    newWindow.show();
-}
 
 ipcMain.on('newWindow', () => {
     createNewWindow();
