@@ -15,6 +15,7 @@ const headless = process.argv.includes('--headless=true');
 let mainWindow;
 let splashWindow;
 let filepath = process.argv[1] ? path.normalize(process.argv[1]) : null;
+let fileToOpen = null;
 
 app.on('will-finish-launching', () => {
     app.on('open-file', async (event, path) => {
@@ -26,6 +27,8 @@ app.on('will-finish-launching', () => {
                 'epocProjectPicked',
                 JSON.stringify({ name: null, modified: null, filepath: filepath, workdir: null }),
             );
+        } else {
+            fileToOpen = path;
         }
     });
 });
@@ -66,6 +69,13 @@ app.whenReady().then(() => {
     autoUpdater.on('update-downloaded', (e) => {
         console.log('Update ready');
         console.log(e);
+    });
+
+    ipcMain.on('initialized', () => {
+        mainWindow.webContents.send(
+            'epocProjectPicked',
+            JSON.stringify({ name: null, modified: null, filepath: fileToOpen, workdir: null }),
+        );
     });
 });
 
