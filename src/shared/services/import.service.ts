@@ -19,6 +19,7 @@ import { useEditorStore, useGraphStore } from '@/src/shared/stores';
 const mapType = {
     video: standardPages.find((s) => s.type === 'video'),
     html: standardPages.find((s) => s.type === 'text'),
+    audio: standardPages.find((s) => s.type === 'audio'),
     'multiple-choice': questions.find((s) => s.type === 'choice'),
     choice: questions.find((s) => s.type === 'choice'),
     'drag-and-drop': questions.find((s) => s.type === 'drag-and-drop'),
@@ -203,12 +204,12 @@ function setQuestionData(type: string, question: any) {
 export function createGraphFromImport(importedEpoc) {
     const graphStore = useGraphStore();
     const editorStore = useEditorStore();
-    
+
     graphStore.setFlow(null);
     router.push('/editor').then(() => {
         editorStore.loading = false;
         if (!importedEpoc || !importedEpoc.workdir) return;
-        
+
         createGraphEpocFromData(importedEpoc.epoc);
         saveState();
     });
