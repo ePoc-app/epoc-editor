@@ -248,7 +248,7 @@ function newQuestion(epoc: EpocV1, questionNode: any): string {
                 };
             });
             type = questionNode.formType;
-        } else if (questionNode.formType === 'custom'){
+        } else if (questionNode.formType === 'custom') {
             //? responses need to contain values but we don't need them for custom questions
             responses = ['sample response'];
 
@@ -267,13 +267,13 @@ function newQuestion(epoc: EpocV1, questionNode: any): string {
         score: questionNode.formValues?.score || 0,
         responses,
         correctResponse,
-        explanation: questionNode.formValues?.explanation || '',
+        feedback: questionNode.formValues?.explanation || '',
     };
 
-    if(questionNode.formType === 'custom') {
+    if (questionNode.formType === 'custom') {
         (question as CustomQuestion).template = template;
         (question as CustomQuestion).data = {};
-        for(const value of questionNode.formValues.data) {
+        for (const value of questionNode.formValues.data) {
             (question as CustomQuestion).data[value.key] = value.value;
         }
     }
@@ -314,7 +314,7 @@ export const graphService = {
     getPreviousNode,
     getNextNode,
     openContextMenu,
-    getProjectJSON
+    getProjectJSON,
 };
 
 let openedConditionIndex: number | null = null;
