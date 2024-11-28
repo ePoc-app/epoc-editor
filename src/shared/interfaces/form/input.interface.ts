@@ -27,4 +27,6 @@ export interface Input {
     linkedOptions?: string;
     targetDirectory?: string;
     hint?: string;
+    collapsible?: boolean;
+    collapsibleLabel?: string;
 }

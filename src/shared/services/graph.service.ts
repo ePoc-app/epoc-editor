@@ -206,6 +206,11 @@ function newContent(epoc: EpocV1, pageNode: GraphNode): string {
     }
 }
 
+interface Response {
+    label: string;
+    value: string;
+    feedback?: string;
+}
 //TODO: refactor this function
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function newQuestion(epoc: EpocV1, questionNode: any): string {
@@ -217,29 +222,47 @@ function newQuestion(epoc: EpocV1, questionNode: any): string {
     //? Custom question don't save responses only correctResponse
     if (questionNode.formValues && (questionNode.formValues.responses || questionNode.formType === 'custom')) {
         if (questionNode.formType === 'choice') {
-            responses = questionNode.formValues.responses.map((r) => {
-                return {
+            responses = questionNode.formValues.responses.map((r: Response) => {
+                const response: Response = {
                     label: r.label,
                     value: r.value,
                 };
+
+                if (r.feedback) {
+                    response.feedback = r.feedback;
+                }
+
+                return response;
             });
             correctResponse = questionNode.formValues.responses.filter((r) => r.isCorrect).map((r) => r.value);
             type = correctResponse.length > 1 ? 'multiple-choice' : 'choice';
         } else if (questionNode.formType === 'reorder') {
-            responses = questionNode.formValues.responses.map((r: { label: string; value: string }) => {
-                return {
+            responses = questionNode.formValues.responses.map((r: Response) => {
+                const response: Response = {
                     label: r.label,
                     value: r.value,
                 };
+
+                if (r.feedback) {
+                    response.feedback = r.feedback;
+                }
+
+                return response;
             });
             correctResponse = questionNode.formValues.responses.reduce((acc, r) => acc + r.value, '');
             type = 'reorder';
         } else if (['drag-and-drop', 'dropdown-list', 'swipe'].includes(questionNode.formType)) {
-            responses = questionNode.formValues.responses.map((r: { label: string; value: string }) => {
-                return {
+            responses = questionNode.formValues.responses.map((r: Response) => {
+                const response: Response = {
                     label: r.label,
                     value: r.value,
                 };
+
+                if (r.feedback) {
+                    response.feedback = r.feedback;
+                }
+
+                return response;
             });
             correctResponse = questionNode.formValues.categories.map((cat) => {
                 return {

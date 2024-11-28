@@ -8,6 +8,7 @@ const props = defineProps<{
     inputValue: string;
     insideCard?: boolean;
     classList?: string;
+    collapsible?: boolean;
 }>();
 
 const emit = defineEmits<{

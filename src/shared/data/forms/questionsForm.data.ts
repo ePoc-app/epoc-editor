@@ -49,9 +49,9 @@ export const qcmForm: Form = {
                     inputs: [
                         {
                             id: 'label',
-                            type: 'textarea',
-                            label: '',
-                            placeholder: 'Saisissez une réponse ..',
+                            type: 'text',
+                            label: 'Réponse',
+                            placeholder: 'Saisissez une réponse...',
                             value: '',
                         },
                         {
@@ -60,6 +60,15 @@ export const qcmForm: Form = {
                             label: '',
                             placeholder: 'Valeur cachée',
                             value: '',
+                        },
+                        {
+                            id: 'feedback',
+                            type: 'textarea',
+                            label: 'Explication',
+                            placeholder: 'Saisissez une explication...',
+                            value: '',
+                            collapsible: true,
+                            collapsibleLabel: 'Ajouter une explication',
                         },
                         {
                             id: 'isCorrect',
@@ -154,8 +163,8 @@ export const dragDropForm: Form = {
                     inputs: [
                         {
                             id: 'label',
-                            type: 'textarea',
-                            label: '',
+                            type: 'text',
+                            label: 'Réponse',
                             placeholder: 'Saisissez une réponse...',
                             value: '',
                         },
@@ -165,6 +174,15 @@ export const dragDropForm: Form = {
                             label: '',
                             placeholder: 'Valeur cachée',
                             value: '',
+                        },
+                        {
+                            id: 'feedback',
+                            type: 'textarea',
+                            label: 'Explication',
+                            placeholder: 'Saisissez une explication...',
+                            value: '',
+                            collapsible: true,
+                            collapsibleLabel: 'Ajouter une explication',
                         },
                         {
                             id: 'category',
@@ -242,10 +260,19 @@ export const reorderForm: Form = {
                     inputs: [
                         {
                             id: 'label',
-                            type: 'textarea',
-                            label: '',
+                            type: 'text',
+                            label: 'Réponse',
                             placeholder: 'Saisissez une réponse...',
                             value: '',
+                        },
+                        {
+                            id: 'feedback',
+                            type: 'textarea',
+                            label: 'Explication',
+                            placeholder: 'Saisissez une explication...',
+                            value: '',
+                            collapsible: true,
+                            collapsibleLabel: 'Ajouter une explication',
                         },
                         {
                             id: 'value',
@@ -342,10 +369,19 @@ export const swipeForm: Form = {
                     inputs: [
                         {
                             id: 'label',
-                            type: 'textarea',
-                            label: '',
+                            type: 'text',
+                            label: 'Réponse',
                             placeholder: 'Saisissez une proposition',
                             value: '',
+                        },
+                        {
+                            id: 'feedback',
+                            type: 'textarea',
+                            label: 'Explication',
+                            placeholder: 'Saisissez une explication...',
+                            value: '',
+                            collapsible: true,
+                            collapsibleLabel: 'Ajouter une explication',
                         },
                         {
                             id: 'value',
@@ -450,10 +486,19 @@ export const listForm: Form = {
                     inputs: [
                         {
                             id: 'label',
-                            type: 'textarea',
-                            label: '',
+                            type: 'text',
+                            label: 'Réponse',
                             placeholder: 'Saisissez une question...',
                             value: '',
+                        },
+                        {
+                            id: 'feedback',
+                            type: 'textarea',
+                            label: 'Explication',
+                            placeholder: 'Saisissez une explication...',
+                            value: '',
+                            collapsible: true,
+                            collapsibleLabel: 'Ajouter une explication',
                         },
                         {
                             id: 'value',

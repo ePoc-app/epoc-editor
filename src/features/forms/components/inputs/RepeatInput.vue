@@ -21,6 +21,8 @@ const props = defineProps<{
     inputValues: string[];
     fieldIndex: number;
     addButton?: boolean;
+    collapsible?: boolean;
+    collapsibleLabel?: string;
 }>();
 
 const emit = defineEmits<{
@@ -56,12 +58,12 @@ function onInput(value: string, id: string, index: number) {
 
 function addCard() {
     const defaultValues =
-        props.inputs.length === 1
-            ? props.inputs[0].value
-            : props.inputs.reduce((defaultValues, input) => {
-                  defaultValues[input.id] = input.type === 'hidden' ? generateContentId() : input.value;
-                  return defaultValues;
-              }, {});
+        props.inputs.length === 1 ?
+            props.inputs[0].value
+        :   props.inputs.reduce((defaultValues, input) => {
+                defaultValues[input.id] = input.type === 'hidden' ? generateContentId() : input.value;
+                return defaultValues;
+            }, {});
 
     const addEvent: RepeatAddEvent = {
         type: 'add',
@@ -184,6 +186,8 @@ function getLabelIdentifier(index) {
                         :input-value="inputs.length > 1 ? element[input.id] : element"
                         :inside-card="true"
                         :pos="index"
+                        :collapsible="input.collapsible"
+                        :collapsible-label="input.collapsibleLabel"
                         @input="onInput($event, input.id, index)"
                         @check="onCheck($event, input.id, index)"
                         @save-given-state="emit('saveGivenState', $event)"

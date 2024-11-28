@@ -23,6 +23,8 @@ const props = defineProps<{
     insideCard?: boolean;
     pos?: number;
     fieldIndex?: number;
+    collapsible?: boolean;
+    collapsibleLabel?: string;
 }>();
 
 const emit = defineEmits<{
@@ -51,13 +53,26 @@ function onLabelClick(inputType: string) {
 function showLabel(inputType: string) {
     return inputType !== 'checkbox' && inputType !== 'repeat';
 }
+
+const collapsed = ref(Boolean(props.collapsible) && !props.inputValue);
+function handleCollapse() {
+    if (!props.collapsible) return;
+
+    collapsed.value = !collapsed.value;
+}
 </script>
 
 <template>
     <div class="input-group">
-        <div v-if="input.label && showLabel(input.type)" class="input-label">
+        <div
+            v-if="input.label && showLabel(input.type)"
+            class="input-label"
+            :class="{ collapse: collapsible }"
+            @click="handleCollapse"
+        >
+            <i v-if="collapsible" class="icon-chevron-down collapse-icon" :class="{ collapsed: collapsed }" />
             <label :for="inputId" @click="onLabelClick(input.type)">
-                {{ input.label }}
+                {{ collapsible && !inputValue ? input.collapsibleLabel : input.label }}
             </label>
             <i
                 v-if="input.hint"
@@ -73,105 +88,110 @@ function showLabel(inputType: string) {
             />
         </div>
 
-        <TextInput
-            v-if="input.type === 'text'"
-            :id="inputId"
-            :label="input.label"
-            :placeholder="input.placeholder"
-            :input-value="inputValue as string"
-            :inside-card="insideCard"
-            @input="emit('input', $event)"
-            @save-given-state="emit('saveGivenState', $event)"
-        />
-        <HtmlInput
-            v-if="input.type === 'html' || input.type === 'html-text' || input.type === 'html-inline'"
-            :id="inputId"
-            ref="htmlInput"
-            :label="input.label"
-            :placeholder="input.placeholder"
-            :input-value="inputValue as string"
-            :inside-card="insideCard"
-            :type="input.type"
-            @input="emit('input', $event)"
-            @save-given-state="emit('saveGivenState', $event)"
-        />
-        <TextAreaInput
-            v-if="input.type === 'textarea'"
-            :id="inputId"
-            :label="input.label"
-            :placeholder="input.placeholder"
-            :input-value="inputValue as string"
-            :inside-card="insideCard"
-            @input="emit('input', $event)"
-            @save-given-state="emit('saveGivenState', $event)"
-        />
-        <FileInput
-            v-if="input.type === 'file'"
-            :id="inputId"
-            :label="input.label"
-            :accept="input.accept"
-            :input-value="inputValue as string"
-            :placeholder="input.placeholder"
-            :target-directory="input.targetDirectory"
-            @input="emit('input', $event)"
-            @save-given-state="emit('saveGivenState', $event)"
-        />
-        <ScoreInput
-            v-if="input.type === 'score'"
-            :id="inputId"
-            :label="input.label"
-            :input-value="Number(inputValue)"
-            @input="emit('input', $event)"
-            @save-given-state="emit('saveGivenState', $event)"
-        />
-        <CheckBoxInput
-            v-if="input.type === 'checkbox'"
-            :id="inputId"
-            :label="input.label"
-            :hint="input.hint"
-            :input-value="inputValue as boolean"
-            @change="emit('check', $event)"
-            @save-given-state="emit('saveGivenState', $event)"
-        />
-        <RadioInput
-            v-if="input.type === 'radio-group'"
-            :id="inputId"
-            :label="input.label"
-            :input-value="inputValue as string"
-            :pos="pos"
-            @change="emit('input', $event)"
-            @save-given-state="emit('saveGivenState', $event)"
-        />
-        <SelectInput
-            v-if="input.type === 'select'"
-            :id="inputId"
-            :label="input.label"
-            :placeholder="input.placeholder"
-            :input-value="inputValue as string"
-            :options="input.options"
-            :linked-options="input.linkedOptions"
-            @change="emit('input', $event)"
-            @save-given-state="emit('saveGivenState', $event)"
-        />
-        <RepeatInput
-            v-if="input.type === 'repeat'"
-            :id="inputId"
-            :label="input.label"
-            :input-values="inputValue as string[]"
-            :inputs="input.inputs"
-            :field-index="fieldIndex"
-            :add-button="input.addButton"
-            @change="emit('repeatInput', $event)"
-            @save-given-state="emit('saveGivenState', $event)"
-        />
-        <BadgesInput v-if="input.type === 'badge'" :input-value="inputValue as string[]" />
-        <IconPicker
-            v-if="input.type === 'icon-picker'"
-            :label="input.label"
-            :input-value="inputValue as string"
-            @input="emit('input', $event)"
-        />
-        <ConditionInput v-if="input.type === 'badge-conditions'" />
+        <template v-if="!collapsed">
+            <TextInput
+                v-if="input.type === 'text'"
+                :id="inputId"
+                :label="input.label"
+                :placeholder="input.placeholder"
+                :input-value="inputValue as string"
+                :inside-card="insideCard"
+                @input="emit('input', $event)"
+                @save-given-state="emit('saveGivenState', $event)"
+            />
+            <HtmlInput
+                v-if="input.type === 'html' || input.type === 'html-text' || input.type === 'html-inline'"
+                :id="inputId"
+                ref="htmlInput"
+                :label="input.label"
+                :placeholder="input.placeholder"
+                :input-value="inputValue as string"
+                :inside-card="insideCard"
+                :type="input.type"
+                @input="emit('input', $event)"
+                @save-given-state="emit('saveGivenState', $event)"
+            />
+            <TextAreaInput
+                v-if="input.type === 'textarea'"
+                :id="inputId"
+                :label="input.label"
+                :placeholder="input.placeholder"
+                :input-value="inputValue as string"
+                :inside-card="insideCard"
+                :collapsible="collapsible"
+                @input="emit('input', $event)"
+                @save-given-state="emit('saveGivenState', $event)"
+            />
+            <FileInput
+                v-if="input.type === 'file'"
+                :id="inputId"
+                :label="input.label"
+                :accept="input.accept"
+                :input-value="inputValue as string"
+                :placeholder="input.placeholder"
+                :target-directory="input.targetDirectory"
+                @input="emit('input', $event)"
+                @save-given-state="emit('saveGivenState', $event)"
+            />
+            <ScoreInput
+                v-if="input.type === 'score'"
+                :id="inputId"
+                :label="input.label"
+                :input-value="Number(inputValue)"
+                @input="emit('input', $event)"
+                @save-given-state="emit('saveGivenState', $event)"
+            />
+            <CheckBoxInput
+                v-if="input.type === 'checkbox'"
+                :id="inputId"
+                :label="input.label"
+                :hint="input.hint"
+                :input-value="inputValue as boolean"
+                @change="emit('check', $event)"
+                @save-given-state="emit('saveGivenState', $event)"
+            />
+            <RadioInput
+                v-if="input.type === 'radio-group'"
+                :id="inputId"
+                :label="input.label"
+                :input-value="inputValue as string"
+                :pos="pos"
+                @change="emit('input', $event)"
+                @save-given-state="emit('saveGivenState', $event)"
+            />
+            <SelectInput
+                v-if="input.type === 'select'"
+                :id="inputId"
+                :label="input.label"
+                :placeholder="input.placeholder"
+                :input-value="inputValue as string"
+                :options="input.options"
+                :linked-options="input.linkedOptions"
+                @change="emit('input', $event)"
+                @save-given-state="emit('saveGivenState', $event)"
+            />
+            <RepeatInput
+                v-if="input.type === 'repeat'"
+                :id="inputId"
+                :label="input.label"
+                :input-values="inputValue as string[]"
+                :inputs="input.inputs"
+                :field-index="fieldIndex"
+                :add-button="input.addButton"
+                :collapsible="collapsible"
+                :collapsible-label="collapsibleLabel"
+                @change="emit('repeatInput', $event)"
+                @save-given-state="emit('saveGivenState', $event)"
+            />
+            <BadgesInput v-if="input.type === 'badge'" :input-value="inputValue as string[]" />
+            <IconPicker
+                v-if="input.type === 'icon-picker'"
+                :label="input.label"
+                :input-value="inputValue as string"
+                @input="emit('input', $event)"
+            />
+            <ConditionInput v-if="input.type === 'badge-conditions'" />
+        </template>
     </div>
 </template>
 
@@ -179,5 +199,28 @@ function showLabel(inputType: string) {
 .input-group {
     display: flex;
     flex-direction: column;
+}
+
+.collapse {
+    cursor: pointer;
+    transition: 0.25s;
+
+    label {
+        cursor: pointer;
+    }
+
+    &:hover {
+        label {
+            text-decoration: underline;
+        }
+    }
+
+    &-icon {
+        transition: 0.2s;
+
+        &.collapsed {
+            transform: rotate(-90deg);
+        }
+    }
 }
 </style>
