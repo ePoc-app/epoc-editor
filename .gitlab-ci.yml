@@ -16,6 +16,8 @@ build:
       - dist_electron/*
   only:
     - main
+  tags:
+    - gitlab-ci-learninglab-4
 
 buildAll:
   image: node:18
@@ -30,6 +32,8 @@ buildAll:
       - dist_electron/*
   only:
     - tags
+  tags:
+    - gitlab-ci-learninglab-4
 
 sign:
   stage: sign
@@ -40,4 +44,6 @@ sign:
     - buildAll
   only:
     - tags
+  tags:
+    - gitlab-ci-learninglab-4
 
