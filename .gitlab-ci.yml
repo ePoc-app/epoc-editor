@@ -25,7 +25,7 @@ buildAll:
   script:
     - npm i
     - npm run updatePreview
-    - npm run build -- -- --x64 --mac pkg --win nsis --linux AppImage --publish never
+    - npm run build -- -- --x64 --mac --win nsis --linux AppImage --publish never
   artifacts:
     expire_in: never
     paths:
