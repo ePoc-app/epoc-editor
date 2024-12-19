@@ -23,7 +23,8 @@ buildAll:
   image: node:18
   stage: build
   script:
-    - npm i --package-lock-only
+    - npm i
+    - npm i --save-optional dmg-license
     - npm run updatePreview
     - npm run build -- -- --x64 --mac --win nsis --linux AppImage --publish never
   artifacts:
