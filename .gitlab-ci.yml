@@ -24,7 +24,7 @@ buildAll:
   stage: build
   script:
     - npm i
-    - npm i --save-optional dmg-license
+    - npm i -D dmg-license -f
     - npm run updatePreview
     - npm run build -- -- --x64 --mac --win nsis --linux AppImage --publish never
   artifacts:
