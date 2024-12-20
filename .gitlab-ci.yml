@@ -33,7 +33,7 @@ buildAll:
   only:
     - tags
   tags:
-    - gitlab-ci-learninglab-4
+    - gitlab-ci-learninglab-macos
 
 sign:
   stage: sign
@@ -45,5 +45,5 @@ sign:
   only:
     - tags
   tags:
-    - gitlab-ci-learninglab-4
+    - gitlab-ci-learninglab-macos
 
