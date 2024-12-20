@@ -87,15 +87,19 @@ module.exports = {
 
         const appName = context.packager.appInfo.productFilename;
 
-        return await notarize({
-            tool: 'notarytool',
-            appBundleId: 'fr.inria.epoc-editor',
-            appPath: `${appOutDir}/${appName}.app`,
-            appleId: process.env.APPLE_ID,
-            appleIdPassword: process.env.APPLE_PASSWORD,
-            teamId: process.env.APPLE_TEAM_ID,
-            ascProvider: process.env.APPLE_ASC
-        });
+        try {
+            return await notarize({
+                tool: 'notarytool',
+                appBundleId: 'fr.inria.epoc-editor',
+                appPath: `${appOutDir}/${appName}.app`,
+                appleId: process.env.APPLE_ID,
+                appleIdPassword: process.env.APPLE_PASSWORD,
+                teamId: process.env.APPLE_TEAM_ID,
+                ascProvider: process.env.APPLE_ASC
+            });
+        } catch (e) {
+            console.log('Could not notarize');
+        }
     }
 };
 

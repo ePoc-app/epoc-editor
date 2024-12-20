@@ -6,7 +6,8 @@ stages:
 build:
   stage: build
   script:
-    - pwd && node --version && touch .env
+    - pwd && node --version
+    - echo "NO_NOTARIZE=true" >> .env
     - npm i
     - npm run updatePreview
     - npm run build -- -- --publish never
@@ -22,7 +23,8 @@ build:
 buildAll:
   stage: build
   script:
-    - pwd && node --version && touch .env
+    - pwd && node --version
+    - echo "NO_NOTARIZE=true" >> .env
     - npm i
     - npm run updatePreview
     - npm run build -- -- --x64 --mac --win nsis --linux AppImage --publish never
