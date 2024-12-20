@@ -28,10 +28,15 @@ buildAll:
     - npm i
     - npm run updatePreview
     - npm run build -- -- --x64 --mac --win nsis --linux AppImage --publish never
+    - ls -lah dist_electron/
   artifacts:
     expire_in: never
     paths:
-      - dist_electron/*
+      - dist_electron/*.yml
+      - dist_electron/*.AppImage
+      - dist_electron/*.dmg
+      - dist_electron/*.exe
+      - dist_electron/*.blockmap
   only:
     - tags
   tags:
