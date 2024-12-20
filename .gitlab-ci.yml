@@ -4,9 +4,9 @@ stages:
   - sign
 
 build:
-  image: node:18
   stage: build
   script:
+    - pwd && node --version
     - npm i
     - npm run updatePreview
     - npm run build -- -- --publish never
@@ -17,12 +17,12 @@ build:
   only:
     - main
   tags:
-    - gitlab-ci-learninglab-4
+    - macos
 
 buildAll:
-  image: node:18
   stage: build
   script:
+    - pwd && node --version
     - npm i
     - npm run updatePreview
     - npm run build -- -- --x64 --mac --win nsis --linux AppImage --publish never
@@ -33,7 +33,7 @@ buildAll:
   only:
     - tags
   tags:
-    - gitlab-ci-learninglab-macos
+    - macos
 
 sign:
   stage: sign
@@ -45,5 +45,5 @@ sign:
   only:
     - tags
   tags:
-    - gitlab-ci-learninglab-macos
+    - macos
 
