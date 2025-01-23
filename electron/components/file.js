@@ -133,7 +133,6 @@ const openEpocProject = async function (filepath) {
         if (!fs.existsSync(path.join(workdir, 'project.json'))) {
             const project = await importEpoc(filepath, startTime, workdir);
             store.updateState('projects', { [BrowserWindow.getFocusedWindow().id]: project });
-            console.log('filepath', filepath);
             return {
                 project,
                 imported: true,
@@ -219,7 +218,7 @@ const zipFiles = async function (workdir, filepath, exporting) {
 
     const zip = new AdmZip();
     zip.addLocalFolder(workdir, '', (entry) => {
-        return excluded.every((e) => entry.indexOf(e) === -1);
+        return excluded.every((e) => entry.replaceAll('\\', '/').indexOf(e) === -1);
     });
     await zip.writeZipPromise(filepath, null);
 };
