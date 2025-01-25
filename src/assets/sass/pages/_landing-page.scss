@@ -1,0 +1,33 @@
+.file {
+    &-icon {
+        border-radius: 6px;
+        background-color: white;
+        border: 1px solid var(--list-border);
+        box-shadow: $default-box-shadow;
+        font-size: 1.2rem;
+        padding: spacer(1) spacer(2);
+    }
+
+    &-list {
+        @include flexbox($flex-direction: column, $gap: spacer(2));
+        width: 100%;
+    }
+
+    &-list-item {
+        @include flexbox($align-items: center, $gap: spacer(2));
+        width: 100%;
+        background-color: var(--item-background);
+        border: 2px solid var(--list-border);
+        border-radius: 6px;
+        padding: spacer(2);
+
+        p {
+            flex-grow: 1;
+        }
+
+        small {
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+    }
+}

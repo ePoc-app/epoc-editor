@@ -1,0 +1,12 @@
+.card {
+    background-color: var(--content);
+    border-radius: 12px;
+    @include flexbox($flex-direction: column);
+
+    &-large {
+        padding: spacer(10);
+        box-shadow: $default-box-shadow;
+        max-width: 800px;
+        min-width: 500px;
+    }
+}
