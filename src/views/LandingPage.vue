@@ -44,13 +44,13 @@ function importProject() {
             @accept="importProject"
             @cancel="cancelImport"
         >
-            <h3>Cet ePoc est une version publiée, vous devez l'importer avant de pouvoir l'éditer ici</h3>
+            <h3>{{ $t('landing.published') }}</h3>
         </ChoiceModal>
 
         <div v-if="editorStore.loading" class="loading">
             <div class="spinner"></div>
             <span v-if="editorStore.currentProject.filepath">
-                Chargement de "{{ editorStore.currentProject.filepath }}"
+                {{ $t('landing.loadingPath', { path: editorStore.currentProject.filepath }) }}
             </span>
             <span v-else>Chargement de l'ePoc</span>
         </div>
@@ -59,15 +59,15 @@ function importProject() {
             <div class="buttons">
                 <button class="btn btn-outline btn-large" @click="pickProject">
                     <i class="icon-ouvrir" />
-                    Ouvrir un projet existant
+                    {{ $t('landing.open') }}
                 </button>
                 <button class="btn btn-outline btn-large" @click="createProject">
                     <i class="icon-creer" />
-                    Créer un nouveau projet
+                    {{ $t('landing.create') }}
                 </button>
             </div>
             <div>
-                <h3>Fichiers récents</h3>
+                <h3>{{ $t('landing.recents') }}</h3>
                 <hr class="separator" />
                 <div v-for="epoc of editorStore.recentProjects" :key="epoc.name" class="card-list-item">
                     <div class="card-icon">
@@ -78,7 +78,7 @@ function importProject() {
                     </p>
                     <small>{{ new Date(epoc.modified).toLocaleString() }}</small>
                     <hr class="vertical-separator" />
-                    <div class="btn-open" @click="openProject(epoc)">Ouvrir</div>
+                    <div class="btn-open" @click="openProject(epoc)">{{ $t('global.open') }}</div>
                 </div>
             </div>
         </div>
