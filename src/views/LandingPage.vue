@@ -52,7 +52,7 @@ function importProject() {
             <span v-if="editorStore.currentProject.filepath">
                 {{ $t('landing.loadingPath', { path: editorStore.currentProject.filepath }) }}
             </span>
-            <span v-else>Chargement de l'ePoc</span>
+            <span v-else>{{ $t('landing.loadingEpoc') }}</span>
         </div>
 
         <div v-else>
