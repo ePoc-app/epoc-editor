@@ -19,7 +19,7 @@ function openIconModal() {
         <BadgeItem :icon="inputValue" :view-mode="true" :inactive="!inputValue" />
         <button class="btn btn-form" @click="openIconModal">
             <i class="icon-plus"></i>
-            Modifier l'icône
+            {{ $t('inputs.updateIcon') }}
         </button>
     </div>
 </template>

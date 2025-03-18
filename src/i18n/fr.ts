@@ -10,6 +10,9 @@ export const frMessages = {
         save: 'Sauvegarder',
         true: 'Vrai',
         false: 'Faux',
+        right: 'droite',
+        left: 'gauche',
+        add: 'Ajouter',
     },
     validation: {
         yes: 'OUI, SUPPRIMER',
@@ -35,5 +38,13 @@ export const frMessages = {
         selectIcon: 'Sélectionner une icône',
         defaultIcons: 'Icônes par défaut',
         customIcons: 'Icônes personnalisées',
+    },
+    inputs: {
+        manageConditions: 'Configurer les conditions',
+        updateIcon: "Modifier l'icône",
+        leftChoice: 'Choix gauche',
+        rightChoice: 'Choix droit',
+        accordion: 'Plier/déplier',
+        accordionDescription: 'Plier/déplier avec titre et contenu',
     },
 };

@@ -13,6 +13,9 @@ import {
 } from '@/src/shared/interfaces';
 import { ref } from 'vue';
 import { generateContentId } from '@/src/shared/services/graph.service';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps<{
     id: string;
@@ -136,7 +139,7 @@ function dragOver(event: DragEvent) {
 // Used to get "choice left/right" on swipe choice
 function getLabelIdentifier(index) {
     if (props.addButton === false) {
-        return index === 0 ? 'droite' : 'gauche';
+        return index === 0 ? t('global.right') : t('global.left');
     } else return index + 1;
 }
 </script>
@@ -199,7 +202,7 @@ function getLabelIdentifier(index) {
     <AddCard
         v-if="addButton !== false"
         :data-testid="`${id}-add`"
-        placeholder="Ajouter"
+        :placeholder="t('global.add')"
         class="add-card"
         @click="addCard"
     />

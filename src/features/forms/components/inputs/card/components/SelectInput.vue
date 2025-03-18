@@ -22,29 +22,28 @@ const currentNode = editorStore.getCurrentGraphNode;
 const currentContent = currentNode.data.elements.find(({ id }) => id === editorStore.openedElementId);
 
 function getOptions() {
-    if(!props.linkedOptions) return props.options;
+    if (!props.linkedOptions) return props.options;
 
     // In this case we have to change the epoc formValues
     //? refactor this if another case is needed
-    if(props.id === 'template') {
+    if (props.id === 'template') {
         const epocNode = editorStore.getEpocNode;
 
         return walkObjectPath(epocNode.data.formValues, props.linkedOptions);
     } else {
         return currentContent.formValues[props.linkedOptions];
-
     }
 }
 
 function walkObjectPath(object: any, path: string) {
     const currentKey = path.split('.')[0];
 
-    if(!currentKey) {
+    if (!currentKey) {
         return object;
     }
 
-    if(currentKey === '*') {
-        if(!object) return [];
+    if (currentKey === '*') {
+        if (!object) return [];
 
         return object.map((item: any) => walkObjectPath(item, path.slice(2)));
     } else {
@@ -65,7 +64,7 @@ function onChange(event: Event) {
 <template>
     <div class="select">
         <select :id="id" :value="inputValue" class="select-box" @change="onChange">
-            <option value="">Sélectionnez</option>
+            <option value="">{{ $t('global.pleaseSelect') }}</option>
             <option v-for="(option, index) in getOptions()" :key="index" :value="option">{{ option }}</option>
         </select>
     </div>
