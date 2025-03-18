@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import Modal from '@/src/components/LayoutModal.vue'
+import Modal from '@/src/components/LayoutModal.vue';
 import SettingsInput from './SettingsInput.vue';
-import ContentButton from '@/src/components/ContentButton.vue';
-import TopActionButton from '@/src/features/topBar/TopActionButton.vue';
 import { ref, onMounted, watch } from 'vue';
 import { useSettingsStore } from '@/src/shared/stores';
 
@@ -12,7 +10,7 @@ const spellcheck = ref(false);
 
 onMounted(() => {
     settingsStore.init();
-})
+});
 
 function save() {
     settingsStore.setSettings(spellcheck.value);
@@ -23,29 +21,31 @@ function open() {
     modal.value.open();
 }
 
-watch(() => modal.value?.isOpen, (isOpen) => {
-    if (isOpen) spellcheck.value = settingsStore?.settings?.spellcheck;
-})
+watch(
+    () => modal.value?.isOpen,
+    (isOpen) => {
+        if (isOpen) spellcheck.value = settingsStore?.settings?.spellcheck;
+    },
+);
 
 defineExpose({
-    open
-})
-
+    open,
+});
 </script>
 
 <template>
-    <Modal ref="modal" title="Paramètres">
+    <Modal ref="modal" :title="$t('settings.title')">
         <template v-if="modal" #trigger>
             <slot name="trigger" />
         </template>
 
         <div class="settings">
-            <SettingsInput v-model="spellcheck" type="toggle" label="Activer la vérification orthographique" />
+            <SettingsInput v-model="spellcheck" type="toggle" :label="$t('settings.spellcheck')" />
         </div>
 
         <template #footer>
-            <button class="btn-choice cancel" @click="modal.close">Annuler</button>
-            <button class="btn-choice save" @click="save">Valider</button>
+            <button class="btn-choice cancel" @click="modal.close">{{ $t('global.cancel') }}</button>
+            <button class="btn-choice save" @click="save">{{ $t('global.validate') }}</button>
         </template>
     </Modal>
 </template>
@@ -54,7 +54,7 @@ defineExpose({
 .settings {
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    gap: 0.5rem;
 }
 
 .btn-choice {

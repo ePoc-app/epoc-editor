@@ -24,7 +24,7 @@ const emit = defineEmits<{
         <i :class="icon" />
         <span v-if="text" class="text-top-bar">{{ text }}</span>
         <select id="select-box" :value="inputValue" :disabled="disabled" class="select-box" @change="onSelect">
-            <option value="0">Ajuster</option>
+            <option value="0">{{ $t('header.adjust') }}</option>
             <option value="0.5">50%</option>
             <option value="0.75">75%</option>
             <option value="1">100%</option>

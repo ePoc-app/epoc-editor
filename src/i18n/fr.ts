@@ -13,6 +13,7 @@ export const frMessages = {
         right: 'droite',
         left: 'gauche',
         add: 'Ajouter',
+        validate: 'Valider',
     },
     validation: {
         yes: 'OUI, SUPPRIMER',
@@ -46,5 +47,29 @@ export const frMessages = {
         rightChoice: 'Choix droit',
         accordion: 'Plier/déplier',
         accordionDescription: 'Plier/déplier avec titre et contenu',
+    },
+    toast: {
+        modelSaved: 'Modèle sauvegardé 👌',
+        modelExists: 'Le modèle existe déjà 🤔',
+    },
+    settings: {
+        title: 'Paramètres',
+        spellcheck: 'Activer la vérification orthographique',
+    },
+    models: {
+        title: 'Modèles de page',
+        empty: "Aucun modèle de page n'as été créé",
+        dragdrop: 'Glisser/déposer pour ajouter un modèle',
+        model: 'Modèle',
+    },
+    header: {
+        undo: 'Annuler',
+        redo: 'Rétablir',
+        preview: 'Aperçu',
+        publish: 'Publier',
+        adjust: 'Ajuster',
+        never: 'jamais',
+        lastSave: 'Dernière sauvegarde :',
+        new: 'Nouvel ePoc',
     },
 };

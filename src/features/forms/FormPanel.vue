@@ -14,6 +14,9 @@ import {
     isFormButtonDisabled,
 } from '@/src/shared/services/graph';
 import LinkedBadges from '@/src/features/badge/components/LinkedBadges.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const editorStore = useEditorStore();
 
@@ -57,8 +60,8 @@ function actionOnForm(action: string) {
 
         case 'save-model':
             if (editorStore.savePageModel(currentNode.data.elements.map((element: NodeElement) => element.action))) {
-                toaster.success('Modèle sauvegardé 👌');
-            } else toaster.error('Le modèle existe déjà 🤔');
+                toaster.success(t('toast.modelSaved'));
+            } else toaster.error(t('toast.modelExists'));
             break;
 
         case 'simple-question':
