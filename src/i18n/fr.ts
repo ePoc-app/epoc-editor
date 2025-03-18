@@ -3,6 +3,13 @@ export const frMessages = {
         open: 'Ouvrir',
         cancel: 'Annuler',
         accept: 'Accepter',
+        element: 'Élément',
+        pleaseSelect: 'Veuillez sélectionner',
+        and: 'et',
+        condition: 'Condition',
+        save: 'Sauvegarder',
+        true: 'Vrai',
+        false: 'Faux',
     },
     validation: {
         yes: 'OUI, SUPPRIMER',
@@ -19,5 +26,14 @@ export const frMessages = {
     },
     editor: {
         select: "Cliquer sur l'élément de contenu concerné par la condition pour la sélectionner",
+    },
+    badge: {
+        supported: 'Fichier supporté: SVG',
+        select: 'Sélectionner un fichier',
+        conditions: "Conditions d'obtention du badge",
+        add: 'Ajouter une condition',
+        selectIcon: 'Sélectionner une icône',
+        defaultIcons: 'Icônes par défaut',
+        customIcons: 'Icônes personnalisées',
     },
 };

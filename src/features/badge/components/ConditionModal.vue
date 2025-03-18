@@ -53,7 +53,7 @@ onMounted(() => {
         <article class="condition-modal">
             <header>
                 <div class="content">
-                    <h2>Conditions d'obtention du badge</h2>
+                    <h2>{{ $t('badge.conditions') }}</h2>
                     <button class="btn btn-close" @click="close"><i class="icon-x"></i></button>
                 </div>
             </header>
@@ -68,14 +68,16 @@ onMounted(() => {
                 />
                 <button class="add btn btn-form" @click="addCondition">
                     <i class="icon-plus"></i>
-                    Ajouter une condition
+                    {{ $t('badge.add') }}
                 </button>
             </div>
 
             <footer>
                 <div class="content">
-                    <button class="btn-choice cancel" @click="close">ANNULER</button>
-                    <button :disabled="!allConditionsValid" class="btn-choice save" @click="save">ENREGISTRER</button>
+                    <button class="btn-choice cancel" @click="close">{{ $t('global.cancel').toUpperCase() }}</button>
+                    <button :disabled="!allConditionsValid" class="btn-choice save" @click="save">
+                        {{ $t('global.save').toUpperCase() }}
+                    </button>
                 </div>
             </footer>
         </article>

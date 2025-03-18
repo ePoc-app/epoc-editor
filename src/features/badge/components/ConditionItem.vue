@@ -63,7 +63,7 @@ function handleVerbChange(value: string) {
     <article>
         <i class="icon-supprimer delete" @click.stop="removeCondition"></i>
         <div class="logic-condition">
-            <button class="logic-choice active">ET</button>
+            <button class="logic-choice active">{{ $t('global.and').toUpperCase() }}</button>
         </div>
         <!-- Condition switch -->
         <!-- <div v-if="conditionIndex !== 0" class="logic-condition">
@@ -81,7 +81,7 @@ function handleVerbChange(value: string) {
                 class="grid-item"
             />
             <div class="select">
-                Condition
+                {{ $t('global.condition') }}
                 <select
                     id="condition"
                     :disabled="verbDisabled"
@@ -89,7 +89,7 @@ function handleVerbChange(value: string) {
                     :value="currentCondition.verb"
                     @change="handleVerbChange(($event.target as HTMLSelectElement).value)"
                 >
-                    <option value="">Veuillez choisir</option>
+                    <option value="">{{ $t('global.pleaseSelect') }}</option>
                     <option v-for="(description, verb) in getVerbs(elementType)" :key="verb" :value="verb">
                         {{ description.label }}
                     </option>

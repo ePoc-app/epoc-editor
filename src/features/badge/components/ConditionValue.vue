@@ -37,14 +37,14 @@ watch(
             :disabled="verb === ''"
             @change="
                 onChange(
-                    ($event.target as HTMLSelectElement).value !== ''
-                        ? ($event.target as HTMLSelectElement).value === 'true'
-                        : '',
+                    ($event.target as HTMLSelectElement).value !== '' ?
+                        ($event.target as HTMLSelectElement).value === 'true'
+                    :   '',
                 )
             "
         >
-            <option value="true">Vrai</option>
-            <option value="false">Faux</option>
+            <option value="true">{{ $t('global.true') }}</option>
+            <option value="false">{{ $t('global.false') }}</option>
         </select>
         <input
             v-else-if="valueType === 'number'"
