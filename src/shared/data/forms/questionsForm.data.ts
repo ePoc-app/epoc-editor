@@ -1,79 +1,82 @@
 import { Form } from '@/src/shared/interfaces';
 import { contentButtons } from './formButtons.data';
+import { i18n } from '@/src/i18n/config';
+
+const { t } = i18n.global;
 
 export const qcmForm: Form = {
     type: 'choice',
-    name: 'QCM',
+    name: t('questions.types.qcm'),
     icon: 'icon-qcm',
     displayFieldIndex: true,
     buttons: contentButtons,
     fields: [
         {
-            name: "Configuration de l'évaluation",
+            name: t('questions.configuration'),
             inputs: [
                 {
                     id: 'score',
                     type: 'score',
-                    label: 'Score',
+                    label: t('questions.score'),
                     value: 0,
                 },
             ],
         },
         {
-            name: 'Question',
+            name: t('questions.question'),
             inputs: [
                 {
                     id: 'label',
                     type: 'textarea',
-                    label: 'Question',
+                    label: t('questions.question'),
                     value: '',
-                    placeholder: 'Posez la question',
+                    placeholder: t('questions.askQuestion'),
                 },
                 {
                     id: 'statement',
                     type: 'html-inline',
-                    label: 'Consigne',
+                    label: t('questions.instruction'),
                     value: '',
-                    placeholder: 'Instruction pour répondre à la question',
+                    placeholder: t('questions.instructionPlaceholder'),
                 },
             ],
         },
         {
-            name: 'Réponses',
+            name: t('questions.responses'),
             inputs: [
                 {
                     id: 'responses',
-                    label: 'Réponse',
+                    label: t('questions.response'),
                     type: 'repeat',
                     value: [],
                     inputs: [
                         {
                             id: 'label',
                             type: 'text',
-                            label: 'Réponse',
-                            placeholder: 'Saisissez une réponse...',
+                            label: t('questions.response'),
+                            placeholder: t('questions.typeResponse'),
                             value: '',
                         },
                         {
                             id: 'value',
                             type: 'hidden',
                             label: '',
-                            placeholder: 'Valeur cachée',
+                            placeholder: t('forms.type'),
                             value: '',
                         },
                         {
                             id: 'feedback',
                             type: 'textarea',
-                            label: 'Explication',
-                            placeholder: 'Saisissez une explication...',
+                            label: t('questions.explanation'),
+                            placeholder: t('questions.typeExplanation'),
                             value: '',
                             collapsible: true,
-                            collapsibleLabel: 'Ajouter une explication',
+                            collapsibleLabel: t('questions.addExplanation'),
                         },
                         {
                             id: 'isCorrect',
                             type: 'checkbox',
-                            label: 'Bonne réponse',
+                            label: t('questions.correctResponse'),
                             value: false,
                         },
                     ],
@@ -81,14 +84,14 @@ export const qcmForm: Form = {
             ],
         },
         {
-            name: 'Explication',
+            name: t('questions.explanation'),
             inputs: [
                 {
                     id: 'explanation',
                     type: 'html',
                     label: '',
                     value: '',
-                    placeholder: 'Saisissez une explication',
+                    placeholder: t('questions.typeExplanation'),
                 },
             ],
         },
@@ -97,47 +100,47 @@ export const qcmForm: Form = {
 
 export const dragDropForm: Form = {
     type: 'drag-and-drop',
-    name: 'Drag & Drop',
+    name: t('questions.types.dragDrop'),
     icon: 'icon-dragdrop',
     displayFieldIndex: true,
     buttons: contentButtons,
     fields: [
         {
-            name: "Configuration de l'évaluation",
+            name: t('questions.configuration'),
             inputs: [
                 {
                     id: 'score',
                     type: 'score',
-                    label: 'Score',
+                    label: t('questions.score'),
                     value: 0,
                 },
             ],
         },
         {
-            name: 'Question',
+            name: t('questions.question'),
             inputs: [
                 {
                     id: 'label',
                     type: 'textarea',
-                    label: 'Question',
+                    label: t('questions.question'),
                     value: '',
-                    placeholder: 'Posez la question',
+                    placeholder: t('questions.askQuestion'),
                 },
                 {
                     id: 'statement',
                     type: 'html-inline',
-                    label: 'Consigne',
+                    label: t('questions.instruction'),
                     value: '',
-                    placeholder: 'Instruction pour répondre à la question',
+                    placeholder: t('questions.instructionPlaceholder'),
                 },
             ],
         },
         {
-            name: 'Catégories de réponses proposées',
+            name: t('questions.categories'),
             inputs: [
                 {
                     id: 'categories',
-                    label: 'Catégorie',
+                    label: t('questions.category'),
                     type: 'repeat',
                     value: [],
                     inputs: [
@@ -145,7 +148,7 @@ export const dragDropForm: Form = {
                             id: '',
                             type: 'textarea',
                             label: '',
-                            placeholder: 'Saisissez un intitulé catégorie..',
+                            placeholder: t('questions.typeCategory'),
                             value: '',
                         },
                     ],
@@ -153,36 +156,36 @@ export const dragDropForm: Form = {
             ],
         },
         {
-            name: 'Réponses proposées',
+            name: t('questions.proposedResponses'),
             inputs: [
                 {
                     id: 'responses',
-                    label: 'Réponse',
+                    label: t('questions.response'),
                     type: 'repeat',
                     value: [],
                     inputs: [
                         {
                             id: 'label',
                             type: 'text',
-                            label: 'Réponse',
-                            placeholder: 'Saisissez une réponse...',
+                            label: t('questions.response'),
+                            placeholder: t('questions.typeResponse'),
                             value: '',
                         },
                         {
                             id: 'value',
                             type: 'hidden',
                             label: '',
-                            placeholder: 'Valeur cachée',
+                            placeholder: t('forms.type'),
                             value: '',
                         },
                         {
                             id: 'feedback',
                             type: 'textarea',
-                            label: 'Explication',
-                            placeholder: 'Saisissez une explication...',
+                            label: t('questions.explanation'),
+                            placeholder: t('questions.typeExplanation'),
                             value: '',
                             collapsible: true,
-                            collapsibleLabel: 'Ajouter une explication',
+                            collapsibleLabel: t('questions.addExplanation'),
                         },
                         {
                             id: 'category',
@@ -198,14 +201,14 @@ export const dragDropForm: Form = {
             ],
         },
         {
-            name: 'Explication',
+            name: t('questions.explanation'),
             inputs: [
                 {
                     id: 'explanation',
                     type: 'html',
                     label: '',
                     value: '',
-                    placeholder: 'Saisissez une explication',
+                    placeholder: t('questions.typeExplanation'),
                 },
             ],
         },
@@ -214,71 +217,71 @@ export const dragDropForm: Form = {
 
 export const reorderForm: Form = {
     type: 'reorder',
-    name: 'Reorder',
+    name: t('questions.types.reorder'),
     icon: 'icon-reorder',
     displayFieldIndex: true,
     buttons: contentButtons,
     fields: [
         {
-            name: "Configuration de l'évaluation",
+            name: t('questions.configuration'),
             inputs: [
                 {
                     id: 'score',
                     type: 'score',
-                    label: 'Score',
+                    label: t('questions.score'),
                     value: 0,
                 },
             ],
         },
         {
-            name: 'Question',
+            name: t('questions.question'),
             inputs: [
                 {
                     id: 'label',
                     type: 'textarea',
-                    label: 'Question',
+                    label: t('questions.question'),
                     value: '',
-                    placeholder: 'Posez la question',
+                    placeholder: t('questions.askQuestion'),
                 },
                 {
                     id: 'statement',
                     type: 'html-inline',
-                    label: 'Consigne',
+                    label: t('questions.instruction'),
                     value: '',
-                    placeholder: 'Instruction pour répondre à la question',
+                    placeholder: t('questions.instructionPlaceholder'),
                 },
             ],
         },
         {
-            name: 'Réponses',
+            name: t('questions.responses'),
             inputs: [
                 {
                     id: 'responses',
-                    label: 'Réponse',
+                    label: t('questions.response'),
                     type: 'repeat',
                     value: [],
                     inputs: [
                         {
                             id: 'label',
                             type: 'text',
-                            label: 'Réponse',
-                            placeholder: 'Saisissez une réponse...',
+                            label: t('questions.response'),
+                            placeholder: t('questions.typeResponse'),
                             value: '',
                         },
                         {
                             id: 'feedback',
                             type: 'textarea',
-                            label: 'Explication',
-                            placeholder: 'Saisissez une explication...',
+                            label: t('questions.explanation'),
+                            placeholder: t('questions.typeExplanation'),
                             value: '',
                             collapsible: true,
-                            collapsibleLabel: 'Ajouter une explication',
+                            collapsibleLabel: t('questions.addExplanation'),
                         },
                         {
                             id: 'value',
                             type: 'hidden',
                             label: '',
-                            placeholder: 'Valeur cachée',
+                            placeholder: t('forms.type'),
                             value: '',
                         },
                     ],
@@ -286,14 +289,14 @@ export const reorderForm: Form = {
             ],
         },
         {
-            name: 'Explication',
+            name: t('questions.explanation'),
             inputs: [
                 {
                     id: 'explanation',
                     type: 'html',
                     label: '',
                     value: '',
-                    placeholder: 'Saisissez une explication...',
+                    placeholder: t('questions.typeExplanation'),
                 },
             ],
         },
@@ -302,47 +305,47 @@ export const reorderForm: Form = {
 
 export const swipeForm: Form = {
     type: 'swipe',
-    name: 'Swipe',
+    name: t('questions.types.swipe'),
     icon: 'icon-swipe',
     displayFieldIndex: true,
     buttons: contentButtons,
     fields: [
         {
-            name: "Configuration de l'évaluation",
+            name: t('questions.configuration'),
             inputs: [
                 {
                     id: 'score',
                     type: 'score',
-                    label: 'Score',
+                    label: t('questions.score'),
                     value: 0,
                 },
             ],
         },
         {
-            name: 'Question',
+            name: t('questions.question'),
             inputs: [
                 {
                     id: 'label',
                     type: 'textarea',
-                    label: 'Question',
+                    label: t('questions.question'),
                     value: '',
-                    placeholder: 'Posez la question',
+                    placeholder: t('questions.askQuestion'),
                 },
                 {
                     id: 'statement',
                     type: 'html-inline',
-                    label: 'Consigne',
+                    label: t('questions.instruction'),
                     value: '',
-                    placeholder: 'Instruction pour répondre à la question',
+                    placeholder: t('questions.instructionPlaceholder'),
                 },
             ],
         },
         {
-            name: 'Catégories de choix proposées',
+            name: t('questions.proposedChoices'),
             inputs: [
                 {
                     id: 'categories',
-                    label: 'Choix',
+                    label: t('questions.choice'),
                     type: 'repeat',
                     value: ['Droite', 'Gauche'],
                     addButton: false,
@@ -351,7 +354,7 @@ export const swipeForm: Form = {
                             id: '',
                             type: 'text',
                             label: '',
-                            placeholder: 'Saisissez une réponse...',
+                            placeholder: t('questions.typeResponse'),
                             value: '',
                         },
                     ],
@@ -359,35 +362,35 @@ export const swipeForm: Form = {
             ],
         },
         {
-            name: 'Réponse proposée',
+            name: t('questions.proposedResponses'),
             inputs: [
                 {
                     id: 'responses',
-                    label: 'Carte',
+                    label: t('questions.card'),
                     type: 'repeat',
                     value: [],
                     inputs: [
                         {
                             id: 'label',
                             type: 'text',
-                            label: 'Réponse',
-                            placeholder: 'Saisissez une proposition',
+                            label: t('questions.response'),
+                            placeholder: t('questions.typeProposition'),
                             value: '',
                         },
                         {
                             id: 'feedback',
                             type: 'textarea',
-                            label: 'Explication',
-                            placeholder: 'Saisissez une explication...',
+                            label: t('questions.explanation'),
+                            placeholder: t('questions.typeExplanation'),
                             value: '',
                             collapsible: true,
-                            collapsibleLabel: 'Ajouter une explication',
+                            collapsibleLabel: t('questions.addExplanation'),
                         },
                         {
                             id: 'value',
                             type: 'hidden',
                             label: '',
-                            placeholder: 'Valeur cachée',
+                            placeholder: t('forms.type'),
                             value: '',
                         },
                         {
@@ -404,14 +407,14 @@ export const swipeForm: Form = {
             ],
         },
         {
-            name: 'Explication',
+            name: t('questions.explanation'),
             inputs: [
                 {
                     id: 'explanation',
                     type: 'html',
                     label: '',
                     value: '',
-                    placeholder: 'Saisissez une explication...',
+                    placeholder: t('questions.typeExplanation'),
                 },
             ],
         },
@@ -420,47 +423,47 @@ export const swipeForm: Form = {
 
 export const listForm: Form = {
     type: 'dropdown-list',
-    name: 'Liste déroulante',
+    name: t('questions.types.dropdownList'),
     icon: 'icon-liste',
     displayFieldIndex: true,
     buttons: contentButtons,
     fields: [
         {
-            name: "Configuration de l'évaluation",
+            name: t('questions.configuration'),
             inputs: [
                 {
                     id: 'score',
                     type: 'score',
-                    label: 'Score',
+                    label: t('questions.score'),
                     value: 0,
                 },
             ],
         },
         {
-            name: 'Question',
+            name: t('questions.question'),
             inputs: [
                 {
                     id: 'label',
                     type: 'textarea',
-                    label: 'Question',
+                    label: t('questions.question'),
                     value: '',
-                    placeholder: 'Posez la question',
+                    placeholder: t('questions.askQuestion'),
                 },
                 {
                     id: 'statement',
                     type: 'html-inline',
-                    label: 'Consigne',
+                    label: t('questions.instruction'),
                     value: '',
-                    placeholder: 'Instruction pour répondre à la question',
+                    placeholder: t('questions.instructionPlaceholder'),
                 },
             ],
         },
         {
-            name: 'Catégories de choix proposées',
+            name: t('questions.proposedChoices'),
             inputs: [
                 {
                     id: 'categories',
-                    label: 'Choix',
+                    label: t('questions.choice'),
                     type: 'repeat',
                     value: [],
                     inputs: [
@@ -468,7 +471,7 @@ export const listForm: Form = {
                             id: '',
                             type: 'text',
                             label: '',
-                            placeholder: 'Saisissez une réponse...',
+                            placeholder: t('questions.typeResponse'),
                             value: '',
                         },
                     ],
@@ -476,35 +479,35 @@ export const listForm: Form = {
             ],
         },
         {
-            name: 'Cartes',
+            name: t('questions.cards'),
             inputs: [
                 {
                     id: 'responses',
-                    label: 'Carte',
+                    label: t('questions.card'),
                     type: 'repeat',
                     value: [],
                     inputs: [
                         {
                             id: 'label',
                             type: 'text',
-                            label: 'Réponse',
-                            placeholder: 'Saisissez une question...',
+                            label: t('questions.response'),
+                            placeholder: t('questions.typeProposition'),
                             value: '',
                         },
                         {
                             id: 'feedback',
                             type: 'textarea',
-                            label: 'Explication',
-                            placeholder: 'Saisissez une explication...',
+                            label: t('questions.explanation'),
+                            placeholder: t('questions.typeExplanation'),
                             value: '',
                             collapsible: true,
-                            collapsibleLabel: 'Ajouter une explication',
+                            collapsibleLabel: t('questions.addExplanation'),
                         },
                         {
                             id: 'value',
                             type: 'hidden',
                             label: '',
-                            placeholder: 'Valeur cachée',
+                            placeholder: t('forms.type'),
                             value: '',
                         },
                         {
@@ -521,14 +524,14 @@ export const listForm: Form = {
             ],
         },
         {
-            name: 'Explication',
+            name: t('questions.explanation'),
             inputs: [
                 {
                     id: 'explanation',
                     type: 'html',
                     label: '',
                     value: '',
-                    placeholder: 'Saisissez une explication...',
+                    placeholder: t('questions.typeExplanation'),
                 },
             ],
         },
@@ -537,48 +540,48 @@ export const listForm: Form = {
 
 export const customQuestionForm: Form = {
     type: 'custom',
-    name: 'Question personnalisée',
+    name: t('questions.types.custom'),
     icon: 'icon-terminal',
     displayFieldIndex: true,
     buttons: contentButtons,
     fields: [
         {
-            name: "Configuration de l'évaluation",
+            name: t('questions.configuration'),
             inputs: [
                 {
                     id: 'score',
                     type: 'score',
-                    label: 'Score',
+                    label: t('questions.score'),
                     value: 0,
                 },
             ],
         },
         {
-            name: 'Question',
+            name: t('questions.question'),
             inputs: [
                 {
                     id: 'label',
                     type: 'textarea',
-                    label: 'Question',
+                    label: t('questions.question'),
                     value: '',
-                    placeholder: 'Posez la question',
+                    placeholder: t('questions.askQuestion'),
                 },
                 {
                     id: 'statement',
                     type: 'html-inline',
-                    label: 'Consigne',
+                    label: t('questions.instruction'),
                     value: '',
-                    placeholder: 'Instruction pour répondre à la question',
+                    placeholder: t('questions.instructionPlaceholder'),
                 },
             ],
         },
         {
-            name: 'Template',
+            name: t('questions.template.title'),
             inputs: [
                 {
                     id: 'template',
                     type: 'select',
-                    label: 'Selectionnez un template',
+                    label: t('questions.template.select'),
                     value: '',
                     options: [],
                     linkedOptions: 'plugins.*.template',
@@ -586,26 +589,26 @@ export const customQuestionForm: Form = {
             ],
         },
         {
-            name: 'Données',
+            name: t('questions.template.data'),
             inputs: [
                 {
                     type: 'repeat',
                     id: 'data',
-                    label: 'Données',
+                    label: t('questions.template.data'),
                     value: [],
                     inputs: [
                         {
                             id: 'key',
                             type: 'text',
-                            label: 'Clé',
-                            placeholder: 'Clé',
+                            label: t('questions.template.key'),
+                            placeholder: t('questions.template.key'),
                             value: '',
                         },
                         {
                             id: 'value',
                             type: 'textarea',
-                            label: 'Valeur',
-                            placeholder: 'Valeur',
+                            label: t('questions.template.value'),
+                            placeholder: t('questions.template.value'),
                             value: '',
                         },
                     ],
@@ -613,25 +616,25 @@ export const customQuestionForm: Form = {
             ],
         },
         {
-            name: 'Réponse',
+            name: t('questions.response'),
             inputs: [
                 {
                     id: 'correctResponse',
-                    label: 'Réponse',
+                    label: t('questions.response'),
                     type: 'text',
                     value: '',
                 },
             ],
         },
         {
-            name: 'Explication',
+            name: t('questions.explanation'),
             inputs: [
                 {
                     id: 'explanation',
                     type: 'html',
                     label: '',
                     value: '',
-                    placeholder: 'Saisissez une explication',
+                    placeholder: t('questions.typeExplanation'),
                 },
             ],
         },
