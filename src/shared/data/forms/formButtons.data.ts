@@ -35,7 +35,7 @@ export const contentButtons: FormButton[] =
         [
             ...baseButtons,
             { label: t('forms.buttons.backToPage'), icon: 'icon-ecran', action: 'back-to-page' },
-            { label: t('forms.button.duplicateElement'), icon: 'icon-plus', action: 'duplicate-element' },
+            { label: t('forms.buttons.duplicateElement'), icon: 'icon-plus', action: 'duplicate-element' },
         ]
     :   [...baseButtons];
 

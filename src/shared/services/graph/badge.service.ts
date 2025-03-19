@@ -6,6 +6,9 @@ import { saveState } from '@/src/shared/services/undoRedo.service';
 import { elementVerbs, verbs } from '@/src/shared/data';
 import { generateContentId, graphService } from '@/src/shared/services';
 import { Operators } from '@epoc/epoc-types/dist/v2';
+import { i18n } from '@/src/i18n/config';
+
+const { t } = i18n.global;
 
 const { findNode } = useVueFlow('main');
 
@@ -65,60 +68,60 @@ export function createRule(entry: Condition[]): Rule {
 }
 
 const phraseType = {
-    video: 'la vidéo',
-    chapter: 'le chapitre',
-    page: 'la page',
-    html: 'le texte',
-    audio: "l'audio",
-    activity: "l'évaluation",
-    question: 'la question',
+    video: t('badge.phrase.type.video'),
+    chapter: t('badge.phrase.type.chapter'),
+    page: t('badge.phrase.type.page'),
+    html: t('badge.phrase.type.html'),
+    audio: t('badge.phrase.type.audio'),
+    activity: t('badge.phrase.type.activity'),
+    question: t('badge.phrase.type.question'),
 };
 
 const phraseVerb = {
     started: {
-        true: 'Avoir commencé',
-        false: 'Ne pas avoir pas commencé',
+        true: t('badge.phrase.verb.started.true'),
+        false: t('badge.phrase.verb.started.false'),
     },
     completed: {
-        true: 'Avoir terminé',
-        false: 'Ne pas avoir terminé',
+        true: t('badge.phrase.verb.completed.true'),
+        false: t('badge.phrase.verb.completed.false'),
     },
     viewed: {
-        true: 'Avoir vu',
-        false: 'Ne pas avoir vu',
+        true: t('badge.phrase.verb.viewed.true'),
+        false: t('badge.phrase.verb.viewed.false'),
     },
     read: {
-        true: 'Avoir lu',
-        false: 'Ne pas avoir lu',
+        true: t('badge.phrase.verb.read.true'),
+        false: t('badge.phrase.verb.read.false'),
     },
     played: {
-        true: 'Avoir lancé',
-        false: 'Ne pas avoir lancé',
+        true: t('badge.phrase.verb.played.true'),
+        false: t('badge.phrase.verb.played.false'),
     },
     watched: {
-        true: 'Avoir regardé',
-        false: 'Ne pas avoir regardé',
+        true: t('badge.phrase.verb.watched.true'),
+        false: t('badge.phrase.verb.watched.false'),
     },
     listened: {
-        true: 'Avoir écouté',
-        false: 'Ne pas avoir écouté',
+        true: t('badge.phrase.verb.listened.true'),
+        false: t('badge.phrase.verb.listened.false'),
     },
     attempted: {
-        true: 'Avoir tenté',
-        false: 'Ne pas avoir tenté',
+        true: t('badge.phrase.verb.attempted.true'),
+        false: t('badge.phrase.verb.attempted.false'),
     },
     passed: {
-        true: 'Avoir réussi',
-        false: 'Avoir échoué',
+        true: t('badge.phrase.verb.passed.true'),
+        false: t('badge.phrase.verb.passed.false'),
     },
-    scored: "Avoir obtenu un score d'au moins",
+    scored: t('badge.phrase.verb.scored'),
 };
 
 export function createPhrase(condition: Condition, elementType: ElementType) {
     const { verb, value } = condition;
     let firstPart: string;
     if (verb === 'scored') {
-        firstPart = `${phraseVerb[verb]} ${value} à`;
+        firstPart = t('badge.phrase.scored', { value, verb: phraseVerb[verb] });
     } else {
         firstPart = `${phraseVerb[verb][value]}`;
     }

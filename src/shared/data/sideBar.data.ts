@@ -1,35 +1,38 @@
 import { SideAction } from '@/src/shared/interfaces';
+import { i18n } from '@/src/i18n/config';
+
+const { t } = i18n.global;
 
 export const questions: SideAction[] = [
     {
         icon: 'icon-qcm',
         type: 'choice',
-        label: 'QCM',
+        label: t('questions.types.qcm'),
     },
     {
         icon: 'icon-dragdrop',
         type: 'drag-and-drop',
-        label: 'Drag & Drop',
+        label: t('questions.types.dragDrop'),
     },
     {
         icon: 'icon-reorder',
         type: 'reorder',
-        label: 'Reorder',
+        label: t('questions.types.reorder'),
     },
     {
         icon: 'icon-swipe',
         type: 'swipe',
-        label: 'Swipe',
+        label: t('questions.types.swipe'),
     },
     {
         icon: 'icon-liste',
         type: 'dropdown-list',
-        label: 'Liste déroulante',
+        label: t('questions.types.dropdownList'),
     },
     {
         icon: 'icon-terminal',
         type: 'custom',
-        label: 'Question personnalisée',
+        label: t('questions.types.custom'),
     }
 ];
 
@@ -37,20 +40,20 @@ const contents: SideAction[] = [
     {
         icon: 'icon-texte',
         type: 'text',
-        label: 'Texte',
-        tooltip: 'Glisser/déposer pour ajouter un texte',
+        label: t('sidebar.content.text'),
+        tooltip: t('sidebar.content.textTooltip'),
     },
     {
         icon: 'icon-video',
         type: 'video',
-        label: 'Vidéo',
-        tooltip: 'Glisser/déposer pour ajouter une vidéo',
+        label: t('sidebar.content.video'),
+        tooltip: t('sidebar.content.videoTooltip'),
     },
     {
         icon: 'icon-audio',
         type: 'audio',
-        label: 'Audio',
-        tooltip: 'Glisser/déposer pour ajouter un audio',
+        label: t('sidebar.content.audio'),
+        tooltip: t('sidebar.content.audioTooltip'),
     },
 ];
 
@@ -60,49 +63,49 @@ export const standardPages: SideAction[] = [
     {
         icon: 'icon-texte',
         type: 'text',
-        label: 'Texte',
-        tooltip: 'Glisser/déposer pour ajouter un texte',
+        label: t('sidebar.content.text'),
+        tooltip: t('sidebar.content.textTooltip'),
     },
     {
         icon: 'icon-video',
         type: 'video',
-        label: 'Vidéo',
-        tooltip: 'Glisser/déposer pour ajouter une vidéo',
+        label: t('sidebar.content.video'),
+        tooltip: t('sidebar.content.videoTooltip'),
     },
     {
         icon: 'icon-audio',
         type: 'audio',
-        label: 'Audio',
-        tooltip: 'Glisser/déposer pour ajouter un audio',
+        label: t('sidebar.content.audio'),
+        tooltip: t('sidebar.content.audioTooltip'),
     },
     {
         icon: 'icon-question',
         type: 'question',
-        label: 'Question',
-        tooltip: 'Cliquer pour ajouter une question',
+        label: t('sidebar.pages.question'),
+        tooltip: t('sidebar.pages.questionTooltip'),
     },
     {
         icon: 'icon-condition',
         type: 'condition',
-        label: 'Conditions',
-        tooltip: 'Glisser/déposer pour ajouter une condition',
+        label: t('sidebar.pages.conditions'),
+        tooltip: t('sidebar.pages.conditionsTooltip'),
     },
     {
         icon: 'icon-condition-legacy',
         type: 'legacy-condition',
-        label: 'Conditions (legacy)',
-        tooltip: 'Glisser/déposer pour ajouter une condition',
+        label: t('sidebar.pages.conditionsLegacy'),
+        tooltip: t('sidebar.pages.conditionsTooltip'),
     },
     {
         icon: 'icon-modele',
         type: 'model',
-        label: 'Modèle',
-        tooltip: 'Cliquer pour ouvrir le menu modèle',
+        label: t('sidebar.pages.model'),
+        tooltip: t('sidebar.pages.modelTooltip'),
     },
     {
         icon: 'icon-badge',
         type: 'badge',
-        label: 'Badge',
-        tooltip: 'Cliquer pour ouvrir le menu badge',
+        label: t('sidebar.pages.badge'),
+        tooltip: t('sidebar.pages.badgeTooltip'),
     },
 ];

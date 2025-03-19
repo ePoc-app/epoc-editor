@@ -45,6 +45,57 @@ export const frMessages = {
         selectIcon: 'Sélectionner une icône',
         defaultIcons: 'Icônes par défaut',
         customIcons: 'Icônes personnalisées',
+        phrase: {
+            type: {
+                video: 'la vidéo',
+                chapter: 'le chapitre',
+                page: 'la page',
+                html: 'le texte',
+                audio: "l'audio",
+                activity: "l'évaluation",
+                question: 'la question',
+            },
+            verb: {
+                started: {
+                    true: 'Avoir commencé',
+                    false: 'Ne pas avoir pas commencé',
+                },
+                completed: {
+                    true: 'Avoir terminé',
+                    false: 'Ne pas avoir terminé',
+                },
+                viewed: {
+                    true: 'Avoir vu',
+                    false: 'Ne pas avoir vu',
+                },
+                read: {
+                    true: 'Avoir lu',
+                    false: 'Ne pas avoir lu',
+                },
+                played: {
+                    true: 'Avoir lancé',
+                    false: 'Ne pas avoir lancé',
+                },
+                watched: {
+                    true: 'Avoir regardé',
+                    false: 'Ne pas avoir regardé',
+                },
+                listened: {
+                    true: 'Avoir écouté',
+                    false: 'Ne pas avoir écouté',
+                },
+                attempted: {
+                    true: 'Avoir tenté',
+                    false: 'Ne pas avoir tenté',
+                },
+                passed: {
+                    true: 'Avoir réussi',
+                    false: 'Avoir échoué',
+                },
+                scored: "Avoir obtenu un score d'au moins",
+            },
+            scored: '{verb} {value} à',
+        },
     },
     inputs: {
         manageConditions: 'Configurer les conditions',
@@ -223,5 +274,38 @@ export const frMessages = {
             custom: 'Question personnalisée',
         },
         score: 'Score',
+    },
+    sidebar: {
+        content: {
+            text: 'Texte',
+            video: 'Vidéo',
+            audio: 'Audio',
+            textTooltip: 'Glisser/déposer pour ajouter un texte',
+            videoTooltip: 'Glisser/déposer pour ajouter une vidéo',
+            audioTooltip: 'Glisser/déposer pour ajouter un audio',
+        },
+        pages: {
+            question: 'Question',
+            conditions: 'Conditions',
+            conditionsLegacy: 'Conditions (legacy)',
+            model: 'Modèle',
+            badge: 'Badge',
+            questionTooltip: 'Cliquer pour ajouter une question',
+            conditionsTooltip: 'Glisser/déposer pour ajouter une condition',
+            modelTooltip: 'Cliquer pour ouvrir le menu modèle',
+            badgeTooltip: 'Cliquer pour ouvrir le menu badge',
+        },
+    },
+    verbs: {
+        started: 'Commencé',
+        completed: 'Terminé',
+        viewed: 'Vu',
+        read: 'Lu',
+        played: 'Joué',
+        watched: 'Regardé',
+        listened: 'Écouté',
+        attempted: 'Tenté',
+        scored: 'Obtenu un score de',
+        passed: 'Réussi',
     },
 };
