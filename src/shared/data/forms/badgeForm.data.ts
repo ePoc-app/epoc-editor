@@ -1,5 +1,8 @@
 import { Form } from '@/src/shared/interfaces';
 import { badgeButtons } from './formButtons.data';
+import { i18n } from '@/src/i18n/config';
+
+const { t } = i18n.global;
 
 export const customBadgeForm: Form = {
     type: 'badge',
@@ -14,19 +17,19 @@ export const customBadgeForm: Form = {
                     type: 'text',
                     label: 'Titre',
                     value: '',
-                    placeholder: 'Saisissez...',
+                    placeholder: t('forms.type'),
                 },
                 {
                     id: 'icon',
                     type: 'icon-picker',
                     label: 'Icône du badge',
                     value: '',
-                    placeholder: "Modifier l'icône",
+                    placeholder: t('forms.badge.updateIcon'),
                 },
             ],
         },
         {
-            name: "Conditions d'obtention du badge",
+            name: t('forms.badge.obtention'),
             inputs: [
                 {
                     id: 'conditions',
@@ -37,14 +40,14 @@ export const customBadgeForm: Form = {
             ],
         },
         {
-            name: 'Présentation du badge',
+            name: t('forms.badge.presentation'),
             inputs: [
                 {
                     id: 'description',
                     type: 'textarea',
                     label: '',
                     value: '',
-                    placeholder: 'Saisissez une présentation du badge',
+                    placeholder: t('forms.badge.presentationPlaceholder'),
                 },
             ],
         },

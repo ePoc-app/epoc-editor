@@ -1,9 +1,12 @@
 import { Form } from '@/src/shared/interfaces';
 import { activityButtons, baseButtons, pageButtons } from './formButtons.data';
+import { i18n } from '@/src/i18n/config';
+
+const { t } = i18n.global;
 
 export const conditionForm: Form = {
     type: 'condition',
-    name: 'Conditions',
+    name: t('global.conditions'),
     icon: 'icon-condition',
     buttons: baseButtons,
     fields: [
@@ -14,14 +17,14 @@ export const conditionForm: Form = {
                     type: 'text',
                     label: '',
                     value: '',
-                    placeholder: 'Saisissez la condition 1...',
+                    placeholder: t('forms.node.conditionPlaceholder', { condition: '1' }),
                 },
                 {
                     id: 'condition2',
                     type: 'text',
                     label: '',
                     value: '',
-                    placeholder: 'Saisissez la condition 2...',
+                    placeholder: t('forms.node.conditionPlaceholder', { condition: '2' }),
                 },
             ],
         },
@@ -39,9 +42,9 @@ export const legacyConditionForm: Form = {
                 {
                     id: 'label',
                     type: 'text',
-                    label: 'Label',
+                    label: t('global.label'),
                     value: '',
-                    placeholder: 'Saisissez...',
+                    placeholder: t('forms.type'),
                 },
             ],
         },
@@ -50,15 +53,15 @@ export const legacyConditionForm: Form = {
             inputs: [
                 {
                     id: 'choices',
-                    label: 'Choix',
+                    label: t('forms.node.choice'),
                     type: 'repeat',
-                    value: ['Parcours A', 'Parcours B'],
+                    value: [t('forms.node.course', { course: 'A' }), t('forms.node.course', { course: 'B' })],
                     inputs: [
                         {
                             id: '',
                             type: 'text',
                             label: '',
-                            placeholder: 'Parcours X',
+                            placeholder: t('forms.node.course', { course: 'X' }),
                             value: '',
                         },
                     ],
@@ -66,11 +69,11 @@ export const legacyConditionForm: Form = {
             ],
         },
         {
-            name: 'Contenus conditionnels',
+            name: t('forms.node.conditional'),
             inputs: [
                 {
                     id: 'conditionalFlag',
-                    label: 'Contenu',
+                    label: t('forms.content.text'),
                     type: 'repeat',
                     value: [],
                     inputs: [
@@ -78,7 +81,7 @@ export const legacyConditionForm: Form = {
                             id: 'id',
                             type: 'text',
                             label: '',
-                            placeholder: 'Contenu',
+                            placeholder: t('forms.type'),
                             value: '',
                         },
                         {
@@ -99,7 +102,7 @@ export const legacyConditionForm: Form = {
 
 export const chapterForm: Form = {
     type: 'chapter',
-    name: 'Chapitre',
+    name: t('global.chapter'),
     icon: 'icon-chapitre',
     buttons: baseButtons,
     fields: [
@@ -108,24 +111,24 @@ export const chapterForm: Form = {
                 {
                     id: 'title',
                     type: 'text',
-                    label: 'Titre',
+                    label: t('forms.node.title'),
                     value: '',
-                    placeholder: 'Saisissez...',
+                    placeholder: t('forms.type'),
                 },
                 {
                     id: 'duration',
                     type: 'score',
-                    label: 'Durée (en minutes)',
+                    label: t('forms.node.duration'),
                     value: 0,
                 },
             ],
         },
         {
-            name: 'Objectifs pédagogiques',
+            name: t('forms.node.objectives'),
             inputs: [
                 {
                     id: 'objectives',
-                    label: 'Objectif',
+                    label: t('global.objective'),
                     type: 'repeat',
                     value: [],
                     inputs: [
@@ -133,7 +136,7 @@ export const chapterForm: Form = {
                             id: '',
                             type: 'textarea',
                             label: '',
-                            placeholder: 'Saisissez un objectif ...',
+                            placeholder: t('forms.type'),
                             value: '',
                         },
                     ],
@@ -145,7 +148,7 @@ export const chapterForm: Form = {
 
 export const epocForm: Form = {
     type: 'epoc',
-    name: "A propos de l'ePoc",
+    name: t('forms.node.about'),
     icon: 'icon-epoc',
     buttons: [],
     fields: [
@@ -154,90 +157,90 @@ export const epocForm: Form = {
                 {
                     id: 'title',
                     type: 'text',
-                    label: 'Titre',
+                    label: t('forms.node.title'),
                     value: '',
-                    placeholder: 'Saisissez...',
+                    placeholder: t('forms.type'),
                 },
                 {
                     id: 'image',
                     type: 'file',
-                    label: 'Image de couverture',
-                    placeholder: 'Ajouter une image de couverture',
+                    label: t('forms.node.cover.title'),
+                    placeholder: t('forms.node.cover.placeholder'),
                     value: '',
                     accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
-                    hint: 'Format recommandé : carré (180x180)<br> Image visible dans la liste des ePocs',
+                    hint: t('forms.node.cover.hint'),
                 },
                 {
                     id: 'teaser',
                     type: 'file',
-                    label: 'Teaser vidéo',
+                    label: t('forms.node.teaser.title'),
                     value: '',
-                    placeholder: 'Ajouter un teaser',
+                    placeholder: t('forms.node.teaser.placeholder'),
                     accept: '.mp4',
-                    hint: "Format recommandé : 16:9 (720x480) <br> Vidéo visible dans la page de présentation de l'ePoc",
+                    hint: t('forms.node.teaser.hint'),
                 },
                 {
                     id: 'thumbnail',
                     type: 'file',
-                    label: 'Vignette de la vidéo',
+                    label: t('forms.node.thumbnail.title'),
                     value: '',
-                    placeholder: 'Ajouter une vignette',
+                    placeholder: t('content.thumbnail.placeholder'),
                     accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
-                    hint: "Format recommandé : idem que la vidéo <br> Image visible dans la page de présentation de l'ePoc",
+                    hint: t('forms.node.thumbnail.hint'),
                 },
                 {
                     id: 'summary',
                     type: 'html-text',
-                    label: 'Présentation',
+                    label: t('forms.node.presentation'),
                     value: '',
-                    placeholder: "Saisissez une présentation de l'ePoc...",
+                    placeholder: t('forms.type'),
                 },
                 {
                     id: 'edition',
                     type: 'text',
-                    label: 'Edition',
+                    label: t('forms.node.edition'),
                     value: String(new Date().getFullYear()),
                 },
             ],
         },
         {
-            name: 'Auteurs',
+            name: t('forms.node.author.title', 2),
             inputs: [
                 {
                     id: 'authors',
-                    label: 'Auteur',
+                    label: t('forms.node.author.title', 1),
                     type: 'repeat',
                     value: [],
                     inputs: [
                         {
                             id: 'name',
                             type: 'text',
-                            label: 'Nom',
-                            placeholder: 'Jeanne Dupont',
+                            label: t('global.name'),
+                            placeholder: t('forms.node.author.placeholder'),
                             value: '',
                         },
                         {
                             id: 'image',
                             type: 'file',
-                            label: 'Image',
-                            placeholder: 'Ajouter une image',
+                            label: t('forms.node.author.image.title'),
+                            placeholder: t('forms.node.author.image.placeholder'),
                             value: '',
                             accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
-                            hint: "Format recommandé : carré (100x100)<br> Image visible dans la page de présentation de l'ePoc",
+                            hint: t('forms.node.author.image.hint'),
                         },
                         {
                             id: 'title',
                             type: 'text',
-                            label: 'Fonction',
-                            placeholder: "Chercheuse à l'Inria",
+                            label: t('forms.node.author.position.title'),
+                            placeholder: t('forms.node.author.position.placeholder'),
                             value: '',
-                            hint: 'Profession, fonction, affiliation…',
+                            hint: t('forms.node.author.position.hint'),
                         },
                         {
                             id: 'description',
                             type: 'html-text',
-                            label: 'Courte biographie',
-                            placeholder: 'Saisissez une courte biographie...',
+                            label: t('forms.node.author.biography'),
+                            placeholder: t('forms.type'),
                             value: '',
                         },
                     ],
@@ -245,11 +248,11 @@ export const epocForm: Form = {
             ],
         },
         {
-            name: 'Objectifs pédagogiques',
+            name: t('forms.node.objectives'),
             inputs: [
                 {
                     id: 'objectives',
-                    label: 'Objectif',
+                    label: t('global.objective'),
                     type: 'repeat',
                     value: [],
                     inputs: [
@@ -257,7 +260,7 @@ export const epocForm: Form = {
                             id: '',
                             type: 'textarea',
                             label: '',
-                            placeholder: 'Saisissez un objectif ...',
+                            placeholder: t('forms.type'),
                             value: '',
                         },
                     ],
@@ -265,50 +268,50 @@ export const epocForm: Form = {
             ],
         },
         {
-            name: 'Paramètres :',
+            name: t('settings.title'),
             inputs: [
                 {
                     id: 'certificateBadgeCount',
                     type: 'score',
-                    label: "Nombre de badge pour obtenir l'attestation",
+                    label: t('forms.node.certificateBadge'),
                     value: 1,
                 },
                 {
                     id: 'certificateScore',
                     type: 'score',
-                    label: "Score pour obtenir l'attestation",
+                    label: t('forms.node.certificateScore'),
                     value: 10,
-                    hint: "N'est pas pris en compte si le nombre de badge pour obtenir l'attestation est supérieur à 0",
+                    hint: t('forms.node.certificateScoreHint'),
                 },
                 {
                     id: 'chapterParameter',
                     type: 'text',
-                    label: 'Label des chapitres',
+                    label: t('forms.node.chapterLabel'),
                     value: '',
-                    placeholder: 'Saisissez...',
+                    placeholder: t('forms.type'),
                 },
                 {
                     id: 'chapterDuration',
                     type: 'score',
-                    label: 'Durée des chapitres (en minutes)',
+                    label: t('forms.node.chapterDuration'),
                     value: 0,
                 },
             ],
         },
         {
-            name: 'Plugins',
+            name: t('forms.node.plugin.title', 2),
             inputs: [
                 {
                     id: 'plugins',
-                    label: 'Plugin',
+                    label: t('forms.node.plugin.title', 1),
                     type: 'repeat',
                     value: [],
                     inputs: [
                         {
                             id: 'script',
                             type: 'file',
-                            label: 'Fichier de script',
-                            placeholder: 'Ajouter un script',
+                            label: t('forms.node.plugin.script'),
+                            placeholder: t('forms.node.plugin.scriptPlaceholder'),
                             targetDirectory: 'plugins',
                             value: '',
                             accept: '.js',
@@ -316,8 +319,8 @@ export const epocForm: Form = {
                         {
                             id: 'template',
                             type: 'file',
-                            label: 'Template html du plugin',
-                            placeholder: 'Ajouter un template',
+                            label: t('forms.node.plugin.template'),
+                            placeholder: t('forms.node.plugin.templatePlaceholder'),
                             targetDirectory: 'plugins',
                             value: '',
                             accept: 'html',
@@ -327,23 +330,23 @@ export const epocForm: Form = {
             ],
         },
         {
-            name: 'Licence',
+            name: t('forms.node.licence.title'),
             inputs: [
                 {
                     id: 'licenceName',
                     type: 'text',
-                    label: 'Nom',
+                    label: t('global.name'),
                     placeholder: 'CC-BY 4.0',
                     value: '',
-                    hint: 'Nom de la licence de votre contenu ePoc',
+                    hint: t('forms.node.licence.hint'),
                 },
                 {
                     id: 'licenceUrl',
                     type: 'text',
-                    label: 'URL',
-                    placeholder: 'https://creativecommons.org/licenses/by/4.0/deed',
+                    label: t('forms.node.licence.url'),
+                    placeholder: t('forms.node.licence.urlPlaceholder'),
                     value: '',
-                    hint: 'Texte complet de la licence choisie',
+                    hint: t('forms.node.licence.urlHint'),
                 },
             ],
         },
@@ -352,7 +355,7 @@ export const epocForm: Form = {
 
 export const pageForm: Form = {
     type: 'page',
-    name: 'Page',
+    name: t('forms.node.page.title'),
     icon: 'icon-ecran',
     buttons: pageButtons,
     fields: [
@@ -361,38 +364,38 @@ export const pageForm: Form = {
                 {
                     id: 'title',
                     type: 'text',
-                    label: 'Titre',
+                    label: t('forms.node.title'),
                     value: '',
-                    placeholder: 'Saisissez...',
+                    placeholder: t('forms.type'),
                 },
                 {
                     id: 'subtitle',
                     type: 'text',
-                    label: 'Sous-titre',
+                    label: t('forms.node.subtitle'),
                     value: '',
-                    placeholder: 'Saisissez...',
+                    placeholder: t('forms.type'),
                 },
                 {
                     id: 'hidden',
                     type: 'checkbox',
-                    label: 'Caché dans la table des matières',
+                    label: t('forms.node.page.hidden'),
                     value: false,
                 },
                 {
                     id: 'conditional',
                     type: 'checkbox',
-                    label: "Ne s'affiche qu'a certaines conditions",
+                    label: t('forms.node.page.conditional'),
                     value: false,
-                    hint: "Option utilisé pour l'affichage conditionnel",
+                    hint: t('forms.node.page.conditionalHint'),
                 },
             ],
         },
         {
-            name: 'Composants',
+            name: t('forms.node.page.components'),
             inputs: [
                 {
                     id: 'components',
-                    label: 'Composants',
+                    label: t('forms.node.page.components'),
                     type: 'repeat',
                     value: [],
                     addButton: false,
@@ -405,7 +408,7 @@ export const pageForm: Form = {
 
 export const activityForm: Form = {
     type: 'activity',
-    name: 'Évaluation',
+    name: t('forms.node.activity'),
     icon: 'icon-ecran',
     buttons: activityButtons,
     fields: [
@@ -414,45 +417,45 @@ export const activityForm: Form = {
                 {
                     id: 'title',
                     type: 'text',
-                    label: 'Titre',
+                    label: t('forms.node.title'),
                     value: '',
-                    placeholder: 'Saisissez...',
+                    placeholder: t('forms.type'),
                 },
                 {
                     id: 'subtitle',
                     type: 'text',
-                    label: 'Sous-titre',
+                    label: t('forms.node.subtitle'),
                     value: '',
-                    placeholder: 'Saisissez...',
+                    placeholder: t('forms.type'),
                 },
                 {
                     id: 'summary',
                     type: 'textarea',
-                    label: 'Résumé',
+                    label: t('forms.content.summary'),
                     value: '',
-                    placeholder: 'Saisissez...',
+                    placeholder: t('forms.type'),
                 },
                 {
                     id: 'hidden',
                     type: 'checkbox',
-                    label: 'Caché dans la table des matières',
+                    label: t('forms.node.page.hidden'),
                     value: false,
                 },
                 {
                     id: 'conditional',
                     type: 'checkbox',
-                    label: "Ne s'affiche qu'a certaines conditions",
+                    label: t('forms.node.page.conditional'),
                     value: false,
-                    hint: "Option utilisé pour l'affichage conditionnel",
+                    hint: t('forms.node.page.conditionalHint'),
                 },
             ],
         },
         {
-            name: 'Composants',
+            name: t('forms.node.page.components'),
             inputs: [
                 {
                     id: 'components',
-                    label: 'Composants',
+                    label: t('forms.node.page.components'),
                     type: 'repeat',
                     value: [],
                     addButton: false,

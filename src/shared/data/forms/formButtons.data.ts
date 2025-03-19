@@ -1,39 +1,45 @@
 import { FormButton } from '@/src/shared/interfaces';
 import env from '@/src/shared/utils/env';
+import { i18n } from '@/src/i18n/config';
+
+const { t } = i18n.global;
 
 export const baseButtons = [
-    { label: 'Supprimer', icon: 'icon-supprimer', action: 'delete' },
-    { label: 'Ajouter un badge', icon: 'icon-plus', action: 'add-badge' },
+    { label: t('global.delete'), icon: 'icon-supprimer', action: 'delete' },
+    { label: t('forms.buttons.addBadge'), icon: 'icon-plus', action: 'add-badge' },
 ];
 
 export const pageButtons: FormButton[] =
     env.isDev ?
         [
             ...baseButtons,
-            { label: 'Dupliquer la page', icon: 'icon-plus', action: 'duplicate-page' },
-            { label: 'Sauvegarder le modèle', icon: 'icon-modele', action: 'save-model' },
+            { label: t('forms.buttons.duplicatePage'), icon: 'icon-plus', action: 'duplicate-page' },
+            { label: t('forms.buttons.saveModel'), icon: 'icon-modele', action: 'save-model' },
         ]
-        :   [...baseButtons, { label: 'Dupliquer la page', icon: 'icon-plus', action: 'duplicate-page' }];
+    :   [...baseButtons, { label: t('forms.buttons.duplicatePage'), icon: 'icon-plus', action: 'duplicate-page' }];
 
 export const activityButtons: FormButton[] =
     env.isDev ?
         [
             ...baseButtons,
-            { label: "Dupliquer l'évaluation", icon: 'icon-plus', action: 'duplicate-page' },
-            { label: 'Sauvegarder le modèle', icon: 'icon-modele', action: 'save-model' },
+            { label: t('forms.buttons.duplicateEvaluation'), icon: 'icon-plus', action: 'duplicate-page' },
+            { label: t('forms.buttons.saveModel'), icon: 'icon-modele', action: 'save-model' },
         ]
-        :   [...baseButtons, { label: "Dupliquer l'évaluation", icon: 'icon-plus', action: 'duplicate-page' }];
+    :   [
+            ...baseButtons,
+            { label: t('forms.buttons.duplicateEvaluation'), icon: 'icon-plus', action: 'duplicate-page' },
+        ];
 
 export const contentButtons: FormButton[] =
     env.isDev ?
         [
             ...baseButtons,
-            { label: 'Revenir à la page', icon: 'icon-ecran', action: 'back-to-page' },
-            { label: "Dupliquer l'élément", icon: 'icon-plus', action: 'duplicate-element' },
+            { label: t('forms.buttons.backToPage'), icon: 'icon-ecran', action: 'back-to-page' },
+            { label: t('forms.button.duplicateElement'), icon: 'icon-plus', action: 'duplicate-element' },
         ]
-        :   [...baseButtons];
+    :   [...baseButtons];
 
 export const badgeButtons: FormButton[] = [
-    { label: 'Supprimer', icon: 'icon-supprimer', action: 'delete-badge' },
-    { label: "Revenir à l'ePoc", icon: 'icon-epoc', action: 'back-to-epoc' },
+    { label: t('global.delete'), icon: 'icon-supprimer', action: 'delete-badge' },
+    { label: t('forms.buttons.backToEpoc'), icon: 'icon-epoc', action: 'back-to-epoc' },
 ];

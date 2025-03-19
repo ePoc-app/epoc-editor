@@ -1,9 +1,12 @@
 import { Form } from '@/src/shared/interfaces';
 import { contentButtons } from './formButtons.data';
+import { i18n } from '@/src/i18n/config';
+
+const { t } = i18n.global;
 
 export const textForm: Form = {
     type: 'text',
-    name: 'Contenu',
+    name: t('forms.content.text'),
     icon: 'icon-texte',
     buttons: contentButtons,
     fields: [
@@ -14,7 +17,7 @@ export const textForm: Form = {
                     type: 'html',
                     label: '',
                     value: '',
-                    placeholder: 'Saisissez un résumé...',
+                    placeholder: t('type'),
                 },
             ],
         },
@@ -23,7 +26,7 @@ export const textForm: Form = {
 
 export const videoForm: Form = {
     type: 'video',
-    name: 'Vidéo',
+    name: t('forms.content.video.label'),
     icon: 'icon-video',
     buttons: contentButtons,
     fields: [
@@ -32,36 +35,36 @@ export const videoForm: Form = {
                 {
                     id: 'source',
                     type: 'file',
-                    label: 'Vidéo',
-                    placeholder: 'Ajouter une vidéo',
+                    label: t('forms.content.video.label'),
+                    placeholder: t('forms.content.video.placeholder'),
                     value: '',
                     accept: '.mp4',
-                    hint: 'Format recommandé: 16:9 (720x480)'
+                    hint: t('forms.content.video.hint'),
                 },
                 {
                     id: 'summary',
                     type: 'html',
-                    label: 'Résumé',
+                    label: t('forms.content.summary'),
                     value: '',
-                    placeholder: 'Saisissez...',
+                    placeholder: t('forms.type'),
                 },
                 {
                     id: 'transcript',
                     type: 'file',
-                    label: 'Transcription',
+                    label: t('forms.content.transcription.label'),
                     value: '',
-                    placeholder: 'Ajouter une transcription',
+                    placeholder: t('forms.content.transcription.placeholder'),
                     accept: '.txt,.vtt',
-                    hint: 'Extensions acceptées : .vtt, .txt <br>Pour les utilisateurs qui ne souhaitent pas ou ne sont pas en capacité d\'écouter la vidéo'
+                    hint: t('forms.content.transcription.hint', { extensions: '.txt,.vtt' }),
                 },
                 {
                     id: 'poster',
                     type: 'file',
-                    label: 'Vignette',
+                    label: t('forms.content.thumbnail.label'),
                     value: '',
-                    placeholder: 'Ajouter une vignette',
+                    placeholder: t('forms.content.thumbnail.placeholder'),
                     accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
-                    hint: 'Format recommandé: idem à la vidéo'
+                    hint: t('forms.content.thumbnail.hint'),
                 },
             ],
         },
@@ -95,7 +98,7 @@ export const videoForm: Form = {
                             value: '',
                             placeholder: 'Ajouter des sous-titres',
                             accept: '.vtt',
-                            hint: 'Extensions acceptées : .vtt'
+                            hint: 'Extensions acceptées : .vtt',
                         },
                     ],
                 },
@@ -134,7 +137,7 @@ export const audioForm: Form = {
                     value: '',
                     placeholder: 'Ajouter une transcription',
                     accept: '.txt,.vtt',
-                    hint: 'Extensions acceptées : .vtt, .txt <br>Pour les utilisateurs qui ne souhaitent pas ou ne sont pas en capacité d\'écouter la piste audio'
+                    hint: "Extensions acceptées : .vtt, .txt <br>Pour les utilisateurs qui ne souhaitent pas ou ne sont pas en capacité d'écouter la piste audio",
                 },
                 {
                     id: 'subtitles',
@@ -143,7 +146,7 @@ export const audioForm: Form = {
                     value: '',
                     placeholder: 'Ajouter des sous-titres',
                     accept: '.vtt',
-                    hint: 'Extensions acceptées: .vtt'
+                    hint: 'Extensions acceptées: .vtt',
                 },
             ],
         },
