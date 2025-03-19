@@ -7,16 +7,6 @@ import VueTippy from 'vue-tippy';
 import 'tippy.js/dist/tippy.css';
 import draggable from 'vuedraggable';
 import { i18n } from './i18n/config';
-// import { createI18n } from 'vue-i18n';
-//
-
-// const i18n = createI18n({
-//     locale: 'fr',
-//     fallbackLocale: 'fr',
-//     messages: {
-//         fr: frMessages,
-//     },
-// });
 
 const app = createApp(App);
 app.use(router);

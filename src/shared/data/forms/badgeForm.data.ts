@@ -15,14 +15,14 @@ export const customBadgeForm: Form = {
                 {
                     id: 'title',
                     type: 'text',
-                    label: 'Titre',
+                    label: t('forms.node.title'),
                     value: '',
                     placeholder: t('forms.type'),
                 },
                 {
                     id: 'icon',
                     type: 'icon-picker',
-                    label: 'Icône du badge',
+                    label: t('forms.badge.icon'),
                     value: '',
                     placeholder: t('forms.badge.updateIcon'),
                 },

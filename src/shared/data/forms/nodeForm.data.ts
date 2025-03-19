@@ -184,7 +184,7 @@ export const epocForm: Form = {
                     type: 'file',
                     label: t('forms.node.thumbnail.title'),
                     value: '',
-                    placeholder: t('content.thumbnail.placeholder'),
+                    placeholder: t('forms.content.thumbnail.placeholder'),
                     accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
                     hint: t('forms.node.thumbnail.hint'),
                 },

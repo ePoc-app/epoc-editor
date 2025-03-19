@@ -20,6 +20,7 @@ export const frMessages = {
         chapter: 'Chapitre',
         objective: 'Objectif',
         name: 'Nom',
+        file: 'Fichier',
     },
     validation: {
         yes: 'OUI, SUPPRIMER',
@@ -137,6 +138,7 @@ export const frMessages = {
             obtention: "Conditions d'obtention du badge",
             presentation: 'Présentation du badge',
             presentationPlaceholder: 'Saisissez une présentation du badge',
+            icon: 'Icône du badge',
         },
         content: {
             text: 'Contenu',
@@ -145,6 +147,17 @@ export const frMessages = {
                 label: 'Vidéo',
                 placeholder: 'Ajouter une vidéo',
                 hint: 'Format recommandé :',
+            },
+            audio: {
+                label: 'Piste audio',
+                placeholder: 'Ajouter une piste audio',
+                hint: 'Format recommandé : MP3',
+            },
+            subtitle: {
+                label: 'Nom de la langue',
+                code: 'Code de la langue',
+                placeholder: 'Ajouter des sous-titre',
+                hint: 'Extensions acceptées : {extensions}',
             },
             transcription: {
                 label: 'Transcription',

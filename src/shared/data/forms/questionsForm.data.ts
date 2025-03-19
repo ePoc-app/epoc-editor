@@ -1,6 +1,7 @@
 import { Form } from '@/src/shared/interfaces';
 import { contentButtons } from './formButtons.data';
 import { i18n } from '@/src/i18n/config';
+import { capitalizeFirstLetter } from '../../utils/string';
 
 const { t } = i18n.global;
 
@@ -345,9 +346,9 @@ export const swipeForm: Form = {
             inputs: [
                 {
                     id: 'categories',
-                    label: t('questions.choice'),
+                    label: t('forms.node.choice'),
                     type: 'repeat',
-                    value: ['Droite', 'Gauche'],
+                    value: [capitalizeFirstLetter(t('global.right')), capitalizeFirstLetter(t('global.left'))],
                     addButton: false,
                     inputs: [
                         {
@@ -463,7 +464,7 @@ export const listForm: Form = {
             inputs: [
                 {
                     id: 'categories',
-                    label: t('questions.choice'),
+                    label: t('forms.node.choice'),
                     type: 'repeat',
                     value: [],
                     inputs: [
