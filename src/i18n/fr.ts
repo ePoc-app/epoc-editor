@@ -113,6 +113,7 @@ export const frMessages = {
     settings: {
         title: 'Paramètres',
         spellcheck: 'Activer la vérification orthographique',
+        lang: 'Langue',
     },
     models: {
         title: 'Modèles de page',

@@ -3,6 +3,9 @@ import Modal from '@/src/components/LayoutModal.vue';
 import SettingsInput from './SettingsInput.vue';
 import { ref, onMounted, watch } from 'vue';
 import { useSettingsStore } from '@/src/shared/stores';
+import { useI18n } from 'vue-i18n';
+
+const { locale } = useI18n();
 
 const modal = ref(null);
 const settingsStore = useSettingsStore();
@@ -41,6 +44,15 @@ defineExpose({
 
         <div class="settings">
             <SettingsInput v-model="spellcheck" type="toggle" :label="$t('settings.spellcheck')" />
+            <SettingsInput
+                v-model="locale"
+                type="select"
+                :label="$t('settings.lang')"
+                :options="[
+                    { label: 'English', value: 'en' },
+                    { label: 'Français', value: 'fr' },
+                ]"
+            />
         </div>
 
         <template #footer>

@@ -113,6 +113,7 @@ export const enMessages = {
     settings: {
         title: 'Settings',
         spellcheck: 'Enable spell checking',
+        lang: 'Language',
     },
     models: {
         title: 'Page templates',
