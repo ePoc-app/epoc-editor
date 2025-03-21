@@ -17,15 +17,15 @@ import { saveState } from '@/src/shared/services/undoRedo.service';
 import { useEditorStore, useGraphStore } from '@/src/shared/stores';
 
 const mapType = {
-    video: standardPages.find((s) => s.type === 'video'),
-    html: standardPages.find((s) => s.type === 'text'),
-    audio: standardPages.find((s) => s.type === 'audio'),
-    'multiple-choice': questions.find((s) => s.type === 'choice'),
-    choice: questions.find((s) => s.type === 'choice'),
-    'drag-and-drop': questions.find((s) => s.type === 'drag-and-drop'),
-    'dropdown-list': questions.find((s) => s.type === 'dropdown-list'),
-    swipe: questions.find((s) => s.type === 'swipe'),
-    reorder: questions.find((s) => s.type === 'reorder'),
+    video: standardPages.value.find((s) => s.type === 'video'),
+    html: standardPages.value.find((s) => s.type === 'text'),
+    audio: standardPages.value.find((s) => s.type === 'audio'),
+    'multiple-choice': questions.value.find((s) => s.type === 'choice'),
+    choice: questions.value.find((s) => s.type === 'choice'),
+    'drag-and-drop': questions.value.find((s) => s.type === 'drag-and-drop'),
+    'dropdown-list': questions.value.find((s) => s.type === 'dropdown-list'),
+    swipe: questions.value.find((s) => s.type === 'swipe'),
+    reorder: questions.value.find((s) => s.type === 'reorder'),
 };
 
 export function createGraphEpocFromData(epoc: EpocV1) {
@@ -70,7 +70,7 @@ export function createGraphEpocFromData(epoc: EpocV1) {
                 const contentElement = newQuestion(epoc, id, qid);
                 contentElements.push(contentElement);
             } else if (content.type === 'choice') {
-                const action = standardPages.find((s) => s.type === 'legacy-condition');
+                const action = standardPages.value.find((s) => s.type === 'legacy-condition');
                 const choiceResolver = (content as ChoiceCondition).conditionResolver;
                 const contentElement = {
                     id: generateId(),

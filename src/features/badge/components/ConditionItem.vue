@@ -56,6 +56,12 @@ function handleVerbChange(value: string) {
     resetValue(true);
     updateCondition(value, 'verb');
 }
+
+const verbs = computed(() => {
+    if (!elementType.value) return [];
+    const res = getVerbs(elementType.value);
+    return res.value;
+});
 </script>
 
 <template>
@@ -90,7 +96,7 @@ function handleVerbChange(value: string) {
                     @change="handleVerbChange(($event.target as HTMLSelectElement).value)"
                 >
                     <option value="">{{ $t('global.pleaseSelect') }}</option>
-                    <option v-for="(description, verb) in getVerbs(elementType)" :key="verb" :value="verb">
+                    <option v-for="(description, verb) in verbs" :key="verb" :value="verb">
                         {{ description.label }}
                     </option>
                 </select>

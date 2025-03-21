@@ -2,82 +2,81 @@ import { Form } from '@/src/shared/interfaces';
 import { contentButtons } from './formButtons.data';
 import { i18n } from '@/src/i18n/config';
 import { capitalizeFirstLetter } from '../../utils/string';
+import { ComputedRef, computed } from 'vue';
 
-const { t } = i18n.global;
-
-export const qcmForm: Form = {
+export const qcmForm: ComputedRef<Form> = computed(() => ({
     type: 'choice',
-    name: t('questions.types.qcm'),
+    name: i18n.global.t('questions.types.qcm'),
     icon: 'icon-qcm',
     displayFieldIndex: true,
-    buttons: contentButtons,
+    buttons: contentButtons.value,
     fields: [
         {
-            name: t('questions.configuration'),
+            name: i18n.global.t('questions.configuration'),
             inputs: [
                 {
                     id: 'score',
                     type: 'score',
-                    label: t('questions.score'),
+                    label: i18n.global.t('questions.score'),
                     value: 0,
                 },
             ],
         },
         {
-            name: t('questions.question'),
+            name: i18n.global.t('questions.question'),
             inputs: [
                 {
                     id: 'label',
                     type: 'textarea',
-                    label: t('questions.question'),
+                    label: i18n.global.t('questions.question'),
                     value: '',
-                    placeholder: t('questions.askQuestion'),
+                    placeholder: i18n.global.t('questions.askQuestion'),
                 },
                 {
                     id: 'statement',
                     type: 'html-inline',
-                    label: t('questions.instruction'),
+                    label: i18n.global.t('questions.instruction'),
                     value: '',
-                    placeholder: t('questions.instructionPlaceholder'),
+                    placeholder: i18n.global.t('questions.instructionPlaceholder'),
                 },
             ],
         },
         {
-            name: t('questions.responses'),
+            name: i18n.global.t('questions.responses'),
             inputs: [
                 {
                     id: 'responses',
-                    label: t('questions.response'),
+                    label: i18n.global.t('questions.response'),
                     type: 'repeat',
                     value: [],
                     inputs: [
                         {
                             id: 'label',
                             type: 'text',
-                            label: t('questions.response'),
-                            placeholder: t('questions.typeResponse'),
+                            label: i18n.global.t('questions.response'),
+                            placeholder: i18n.global.t('questions.typeResponse'),
                             value: '',
                         },
                         {
                             id: 'value',
                             type: 'hidden',
                             label: '',
-                            placeholder: t('forms.type'),
+                            placeholder: i18n.global.t('forms.type'),
                             value: '',
                         },
                         {
                             id: 'feedback',
                             type: 'textarea',
-                            label: t('questions.explanation'),
-                            placeholder: t('questions.typeExplanation'),
+                            label: i18n.global.t('questions.explanation'),
+                            placeholder: i18n.global.t('questions.typeExplanation'),
                             value: '',
                             collapsible: true,
-                            collapsibleLabel: t('questions.addExplanation'),
+                            collapsibleLabel: i18n.global.t('questions.addExplanation'),
                         },
                         {
                             id: 'isCorrect',
                             type: 'checkbox',
-                            label: t('questions.correctResponse'),
+                            label: i18n.global.t('questions.correctResponse'),
                             value: false,
                         },
                     ],
@@ -85,63 +84,63 @@ export const qcmForm: Form = {
             ],
         },
         {
-            name: t('questions.explanation'),
+            name: i18n.global.t('questions.explanation'),
             inputs: [
                 {
                     id: 'explanation',
                     type: 'html',
                     label: '',
                     value: '',
-                    placeholder: t('questions.typeExplanation'),
+                    placeholder: i18n.global.t('questions.typeExplanation'),
                 },
             ],
         },
     ],
-};
+}));
 
-export const dragDropForm: Form = {
+export const dragDropForm: ComputedRef<Form> = computed(() => ({
     type: 'drag-and-drop',
-    name: t('questions.types.dragDrop'),
+    name: i18n.global.t('questions.types.dragDrop'),
     icon: 'icon-dragdrop',
     displayFieldIndex: true,
-    buttons: contentButtons,
+    buttons: contentButtons.value,
     fields: [
         {
-            name: t('questions.configuration'),
+            name: i18n.global.t('questions.configuration'),
             inputs: [
                 {
                     id: 'score',
                     type: 'score',
-                    label: t('questions.score'),
+                    label: i18n.global.t('questions.score'),
                     value: 0,
                 },
             ],
         },
         {
-            name: t('questions.question'),
+            name: i18n.global.t('questions.question'),
             inputs: [
                 {
                     id: 'label',
                     type: 'textarea',
-                    label: t('questions.question'),
+                    label: i18n.global.t('questions.question'),
                     value: '',
-                    placeholder: t('questions.askQuestion'),
+                    placeholder: i18n.global.t('questions.askQuestion'),
                 },
                 {
                     id: 'statement',
                     type: 'html-inline',
-                    label: t('questions.instruction'),
+                    label: i18n.global.t('questions.instruction'),
                     value: '',
-                    placeholder: t('questions.instructionPlaceholder'),
+                    placeholder: i18n.global.t('questions.instructionPlaceholder'),
                 },
             ],
         },
         {
-            name: t('questions.categories'),
+            name: i18n.global.t('questions.categories'),
             inputs: [
                 {
                     id: 'categories',
-                    label: t('questions.category'),
+                    label: i18n.global.t('questions.category'),
                     type: 'repeat',
                     value: [],
                     inputs: [
@@ -149,7 +148,7 @@ export const dragDropForm: Form = {
                             id: '',
                             type: 'textarea',
                             label: '',
-                            placeholder: t('questions.typeCategory'),
+                            placeholder: i18n.global.t('questions.typeCategory'),
                             value: '',
                         },
                     ],
@@ -157,36 +156,36 @@ export const dragDropForm: Form = {
             ],
         },
         {
-            name: t('questions.proposedResponses'),
+            name: i18n.global.t('questions.proposedResponses'),
             inputs: [
                 {
                     id: 'responses',
-                    label: t('questions.response'),
+                    label: i18n.global.t('questions.response'),
                     type: 'repeat',
                     value: [],
                     inputs: [
                         {
                             id: 'label',
                             type: 'text',
-                            label: t('questions.response'),
-                            placeholder: t('questions.typeResponse'),
+                            label: i18n.global.t('questions.response'),
+                            placeholder: i18n.global.t('questions.typeResponse'),
                             value: '',
                         },
                         {
                             id: 'value',
                             type: 'hidden',
                             label: '',
-                            placeholder: t('forms.type'),
+                            placeholder: i18n.global.t('forms.type'),
                             value: '',
                         },
                         {
                             id: 'feedback',
                             type: 'textarea',
-                            label: t('questions.explanation'),
-                            placeholder: t('questions.typeExplanation'),
+                            label: i18n.global.t('questions.explanation'),
+                            placeholder: i18n.global.t('questions.typeExplanation'),
                             value: '',
                             collapsible: true,
-                            collapsibleLabel: t('questions.addExplanation'),
+                            collapsibleLabel: i18n.global.t('questions.addExplanation'),
                         },
                         {
                             id: 'category',
@@ -202,87 +201,87 @@ export const dragDropForm: Form = {
             ],
         },
         {
-            name: t('questions.explanation'),
+            name: i18n.global.t('questions.explanation'),
             inputs: [
                 {
                     id: 'explanation',
                     type: 'html',
                     label: '',
                     value: '',
-                    placeholder: t('questions.typeExplanation'),
+                    placeholder: i18n.global.t('questions.typeExplanation'),
                 },
             ],
         },
     ],
-};
+}));
 
-export const reorderForm: Form = {
+export const reorderForm: ComputedRef<Form> = computed(() => ({
     type: 'reorder',
-    name: t('questions.types.reorder'),
+    name: i18n.global.t('questions.types.reorder'),
     icon: 'icon-reorder',
     displayFieldIndex: true,
-    buttons: contentButtons,
+    buttons: contentButtons.value,
     fields: [
         {
-            name: t('questions.configuration'),
+            name: i18n.global.t('questions.configuration'),
             inputs: [
                 {
                     id: 'score',
                     type: 'score',
-                    label: t('questions.score'),
+                    label: i18n.global.t('questions.score'),
                     value: 0,
                 },
             ],
         },
         {
-            name: t('questions.question'),
+            name: i18n.global.t('questions.question'),
             inputs: [
                 {
                     id: 'label',
                     type: 'textarea',
-                    label: t('questions.question'),
+                    label: i18n.global.t('questions.question'),
                     value: '',
-                    placeholder: t('questions.askQuestion'),
+                    placeholder: i18n.global.t('questions.askQuestion'),
                 },
                 {
                     id: 'statement',
                     type: 'html-inline',
-                    label: t('questions.instruction'),
+                    label: i18n.global.t('questions.instruction'),
                     value: '',
-                    placeholder: t('questions.instructionPlaceholder'),
+                    placeholder: i18n.global.t('questions.instructionPlaceholder'),
                 },
             ],
         },
         {
-            name: t('questions.responses'),
+            name: i18n.global.t('questions.responses'),
             inputs: [
                 {
                     id: 'responses',
-                    label: t('questions.response'),
+                    label: i18n.global.t('questions.response'),
                     type: 'repeat',
                     value: [],
                     inputs: [
                         {
                             id: 'label',
                             type: 'text',
-                            label: t('questions.response'),
-                            placeholder: t('questions.typeResponse'),
+                            label: i18n.global.t('questions.response'),
+                            placeholder: i18n.global.t('questions.typeResponse'),
                             value: '',
                         },
                         {
                             id: 'feedback',
                             type: 'textarea',
-                            label: t('questions.explanation'),
-                            placeholder: t('questions.typeExplanation'),
+                            label: i18n.global.t('questions.explanation'),
+                            placeholder: i18n.global.t('questions.typeExplanation'),
                             value: '',
                             collapsible: true,
-                            collapsibleLabel: t('questions.addExplanation'),
+                            collapsibleLabel: i18n.global.t('questions.addExplanation'),
                         },
                         {
                             id: 'value',
                             type: 'hidden',
                             label: '',
-                            placeholder: t('forms.type'),
+                            placeholder: i18n.global.t('forms.type'),
                             value: '',
                         },
                     ],
@@ -290,72 +289,75 @@ export const reorderForm: Form = {
             ],
         },
         {
-            name: t('questions.explanation'),
+            name: i18n.global.t('questions.explanation'),
             inputs: [
                 {
                     id: 'explanation',
                     type: 'html',
                     label: '',
                     value: '',
-                    placeholder: t('questions.typeExplanation'),
+                    placeholder: i18n.global.t('questions.typeExplanation'),
                 },
             ],
         },
     ],
-};
+}));
 
-export const swipeForm: Form = {
+export const swipeForm: ComputedRef<Form> = computed(() => ({
     type: 'swipe',
-    name: t('questions.types.swipe'),
+    name: i18n.global.t('questions.types.swipe'),
     icon: 'icon-swipe',
     displayFieldIndex: true,
-    buttons: contentButtons,
+    buttons: contentButtons.value,
     fields: [
         {
-            name: t('questions.configuration'),
+            name: i18n.global.t('questions.configuration'),
             inputs: [
                 {
                     id: 'score',
                     type: 'score',
-                    label: t('questions.score'),
+                    label: i18n.global.t('questions.score'),
                     value: 0,
                 },
             ],
         },
         {
-            name: t('questions.question'),
+            name: i18n.global.t('questions.question'),
             inputs: [
                 {
                     id: 'label',
                     type: 'textarea',
-                    label: t('questions.question'),
+                    label: i18n.global.t('questions.question'),
                     value: '',
-                    placeholder: t('questions.askQuestion'),
+                    placeholder: i18n.global.t('questions.askQuestion'),
                 },
                 {
                     id: 'statement',
                     type: 'html-inline',
-                    label: t('questions.instruction'),
+                    label: i18n.global.t('questions.instruction'),
                     value: '',
-                    placeholder: t('questions.instructionPlaceholder'),
+                    placeholder: i18n.global.t('questions.instructionPlaceholder'),
                 },
             ],
         },
         {
-            name: t('questions.proposedChoices'),
+            name: i18n.global.t('questions.proposedChoices'),
             inputs: [
                 {
                     id: 'categories',
-                    label: t('forms.node.choice'),
+                    label: i18n.global.t('forms.node.choice'),
                     type: 'repeat',
-                    value: [capitalizeFirstLetter(t('global.right')), capitalizeFirstLetter(t('global.left'))],
+                    value: [
+                        capitalizeFirstLetter(i18n.global.t('global.right')),
+                        capitalizeFirstLetter(i18n.global.t('global.left')),
+                    ],
                     addButton: false,
                     inputs: [
                         {
                             id: '',
                             type: 'text',
                             label: '',
-                            placeholder: t('questions.typeResponse'),
+                            placeholder: i18n.global.t('questions.typeResponse'),
                             value: '',
                         },
                     ],
@@ -363,35 +365,35 @@ export const swipeForm: Form = {
             ],
         },
         {
-            name: t('questions.proposedResponses'),
+            name: i18n.global.t('questions.proposedResponses'),
             inputs: [
                 {
                     id: 'responses',
-                    label: t('questions.card'),
+                    label: i18n.global.t('questions.card'),
                     type: 'repeat',
                     value: [],
                     inputs: [
                         {
                             id: 'label',
                             type: 'text',
-                            label: t('questions.response'),
-                            placeholder: t('questions.typeProposition'),
+                            label: i18n.global.t('questions.response'),
+                            placeholder: i18n.global.t('questions.typeProposition'),
                             value: '',
                         },
                         {
                             id: 'feedback',
                             type: 'textarea',
-                            label: t('questions.explanation'),
-                            placeholder: t('questions.typeExplanation'),
+                            label: i18n.global.t('questions.explanation'),
+                            placeholder: i18n.global.t('questions.typeExplanation'),
                             value: '',
                             collapsible: true,
-                            collapsibleLabel: t('questions.addExplanation'),
+                            collapsibleLabel: i18n.global.t('questions.addExplanation'),
                         },
                         {
                             id: 'value',
                             type: 'hidden',
                             label: '',
-                            placeholder: t('forms.type'),
+                            placeholder: i18n.global.t('forms.type'),
                             value: '',
                         },
                         {
@@ -408,63 +410,63 @@ export const swipeForm: Form = {
             ],
         },
         {
-            name: t('questions.explanation'),
+            name: i18n.global.t('questions.explanation'),
             inputs: [
                 {
                     id: 'explanation',
                     type: 'html',
                     label: '',
                     value: '',
-                    placeholder: t('questions.typeExplanation'),
+                    placeholder: i18n.global.t('questions.typeExplanation'),
                 },
             ],
         },
     ],
-};
+}));
 
-export const listForm: Form = {
+export const listForm: ComputedRef<Form> = computed(() => ({
     type: 'dropdown-list',
-    name: t('questions.types.dropdownList'),
+    name: i18n.global.t('questions.types.dropdownList'),
     icon: 'icon-liste',
     displayFieldIndex: true,
-    buttons: contentButtons,
+    buttons: contentButtons.value,
     fields: [
         {
-            name: t('questions.configuration'),
+            name: i18n.global.t('questions.configuration'),
             inputs: [
                 {
                     id: 'score',
                     type: 'score',
-                    label: t('questions.score'),
+                    label: i18n.global.t('questions.score'),
                     value: 0,
                 },
             ],
         },
         {
-            name: t('questions.question'),
+            name: i18n.global.t('questions.question'),
             inputs: [
                 {
                     id: 'label',
                     type: 'textarea',
-                    label: t('questions.question'),
+                    label: i18n.global.t('questions.question'),
                     value: '',
-                    placeholder: t('questions.askQuestion'),
+                    placeholder: i18n.global.t('questions.askQuestion'),
                 },
                 {
                     id: 'statement',
                     type: 'html-inline',
-                    label: t('questions.instruction'),
+                    label: i18n.global.t('questions.instruction'),
                     value: '',
-                    placeholder: t('questions.instructionPlaceholder'),
+                    placeholder: i18n.global.t('questions.instructionPlaceholder'),
                 },
             ],
         },
         {
-            name: t('questions.proposedChoices'),
+            name: i18n.global.t('questions.proposedChoices'),
             inputs: [
                 {
                     id: 'categories',
-                    label: t('forms.node.choice'),
+                    label: i18n.global.t('forms.node.choice'),
                     type: 'repeat',
                     value: [],
                     inputs: [
@@ -472,7 +474,7 @@ export const listForm: Form = {
                             id: '',
                             type: 'text',
                             label: '',
-                            placeholder: t('questions.typeResponse'),
+                            placeholder: i18n.global.t('questions.typeResponse'),
                             value: '',
                         },
                     ],
@@ -480,35 +482,35 @@ export const listForm: Form = {
             ],
         },
         {
-            name: t('questions.cards'),
+            name: i18n.global.t('questions.cards'),
             inputs: [
                 {
                     id: 'responses',
-                    label: t('questions.card'),
+                    label: i18n.global.t('questions.card'),
                     type: 'repeat',
                     value: [],
                     inputs: [
                         {
                             id: 'label',
                             type: 'text',
-                            label: t('questions.response'),
-                            placeholder: t('questions.typeProposition'),
+                            label: i18n.global.t('questions.response'),
+                            placeholder: i18n.global.t('questions.typeProposition'),
                             value: '',
                         },
                         {
                             id: 'feedback',
                             type: 'textarea',
-                            label: t('questions.explanation'),
-                            placeholder: t('questions.typeExplanation'),
+                            label: i18n.global.t('questions.explanation'),
+                            placeholder: i18n.global.t('questions.typeExplanation'),
                             value: '',
                             collapsible: true,
-                            collapsibleLabel: t('questions.addExplanation'),
+                            collapsibleLabel: i18n.global.t('questions.addExplanation'),
                         },
                         {
                             id: 'value',
                             type: 'hidden',
                             label: '',
-                            placeholder: t('forms.type'),
+                            placeholder: i18n.global.t('forms.type'),
                             value: '',
                         },
                         {
@@ -525,64 +527,64 @@ export const listForm: Form = {
             ],
         },
         {
-            name: t('questions.explanation'),
+            name: i18n.global.t('questions.explanation'),
             inputs: [
                 {
                     id: 'explanation',
                     type: 'html',
                     label: '',
                     value: '',
-                    placeholder: t('questions.typeExplanation'),
+                    placeholder: i18n.global.t('questions.typeExplanation'),
                 },
             ],
         },
     ],
-};
+}));
 
-export const customQuestionForm: Form = {
+export const customQuestionForm: ComputedRef<Form> = computed(() => ({
     type: 'custom',
-    name: t('questions.types.custom'),
+    name: i18n.global.t('questions.types.custom'),
     icon: 'icon-terminal',
     displayFieldIndex: true,
-    buttons: contentButtons,
+    buttons: contentButtons.value,
     fields: [
         {
-            name: t('questions.configuration'),
+            name: i18n.global.t('questions.configuration'),
             inputs: [
                 {
                     id: 'score',
                     type: 'score',
-                    label: t('questions.score'),
+                    label: i18n.global.t('questions.score'),
                     value: 0,
                 },
             ],
         },
         {
-            name: t('questions.question'),
+            name: i18n.global.t('questions.question'),
             inputs: [
                 {
                     id: 'label',
                     type: 'textarea',
-                    label: t('questions.question'),
+                    label: i18n.global.t('questions.question'),
                     value: '',
-                    placeholder: t('questions.askQuestion'),
+                    placeholder: i18n.global.t('questions.askQuestion'),
                 },
                 {
                     id: 'statement',
                     type: 'html-inline',
-                    label: t('questions.instruction'),
+                    label: i18n.global.t('questions.instruction'),
                     value: '',
-                    placeholder: t('questions.instructionPlaceholder'),
+                    placeholder: i18n.global.t('questions.instructionPlaceholder'),
                 },
             ],
         },
         {
-            name: t('questions.template.title'),
+            name: i18n.global.t('questions.template.title'),
             inputs: [
                 {
                     id: 'template',
                     type: 'select',
-                    label: t('questions.template.select'),
+                    label: i18n.global.t('questions.template.select'),
                     value: '',
                     options: [],
                     linkedOptions: 'plugins.*.template',
@@ -590,26 +592,26 @@ export const customQuestionForm: Form = {
             ],
         },
         {
-            name: t('questions.template.data'),
+            name: i18n.global.t('questions.template.data'),
             inputs: [
                 {
                     type: 'repeat',
                     id: 'data',
-                    label: t('questions.template.data'),
+                    label: i18n.global.t('questions.template.data'),
                     value: [],
                     inputs: [
                         {
                             id: 'key',
                             type: 'text',
-                            label: t('questions.template.key'),
-                            placeholder: t('questions.template.key'),
+                            label: i18n.global.t('questions.template.key'),
+                            placeholder: i18n.global.t('questions.template.key'),
                             value: '',
                         },
                         {
                             id: 'value',
                             type: 'textarea',
-                            label: t('questions.template.value'),
-                            placeholder: t('questions.template.value'),
+                            label: i18n.global.t('questions.template.value'),
+                            placeholder: i18n.global.t('questions.template.value'),
                             value: '',
                         },
                     ],
@@ -617,29 +619,36 @@ export const customQuestionForm: Form = {
             ],
         },
         {
-            name: t('questions.response'),
+            name: i18n.global.t('questions.response'),
             inputs: [
                 {
                     id: 'correctResponse',
-                    label: t('questions.response'),
+                    label: i18n.global.t('questions.response'),
                     type: 'text',
                     value: '',
                 },
             ],
         },
         {
-            name: t('questions.explanation'),
+            name: i18n.global.t('questions.explanation'),
             inputs: [
                 {
                     id: 'explanation',
                     type: 'html',
                     label: '',
                     value: '',
-                    placeholder: t('questions.typeExplanation'),
+                    placeholder: i18n.global.t('questions.typeExplanation'),
                 },
             ],
         },
     ],
-};
+}));
 
-export const questionForms: Form[] = [qcmForm, swipeForm, reorderForm, dragDropForm, listForm, customQuestionForm];
+export const questionForms: ComputedRef<Form[]> = computed(() => [
+    qcmForm.value,
+    swipeForm.value,
+    reorderForm.value,
+    dragDropForm.value,
+    listForm.value,
+    customQuestionForm.value,
+]);

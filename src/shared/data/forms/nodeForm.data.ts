@@ -1,14 +1,13 @@
 import { Form } from '@/src/shared/interfaces';
 import { activityButtons, baseButtons, pageButtons } from './formButtons.data';
+import { computed, ComputedRef } from 'vue';
 import { i18n } from '@/src/i18n/config';
 
-const { t } = i18n.global;
-
-export const conditionForm: Form = {
+export const conditionForm: ComputedRef<Form> = computed(() => ({
     type: 'condition',
-    name: t('global.conditions'),
+    name: i18n.global.t('global.conditions'),
     icon: 'icon-condition',
-    buttons: baseButtons,
+    buttons: baseButtons.value,
     fields: [
         {
             inputs: [
@@ -17,34 +16,34 @@ export const conditionForm: Form = {
                     type: 'text',
                     label: '',
                     value: '',
-                    placeholder: t('forms.node.conditionPlaceholder', { condition: '1' }),
+                    placeholder: i18n.global.t('forms.node.conditionPlaceholder', { condition: '1' }),
                 },
                 {
                     id: 'condition2',
                     type: 'text',
                     label: '',
                     value: '',
-                    placeholder: t('forms.node.conditionPlaceholder', { condition: '2' }),
+                    placeholder: i18n.global.t('forms.node.conditionPlaceholder', { condition: '2' }),
                 },
             ],
         },
     ],
-};
+}));
 
-export const legacyConditionForm: Form = {
+export const legacyConditionForm: ComputedRef<Form> = computed(() => ({
     type: 'legacy-condition',
     name: 'Conditions (legacy)',
     icon: 'icon-condition',
-    buttons: baseButtons,
+    buttons: baseButtons.value,
     fields: [
         {
             inputs: [
                 {
                     id: 'label',
                     type: 'text',
-                    label: t('global.label'),
+                    label: i18n.global.t('global.label'),
                     value: '',
-                    placeholder: t('forms.type'),
+                    placeholder: i18n.global.t('forms.type'),
                 },
             ],
         },
@@ -53,15 +52,18 @@ export const legacyConditionForm: Form = {
             inputs: [
                 {
                     id: 'choices',
-                    label: t('forms.node.choice'),
+                    label: i18n.global.t('forms.node.choice'),
                     type: 'repeat',
-                    value: [t('forms.node.course', { course: 'A' }), t('forms.node.course', { course: 'B' })],
+                    value: [
+                        i18n.global.t('forms.node.course', { course: 'A' }),
+                        i18n.global.t('forms.node.course', { course: 'B' }),
+                    ],
                     inputs: [
                         {
                             id: '',
                             type: 'text',
                             label: '',
-                            placeholder: t('forms.node.course', { course: 'X' }),
+                            placeholder: i18n.global.t('forms.node.course', { course: 'X' }),
                             value: '',
                         },
                     ],
@@ -69,11 +71,11 @@ export const legacyConditionForm: Form = {
             ],
         },
         {
-            name: t('forms.node.conditional'),
+            name: i18n.global.t('forms.node.conditional'),
             inputs: [
                 {
                     id: 'conditionalFlag',
-                    label: t('forms.content.text'),
+                    label: i18n.global.t('forms.content.text'),
                     type: 'repeat',
                     value: [],
                     inputs: [
@@ -81,7 +83,7 @@ export const legacyConditionForm: Form = {
                             id: 'id',
                             type: 'text',
                             label: '',
-                            placeholder: t('forms.type'),
+                            placeholder: i18n.global.t('forms.type'),
                             value: '',
                         },
                         {
@@ -98,37 +100,37 @@ export const legacyConditionForm: Form = {
             ],
         },
     ],
-};
+}));
 
-export const chapterForm: Form = {
+export const chapterForm: ComputedRef<Form> = computed(() => ({
     type: 'chapter',
-    name: t('global.chapter'),
+    name: i18n.global.t('global.chapter'),
     icon: 'icon-chapitre',
-    buttons: baseButtons,
+    buttons: baseButtons.value,
     fields: [
         {
             inputs: [
                 {
                     id: 'title',
                     type: 'text',
-                    label: t('forms.node.title'),
+                    label: i18n.global.t('forms.node.title'),
                     value: '',
-                    placeholder: t('forms.type'),
+                    placeholder: i18n.global.t('forms.type'),
                 },
                 {
                     id: 'duration',
                     type: 'score',
-                    label: t('forms.node.duration'),
+                    label: i18n.global.t('forms.node.duration'),
                     value: 0,
                 },
             ],
         },
         {
-            name: t('forms.node.objectives'),
+            name: i18n.global.t('forms.node.objectives'),
             inputs: [
                 {
                     id: 'objectives',
-                    label: t('global.objective'),
+                    label: i18n.global.t('global.objective'),
                     type: 'repeat',
                     value: [],
                     inputs: [
@@ -136,7 +138,7 @@ export const chapterForm: Form = {
                             id: '',
                             type: 'textarea',
                             label: '',
-                            placeholder: t('forms.type'),
+                            placeholder: i18n.global.t('forms.type'),
                             value: '',
                         },
                     ],
@@ -144,11 +146,11 @@ export const chapterForm: Form = {
             ],
         },
     ],
-};
+}));
 
-export const epocForm: Form = {
+export const epocForm: ComputedRef<Form> = computed(() => ({
     type: 'epoc',
-    name: t('forms.node.about'),
+    name: i18n.global.t('forms.node.about'),
     icon: 'icon-epoc',
     buttons: [],
     fields: [
@@ -157,90 +159,90 @@ export const epocForm: Form = {
                 {
                     id: 'title',
                     type: 'text',
-                    label: t('forms.node.title'),
+                    label: i18n.global.t('forms.node.title'),
                     value: '',
-                    placeholder: t('forms.type'),
+                    placeholder: i18n.global.t('forms.type'),
                 },
                 {
                     id: 'image',
                     type: 'file',
-                    label: t('forms.node.cover.title'),
-                    placeholder: t('forms.node.cover.placeholder'),
+                    label: i18n.global.t('forms.node.cover.title'),
+                    placeholder: i18n.global.t('forms.node.cover.placeholder'),
                     value: '',
                     accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
-                    hint: t('forms.node.cover.hint'),
+                    hint: i18n.global.t('forms.node.cover.hint'),
                 },
                 {
                     id: 'teaser',
                     type: 'file',
-                    label: t('forms.node.teaser.title'),
+                    label: i18n.global.t('forms.node.teaser.title'),
                     value: '',
-                    placeholder: t('forms.node.teaser.placeholder'),
+                    placeholder: i18n.global.t('forms.node.teaser.placeholder'),
                     accept: '.mp4',
-                    hint: t('forms.node.teaser.hint'),
+                    hint: i18n.global.t('forms.node.teaser.hint'),
                 },
                 {
                     id: 'thumbnail',
                     type: 'file',
-                    label: t('forms.node.thumbnail.title'),
+                    label: i18n.global.t('forms.node.thumbnail.title'),
                     value: '',
-                    placeholder: t('forms.content.thumbnail.placeholder'),
+                    placeholder: i18n.global.t('forms.content.thumbnail.placeholder'),
                     accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
-                    hint: t('forms.node.thumbnail.hint'),
+                    hint: i18n.global.t('forms.node.thumbnail.hint'),
                 },
                 {
                     id: 'summary',
                     type: 'html-text',
-                    label: t('forms.node.presentation'),
+                    label: i18n.global.t('forms.node.presentation'),
                     value: '',
-                    placeholder: t('forms.type'),
+                    placeholder: i18n.global.t('forms.type'),
                 },
                 {
                     id: 'edition',
                     type: 'text',
-                    label: t('forms.node.edition'),
+                    label: i18n.global.t('forms.node.edition'),
                     value: String(new Date().getFullYear()),
                 },
             ],
         },
         {
-            name: t('forms.node.author.title', 2),
+            name: i18n.global.t('forms.node.author.title', 2),
             inputs: [
                 {
                     id: 'authors',
-                    label: t('forms.node.author.title', 1),
+                    label: i18n.global.t('forms.node.author.title', 1),
                     type: 'repeat',
                     value: [],
                     inputs: [
                         {
                             id: 'name',
                             type: 'text',
-                            label: t('global.name'),
-                            placeholder: t('forms.node.author.placeholder'),
+                            label: i18n.global.t('global.name'),
+                            placeholder: i18n.global.t('forms.node.author.placeholder'),
                             value: '',
                         },
                         {
                             id: 'image',
                             type: 'file',
-                            label: t('forms.node.author.image.title'),
-                            placeholder: t('forms.node.author.image.placeholder'),
+                            label: i18n.global.t('forms.node.author.image.title'),
+                            placeholder: i18n.global.t('forms.node.author.image.placeholder'),
                             value: '',
                             accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
-                            hint: t('forms.node.author.image.hint'),
+                            hint: i18n.global.t('forms.node.author.image.hint'),
                         },
                         {
                             id: 'title',
                             type: 'text',
-                            label: t('forms.node.author.position.title'),
-                            placeholder: t('forms.node.author.position.placeholder'),
+                            label: i18n.global.t('forms.node.author.position.title'),
+                            placeholder: i18n.global.t('forms.node.author.position.placeholder'),
                             value: '',
-                            hint: t('forms.node.author.position.hint'),
+                            hint: i18n.global.t('forms.node.author.position.hint'),
                         },
                         {
                             id: 'description',
                             type: 'html-text',
-                            label: t('forms.node.author.biography'),
-                            placeholder: t('forms.type'),
+                            label: i18n.global.t('forms.node.author.biography'),
+                            placeholder: i18n.global.t('forms.type'),
                             value: '',
                         },
                     ],
@@ -248,11 +250,11 @@ export const epocForm: Form = {
             ],
         },
         {
-            name: t('forms.node.objectives'),
+            name: i18n.global.t('forms.node.objectives'),
             inputs: [
                 {
                     id: 'objectives',
-                    label: t('global.objective'),
+                    label: i18n.global.t('global.objective'),
                     type: 'repeat',
                     value: [],
                     inputs: [
@@ -260,7 +262,7 @@ export const epocForm: Form = {
                             id: '',
                             type: 'textarea',
                             label: '',
-                            placeholder: t('forms.type'),
+                            placeholder: i18n.global.t('forms.type'),
                             value: '',
                         },
                     ],
@@ -268,50 +270,50 @@ export const epocForm: Form = {
             ],
         },
         {
-            name: t('settings.title'),
+            name: i18n.global.t('settings.title'),
             inputs: [
                 {
                     id: 'certificateBadgeCount',
                     type: 'score',
-                    label: t('forms.node.certificateBadge'),
+                    label: i18n.global.t('forms.node.certificateBadge'),
                     value: 1,
                 },
                 {
                     id: 'certificateScore',
                     type: 'score',
-                    label: t('forms.node.certificateScore'),
+                    label: i18n.global.t('forms.node.certificateScore'),
                     value: 10,
-                    hint: t('forms.node.certificateScoreHint'),
+                    hint: i18n.global.t('forms.node.certificateScoreHint'),
                 },
                 {
                     id: 'chapterParameter',
                     type: 'text',
-                    label: t('forms.node.chapterLabel'),
+                    label: i18n.global.t('forms.node.chapterLabel'),
                     value: '',
-                    placeholder: t('forms.type'),
+                    placeholder: i18n.global.t('forms.type'),
                 },
                 {
                     id: 'chapterDuration',
                     type: 'score',
-                    label: t('forms.node.chapterDuration'),
+                    label: i18n.global.t('forms.node.chapterDuration'),
                     value: 0,
                 },
             ],
         },
         {
-            name: t('forms.node.plugin.title', 2),
+            name: i18n.global.t('forms.node.plugin.title', 2),
             inputs: [
                 {
                     id: 'plugins',
-                    label: t('forms.node.plugin.title', 1),
+                    label: i18n.global.t('forms.node.plugin.title', 1),
                     type: 'repeat',
                     value: [],
                     inputs: [
                         {
                             id: 'script',
                             type: 'file',
-                            label: t('forms.node.plugin.script'),
-                            placeholder: t('forms.node.plugin.scriptPlaceholder'),
+                            label: i18n.global.t('forms.node.plugin.script'),
+                            placeholder: i18n.global.t('forms.node.plugin.scriptPlaceholder'),
                             targetDirectory: 'plugins',
                             value: '',
                             accept: '.js',
@@ -319,8 +321,8 @@ export const epocForm: Form = {
                         {
                             id: 'template',
                             type: 'file',
-                            label: t('forms.node.plugin.template'),
-                            placeholder: t('forms.node.plugin.templatePlaceholder'),
+                            label: i18n.global.t('forms.node.plugin.template'),
+                            placeholder: i18n.global.t('forms.node.plugin.templatePlaceholder'),
                             targetDirectory: 'plugins',
                             value: '',
                             accept: 'html',
@@ -330,72 +332,72 @@ export const epocForm: Form = {
             ],
         },
         {
-            name: t('forms.node.licence.title'),
+            name: i18n.global.t('forms.node.licence.title'),
             inputs: [
                 {
                     id: 'licenceName',
                     type: 'text',
-                    label: t('global.name'),
+                    label: i18n.global.t('global.name'),
                     placeholder: 'CC-BY 4.0',
                     value: '',
-                    hint: t('forms.node.licence.hint'),
+                    hint: i18n.global.t('forms.node.licence.hint'),
                 },
                 {
                     id: 'licenceUrl',
                     type: 'text',
-                    label: t('forms.node.licence.url'),
-                    placeholder: t('forms.node.licence.urlPlaceholder'),
+                    label: i18n.global.t('forms.node.licence.url'),
+                    placeholder: i18n.global.t('forms.node.licence.urlPlaceholder'),
                     value: '',
-                    hint: t('forms.node.licence.urlHint'),
+                    hint: i18n.global.t('forms.node.licence.urlHint'),
                 },
             ],
         },
     ],
-};
+}));
 
-export const pageForm: Form = {
+export const pageForm: ComputedRef<Form> = computed(() => ({
     type: 'page',
-    name: t('forms.node.page.title'),
+    name: i18n.global.t('forms.node.page.title'),
     icon: 'icon-ecran',
-    buttons: pageButtons,
+    buttons: pageButtons.value,
     fields: [
         {
             inputs: [
                 {
                     id: 'title',
                     type: 'text',
-                    label: t('forms.node.title'),
+                    label: i18n.global.t('forms.node.title'),
                     value: '',
-                    placeholder: t('forms.type'),
+                    placeholder: i18n.global.t('forms.type'),
                 },
                 {
                     id: 'subtitle',
                     type: 'text',
-                    label: t('forms.node.subtitle'),
+                    label: i18n.global.t('forms.node.subtitle'),
                     value: '',
-                    placeholder: t('forms.type'),
+                    placeholder: i18n.global.t('forms.type'),
                 },
                 {
                     id: 'hidden',
                     type: 'checkbox',
-                    label: t('forms.node.page.hidden'),
+                    label: i18n.global.t('forms.node.page.hidden'),
                     value: false,
                 },
                 {
                     id: 'conditional',
                     type: 'checkbox',
-                    label: t('forms.node.page.conditional'),
+                    label: i18n.global.t('forms.node.page.conditional'),
                     value: false,
-                    hint: t('forms.node.page.conditionalHint'),
+                    hint: i18n.global.t('forms.node.page.conditionalHint'),
                 },
             ],
         },
         {
-            name: t('forms.node.page.components'),
+            name: i18n.global.t('forms.node.page.components'),
             inputs: [
                 {
                     id: 'components',
-                    label: t('forms.node.page.components'),
+                    label: i18n.global.t('forms.node.page.components'),
                     type: 'repeat',
                     value: [],
                     addButton: false,
@@ -404,58 +406,58 @@ export const pageForm: Form = {
             ],
         },
     ],
-};
+}));
 
-export const activityForm: Form = {
+export const activityForm: ComputedRef<Form> = computed(() => ({
     type: 'activity',
-    name: t('forms.node.activity'),
+    name: i18n.global.t('forms.node.activity'),
     icon: 'icon-ecran',
-    buttons: activityButtons,
+    buttons: activityButtons.value,
     fields: [
         {
             inputs: [
                 {
                     id: 'title',
                     type: 'text',
-                    label: t('forms.node.title'),
+                    label: i18n.global.t('forms.node.title'),
                     value: '',
-                    placeholder: t('forms.type'),
+                    placeholder: i18n.global.t('forms.type'),
                 },
                 {
                     id: 'subtitle',
                     type: 'text',
-                    label: t('forms.node.subtitle'),
+                    label: i18n.global.t('forms.node.subtitle'),
                     value: '',
-                    placeholder: t('forms.type'),
+                    placeholder: i18n.global.t('forms.type'),
                 },
                 {
                     id: 'summary',
                     type: 'textarea',
-                    label: t('forms.content.summary'),
+                    label: i18n.global.t('forms.content.summary'),
                     value: '',
-                    placeholder: t('forms.type'),
+                    placeholder: i18n.global.t('forms.type'),
                 },
                 {
                     id: 'hidden',
                     type: 'checkbox',
-                    label: t('forms.node.page.hidden'),
+                    label: i18n.global.t('forms.node.page.hidden'),
                     value: false,
                 },
                 {
                     id: 'conditional',
                     type: 'checkbox',
-                    label: t('forms.node.page.conditional'),
+                    label: i18n.global.t('forms.node.page.conditional'),
                     value: false,
-                    hint: t('forms.node.page.conditionalHint'),
+                    hint: i18n.global.t('forms.node.page.conditionalHint'),
                 },
             ],
         },
         {
-            name: t('forms.node.page.components'),
+            name: i18n.global.t('forms.node.page.components'),
             inputs: [
                 {
                     id: 'components',
-                    label: t('forms.node.page.components'),
+                    label: i18n.global.t('forms.node.page.components'),
                     type: 'repeat',
                     value: [],
                     addButton: false,
@@ -464,6 +466,13 @@ export const activityForm: Form = {
             ],
         },
     ],
-};
+}));
 
-export const nodeForms: Form[] = [chapterForm, pageForm, epocForm, conditionForm, legacyConditionForm, activityForm];
+export const nodeForms: ComputedRef<Form[]> = computed(() => [
+    chapterForm.value,
+    pageForm.value,
+    epocForm.value,
+    conditionForm.value,
+    legacyConditionForm.value,
+    activityForm.value,
+]);

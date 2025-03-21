@@ -92,7 +92,9 @@ export function unselectAllContents(): void {
 }
 
 export function getContentDefaultValues(type: string) {
-    const form = [...forms.questionForms, ...forms.elementForms, ...forms.nodeForms].find((f) => f.type === type);
+    const form = [...forms.questionForms.value, ...forms.elementForms.value, ...forms.nodeForms.value].find(
+        (f) => f.type === type,
+    );
 
     return form.fields.reduce((acc, field) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

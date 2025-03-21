@@ -1,111 +1,110 @@
 import { SideAction } from '@/src/shared/interfaces';
 import { i18n } from '@/src/i18n/config';
+import { computed, ComputedRef } from 'vue';
 
-const { t } = i18n.global;
-
-export const questions: SideAction[] = [
+export const questions: ComputedRef<SideAction[]> = computed(() => [
     {
         icon: 'icon-qcm',
         type: 'choice',
-        label: t('questions.types.qcm'),
+        label: i18n.global.t('questions.types.qcm'),
     },
     {
         icon: 'icon-dragdrop',
         type: 'drag-and-drop',
-        label: t('questions.types.dragDrop'),
+        label: i18n.global.t('questions.types.dragDrop'),
     },
     {
         icon: 'icon-reorder',
         type: 'reorder',
-        label: t('questions.types.reorder'),
+        label: i18n.global.t('questions.types.reorder'),
     },
     {
         icon: 'icon-swipe',
         type: 'swipe',
-        label: t('questions.types.swipe'),
+        label: i18n.global.t('questions.types.swipe'),
     },
     {
         icon: 'icon-liste',
         type: 'dropdown-list',
-        label: t('questions.types.dropdownList'),
+        label: i18n.global.t('questions.types.dropdownList'),
     },
     {
         icon: 'icon-terminal',
         type: 'custom',
-        label: t('questions.types.custom'),
-    }
-];
+        label: i18n.global.t('questions.types.custom'),
+    },
+]);
 
-const contents: SideAction[] = [
+const contents: ComputedRef<SideAction[]> = computed(() => [
     {
         icon: 'icon-texte',
         type: 'text',
-        label: t('sidebar.content.text'),
-        tooltip: t('sidebar.content.textTooltip'),
+        label: i18n.global.t('sidebar.content.text'),
+        tooltip: i18n.global.t('sidebar.content.textTooltip'),
     },
     {
         icon: 'icon-video',
         type: 'video',
-        label: t('sidebar.content.video'),
-        tooltip: t('sidebar.content.videoTooltip'),
+        label: i18n.global.t('sidebar.content.video'),
+        tooltip: i18n.global.t('sidebar.content.videoTooltip'),
     },
     {
         icon: 'icon-audio',
         type: 'audio',
-        label: t('sidebar.content.audio'),
-        tooltip: t('sidebar.content.audioTooltip'),
+        label: i18n.global.t('sidebar.content.audio'),
+        tooltip: i18n.global.t('sidebar.content.audioTooltip'),
     },
-];
+]);
 
-export const standardActions = [...questions, ...contents];
+export const standardActions = computed(() => [...questions.value, ...contents.value]);
 
-export const standardPages: SideAction[] = [
+export const standardPages: ComputedRef<SideAction[]> = computed(() => [
     {
         icon: 'icon-texte',
         type: 'text',
-        label: t('sidebar.content.text'),
-        tooltip: t('sidebar.content.textTooltip'),
+        label: i18n.global.t('sidebar.content.text'),
+        tooltip: i18n.global.t('sidebar.content.textTooltip'),
     },
     {
         icon: 'icon-video',
         type: 'video',
-        label: t('sidebar.content.video'),
-        tooltip: t('sidebar.content.videoTooltip'),
+        label: i18n.global.t('sidebar.content.video'),
+        tooltip: i18n.global.t('sidebar.content.videoTooltip'),
     },
     {
         icon: 'icon-audio',
         type: 'audio',
-        label: t('sidebar.content.audio'),
-        tooltip: t('sidebar.content.audioTooltip'),
+        label: i18n.global.t('sidebar.content.audio'),
+        tooltip: i18n.global.t('sidebar.content.audioTooltip'),
     },
     {
         icon: 'icon-question',
         type: 'question',
-        label: t('sidebar.pages.question'),
-        tooltip: t('sidebar.pages.questionTooltip'),
+        label: i18n.global.t('sidebar.pages.question'),
+        tooltip: i18n.global.t('sidebar.pages.questionTooltip'),
     },
     {
         icon: 'icon-condition',
         type: 'condition',
-        label: t('sidebar.pages.conditions'),
-        tooltip: t('sidebar.pages.conditionsTooltip'),
+        label: i18n.global.t('sidebar.pages.conditions'),
+        tooltip: i18n.global.t('sidebar.pages.conditionsTooltip'),
     },
     {
         icon: 'icon-condition-legacy',
         type: 'legacy-condition',
-        label: t('sidebar.pages.conditionsLegacy'),
-        tooltip: t('sidebar.pages.conditionsTooltip'),
+        label: i18n.global.t('sidebar.pages.conditionsLegacy'),
+        tooltip: i18n.global.t('sidebar.pages.conditionsTooltip'),
     },
     {
         icon: 'icon-modele',
         type: 'model',
-        label: t('sidebar.pages.model'),
-        tooltip: t('sidebar.pages.modelTooltip'),
+        label: i18n.global.t('sidebar.pages.model'),
+        tooltip: i18n.global.t('sidebar.pages.modelTooltip'),
     },
     {
         icon: 'icon-badge',
         type: 'badge',
-        label: t('sidebar.pages.badge'),
-        tooltip: t('sidebar.pages.badgeTooltip'),
+        label: i18n.global.t('sidebar.pages.badge'),
+        tooltip: i18n.global.t('sidebar.pages.badgeTooltip'),
     },
-];
+]);

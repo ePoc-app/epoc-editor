@@ -7,27 +7,26 @@ import { elementVerbs, verbs } from '@/src/shared/data';
 import { generateContentId, graphService } from '@/src/shared/services';
 import { Operators } from '@epoc/epoc-types/dist/v2';
 import { i18n } from '@/src/i18n/config';
-
-const { t } = i18n.global;
+import { computed, ComputedRef } from 'vue';
 
 const { findNode } = useVueFlow('main');
 
-export function getVerbs(type: ElementType): Verbs {
+export function getVerbs(type: ElementType): ComputedRef<Verbs> {
     if (!type || !elementVerbs[type]) return;
 
     const verbsKeys = elementVerbs[type];
-    const res: Verbs = {};
+    const res: ComputedRef<Verbs> = computed(() => ({}));
 
     for (const key of verbsKeys) {
-        res[key] = verbs[key];
+        res.value[key] = verbs.value[key];
     }
 
     return res;
 }
 
 export function getValueType(verbKey: string): 'number' | 'boolean' {
-    if (!verbs[verbKey]) return;
-    return verbs[verbKey].valueType;
+    if (!verbs.value[verbKey]) return;
+    return verbs.value[verbKey].valueType;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -67,66 +66,66 @@ export function createRule(entry: Condition[]): Rule {
     return { and: rules };
 }
 
-const phraseType = {
-    video: t('badge.phrase.type.video'),
-    chapter: t('badge.phrase.type.chapter'),
-    page: t('badge.phrase.type.page'),
-    html: t('badge.phrase.type.html'),
-    audio: t('badge.phrase.type.audio'),
-    activity: t('badge.phrase.type.activity'),
-    question: t('badge.phrase.type.question'),
-};
+const phraseType = computed(() => ({
+    video: i18n.global.t('badge.phrase.type.video'),
+    chapter: i18n.global.t('badge.phrase.type.chapter'),
+    page: i18n.global.t('badge.phrase.type.page'),
+    html: i18n.global.t('badge.phrase.type.html'),
+    audio: i18n.global.t('badge.phrase.type.audio'),
+    activity: i18n.global.t('badge.phrase.type.activity'),
+    question: i18n.global.t('badge.phrase.type.question'),
+}));
 
-const phraseVerb = {
+const phraseVerb = computed(() => ({
     started: {
-        true: t('badge.phrase.verb.started.true'),
-        false: t('badge.phrase.verb.started.false'),
+        true: i18n.global.t('badge.phrase.verb.started.true'),
+        false: i18n.global.t('badge.phrase.verb.started.false'),
     },
     completed: {
-        true: t('badge.phrase.verb.completed.true'),
-        false: t('badge.phrase.verb.completed.false'),
+        true: i18n.global.t('badge.phrase.verb.completed.true'),
+        false: i18n.global.t('badge.phrase.verb.completed.false'),
     },
     viewed: {
-        true: t('badge.phrase.verb.viewed.true'),
-        false: t('badge.phrase.verb.viewed.false'),
+        true: i18n.global.t('badge.phrase.verb.viewed.true'),
+        false: i18n.global.t('badge.phrase.verb.viewed.false'),
     },
     read: {
-        true: t('badge.phrase.verb.read.true'),
-        false: t('badge.phrase.verb.read.false'),
+        true: i18n.global.t('badge.phrase.verb.read.true'),
+        false: i18n.global.t('badge.phrase.verb.read.false'),
     },
     played: {
-        true: t('badge.phrase.verb.played.true'),
-        false: t('badge.phrase.verb.played.false'),
+        true: i18n.global.t('badge.phrase.verb.played.true'),
+        false: i18n.global.t('badge.phrase.verb.played.false'),
     },
     watched: {
-        true: t('badge.phrase.verb.watched.true'),
-        false: t('badge.phrase.verb.watched.false'),
+        true: i18n.global.t('badge.phrase.verb.watched.true'),
+        false: i18n.global.t('badge.phrase.verb.watched.false'),
     },
     listened: {
-        true: t('badge.phrase.verb.listened.true'),
-        false: t('badge.phrase.verb.listened.false'),
+        true: i18n.global.t('badge.phrase.verb.listened.true'),
+        false: i18n.global.t('badge.phrase.verb.listened.false'),
     },
     attempted: {
-        true: t('badge.phrase.verb.attempted.true'),
-        false: t('badge.phrase.verb.attempted.false'),
+        true: i18n.global.t('badge.phrase.verb.attempted.true'),
+        false: i18n.global.t('badge.phrase.verb.attempted.false'),
     },
     passed: {
-        true: t('badge.phrase.verb.passed.true'),
-        false: t('badge.phrase.verb.passed.false'),
+        true: i18n.global.t('badge.phrase.verb.passed.true'),
+        false: i18n.global.t('badge.phrase.verb.passed.false'),
     },
-    scored: t('badge.phrase.verb.scored'),
-};
+    scored: i18n.global.t('badge.phrase.verb.scored'),
+}));
 
 export function createPhrase(condition: Condition, elementType: ElementType) {
     const { verb, value } = condition;
     let firstPart: string;
     if (verb === 'scored') {
-        firstPart = t('badge.phrase.scored', { value, verb: phraseVerb[verb] });
+        firstPart = i18n.global.t('badge.phrase.scored', { value, verb: phraseVerb[verb] });
     } else {
-        firstPart = `${phraseVerb[verb][value]}`;
+        firstPart = `${phraseVerb.value[verb][value]}`;
     }
 
-    return `${firstPart} ${phraseType[elementType]}`;
+    return `${firstPart} ${phraseType.value[elementType]}`;
 }
 
 export function getConnectedBadges(contentId: string): Badge[] {

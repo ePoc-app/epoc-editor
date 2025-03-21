@@ -1,25 +1,24 @@
 import env from '@/src/shared/utils/env';
 import { ElementType, VerbKey, Verbs } from '@/src/shared/interfaces';
 import { i18n } from '@/src/i18n/config';
-
-const { t } = i18n.global;
+import { computed, ComputedRef } from 'vue';
 
 export const iconsPath = env.isDev ? '/img/badge/icon' : 'img/badge/icon';
 
 export const defaultBadgeIcons = ['audio', 'check', 'condition', 'cup', 'puzzle', 'question', 'star', 'video'];
 
-export const verbs: Verbs = {
-    started: { label: t('verbs.started'), valueType: 'boolean' },
-    completed: { label: t('verbs.completed'), valueType: 'boolean' },
-    viewed: { label: t('verbs.viewed'), valueType: 'boolean' },
-    read: { label: t('verbs.read'), valueType: 'boolean' },
-    played: { label: t('verbs.played'), valueType: 'boolean' },
-    watched: { label: t('verbs.watched'), valueType: 'boolean' },
-    listened: { label: t('verbs.listened'), valueType: 'boolean' },
-    attempted: { label: t('verbs.attempted'), valueType: 'boolean' },
-    scored: { label: t('verbs.scored'), valueType: 'number' },
-    passed: { label: t('verbs.passed'), valueType: 'boolean' },
-};
+export const verbs: ComputedRef<Verbs> = computed(() => ({
+    started: { label: i18n.global.t('verbs.started'), valueType: 'boolean' },
+    completed: { label: i18n.global.t('verbs.completed'), valueType: 'boolean' },
+    viewed: { label: i18n.global.t('verbs.viewed'), valueType: 'boolean' },
+    read: { label: i18n.global.t('verbs.read'), valueType: 'boolean' },
+    played: { label: i18n.global.t('verbs.played'), valueType: 'boolean' },
+    watched: { label: i18n.global.t('verbs.watched'), valueType: 'boolean' },
+    listened: { label: i18n.global.t('verbs.listened'), valueType: 'boolean' },
+    attempted: { label: i18n.global.t('verbs.attempted'), valueType: 'boolean' },
+    scored: { label: i18n.global.t('verbs.scored'), valueType: 'number' },
+    passed: { label: i18n.global.t('verbs.passed'), valueType: 'boolean' },
+}));
 
 export const elementVerbs: Record<ElementType, VerbKey[]> = {
     chapter: ['started'],

@@ -94,6 +94,8 @@ export function getElementType(contentId: string): ElementType {
         return getContentType(contentId);
     }
 
+    console.log('type', node.type);
+
     return node.type as ElementType;
 }
 
