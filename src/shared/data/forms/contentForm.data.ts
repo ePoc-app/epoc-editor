@@ -41,7 +41,7 @@ export const videoForm: ComputedRef<Form> = computed(() => {
                         placeholder: i18n.global.t('forms.content.video.placeholder'),
                         value: '',
                         accept: '.mp4',
-                        hint: i18n.global.t('forms.content.video.hint'),
+                        hint: i18n.global.t('forms.content.video.hint', { format: '16:9 (720x480)' }),
                     },
                     {
                         id: 'summary',

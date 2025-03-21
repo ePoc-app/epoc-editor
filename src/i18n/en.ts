@@ -146,7 +146,7 @@ export const enMessages = {
             video: {
                 label: 'Video',
                 placeholder: 'Add a video',
-                hint: 'Recommended format:',
+                hint: 'Recommended format: {format}',
             },
             audio: {
                 label: 'Audio track',

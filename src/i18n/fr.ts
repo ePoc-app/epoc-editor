@@ -131,7 +131,6 @@ export const frMessages = {
         lastSave: 'Dernière sauvegarde :',
         new: 'Nouvel ePoc',
     },
-
     forms: {
         type: 'Saisissez...',
         badge: {
@@ -147,7 +146,7 @@ export const frMessages = {
             video: {
                 label: 'Vidéo',
                 placeholder: 'Ajouter une vidéo',
-                hint: 'Format recommandé :',
+                hint: 'Format recommandé : {format}',
             },
             audio: {
                 label: 'Piste audio',
