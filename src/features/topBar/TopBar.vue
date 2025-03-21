@@ -13,12 +13,6 @@ const undoRedoStore = useUndoRedoStore();
 
 const { zoomTo, fitView, onViewportChangeEnd } = useVueFlow('main');
 
-editorStore.$subscribe(() => {
-    savedSince.value = since(editorStore.currentProject.modified);
-});
-
-const savedSince = ref(since(editorStore.currentProject.modified));
-
 const zoom = ref(1);
 const zoomString = computed(() => (zoom.value === 0 ? t('header.adjust') : `${Math.round(zoom.value * 100)}%`));
 
@@ -37,7 +31,8 @@ function updateZoom(val: number) {
     }
 }
 
-function since(date: string) {
+const savedSince = computed(() => {
+    const date = editorStore.currentProject.modified;
     if (!date) return t('header.never');
     const milliseconds = Math.abs(Date.now() - new Date(date).getTime());
     const secs = Math.floor(Math.abs(milliseconds) / 1000);
@@ -61,11 +56,7 @@ function since(date: string) {
             : 'less than a minute') + ' ago'
         );
     }
-}
-
-setInterval(() => {
-    savedSince.value = since(editorStore.currentProject.modified);
-}, 60000);
+});
 
 function separateFilePath(filepath: string) {
     const file = filepath.split('/').pop();
