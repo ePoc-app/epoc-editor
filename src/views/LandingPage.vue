@@ -1,13 +1,18 @@
 <script setup lang="ts">
-import { useEditorStore } from '@/src/shared/stores';
+import { useEditorStore, useSettingsStore } from '@/src/shared/stores';
 import { editorService } from '@/src/shared/services';
 import { ePocProject } from '@/src/shared/interfaces';
 import ChoiceModal from '@/src/components/ChoiceModal.vue';
 import { createGraphFromImport } from '@/src/shared/services/import.service';
+import { onMounted } from 'vue';
 
 const editorStore = useEditorStore();
-
 editorService.setup();
+
+const settingsStore = useSettingsStore();
+if (!settingsStore.initialized) {
+    settingsStore.init();
+}
 
 function pickProject() {
     editorService.pickEpocProject();

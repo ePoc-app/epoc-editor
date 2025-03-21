@@ -5,16 +5,19 @@ import { i18n } from '@/src/i18n/config';
 
 interface SettingsState {
     settings?: Settings;
+    initialized: boolean;
 }
 
 export const useSettingsStore = defineStore('settings', {
     state: (): SettingsState => ({
         settings: undefined,
+        initialized: false,
     }),
 
     actions: {
         init() {
             editorService.fetchSettings();
+            this.initialized = true;
         },
 
         initSettings(settings: Settings) {

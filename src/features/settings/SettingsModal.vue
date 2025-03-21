@@ -11,9 +11,11 @@ const modal = ref(null);
 const settingsStore = useSettingsStore();
 const spellcheck = ref(false);
 
-onMounted(() => {
-    settingsStore.init();
-});
+// onMounted(() => {
+//     if (!settingsStore.init) {
+//         settingsStore.init();
+//     }
+// });
 
 function save() {
     settingsStore.setSettings(spellcheck.value);
