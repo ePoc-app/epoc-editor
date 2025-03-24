@@ -1,0 +1,44 @@
+{
+    "menu": {
+        "app": {
+            "label": "App",
+            "about": "About",
+            "quit": "Quit",
+            "lang": "Language"
+        },
+        "file": {
+            "label": "File",
+            "new": "New",
+            "newWindow": "New Window",
+            "open": "Open",
+            "openInNewWindow": "Open in New Window",
+            "latest": "Recent Projects",
+            "import": "Import .epoc File",
+            "save": "Save",
+            "saveAs": "Save As..."
+        },
+        "edit": {
+            "label": "Edit",
+            "undo": "Undo",
+            "redo": "Redo",
+            "cut": "Cut",
+            "copy": "Copy",
+            "paste": "Paste",
+            "selectAll": "Select All"
+        },
+        "preview": {
+            "label": "Preview",
+            "start": "Start Preview",
+            "global": "Start Global Preview"
+        },
+        "help": {
+            "label": "Help",
+            "documentation": "Documentation",
+            "reportIssue": "Report Issue",
+            "mailSubject": "Editor Help",
+            "mailBody": "Describe your issue below:"
+        },
+        "devTools": "Developer Tools",
+        "reload": "Reload"
+    }
+}

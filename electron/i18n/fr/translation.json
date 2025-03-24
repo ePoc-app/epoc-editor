@@ -1,0 +1,44 @@
+{
+    "menu": {
+        "app": {
+            "label:": "App",
+            "about": "À propos",
+            "quit": "Quitter",
+            "lang": "Langage"
+        },
+        "file": {
+            "label": "Fichier",
+            "new": "Nouveau",
+            "newWindow": "Nouvelle fenêtre",
+            "open": "Ouvrir",
+            "openInNewWindow": "Ouvrir dans une nouvelle fenêtre",
+            "latest": "Projets récents",
+            "import": "Importer un fichier .epoc",
+            "save": "Sauvegarder",
+            "saveAs": "Sauvegarder sous..."
+        },
+        "edit": {
+            "label": "Édition",
+            "undo": "Annuler",
+            "redo": "Rétablir",
+            "cut": "Couper",
+            "copy": "Copier",
+            "paste": "Coller",
+            "selectAll": "Sélectionner tout"
+        },
+        "preview": {
+            "label": "Aperçu",
+            "start": "Lancer l'aperçu",
+            "global": "Lancer l'aperçu global"
+        },
+        "help": {
+            "label": "Aide",
+            "documentation": "Documentation",
+            "reportIssue": "Signaler un problème",
+            "mailSubject": "Aide éditeur",
+            "mailBody": "Décrivez votre problème ci-dessous:"
+        },
+        "devTools": "Outils de développement",
+        "reload": "Recharger"
+    }
+}

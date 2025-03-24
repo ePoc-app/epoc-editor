@@ -13,9 +13,18 @@ const {
     createPreview,
     createGlobalPreview,
 } = require('./file');
+const i18n = require('../i18n/i18next.config.js');
 
 const Store = require('electron-store');
 const electronStore = new Store();
+
+i18n.on('initialized', () => {
+    console.log('i18next initialized successfully');
+});
+
+i18n.on('failedLoading', (lng, ns, msg) => {
+    console.error('i18next failed to load:', msg);
+});
 
 /**
  * Create the app main window
@@ -104,7 +113,7 @@ const setupWindow = function (window, filepath) {
     if (filepath) {
         window.webContents.send(
             'epocProjectPicked',
-            JSON.stringify({ name: null, modified: null, filepath: filepath, workdir: null }),
+            JSON.stringify({ name: null, modified: null, filepath: filepath, workdir: null })
         );
     }
 };
@@ -124,44 +133,62 @@ const createNewWindow = () => {
 const setupMenu = () => {
     const mainMenuTemplate = [
         {
-            label: 'App',
+            label: i18n.t('menu.app.label'),
             submenu: [
-                { label: 'À propos', role: 'about' },
+                { label: i18n.t('menu.app.about'), role: 'about' },
                 {
-                    label: 'Quitter',
+                    label: i18n.t('menu.app.quit'),
                     accelerator: 'CmdOrCtrl+Q',
                     click: function () {
                         app.quit();
                     },
                 },
+                { type: 'separator' },
+                {
+                    label: i18n.t('menu.app.lang'),
+                    submenu: [
+                        {
+                            label: 'English',
+                            type: 'radio',
+                            checked: i18n.language === 'en',
+                            click: () => changeLanguage('en'),
+                        },
+                        {
+                            label: 'Français',
+                            type: 'radio',
+                            checked: i18n.language === 'fr',
+                            click: () => changeLanguage('fr'),
+                        },
+                    ],
+                },
             ],
         },
         {
-            label: 'Fichier',
+            label: i18n.t('menu.file.label'),
             submenu: [
                 {
-                    label: 'Nouveau',
+                    label: i18n.t('menu.file.new'),
                     accelerator: 'CmdOrCtrl+N',
                     click: function () {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectNew');
                     },
                 },
                 {
-                    label: 'Nouvelle fenêtre',
+                    label: i18n.t('menu.file.newWindow'),
                     click: function () {
                         ipcMain.emit('newWindow');
                     },
                 },
                 { type: 'separator' },
                 {
-                    label: 'Ouvrir',
+                    label: i18n.t('menu.file.open'),
                     accelerator: 'CmdOrCtrl+O',
                     click: function () {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectPicked', pickEpocProject());
                     },
                 },
                 {
-                    label: 'Ouvrir dans une nouvelle fenêtre',
+                    label: i18n.t('menu.file.openInNewWindow'),
                     click: () => {
                         const newWindow = createNewWindow();
                         const project = pickEpocProject();
@@ -171,7 +198,7 @@ const setupMenu = () => {
                     },
                 },
                 {
-                    label: 'Projet récents',
+                    label: i18n.t('menu.file.latest'),
                     submenu: [
                         ...getRecentFiles().map((project) => {
                             return {
@@ -184,7 +211,7 @@ const setupMenu = () => {
                     ],
                 },
                 {
-                    label: 'Importer un fichier .epoc',
+                    label: i18n.t('menu.file.import'),
                     click: async function () {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportPicked');
                         const project = await pickEpocToImport();
@@ -222,7 +249,7 @@ const setupMenu = () => {
                 { type: 'separator' },
                 {
                     id: 'save',
-                    label: 'Sauvegarder',
+                    label: i18n.t('menu.file.save'),
                     accelerator: 'CmdOrCtrl+S',
                     enabled: !!(
                         store.state.projects[BrowserWindow.getFocusedWindow()?.id] &&
@@ -240,7 +267,7 @@ const setupMenu = () => {
                 },
                 {
                     id: 'saveAs',
-                    label: 'Sauvegarder sous...',
+                    label: i18n.t('menu.file.saveAs'),
                     accelerator: 'Shift+CmdOrCtrl+S',
                     enabled: !!(
                         store.state.projects[BrowserWindow.getFocusedWindow()?.id] &&
@@ -249,7 +276,7 @@ const setupMenu = () => {
                     click: async function () {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectSaving');
                         const result = await saveAsEpocProject(
-                            store.state.projects[BrowserWindow.getFocusedWindow().id],
+                            store.state.projects[BrowserWindow.getFocusedWindow().id]
                         );
                         if (result) {
                             updateSavedProject(BrowserWindow.getFocusedWindow().webContents, result);
@@ -261,40 +288,40 @@ const setupMenu = () => {
             ],
         },
         {
-            label: 'Édition',
+            label: i18n.t('menu.edit.label'),
             submenu: [
                 {
-                    label: 'Annuler',
+                    label: i18n.t('menu.edit.undo'),
                     accelerator: 'CmdOrCtrl+Z',
                     click: function () {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'undo');
                     },
                 },
                 {
-                    label: 'Rétablir',
+                    label: i18n.t('menu.edit.redo'),
                     accelerator: process.platform === 'darwin' ? 'Shift+CmdOrCtrl+Z' : 'CmdOrCtrl+Y',
                     click: function () {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'redo');
                     },
                 },
                 { type: 'separator' },
-                { label: 'Couper', accelerator: 'CmdOrCtrl+X', role: 'cut' },
-                { label: 'Copier', accelerator: 'CmdOrCtrl+C', role: 'copy' },
-                { label: 'Coller', accelerator: 'CmdOrCtrl+V', role: 'paste' },
-                { label: 'Tout sélectionner', accelerator: 'CmdOrCtrl+A', role: 'selectAll' },
+                { label: i18n.t('menu.edit.cut'), accelerator: 'CmdOrCtrl+X', role: 'cut' },
+                { label: i18n.t('menu.edit.copy'), accelerator: 'CmdOrCtrl+C', role: 'copy' },
+                { label: i18n.t('menu.edit.paste'), accelerator: 'CmdOrCtrl+V', role: 'paste' },
+                { label: i18n.t('menu.edit.selectAll'), accelerator: 'CmdOrCtrl+A', role: 'selectAll' },
             ],
         },
         {
-            label: 'Aperçu',
+            label: i18n.t('menu.preview.label'),
             submenu: [
                 {
-                    label: "Lancer l'aperçu",
+                    label: i18n.t('menu.preview.start'),
                     click: function () {
                         createPreview(store.state.projects[BrowserWindow.getFocusedWindow().id].workdir);
                     },
                 },
                 {
-                    label: "Lancer l'aperçu global",
+                    label: i18n.t('menu.preview.global'),
                     click: function () {
                         createGlobalPreview(store.state.projects[BrowserWindow.getFocusedWindow().id].workdir);
                     },
@@ -302,31 +329,33 @@ const setupMenu = () => {
             ],
         },
         {
-            label: 'Aide',
+            label: i18n.t('menu.help.label'),
             submenu: [
                 {
-                    label: 'Documentation',
+                    label: i18n.t('menu.help.documentation'),
                     click: async function () {
                         await shell.openExternal('https://epoc.inria.fr/guide/user/getting-started/');
                     },
                 },
                 {
-                    label: 'Signaler un problème',
+                    label: i18n.t('menu.help.reportIssue'),
                     click: async function () {
                         const isDev = process.env.IS_DEV === 'true';
 
-                        const emailSubject = 'Aide éditeur';
+                        const emailSubject = i18n.t('menu.help.mailSubject');
                         const emailRecipient = 'ill-ePoc-contact@inria.fr';
                         let emailBody = '';
                         if (isDev) {
                             const appVersion = app.getVersion();
                             emailBody = encodeURIComponent(
-                                `Version: ${appVersion}\n---\n\nDécrivez votre problème ci-dessous:\n\n`,
+                                `Version: ${appVersion}\n---\n\n${i18n.t('menu.help.mailBody')}\n\n`
                             );
                         } else {
                             const appInfo = require('../../dist/appInfo.json');
                             emailBody = encodeURIComponent(
-                                `Version: ${appInfo.version}\nBuild: ${appInfo.buildNumber}\n ---\n\nDécrivez votre problème ci-dessous:\n\n`,
+                                `Version: ${appInfo.version}\nBuild: ${appInfo.buildNumber}\n ---\n\n${i18n.t(
+                                    'menu.help.mailBody'
+                                )}\n\n`
                             );
                         }
 
@@ -337,14 +366,14 @@ const setupMenu = () => {
                 },
                 { type: 'separator' },
                 {
-                    label: 'Outils de développement',
+                    label: i18n.t('menu.devTools'),
                     accelerator: 'CmdOrCtrl+D',
                     click: function () {
                         BrowserWindow.getFocusedWindow().webContents.toggleDevTools();
                     },
                 },
                 {
-                    label: 'Recharger',
+                    label: i18n.t('menu.reload'),
                     accelerator: 'CmdOrCtrl+R',
                     click: function () {
                         BrowserWindow.getFocusedWindow().webContents.reload();
@@ -373,3 +402,22 @@ module.exports = {
     setupWindow,
     createNewWindow,
 };
+
+const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng, (err) => {
+        if (err) {
+            console.error('Error changing language:', err);
+            return;
+        }
+        // Save language preference
+        electronStore.set('language', lng);
+        // Refresh the menu
+        setupMenu();
+    });
+};
+
+// Initialize language from store
+const storedLanguage = electronStore.get('language');
+if (storedLanguage) {
+    i18n.changeLanguage(storedLanguage);
+}
