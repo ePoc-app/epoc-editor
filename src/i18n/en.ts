@@ -134,6 +134,7 @@ export const enMessages = {
     forms: {
         type: 'Type here...',
         badge: {
+            text: 'Badge settings',
             updateIcon: 'Update icon',
             obtention: 'Badge earning conditions',
             presentation: 'Badge presentation',

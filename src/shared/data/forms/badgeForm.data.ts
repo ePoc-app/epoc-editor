@@ -6,7 +6,7 @@ import { i18n } from '@/src/i18n/config';
 export const customBadgeForm: ComputedRef<Form> = computed(() => {
     return {
         type: 'badge',
-        name: 'Paramètres du badge',
+        name: i18n.global.t('forms.badge.text'),
         icon: 'icon-badge',
         buttons: badgeButtons.value,
         fields: [

@@ -40,5 +40,30 @@
         },
         "devTools": "Outils de développement",
         "reload": "Recharger"
+    },
+    "context": {
+        "add": "Ajouter",
+        "pasteHere": "Coller ici",
+        "insertAfter": "Insérer après",
+        "insertBefore": "Insérer avant",
+        "delete": "Supprimer",
+        "duplicate": "Dupliquer",
+        "swapNext": "Échanger avec le suivant",
+        "swapPrevious": "Échanger avec le précédent",
+        "insertEnd": "Insérer à la fin",
+        "insertStart": "Insérer au début",
+        "copyChapter": "Copier le chapitre",
+        "addChapter": "Ajouter un nouveau chapitre",
+
+        "addText": "Ajouter une page texte",
+        "addVideo": "Ajouter une page vidéo",
+        "addAudio": "Ajouter une page audio",
+
+        "addChoice": "Ajouter une évaluation QCM",
+        "addDragAndDrop": "Ajouter une évaluation Drag & Drop",
+        "addReorder": "Ajouter une évaluation Reorder",
+        "addSwipe": "Ajouter une évaluation Swipe",
+        "addDropdown": "Ajouter une évaluation Liste Déroulante",
+        "addCustom": "Ajouter une évaluation personnalisée"
     }
 }

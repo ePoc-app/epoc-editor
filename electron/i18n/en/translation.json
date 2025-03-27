@@ -40,5 +40,28 @@
         },
         "devTools": "Developer Tools",
         "reload": "Reload"
+    },
+    "context": {
+        "add": "Add",
+        "pasteHere": "Paste here",
+        "insertAfter": "Insert after",
+        "insertBefore": "Insert before",
+        "delete": "Delete",
+        "duplicate": "Duplicate",
+        "swapNext": "Swap with next",
+        "swapPrevious": "Swap with previous",
+        "insertEnd": "Insert at end",
+        "insertStart": "Insert at start",
+        "copyChapter": "Copy chapter",
+        "addChapter": "Add new chapter",
+        "addText": "Add text page",
+        "addVideo": "Add video page",
+        "addAudio": "Add audio page",
+        "addChoice": "Add multiple choice assessment",
+        "addDragAndDrop": "Add drag and drop assessment",
+        "addReorder": "Add reorder assessment",
+        "addSwipe": "Add swipe assessment",
+        "addDropdown": "Add dropdown assessment",
+        "addCustom": "Add custom assessment"
     }
 }

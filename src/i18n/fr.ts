@@ -134,6 +134,7 @@ export const frMessages = {
     forms: {
         type: 'Saisissez...',
         badge: {
+            text: 'Paramètres du badge',
             updateIcon: "Modifier l'icône",
             obtention: "Conditions d'obtention du badge",
             presentation: 'Présentation du badge',
