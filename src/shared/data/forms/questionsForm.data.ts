@@ -1,6 +1,6 @@
 import { Form } from '@/src/shared/interfaces';
 import { contentButtons } from './formButtons.data';
-import { i18n } from '@/src/i18n/config';
+import { i18n } from '@/i18n/config';
 import { capitalizeFirstLetter } from '../../utils/string';
 import { ComputedRef, computed } from 'vue';
 

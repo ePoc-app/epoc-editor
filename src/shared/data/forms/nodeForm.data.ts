@@ -1,7 +1,7 @@
 import { Form } from '@/src/shared/interfaces';
 import { activityButtons, baseButtons, pageButtons } from './formButtons.data';
 import { computed, ComputedRef } from 'vue';
-import { i18n } from '@/src/i18n/config';
+import { i18n } from '@/i18n/config';
 
 export const conditionForm: ComputedRef<Form> = computed(() => ({
     type: 'condition',

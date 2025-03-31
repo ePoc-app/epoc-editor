@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { editorService } from '@/src/shared/services';
 import { Settings } from '@/src/shared/interfaces';
-import { i18n } from '@/src/i18n/config';
+import { i18n } from '@/i18n/config';
 
 interface SettingsState {
     settings?: Settings;

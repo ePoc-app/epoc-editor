@@ -6,7 +6,7 @@ import { createPinia } from 'pinia';
 import VueTippy from 'vue-tippy';
 import 'tippy.js/dist/tippy.css';
 import draggable from 'vuedraggable';
-import { i18n } from './i18n/config';
+import { i18n } from '@/i18n/config';
 
 const app = createApp(App);
 const pinia = createPinia();

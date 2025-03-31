@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { app, BrowserWindow, ipcMain } = require('electron');
-const { createMainWindow, setupWindow, createNewWindow } = require('./components/window');
+const { createMainWindow, setupWindow, createNewWindow, setupMenu } = require('./components/window');
 const { createSplashWindow } = require('./components/splash');
 const { setupIpcListener } = require('./components/ipc');
 const { waitEvent, waitAll, wait } = require('./components/utils');
@@ -40,7 +40,7 @@ app.whenReady().then(() => {
     mainWindow = createMainWindow();
     if (!headless) splashWindow = createSplashWindow();
 
-    setupIpcListener(mainWindow);
+    setupIpcListener(mainWindow, setupMenu);
 
     // Display splash screen for minimum 2s then display main window
     waitAll([waitEvent(mainWindow, 'ready-to-show'), wait(200)]).then(async () => {

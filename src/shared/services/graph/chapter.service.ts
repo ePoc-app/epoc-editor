@@ -2,7 +2,7 @@ import { Node, useVueFlow } from '@vue-flow/core';
 import { Chapter } from '@epoc/epoc-types/src/v1';
 import { generateContentId, generateId, graphService } from '@/src/shared/services';
 const { nodes, findNode, addNodes } = useVueFlow('main');
-import { i18n } from '@/src/i18n/config';
+import { i18n } from '@/i18n/config';
 
 const { t } = i18n.global;
 

@@ -32,7 +32,7 @@ const copyData = {
  * Setup ipc listeners that are received from renderer process
  * @param targetWindow
  */
-const setupIpcListener = function (targetWindow) {
+const setupIpcListener = function (targetWindow, setupMenu) {
     function ipcGuard(handler) {
         return (event, ...args) => {
             if (targetWindow.isDestroyed() || event.sender !== targetWindow.webContents) return;
@@ -251,11 +251,19 @@ const setupIpcListener = function (targetWindow) {
 
     ipcMain.on(
         'setSettings',
-        ipcGuard(async (event, data) => {
+        ipcGuard(async (_event, data) => {
+            const { spellcheck, locale } = electronStore.get('settings');
             electronStore.set('settings', data);
 
-            targetWindow.webContents.session.setSpellCheckerEnabled(electronStore.get('settings.spellcheck'));
-            targetWindow.webContents.reload();
+            if (data.spellcheck !== spellcheck) {
+                targetWindow.webContents.session.setSpellCheckerEnabled(spellcheck);
+                targetWindow.webContents.reload();
+            }
+
+            if (data.locale !== locale) {
+                setupMenu();
+                targetWindow.webContents.reload();
+            }
         }),
     );
 };

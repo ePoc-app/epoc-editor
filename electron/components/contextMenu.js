@@ -1,5 +1,5 @@
 const { BrowserWindow } = require('electron');
-const i18n = require('../i18n/i18next.config');
+const { t } = require('./utils');
 
 const isDev = process.env.IS_DEV === 'true';
 
@@ -9,11 +9,11 @@ function getTemplateFromContext(callback, data) {
     };
     const standardActions = [
         {
-            label: i18n.t('menu.edit.undo'),
+            label: t('menu.edit.undo'),
             click: () => onClick('undo'),
         },
         {
-            label: i18n.t('menu.edit.redo'),
+            label: t('menu.edit.redo'),
             click: () => onClick('redo'),
         },
     ];
@@ -23,60 +23,60 @@ function getTemplateFromContext(callback, data) {
     if (data.context === 'flow') {
         menu.push(
             {
-                label: i18n.t('context.add'),
+                label: t('context.add'),
                 submenu: getPagesFromContext(onClick, { position: data.position }, 'addPage', data.context),
             },
             {
-                label: i18n.t('context.pasteHere'),
+                label: t('context.pasteHere'),
                 click: () => onClick('paste', { position: data.position }),
-            },
+            }
         );
     } else if (data.context === 'page' || data.context === 'activity' || data.context === 'pageWithQuestion') {
         if (isDev) {
             menu.push({
-                label: i18n.t('context.add'),
+                label: t('context.add'),
                 submenu: getContentFromContext(onClick, { id: data.id }, data.context),
             });
         }
         menu.push(
             {
-                label: i18n.t('context.insertAfter'),
+                label: t('context.insertAfter'),
                 submenu: getPagesFromContext(onClick, { id: data.id }, 'insertAfter', data.context),
             },
             {
-                label: i18n.t('context.insertBefore'),
+                label: t('context.insertBefore'),
                 submenu: getPagesFromContext(onClick, { id: data.id }, 'insertBefore', data.context),
             },
             {
-                label: i18n.t('context.duplicate'),
+                label: t('context.duplicate'),
                 click: () => onClick('duplicatePage', { id: data.id }),
             },
             {
-                label: i18n.t('context.delete'),
+                label: t('context.delete'),
                 click: () => onClick('deleteNode', { id: data.id }),
             },
             {
                 type: 'separator',
             },
             {
-                label: i18n.t('menu.edit.copy'),
+                label: t('menu.edit.copy'),
                 click: () => onClick('copy', { id: data.id }),
             },
             {
-                label: i18n.t('context.swapNext'),
+                label: t('context.swapNext'),
                 click: () => onClick('swapNodeWithNext', { id: data.id }),
             },
             {
-                label: i18n.t('context.swapPrevious'),
+                label: t('context.swapPrevious'),
                 click: () => onClick('swapNodeWithPrevious', { id: data.id }),
-            },
+            }
         );
     } else if (data.context === 'content') {
         menu.push(
             {
-                label: i18n.t('context.delete'),
+                label: t('context.delete'),
                 click: () => onClick('deleteContent', { pageId: data.pageId, id: data.id }),
-            },
+            }
             // {
             //     label: 'Dupliquer',
             //     click: () => onClick('duplicateContent', { pageId: data.pageId, id: data.id })
@@ -85,45 +85,45 @@ function getTemplateFromContext(callback, data) {
     } else if (data.context === 'chapter') {
         menu.push(
             {
-                label: i18n.t('context.insertEnd'),
+                label: t('context.insertEnd'),
                 submenu: getPagesFromContext(onClick, { id: data.id }, 'insertAtEnd', data.context),
             },
             {
-                label: i18n.t('context.insertStart'),
+                label: t('context.insertStart'),
                 submenu: getPagesFromContext(onClick, { id: data.id }, 'insertAtStart', data.context),
             },
             {
-                label: i18n.t('context.swapPrevious'),
+                label: t('context.swapPrevious'),
                 click: () => onClick('swapChapterWithPrevious', { id: data.id }),
             },
             {
-                label: i18n.t('context.swapNext'),
+                label: t('context.swapNext'),
                 click: () => onClick('swapChapterWithNext', { id: data.id }),
             },
             {
-                label: i18n.t('context.delete'),
+                label: t('context.delete'),
                 click: () => onClick('deleteNode', { id: data.id }),
             },
             {
-                label: i18n.t('context.copyChapter'),
+                label: t('context.copyChapter'),
                 click: () => onClick('copyChapter', { id: data.id }),
-            },
+            }
         );
     } else if (data.context === 'epoc') {
         menu.push({
-            label: i18n.t('context.addChapter'),
+            label: t('context.addChapter'),
             click: () => onClick('addChapter'),
         });
     } else if (data.context === 'selection') {
         menu.push(
             {
-                label: i18n.t('context.delete'),
+                label: t('context.delete'),
                 click: () => onClick('deleteSelection', { selection: data.selection }),
             },
             {
-                label: i18n.t('menu.edit.copy'),
+                label: t('menu.edit.copy'),
                 click: () => onClick('copySelection', { selection: data.selection }),
-            },
+            }
         );
     }
 
@@ -135,42 +135,42 @@ function getTemplateFromContext(callback, data) {
 function getPagesFromContext(onClick, data, event, context) {
     const contents = [
         {
-            label: i18n.t('context.addText'),
+            label: t('context.addText'),
             click: () => onClick(event, { type: 'text', ...data }),
         },
         {
-            label: i18n.t('context.addVideo'),
+            label: t('context.addVideo'),
             click: () => onClick(event, { type: 'video', ...data }),
         },
         {
-            label: i18n.t('context.addAudio'),
+            label: t('context.addAudio'),
             click: () => onClick(event, { type: 'audio', ...data }),
         },
     ];
 
     const questions = [
         {
-            label: i18n.t('context.addChoice'),
+            label: t('context.addChoice'),
             click: () => onClick(event, { type: 'choice', ...data }),
         },
         {
-            label: i18n.t('context.addDragAndDrop'),
+            label: t('context.addDragAndDrop'),
             click: () => onClick(event, { type: 'drag-and-drop', ...data }),
         },
         {
-            label: i18n.t('context.addReorder'),
+            label: t('context.addReorder'),
             click: () => onClick(event, { type: 'reorder', ...data }),
         },
         {
-            label: i18n.t('context.addSwipe'),
+            label: t('context.addSwipe'),
             click: () => onClick(event, { type: 'swipe', ...data }),
         },
         {
-            label: i18n.t('context.addDropdown'),
+            label: t('context.addDropdown'),
             click: () => onClick(event, { type: 'dropdown-list', ...data }),
         },
         {
-            label: i18n.t('context.addCustom'),
+            label: t('context.addCustom'),
             click: () => onClick(event, { type: 'custom', ...data }),
         },
     ];
@@ -181,7 +181,7 @@ function getPagesFromContext(onClick, data, event, context) {
         const addChapter = [
             { type: 'separator' },
             {
-                label: i18n.t('context.addChapter'),
+                label: t('context.addChapter'),
                 click: () => onClick('addChapter'),
             },
         ];
@@ -194,42 +194,42 @@ function getPagesFromContext(onClick, data, event, context) {
 function getContentFromContext(onClick, data, context) {
     const questions = [
         {
-            label: i18n.t('context.addQuestion'),
+            label: t('context.addQuestion'),
             click: () => onClick('addContent', { type: 'choice', ...data }),
         },
         {
-            label: i18n.t('context.addDragAndDrop'),
+            label: t('context.addDragAndDrop'),
             click: () => onClick('addContent', { type: 'drag-and-drop', ...data }),
         },
         {
-            label: i18n.t('context.addReorder'),
+            label: t('context.addReorder'),
             click: () => onClick('addContent', { type: 'reorder', ...data }),
         },
         {
-            label: i18n.t('context.addSwipe'),
+            label: t('context.addSwipe'),
             click: () => onClick('addContent', { type: 'swipe', ...data }),
         },
         {
-            label: i18n.t('context.addDropdownList'),
+            label: t('context.addDropdownList'),
             click: () => onClick('addContent', { type: 'dropdown-list', ...data }),
         },
         {
-            label: i18n.t('context.addCustom'),
+            label: t('context.addCustom'),
             click: () => onClick('addContent', { type: 'custom', ...data }),
         },
     ];
 
     const contents = [
         {
-            label: i18n.t('context.addText'),
+            label: t('context.addText'),
             click: () => onClick('addContent', { type: 'text', ...data }),
         },
         {
-            label: i18n.t('context.addVideo'),
+            label: t('context.addVideo'),
             click: () => onClick('addContent', { type: 'video', ...data }),
         },
         {
-            label: i18n.t('context.addAudio'),
+            label: t('context.addAudio'),
             click: () => onClick('addContent', { type: 'audio', ...data }),
         },
     ];

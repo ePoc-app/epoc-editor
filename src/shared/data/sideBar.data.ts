@@ -1,5 +1,5 @@
 import { SideAction } from '@/src/shared/interfaces';
-import { i18n } from '@/src/i18n/config';
+import { i18n } from '@/i18n/config';
 import { computed, ComputedRef } from 'vue';
 
 export const questions: ComputedRef<SideAction[]> = computed(() => [

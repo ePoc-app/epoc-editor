@@ -1,6 +1,6 @@
 import env from '@/src/shared/utils/env';
 import { ElementType, VerbKey, Verbs } from '@/src/shared/interfaces';
-import { i18n } from '@/src/i18n/config';
+import { i18n } from '@/i18n/config';
 import { computed, ComputedRef } from 'vue';
 
 export const iconsPath = env.isDev ? '/img/badge/icon' : 'img/badge/icon';

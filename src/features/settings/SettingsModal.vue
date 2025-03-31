@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Modal from '@/src/components/LayoutModal.vue';
 import SettingsInput from './SettingsInput.vue';
-import { ref, onMounted, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useSettingsStore } from '@/src/shared/stores';
 import { useI18n } from 'vue-i18n';
 
@@ -10,14 +10,10 @@ const { locale } = useI18n();
 const modal = ref(null);
 const settingsStore = useSettingsStore();
 const spellcheck = ref(false);
-
-// onMounted(() => {
-//     if (!settingsStore.init) {
-//         settingsStore.init();
-//     }
-// });
+const localeTmp = ref();
 
 function save() {
+    locale.value = localeTmp.value;
     settingsStore.setSettings(spellcheck.value);
     modal.value.close();
 }
@@ -29,7 +25,11 @@ function open() {
 watch(
     () => modal.value?.isOpen,
     (isOpen) => {
-        if (isOpen) spellcheck.value = settingsStore?.settings?.spellcheck;
+        // set values here to make sure the settings were fetched from the store
+        if (isOpen) {
+            spellcheck.value = settingsStore?.settings?.spellcheck;
+            localeTmp.value = locale.value;
+        }
     },
 );
 
@@ -47,7 +47,7 @@ defineExpose({
         <div class="settings">
             <SettingsInput v-model="spellcheck" type="toggle" :label="$t('settings.spellcheck')" />
             <SettingsInput
-                v-model="locale"
+                v-model="localeTmp"
                 type="select"
                 :label="$t('settings.lang')"
                 :options="[
@@ -59,7 +59,7 @@ defineExpose({
 
         <template #footer>
             <button class="btn-choice cancel" @click="modal.close">{{ $t('global.cancel') }}</button>
-            <button class="btn-choice save" @click="save">{{ $t('global.validate') }}</button>
+            <button class="btn-choice save" @click="save">{{ $t('global.save') }}</button>
         </template>
     </Modal>
 </template>
