@@ -1,108 +1,110 @@
 import { SideAction } from '@/src/shared/interfaces';
+import { i18n } from '@/i18n/config';
+import { computed, ComputedRef } from 'vue';
 
-export const questions: SideAction[] = [
+export const questions: ComputedRef<SideAction[]> = computed(() => [
     {
         icon: 'icon-qcm',
         type: 'choice',
-        label: 'QCM',
+        label: i18n.global.t('questions.types.qcm'),
     },
     {
         icon: 'icon-dragdrop',
         type: 'drag-and-drop',
-        label: 'Drag & Drop',
+        label: i18n.global.t('questions.types.dragDrop'),
     },
     {
         icon: 'icon-reorder',
         type: 'reorder',
-        label: 'Reorder',
+        label: i18n.global.t('questions.types.reorder'),
     },
     {
         icon: 'icon-swipe',
         type: 'swipe',
-        label: 'Swipe',
+        label: i18n.global.t('questions.types.swipe'),
     },
     {
         icon: 'icon-liste',
         type: 'dropdown-list',
-        label: 'Liste déroulante',
+        label: i18n.global.t('questions.types.dropdownList'),
     },
     {
         icon: 'icon-terminal',
         type: 'custom',
-        label: 'Question personnalisée',
-    }
-];
+        label: i18n.global.t('questions.types.custom'),
+    },
+]);
 
-const contents: SideAction[] = [
+const contents: ComputedRef<SideAction[]> = computed(() => [
     {
         icon: 'icon-texte',
         type: 'text',
-        label: 'Texte',
-        tooltip: 'Glisser/déposer pour ajouter un texte',
+        label: i18n.global.t('sidebar.content.text'),
+        tooltip: i18n.global.t('sidebar.content.textTooltip'),
     },
     {
         icon: 'icon-video',
         type: 'video',
-        label: 'Vidéo',
-        tooltip: 'Glisser/déposer pour ajouter une vidéo',
+        label: i18n.global.t('sidebar.content.video'),
+        tooltip: i18n.global.t('sidebar.content.videoTooltip'),
     },
     {
         icon: 'icon-audio',
         type: 'audio',
-        label: 'Audio',
-        tooltip: 'Glisser/déposer pour ajouter un audio',
+        label: i18n.global.t('sidebar.content.audio'),
+        tooltip: i18n.global.t('sidebar.content.audioTooltip'),
     },
-];
+]);
 
-export const standardActions = [...questions, ...contents];
+export const standardActions = computed(() => [...questions.value, ...contents.value]);
 
-export const standardPages: SideAction[] = [
+export const standardPages: ComputedRef<SideAction[]> = computed(() => [
     {
         icon: 'icon-texte',
         type: 'text',
-        label: 'Texte',
-        tooltip: 'Glisser/déposer pour ajouter un texte',
+        label: i18n.global.t('sidebar.content.text'),
+        tooltip: i18n.global.t('sidebar.content.textTooltip'),
     },
     {
         icon: 'icon-video',
         type: 'video',
-        label: 'Vidéo',
-        tooltip: 'Glisser/déposer pour ajouter une vidéo',
+        label: i18n.global.t('sidebar.content.video'),
+        tooltip: i18n.global.t('sidebar.content.videoTooltip'),
     },
     {
         icon: 'icon-audio',
         type: 'audio',
-        label: 'Audio',
-        tooltip: 'Glisser/déposer pour ajouter un audio',
+        label: i18n.global.t('sidebar.content.audio'),
+        tooltip: i18n.global.t('sidebar.content.audioTooltip'),
     },
     {
         icon: 'icon-question',
         type: 'question',
-        label: 'Question',
-        tooltip: 'Cliquer pour ajouter une question',
+        label: i18n.global.t('sidebar.pages.question'),
+        tooltip: i18n.global.t('sidebar.pages.questionTooltip'),
     },
     {
         icon: 'icon-condition',
         type: 'condition',
-        label: 'Conditions',
-        tooltip: 'Glisser/déposer pour ajouter une condition',
+        label: i18n.global.t('sidebar.pages.conditions'),
+        tooltip: i18n.global.t('sidebar.pages.conditionsTooltip'),
     },
     {
         icon: 'icon-condition-legacy',
         type: 'legacy-condition',
-        label: 'Conditions (legacy)',
-        tooltip: 'Glisser/déposer pour ajouter une condition',
+        label: i18n.global.t('sidebar.pages.conditionsLegacy'),
+        tooltip: i18n.global.t('sidebar.pages.conditionsTooltip'),
     },
     {
         icon: 'icon-modele',
         type: 'model',
-        label: 'Modèle',
-        tooltip: 'Cliquer pour ouvrir le menu modèle',
+        label: i18n.global.t('sidebar.pages.model'),
+        tooltip: i18n.global.t('sidebar.pages.modelTooltip'),
     },
     {
         icon: 'icon-badge',
         type: 'badge',
-        label: 'Badge',
-        tooltip: 'Cliquer pour ouvrir le menu badge',
+        label: i18n.global.t('sidebar.pages.badge'),
+        tooltip: i18n.global.t('sidebar.pages.badgeTooltip'),
     },
-];
+]);

@@ -13,6 +13,7 @@ const {
     createPreview,
     createGlobalPreview,
 } = require('./file');
+const { t } = require('./utils');
 
 const Store = require('electron-store');
 const electronStore = new Store();
@@ -111,7 +112,7 @@ const setupWindow = function (window, filepath) {
 
 const createNewWindow = () => {
     const newWindow = createMainWindow();
-    setupIpcListener(newWindow);
+    setupIpcListener(newWindow, setupMenu);
     setupWindow(newWindow);
 
     newWindow.show();
@@ -124,44 +125,45 @@ const createNewWindow = () => {
 const setupMenu = () => {
     const mainMenuTemplate = [
         {
-            label: 'App',
+            label: t('menu.app.label'),
             submenu: [
-                { label: 'À propos', role: 'about' },
+                { label: t('menu.app.about'), role: 'about' },
                 {
-                    label: 'Quitter',
+                    label: t('menu.app.quit'),
                     accelerator: 'CmdOrCtrl+Q',
                     click: function () {
                         app.quit();
                     },
                 },
+                { type: 'separator' },
             ],
         },
         {
-            label: 'Fichier',
+            label: t('menu.file.label'),
             submenu: [
                 {
-                    label: 'Nouveau',
+                    label: t('menu.file.new'),
                     accelerator: 'CmdOrCtrl+N',
                     click: function () {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectNew');
                     },
                 },
                 {
-                    label: 'Nouvelle fenêtre',
+                    label: t('menu.file.newWindow'),
                     click: function () {
                         ipcMain.emit('newWindow');
                     },
                 },
                 { type: 'separator' },
                 {
-                    label: 'Ouvrir',
+                    label: t('menu.file.open'),
                     accelerator: 'CmdOrCtrl+O',
                     click: function () {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocProjectPicked', pickEpocProject());
                     },
                 },
                 {
-                    label: 'Ouvrir dans une nouvelle fenêtre',
+                    label: t('menu.file.openInNewWindow'),
                     click: () => {
                         const newWindow = createNewWindow();
                         const project = pickEpocProject();
@@ -171,7 +173,7 @@ const setupMenu = () => {
                     },
                 },
                 {
-                    label: 'Projet récents',
+                    label: t('menu.file.latest'),
                     submenu: [
                         ...getRecentFiles().map((project) => {
                             return {
@@ -184,7 +186,7 @@ const setupMenu = () => {
                     ],
                 },
                 {
-                    label: 'Importer un fichier .epoc',
+                    label: t('menu.file.import'),
                     click: async function () {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'epocImportPicked');
                         const project = await pickEpocToImport();
@@ -222,7 +224,7 @@ const setupMenu = () => {
                 { type: 'separator' },
                 {
                     id: 'save',
-                    label: 'Sauvegarder',
+                    label: t('menu.file.save'),
                     accelerator: 'CmdOrCtrl+S',
                     enabled: !!(
                         store.state.projects[BrowserWindow.getFocusedWindow()?.id] &&
@@ -240,7 +242,7 @@ const setupMenu = () => {
                 },
                 {
                     id: 'saveAs',
-                    label: 'Sauvegarder sous...',
+                    label: t('menu.file.saveAs'),
                     accelerator: 'Shift+CmdOrCtrl+S',
                     enabled: !!(
                         store.state.projects[BrowserWindow.getFocusedWindow()?.id] &&
@@ -261,40 +263,40 @@ const setupMenu = () => {
             ],
         },
         {
-            label: 'Édition',
+            label: t('menu.edit.label'),
             submenu: [
                 {
-                    label: 'Annuler',
+                    label: t('menu.edit.undo'),
                     accelerator: 'CmdOrCtrl+Z',
                     click: function () {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'undo');
                     },
                 },
                 {
-                    label: 'Rétablir',
+                    label: t('menu.edit.redo'),
                     accelerator: process.platform === 'darwin' ? 'Shift+CmdOrCtrl+Z' : 'CmdOrCtrl+Y',
                     click: function () {
                         sendToFrontend(BrowserWindow.getFocusedWindow(), 'redo');
                     },
                 },
                 { type: 'separator' },
-                { label: 'Couper', accelerator: 'CmdOrCtrl+X', role: 'cut' },
-                { label: 'Copier', accelerator: 'CmdOrCtrl+C', role: 'copy' },
-                { label: 'Coller', accelerator: 'CmdOrCtrl+V', role: 'paste' },
-                { label: 'Tout sélectionner', accelerator: 'CmdOrCtrl+A', role: 'selectAll' },
+                { label: t('menu.edit.cut'), accelerator: 'CmdOrCtrl+X', role: 'cut' },
+                { label: t('menu.edit.copy'), accelerator: 'CmdOrCtrl+C', role: 'copy' },
+                { label: t('menu.edit.paste'), accelerator: 'CmdOrCtrl+V', role: 'paste' },
+                { label: t('menu.edit.selectAll'), accelerator: 'CmdOrCtrl+A', role: 'selectAll' },
             ],
         },
         {
-            label: 'Aperçu',
+            label: t('menu.preview.label'),
             submenu: [
                 {
-                    label: "Lancer l'aperçu",
+                    label: t('menu.preview.start'),
                     click: function () {
                         createPreview(store.state.projects[BrowserWindow.getFocusedWindow().id].workdir);
                     },
                 },
                 {
-                    label: "Lancer l'aperçu global",
+                    label: t('menu.preview.global'),
                     click: function () {
                         createGlobalPreview(store.state.projects[BrowserWindow.getFocusedWindow().id].workdir);
                     },
@@ -302,31 +304,33 @@ const setupMenu = () => {
             ],
         },
         {
-            label: 'Aide',
+            label: t('menu.help.label'),
             submenu: [
                 {
-                    label: 'Documentation',
+                    label: t('menu.help.documentation'),
                     click: async function () {
                         await shell.openExternal('https://epoc.inria.fr/guide/user/getting-started/');
                     },
                 },
                 {
-                    label: 'Signaler un problème',
+                    label: t('menu.help.reportIssue'),
                     click: async function () {
                         const isDev = process.env.IS_DEV === 'true';
 
-                        const emailSubject = 'Aide éditeur';
+                        const emailSubject = t('menu.help.mailSubject');
                         const emailRecipient = 'ill-ePoc-contact@inria.fr';
                         let emailBody = '';
                         if (isDev) {
                             const appVersion = app.getVersion();
                             emailBody = encodeURIComponent(
-                                `Version: ${appVersion}\n---\n\nDécrivez votre problème ci-dessous:\n\n`,
+                                `Version: ${appVersion}\n---\n\n${t('menu.help.mailBody')}\n\n`,
                             );
                         } else {
                             const appInfo = require('../../dist/appInfo.json');
                             emailBody = encodeURIComponent(
-                                `Version: ${appInfo.version}\nBuild: ${appInfo.buildNumber}\n ---\n\nDécrivez votre problème ci-dessous:\n\n`,
+                                `Version: ${appInfo.version}\nBuild: ${appInfo.buildNumber}\n ---\n\n${t(
+                                    'menu.help.mailBody',
+                                )}\n\n`,
                             );
                         }
 
@@ -337,14 +341,14 @@ const setupMenu = () => {
                 },
                 { type: 'separator' },
                 {
-                    label: 'Outils de développement',
+                    label: t('menu.devTools'),
                     accelerator: 'CmdOrCtrl+D',
                     click: function () {
                         BrowserWindow.getFocusedWindow().webContents.toggleDevTools();
                     },
                 },
                 {
-                    label: 'Recharger',
+                    label: t('menu.reload'),
                     accelerator: 'CmdOrCtrl+R',
                     click: function () {
                         BrowserWindow.getFocusedWindow().webContents.reload();
@@ -372,4 +376,5 @@ module.exports = {
     createMainWindow,
     setupWindow,
     createNewWindow,
+    setupMenu,
 };

@@ -1,20 +1,19 @@
 <script setup lang="ts">
-import Modal from '@/src/components/LayoutModal.vue'
+import Modal from '@/src/components/LayoutModal.vue';
 import SettingsInput from './SettingsInput.vue';
-import ContentButton from '@/src/components/ContentButton.vue';
-import TopActionButton from '@/src/features/topBar/TopActionButton.vue';
-import { ref, onMounted, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useSettingsStore } from '@/src/shared/stores';
+import { useI18n } from 'vue-i18n';
+
+const { locale } = useI18n();
 
 const modal = ref(null);
 const settingsStore = useSettingsStore();
 const spellcheck = ref(false);
-
-onMounted(() => {
-    settingsStore.init();
-})
+const localeTmp = ref();
 
 function save() {
+    locale.value = localeTmp.value;
     settingsStore.setSettings(spellcheck.value);
     modal.value.close();
 }
@@ -23,29 +22,44 @@ function open() {
     modal.value.open();
 }
 
-watch(() => modal.value?.isOpen, (isOpen) => {
-    if (isOpen) spellcheck.value = settingsStore?.settings?.spellcheck;
-})
+watch(
+    () => modal.value?.isOpen,
+    (isOpen) => {
+        // set values here to make sure the settings were fetched from the store
+        if (isOpen) {
+            spellcheck.value = settingsStore?.settings?.spellcheck;
+            localeTmp.value = locale.value;
+        }
+    },
+);
 
 defineExpose({
-    open
-})
-
+    open,
+});
 </script>
 
 <template>
-    <Modal ref="modal" title="Paramètres">
+    <Modal ref="modal" :title="$t('settings.title')">
         <template v-if="modal" #trigger>
             <slot name="trigger" />
         </template>
 
         <div class="settings">
-            <SettingsInput v-model="spellcheck" type="toggle" label="Activer la vérification orthographique" />
+            <SettingsInput v-model="spellcheck" type="toggle" :label="$t('settings.spellcheck')" />
+            <SettingsInput
+                v-model="localeTmp"
+                type="select"
+                :label="$t('settings.lang')"
+                :options="[
+                    { label: 'English', value: 'en' },
+                    { label: 'Français', value: 'fr' },
+                ]"
+            />
         </div>
 
         <template #footer>
-            <button class="btn-choice cancel" @click="modal.close">Annuler</button>
-            <button class="btn-choice save" @click="save">Valider</button>
+            <button class="btn-choice cancel" @click="modal.close">{{ $t('global.cancel') }}</button>
+            <button class="btn-choice save" @click="save">{{ $t('global.save') }}</button>
         </template>
     </Modal>
 </template>
@@ -54,7 +68,7 @@ defineExpose({
 .settings {
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    gap: 0.5rem;
 }
 
 .btn-choice {

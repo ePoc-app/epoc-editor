@@ -4,20 +4,17 @@ import { computed, ref } from 'vue';
 import { editorService } from '@/src/shared/services';
 import { useVueFlow } from '@vue-flow/core';
 import TopActionsMenu from '@/src/features/topBar/TopActionsMenu.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t, locale } = useI18n();
 
 const editorStore = useEditorStore();
 const undoRedoStore = useUndoRedoStore();
 
 const { zoomTo, fitView, onViewportChangeEnd } = useVueFlow('main');
 
-editorStore.$subscribe(() => {
-    savedSince.value = since(editorStore.currentProject.modified);
-});
-
-const savedSince = ref(since(editorStore.currentProject.modified));
-
 const zoom = ref(1);
-const zoomString = computed(() => (zoom.value === 0 ? 'Ajuster' : `${Math.round(zoom.value * 100)}%`));
+const zoomString = computed(() => (zoom.value === 0 ? t('header.adjust') : `${Math.round(zoom.value * 100)}%`));
 
 zoomTo(zoom.value);
 
@@ -34,38 +31,49 @@ function updateZoom(val: number) {
     }
 }
 
-function since(date: string) {
-    if (!date) return 'jamais';
+const savedSince = computed(() => {
+    const date = editorStore.currentProject.modified;
+    if (!date) return t('header.never');
     const milliseconds = Math.abs(Date.now() - new Date(date).getTime());
     const secs = Math.floor(Math.abs(milliseconds) / 1000);
     const mins = Math.floor(secs / 60);
     const hours = Math.floor(mins / 60);
     const days = Math.floor(hours / 24);
 
-    return (
-        'Il y a ' +
-        (days > 1 ? `${days} jours` : hours > 1 ? `${hours} heures` : mins > 1 ? `${mins} mins` : "moins d'une minute")
-    );
-}
-
-setInterval(() => {
-    savedSince.value = since(editorStore.currentProject.modified);
-}, 60000);
+    if (locale.value === 'fr') {
+        return (
+            'Il y a ' +
+            (days > 1 ? `${days} jours`
+            : hours > 1 ? `${hours} heures`
+            : mins > 1 ? `${mins} mins`
+            : "moins d'une minute")
+        );
+    } else {
+        return (
+            (days > 1 ? `${days} days`
+            : hours > 1 ? `${hours} hours`
+            : mins > 1 ? `${mins} mins`
+            : 'less than a minute') + ' ago'
+        );
+    }
+});
 
 function separateFilePath(filepath: string) {
     const file = filepath.split('/').pop();
     return [filepath.replace('/' + file, ''), '/' + file];
 }
-
 </script>
 
 <template>
     <div class="top-bar">
         <div class="top-bar-content">
             <div class="top-bar-title">
-                <h3 v-if="!editorStore.currentProject.filepath">Nouvel ePoc</h3>
-                <h3 v-else><span>{{ separateFilePath(editorStore.currentProject.filepath)[0] }}</span>{{ separateFilePath(editorStore.currentProject.filepath)[1] }}</h3>
-                <small>Dernière sauvegarde : {{ savedSince }}</small>
+                <h3 v-if="!editorStore.currentProject.filepath">{{ t('header.new') }}</h3>
+                <h3 v-else>
+                    <span>{{ separateFilePath(editorStore.currentProject.filepath)[0] }}</span>
+                    {{ separateFilePath(editorStore.currentProject.filepath)[1] }}
+                </h3>
+                <small>{{ t('header.lastSave') }} {{ savedSince }}</small>
             </div>
             <TopActionsMenu
                 :undo-disabled="undoRedoStore.undoStack.length <= 0"

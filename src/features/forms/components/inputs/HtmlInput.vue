@@ -4,6 +4,9 @@ import { getTinymce } from '@tinymce/tinymce-vue/lib/cjs/main/ts/TinyMCE';
 import { Ref, ref, watch } from 'vue';
 import { graphService } from '@/src/shared/services';
 import { getCurrentState } from '@/src/shared/services/undoRedo.service';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps<{
     type: 'html' | 'html-text' | 'html-inline';
@@ -66,7 +69,7 @@ const standardOptions = {
     min_height: 150,
     max_height: 800,
     height: 350,
-    templates: [{ title: 'Plier/déplier', content: template, description: 'Plier/déplier avec titre et contenu' }],
+    templates: [{ title: t('inputs.accordion'), content: template, description: t('inputs.accordionDescription') }],
     file_picker_types: 'image',
     file_picker_callback: handleFilePicker,
     link_default_target: '_blank',

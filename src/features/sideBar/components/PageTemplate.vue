@@ -3,6 +3,9 @@ import { SideAction } from '@/src/shared/interfaces';
 import ContentButton from '@/src/components/ContentButton.vue';
 import { ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 defineProps<{
     elements: SideAction[];
@@ -11,7 +14,7 @@ defineProps<{
 
 const editorStore = useEditorStore();
 
-const templateTooltip = 'Glisser/déposer pour ajouter un modèle';
+const templateTooltip = t('models.dragdrop');
 
 const dragging = ref(false);
 
@@ -26,7 +29,7 @@ function dragStart(event: DragEvent, elements) {
 
 <template>
     <div class="container">
-        <p class="page-title">{{ name ? name : 'Modèle' }}</p>
+        <p class="page-title">{{ name ? name : t('models.model') }}</p>
         <!--suppress VueUnrecognizedDirective -->
         <div
             v-tippy="{

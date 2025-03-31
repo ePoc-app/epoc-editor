@@ -36,11 +36,11 @@ const fileInput = ref(null);
     <div class="new-icon">
         <BadgeItem :icon="blob" :inactive="!url" @click="onClick" />
         <div>
-            <p class="accepted-files">Fichier supporté: SVG</p>
+            <p class="accepted-files">{{ $t('badge.supported') }}</p>
             <div v-if="!url">
                 <button id="file-selector" class="btn btn-form" @click="openFile">
                     <i class="icon-plus"></i>
-                    Sélectionner un fichier
+                    {{ $t('badge.select') }}
                 </button>
             </div>
             <div v-show="url">

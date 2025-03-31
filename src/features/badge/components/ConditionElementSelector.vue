@@ -14,9 +14,9 @@ function onClick() {
 
 <template>
     <div class="select">
-        Elément
+        {{ $t('global.element') }}
         <div class="select-input" @click="onClick">
-            <p>{{ inputValue || 'Veuillez sélectionner' }}</p>
+            <p>{{ inputValue || $t('global.pleaseSelect') }}</p>
             <i class="icon-cible"></i>
         </div>
     </div>

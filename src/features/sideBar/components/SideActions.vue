@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { SideAction } from '@/src/shared/interfaces';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import ContentButton from '@/src/components/ContentButton.vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { moveGuard } from '@/src/shared/utils/draggable';
@@ -9,15 +9,18 @@ import SettingsModal from '@/src/features/settings/SettingsModal.vue';
 
 const editorStore = useEditorStore();
 
-const standardContent = editorStore.standardPages.filter(({ type }) => {
-    const filteredPages = ['legacy-condition', 'condition', 'question', 'model', 'badge'];
-    const prodFilteredPages = env.isDev ? [] : [];
-    return ![...filteredPages, ...prodFilteredPages].includes(type);
-});
-const questionContent = editorStore.standardPages.find(({ type }) => type === 'question');
-const conditionContent = editorStore.standardPages.find(({ type }) => type === 'condition');
-const modelContent = editorStore.standardPages.find(({ type }) => type === 'model');
-const badgeContent = editorStore.standardPages.find(({ type }) => type === 'badge');
+const standardContent = computed(() =>
+    editorStore.standardPages.filter(({ type }) => {
+        const filteredPages = ['legacy-condition', 'condition', 'question', 'model', 'badge'];
+        const prodFilteredPages = env.isDev ? [] : [];
+        return ![...filteredPages, ...prodFilteredPages].includes(type);
+    }),
+);
+
+const questionContent = computed(() => editorStore.standardPages.find(({ type }) => type === 'question'));
+const conditionContent = computed(() => editorStore.standardPages.find(({ type }) => type === 'condition'));
+const modelContent = computed(() => editorStore.standardPages.find(({ type }) => type === 'model'));
+const badgeContent = computed(() => editorStore.standardPages.find(({ type }) => type === 'badge'));
 
 const dragging = ref(false);
 
@@ -56,7 +59,6 @@ function showTemplateMenu() {
 function showBadgeMenu() {
     editorStore.toggleSideMenu('badge');
 }
-
 </script>
 
 <template>
@@ -220,7 +222,9 @@ hr {
     transition: all 0.15s ease-in-out;
 }
 
-.questions-list, .actions-list, .contents-list {
+.questions-list,
+.actions-list,
+.contents-list {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -273,5 +277,4 @@ hr {
 .model-menu {
     flex: 1;
 }
-
 </style>

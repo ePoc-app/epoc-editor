@@ -1,15 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 
-interface Props {
+defineProps<{
     acceptLabel: string;
     cancelLabel: string;
-}
-
-withDefaults(defineProps<Props>(), {
-    acceptLabel: 'Accepter',
-    cancelLabel: 'Annuler',
-});
+}>();
 
 const emits = defineEmits<{
     (e: 'accept'): void;
@@ -32,18 +27,12 @@ onMounted(() => {
 </script>
 
 <template>
-    <div
-        ref="modalScreen"
-        class="modal-backdrop"
-        tabindex="0"
-        @keyup.enter="validate"
-        @keyup.esc="cancel"
-    >
+    <div ref="modalScreen" class="modal-backdrop" tabindex="0" @keyup.enter="validate" @keyup.esc="cancel">
         <div class="modal">
             <slot />
             <button class="btn btn-close" @click="cancel"><i class="icon-x"></i></button>
-            <button class="btn-choice accept" @click="validate">{{ acceptLabel }}</button>
-            <button class="btn-choice cancel" @click="cancel">{{ cancelLabel }}</button>
+            <button class="btn-choice accept" @click="validate">{{ acceptLabel ?? $t('global.accept') }}</button>
+            <button class="btn-choice cancel" @click="cancel">{{ cancelLabel ?? $t('global.cancel') }}</button>
         </div>
     </div>
 </template>

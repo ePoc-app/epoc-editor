@@ -100,8 +100,8 @@ export const useEditorStore = defineStore('editor', {
 
         // Data
         pageModels: [],
-        questions: questions,
-        standardPages: standardPages,
+        questions: questions.value,
+        standardPages: standardPages.value,
 
         // Modal
         conditionModal: false,
@@ -135,7 +135,7 @@ export const useEditorStore = defineStore('editor', {
 
         sideMenuOpen(): boolean {
             return this.modelMenu || this.badgeMenu;
-        }
+        },
     },
 
     actions: {
@@ -163,7 +163,7 @@ export const useEditorStore = defineStore('editor', {
             this.openedElementId = null;
 
             setTimeout(() => {
-                this.formPanel.form = formsModel.find((form) => form.type === 'badge');
+                this.formPanel.form = formsModel.value.find((form) => form.type === 'badge');
             });
 
             if (scrollPosY) this.scrollFormPanel(scrollPosY);
@@ -183,7 +183,7 @@ export const useEditorStore = defineStore('editor', {
             //? To be sure the view is notified of closing / reopening
             this.formPanel.form = null;
             setTimeout(() => {
-                this.formPanel.form = formsModel.find((form) => form.type === formType);
+                this.formPanel.form = formsModel.value.find((form) => form.type === formType);
             });
 
             if (scrollPosY) this.scrollFormPanel(scrollPosY);
@@ -259,9 +259,9 @@ export const useEditorStore = defineStore('editor', {
         },
 
         toggleSideMenu(type: SideMenu) {
-            for(const key in sideMenus) {
-                this[sideMenus[key]] = (key === type) ? !this[sideMenus[key]] : false;
+            for (const key in sideMenus) {
+                this[sideMenus[key]] = key === type ? !this[sideMenus[key]] : false;
             }
-        }
+        },
     },
 });

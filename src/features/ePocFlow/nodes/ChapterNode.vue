@@ -5,6 +5,9 @@ import { Position } from '@vue-flow/core';
 import { computed } from 'vue';
 import ContentButton from '@/src/components/ContentButton.vue';
 import { closeFormPanel, exitSelectNodeMode, getConnectedBadges, graphService } from '@/src/shared/services';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const editorStore = useEditorStore();
 
@@ -16,15 +19,13 @@ const currentNode = findNode(props.id);
 
 const subtitle = computed(() => {
     const epocNode = findNode('1');
-    const chapterParameter = epocNode?.data?.formValues?.chapterParameter || 'Chapitre';
+    const chapterParameter = epocNode?.data?.formValues?.chapterParameter || t('global.chapter');
     const label = chapterParameter.length > 8 ? chapterParameter.substring(0, 7) + '...' : chapterParameter;
 
     return `${label} ${currentNode.data.index}`;
 });
 
-const isSource = computed(() =>
-    getConnectedEdges([currentNode], edges.value).some((edge) => edge.source === props.id),
-);
+const isSource = computed(() => getConnectedEdges([currentNode], edges.value).some((edge) => edge.source === props.id));
 
 const classList = {
     clickable: true,

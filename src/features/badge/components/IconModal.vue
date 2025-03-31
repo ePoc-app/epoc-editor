@@ -46,12 +46,12 @@ onMounted(() => {
         <article class="condition-modal">
             <header>
                 <div class="content">
-                    <h2>Sélectionner une icône</h2>
+                    <h2>{{ $t('badge.selectIcon') }}</h2>
                     <button class="btn btn-close" @click="close"><i class="icon-x"></i></button>
                 </div>
             </header>
             <div class="content">
-                <h3>Icônes par défaut</h3>
+                <h3>{{ $t('badge.defaultIcons') }}</h3>
                 <hr class="separator" />
                 <div class="badges">
                     <BadgeItem
@@ -64,7 +64,7 @@ onMounted(() => {
             </div>
 
             <div class="content">
-                <h3>Icônes personnalisées</h3>
+                <h3>{{ $t('badge.customIcons') }}</h3>
                 <hr class="separator" />
                 <div class="badges">
                     <BadgeItem

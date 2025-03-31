@@ -48,7 +48,7 @@ function handleMouseLeave() {
     </ul>
     <button class="btn btn-form" @click="onClick">
         <i class="icon-plus"></i>
-        Configurer les conditions
+        {{ $t('inputs.manageConditions') }}
     </button>
 </template>
 

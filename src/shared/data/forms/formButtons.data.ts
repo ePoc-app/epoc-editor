@@ -1,39 +1,68 @@
 import { FormButton } from '@/src/shared/interfaces';
 import env from '@/src/shared/utils/env';
+import { computed, ComputedRef } from 'vue';
+import { i18n } from '@/i18n/config';
 
-export const baseButtons = [
-    { label: 'Supprimer', icon: 'icon-supprimer', action: 'delete' },
-    { label: 'Ajouter un badge', icon: 'icon-plus', action: 'add-badge' },
-];
+export const baseButtons: ComputedRef<FormButton[]> = computed(() => {
+    return [
+        { label: i18n.global.t('global.delete'), icon: 'icon-supprimer', action: 'delete' },
+        { label: i18n.global.t('forms.buttons.addBadge'), icon: 'icon-plus', action: 'add-badge' },
+    ];
+});
 
-export const pageButtons: FormButton[] =
-    env.isDev ?
-        [
-            ...baseButtons,
-            { label: 'Dupliquer la page', icon: 'icon-plus', action: 'duplicate-page' },
-            { label: 'Sauvegarder le modèle', icon: 'icon-modele', action: 'save-model' },
-        ]
-        :   [...baseButtons, { label: 'Dupliquer la page', icon: 'icon-plus', action: 'duplicate-page' }];
+export const pageButtons: ComputedRef<FormButton[]> = computed(() => {
+    if (env.isDev) {
+        return [
+            ...baseButtons.value,
+            { label: i18n.global.t('forms.buttons.duplicatePage'), icon: 'icon-plus', action: 'duplicate-page' },
+            { label: i18n.global.t('forms.buttons.saveModel'), icon: 'icon-modele', action: 'save-model' },
+        ];
+    }
 
-export const activityButtons: FormButton[] =
-    env.isDev ?
-        [
-            ...baseButtons,
-            { label: "Dupliquer l'évaluation", icon: 'icon-plus', action: 'duplicate-page' },
-            { label: 'Sauvegarder le modèle', icon: 'icon-modele', action: 'save-model' },
-        ]
-        :   [...baseButtons, { label: "Dupliquer l'évaluation", icon: 'icon-plus', action: 'duplicate-page' }];
+    return [
+        ...baseButtons.value,
+        { label: i18n.global.t('forms.buttons.duplicatePage'), icon: 'icon-plus', action: 'duplicate-page' },
+    ];
+});
 
-export const contentButtons: FormButton[] =
-    env.isDev ?
-        [
-            ...baseButtons,
-            { label: 'Revenir à la page', icon: 'icon-ecran', action: 'back-to-page' },
-            { label: "Dupliquer l'élément", icon: 'icon-plus', action: 'duplicate-element' },
-        ]
-        :   [...baseButtons];
+export const activityButtons: ComputedRef<FormButton[]> = computed(() => {
+    return env.isDev ?
+            [
+                ...baseButtons.value,
+                {
+                    label: i18n.global.t('forms.buttons.duplicateEvaluation'),
+                    icon: 'icon-plus',
+                    action: 'duplicate-page',
+                },
+                { label: i18n.global.t('forms.buttons.saveModel'), icon: 'icon-modele', action: 'save-model' },
+            ]
+        :   [
+                ...baseButtons.value,
+                {
+                    label: i18n.global.t('forms.buttons.duplicateEvaluation'),
+                    icon: 'icon-plus',
+                    action: 'duplicate-page',
+                },
+            ];
+});
 
-export const badgeButtons: FormButton[] = [
-    { label: 'Supprimer', icon: 'icon-supprimer', action: 'delete-badge' },
-    { label: "Revenir à l'ePoc", icon: 'icon-epoc', action: 'back-to-epoc' },
-];
+export const contentButtons: ComputedRef<FormButton[]> = computed(() => {
+    return env.isDev ?
+            [
+                ...baseButtons.value,
+                { label: i18n.global.t('forms.buttons.backToPage'), icon: 'icon-ecran', action: 'back-to-page' },
+                {
+                    label: i18n.global.t('forms.buttons.duplicateElement'),
+                    icon: 'icon-plus',
+                    action: 'duplicate-element',
+                },
+            ]
+        :   [...baseButtons.value];
+});
+
+export const badgeButtons: ComputedRef<FormButton[]> = computed(() => {
+    return [
+        { label: i18n.global.t('global.delete'), icon: 'icon-supprimer', action: 'delete-badge' },
+        { label: i18n.global.t('forms.buttons.backToEpoc'), icon: 'icon-epoc', action: 'back-to-epoc' },
+    ];
+});

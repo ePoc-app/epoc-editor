@@ -14,12 +14,12 @@ function confirmDelete() {
 
 <template>
     <ChoiceModal
-        accept-label="OUI, SUPPRIMER"
-        cancel-label="NON, NE PAS SUPPRIMER"
+        :accept-label="$t('validation.yes')"
+        :cancel-label="$t('validation.no')"
         @cancel="editorStore.validationModal = false"
         @accept="confirmDelete"
     >
-        <h3>Souhaitez-vous vraiment supprimer cet élément ?</h3>
+        <h3>{{ $t('validation.confirm') }}</h3>
     </ChoiceModal>
 </template>
 

@@ -1,3 +1,39 @@
+const translations = require('../../i18n/en/translation.json');
+const Store = require('electron-store');
+const electronStore = new Store();
+
+/**
+ * Get translation for a given key
+ * @param {string} key - Translation key (e.g., 'menu.app.label')
+ * @returns {string} - Translated string or key if not found
+ */
+module.exports.t = function (key) {
+    const lang = electronStore.get('settings.locale') || 'en';
+    const translationFile = require(`../../i18n/${lang}/translation.json`);
+
+    // Split key by dots and traverse the translation object
+    const keys = key.split('.');
+    let result = translationFile;
+
+    for (const k of keys) {
+        if (result && Object.prototype.hasOwnProperty.call(result, k)) {
+            result = result[k];
+        } else {
+            // If key not found, try English as fallback
+            result = translations;
+            for (const k of keys) {
+                if (result && Object.prototype.hasOwnProperty.call(result, k)) {
+                    result = result[k];
+                } else {
+                    return key; // Return the key itself if translation not found
+                }
+            }
+            return result;
+        }
+    }
+    return result;
+};
+
 /**
  * Wait for all promise to have resolve
  * @param promises

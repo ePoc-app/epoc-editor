@@ -4,8 +4,10 @@ import { computed, ref } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { getSelectedNodes } from '@/src/shared/services/graph';
 import { closeFormPanel, exitSelectNodeMode, getConnectedBadges, graphService } from '@/src/shared/services';
-
 import DraggableNode from '@/src/features/ePocFlow/nodes/content/DraggableNode.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const editorStore = useEditorStore();
 
@@ -85,7 +87,7 @@ const activityIndex = computed(() => {
                 class="node-title"
                 :class="{ active: editorStore.openedElementId ? editorStore.openedElementId === props.id : false }"
             >
-                {{ currentNode.data.formValues?.title || 'Évaluation' }}
+                {{ currentNode.data.formValues?.title || t('forms.node.activity') }}
             </p>
             <Handle
                 :data-testid="`target-activity-${activityIndex}`"

@@ -28,7 +28,7 @@ const emit = defineEmits<{
 }>();
 
 // detect the platform
-const modifier = computed(() => editorStore.platform === 'darwin' ? '⌘' : 'Ctrl');
+const modifier = computed(() => (editorStore.platform === 'darwin' ? '⌘' : 'Ctrl'));
 
 const settingsModal = ref(null);
 </script>
@@ -59,7 +59,7 @@ const settingsModal = ref(null);
             />
             <TopActionButton
                 v-tippy="{
-                    content: `${modifier} + ${editorStore.platform === 'darwin' ? '⇧ + z' : 'y' }`,
+                    content: `${modifier} + ${editorStore.platform === 'darwin' ? '⇧ + z' : 'y'}`,
                     placement: 'bottom',
                     arrow: true,
                     arrowType: 'round',
@@ -81,21 +81,21 @@ const settingsModal = ref(null);
                     animation: 'fade',
                 }"
                 icon="icon-save"
-                text="Sauvegarder"
+                :text="$t('global.save')"
                 position="right"
                 :disabled="saving"
                 @click="emit('save')"
             />
             <TopActionButton
                 icon="icon-play"
-                text="Aperçu"
+                :text="$t('header.preview')"
                 position="right"
                 :disabled="loadingPreview"
                 @click="emit('runPreview')"
             />
             <TopActionButton
                 icon="icon-export"
-                text="Publier"
+                :text="$t('header.publish')"
                 position="right"
                 :disabled="exporting"
                 @click="emit('exportProject')"
@@ -105,7 +105,7 @@ const settingsModal = ref(null);
                 <template #trigger>
                     <TopActionButton
                         icon="icon-settings"
-                        text="Paramètres"
+                        :text="$t('settings.title')"
                         position="right"
                         @click="settingsModal.open"
                     />

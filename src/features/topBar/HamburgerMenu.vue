@@ -58,11 +58,11 @@ const settingsModal = ref(null);
             @click="emit('undo')"
         >
             <i class="icon-arriere"></i>
-            <span>Undo</span>
+            <span>{{ $t('header.undo') }}</span>
         </button>
         <button
             v-tippy="{
-                content: `${modifier} + ${editorStore.platform === 'darwin' ? '⇧ + z' : 'y' }`,
+                content: `${modifier} + ${editorStore.platform === 'darwin' ? '⇧ + z' : 'y'}`,
                 placement: 'left',
                 arrow: true,
                 arrowType: 'round',
@@ -73,7 +73,7 @@ const settingsModal = ref(null);
             @click="emit('redo')"
         >
             <i class="icon-avant"></i>
-            <span>Redo</span>
+            <span>{{ $t('header.redo') }}</span>
         </button>
         <button
             v-tippy="{
@@ -88,22 +88,22 @@ const settingsModal = ref(null);
             @click="emit('save')"
         >
             <i class="icon-save"></i>
-            <span>Sauvegarder</span>
+            <span>{{ $t('global.save') }}</span>
         </button>
         <button class="menu-item" :disabled="loadingPreview" @click="emit('runPreview')">
             <i class="icon-play"></i>
-            <span>Aperçu</span>
+            <span>{{ $t('header.preview') }}</span>
         </button>
         <button class="menu-item" :disabled="exporting" @click="emit('exportProject')">
             <i class="icon-export"></i>
-            <span>Publier</span>
+            <span>{{ $t('header.publish') }}</span>
         </button>
 
         <SettingsModal ref="settingsModal">
             <template #trigger>
                 <button class="menu-item" @click="settingsModal.open">
                     <i class="icon-settings"></i>
-                    <span>Paramètre</span>
+                    <span>{{ $t('settings.title') }}</span>
                 </button>
             </template>
         </SettingsModal>

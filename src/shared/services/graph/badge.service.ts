@@ -6,25 +6,27 @@ import { saveState } from '@/src/shared/services/undoRedo.service';
 import { elementVerbs, verbs } from '@/src/shared/data';
 import { generateContentId, graphService } from '@/src/shared/services';
 import { Operators } from '@epoc/epoc-types/dist/v2';
+import { i18n } from '@/i18n/config';
+import { computed, ComputedRef } from 'vue';
 
 const { findNode } = useVueFlow('main');
 
-export function getVerbs(type: ElementType): Verbs {
+export function getVerbs(type: ElementType): ComputedRef<Verbs> {
     if (!type || !elementVerbs[type]) return;
 
     const verbsKeys = elementVerbs[type];
-    const res: Verbs = {};
+    const res: ComputedRef<Verbs> = computed(() => ({}));
 
     for (const key of verbsKeys) {
-        res[key] = verbs[key];
+        res.value[key] = verbs.value[key];
     }
 
     return res;
 }
 
 export function getValueType(verbKey: string): 'number' | 'boolean' {
-    if (!verbs[verbKey]) return;
-    return verbs[verbKey].valueType;
+    if (!verbs.value[verbKey]) return;
+    return verbs.value[verbKey].valueType;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -64,66 +66,66 @@ export function createRule(entry: Condition[]): Rule {
     return { and: rules };
 }
 
-const phraseType = {
-    video: 'la vidéo',
-    chapter: 'le chapitre',
-    page: 'la page',
-    html: 'le texte',
-    audio: "l'audio",
-    activity: "l'évaluation",
-    question: 'la question',
-};
+const phraseType = computed(() => ({
+    video: i18n.global.t('badge.phrase.type.video'),
+    chapter: i18n.global.t('badge.phrase.type.chapter'),
+    page: i18n.global.t('badge.phrase.type.page'),
+    html: i18n.global.t('badge.phrase.type.html'),
+    audio: i18n.global.t('badge.phrase.type.audio'),
+    activity: i18n.global.t('badge.phrase.type.activity'),
+    question: i18n.global.t('badge.phrase.type.question'),
+}));
 
-const phraseVerb = {
+const phraseVerb = computed(() => ({
     started: {
-        true: 'Avoir commencé',
-        false: 'Ne pas avoir pas commencé',
+        true: i18n.global.t('badge.phrase.verb.started.true'),
+        false: i18n.global.t('badge.phrase.verb.started.false'),
     },
     completed: {
-        true: 'Avoir terminé',
-        false: 'Ne pas avoir terminé',
+        true: i18n.global.t('badge.phrase.verb.completed.true'),
+        false: i18n.global.t('badge.phrase.verb.completed.false'),
     },
     viewed: {
-        true: 'Avoir vu',
-        false: 'Ne pas avoir vu',
+        true: i18n.global.t('badge.phrase.verb.viewed.true'),
+        false: i18n.global.t('badge.phrase.verb.viewed.false'),
     },
     read: {
-        true: 'Avoir lu',
-        false: 'Ne pas avoir lu',
+        true: i18n.global.t('badge.phrase.verb.read.true'),
+        false: i18n.global.t('badge.phrase.verb.read.false'),
     },
     played: {
-        true: 'Avoir lancé',
-        false: 'Ne pas avoir lancé',
+        true: i18n.global.t('badge.phrase.verb.played.true'),
+        false: i18n.global.t('badge.phrase.verb.played.false'),
     },
     watched: {
-        true: 'Avoir regardé',
-        false: 'Ne pas avoir regardé',
+        true: i18n.global.t('badge.phrase.verb.watched.true'),
+        false: i18n.global.t('badge.phrase.verb.watched.false'),
     },
     listened: {
-        true: 'Avoir écouté',
-        false: 'Ne pas avoir écouté',
+        true: i18n.global.t('badge.phrase.verb.listened.true'),
+        false: i18n.global.t('badge.phrase.verb.listened.false'),
     },
     attempted: {
-        true: 'Avoir tenté',
-        false: 'Ne pas avoir tenté',
+        true: i18n.global.t('badge.phrase.verb.attempted.true'),
+        false: i18n.global.t('badge.phrase.verb.attempted.false'),
     },
     passed: {
-        true: 'Avoir réussi',
-        false: 'Avoir échoué',
+        true: i18n.global.t('badge.phrase.verb.passed.true'),
+        false: i18n.global.t('badge.phrase.verb.passed.false'),
     },
-    scored: "Avoir obtenu un score d'au moins",
-};
+    scored: i18n.global.t('badge.phrase.verb.scored'),
+}));
 
 export function createPhrase(condition: Condition, elementType: ElementType) {
     const { verb, value } = condition;
     let firstPart: string;
     if (verb === 'scored') {
-        firstPart = `${phraseVerb[verb]} ${value} à`;
+        firstPart = i18n.global.t('badge.phrase.scored', { value, verb: phraseVerb[verb] });
     } else {
-        firstPart = `${phraseVerb[verb][value]}`;
+        firstPart = `${phraseVerb.value[verb][value]}`;
     }
 
-    return `${firstPart} ${phraseType[elementType]}`;
+    return `${firstPart} ${phraseType.value[elementType]}`;
 }
 
 export function getConnectedBadges(contentId: string): Badge[] {

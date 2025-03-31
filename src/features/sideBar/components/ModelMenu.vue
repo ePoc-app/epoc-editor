@@ -7,7 +7,7 @@ const editorStore = useEditorStore();
 </script>
 
 <template>
-    <SideMenu title="Modèles de page" @close="editorStore.modelMenu = false">
+    <SideMenu :title="$t('models.title')" @close="editorStore.modelMenu = false">
         <div v-if="editorStore.pageModels.length > 0" class="models">
             <PageTemplate
                 v-for="(model, index) in editorStore.pageModels"
@@ -17,7 +17,7 @@ const editorStore = useEditorStore();
             />
         </div>
         <div v-else>
-            <h4 class="empty">Aucun modèle de page n'as été créé</h4>
+            <h4 class="empty">{{ $t('models.empty') }}</h4>
         </div>
     </SideMenu>
 </template>

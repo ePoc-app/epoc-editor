@@ -25,7 +25,8 @@ import {
     addPage,
     createPageFromContent,
     graphCopy,
-    getSelectedNodes, handleChapterDrag
+    getSelectedNodes,
+    handleChapterDrag,
 } from '@/src/shared/services/graph';
 import { saveState, saveGivenState, getCurrentState } from '@/src/shared/services/undoRedo.service';
 import { closeAllPanels, closeFormPanel, graphService, getSelectedEdges } from '@/src/shared/services';
@@ -120,7 +121,7 @@ function connect(event: Connection) {
     }
 
     const otherEdge = getConnectedEdges([targetNode], edges.value).find(
-        (edge) => edge.target === targetNode.id && edge.source !== sourceNode.id,
+        (edge) => edge.target === targetNode.id && edge.source !== sourceNode.id
     );
 
     if (otherEdge) {
@@ -188,7 +189,9 @@ function onContextMenu(event: MouseEvent) {
 function onSelectionContextMenu() {
     const selectedNodes = getSelectedNodes();
     const selectedEdges = getSelectedEdges();
-    graphService.openContextMenu('selection', { selection: JSON.stringify({ pages: selectedNodes, edges: selectedEdges }) });
+    graphService.openContextMenu('selection', {
+        selection: JSON.stringify({ pages: selectedNodes, edges: selectedEdges }),
+    });
 }
 
 function onPaneReady() {

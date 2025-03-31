@@ -34,7 +34,7 @@ function onChange(value: string) {
                     :checked="inputValue === '1'"
                     @change="onChange('1')"
                 />
-                <label :for="'left-' + id">Choix gauche</label>
+                <label :for="'left-' + id">{{ $t('inputs.leftChoice') }}</label>
             </div>
             <div class="radio-btn">
                 <input
@@ -45,7 +45,7 @@ function onChange(value: string) {
                     type="radio"
                     @change="onChange('2')"
                 />
-                <label :for="'right-' + id">Choix droite</label>
+                <label :for="'right-' + id">{{ $t('inputs.rightChoice') }}</label>
             </div>
         </div>
     </div>

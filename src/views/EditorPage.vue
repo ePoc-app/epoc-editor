@@ -14,6 +14,8 @@ import { setupContextMenu } from '../shared/services/contextMenu.service';
 import { computed } from 'vue';
 import ModelMenu from '@/src/features/sideBar/components/ModelMenu.vue';
 import BadgeMenu from '@/src/features/sideBar/components/BadgeMenu.vue';
+import { onMounted } from 'vue';
+import { useSettingsStore } from '@/src/shared/stores';
 
 const editorStore = useEditorStore();
 
@@ -32,8 +34,11 @@ function addKeyboardEvent(event: KeyboardEvent) {
     if (metaKey || ctrlKey) {
         if (key === 'v') {
             // Permits to paste in the WYSIWYG link editor modal
-            if((event.target as HTMLElement).className.indexOf('tox-textfield') !== -1
-                || (event.target as HTMLElement).className.indexOf('tox-textarea') !== -1) return;
+            if (
+                (event.target as HTMLElement).className.indexOf('tox-textfield') !== -1 ||
+                (event.target as HTMLElement).className.indexOf('tox-textarea') !== -1
+            )
+                return;
 
             event.preventDefault();
             saveState();
@@ -82,7 +87,13 @@ function onRemoveCursor() {
 }
 
 const editorDisplay = computed(() => (editorStore.selectNodeMode ? 'editor-flex' : 'editor-grid'));
-const sideMenuOpen = computed(() => editorStore.sideMenuOpen ? 'side-menu-open' : '');
+const sideMenuOpen = computed(() => (editorStore.sideMenuOpen ? 'side-menu-open' : ''));
+
+//? For some reason, this code doesn't work in App.vue
+const settingsStore = useSettingsStore();
+if (!settingsStore.initialized) {
+    settingsStore.init();
+}
 </script>
 
 <template>
@@ -95,8 +106,8 @@ const sideMenuOpen = computed(() => editorStore.sideMenuOpen ? 'side-menu-open' 
         <SideBar v-if="!editorStore.selectNodeMode" class="side-bar" @dragover="onCursorNotAllowed" />
         <TopBar v-if="!editorStore.selectNodeMode" class="top-bar" @dragover="onCursorNotAllowed" />
         <div v-if="editorStore.selectNodeMode" class="flex-information">
-            <h4>Cliquer sur l'élément de contenu concerné par la condition pour la sélectionner</h4>
-            <button class="btn btn-top-bar" @click="exitSelectNodeMode()">Annuler</button>
+            <h4>{{ $t('editor.select') }}</h4>
+            <button class="btn btn-top-bar" @click="exitSelectNodeMode()">{{ $t('global.cancel') }}</button>
         </div>
         <ePocFlow class="editor-content" @dragover="onCursorAllowed" />
         <Transition>
