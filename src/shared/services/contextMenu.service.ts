@@ -14,9 +14,13 @@ import {
     insertAfter,
     insertAtEnd,
     insertAtStart,
-    insertBefore, swapChapterWithNext, swapChapterWithPrevious, swapNodeWithNext, swapNodeWithPrevious,
+    insertBefore,
+    swapChapterWithNext,
+    swapChapterWithPrevious,
+    swapNodeWithNext,
+    swapNodeWithPrevious,
     unselectAllContents,
-    unselectAllNodes
+    unselectAllNodes,
 } from './graph';
 import { useVueFlow } from '@vue-flow/core';
 import { saveState } from './undoRedo.service';
@@ -62,7 +66,7 @@ export function setupContextMenu() {
         const parsedData: { type: string; position: { x: number; y: number } } = JSON.parse(data);
         const { type, position } = parsedData;
 
-        const action = standardActions.find((a) => a.type === type);
+        const action = standardActions.value.find((a) => a.type === type);
 
         addPage(position, [action]);
     });
@@ -89,7 +93,7 @@ export function setupContextMenu() {
         const parsedData: { type: string; id: string } = JSON.parse(data);
         const { type, id } = parsedData;
 
-        const action = standardActions.find((a) => a.type === type);
+        const action = standardActions.value.find((a) => a.type === type);
         addContentToPage(id, action);
     });
 
@@ -104,7 +108,7 @@ export function setupContextMenu() {
         const parsedData: { id: string; type: string } = JSON.parse(data);
         const { id, type } = parsedData;
 
-        const action = standardActions.find((a) => a.type === type);
+        const action = standardActions.value.find((a) => a.type === type);
         insertAfter(id, action);
     });
 
@@ -112,7 +116,7 @@ export function setupContextMenu() {
         const parsedData: { id: string; type: string } = JSON.parse(data);
         const { id, type } = parsedData;
 
-        const action = standardActions.find((a) => a.type === type);
+        const action = standardActions.value.find((a) => a.type === type);
         insertBefore(id, action);
     });
 
@@ -120,7 +124,7 @@ export function setupContextMenu() {
         const parsedData: { id: string; type: string } = JSON.parse(data);
         const { id, type } = parsedData;
 
-        const action = standardActions.find((a) => a.type === type);
+        const action = standardActions.value.find((a) => a.type === type);
         insertAtEnd(id, action);
     });
 
@@ -128,7 +132,7 @@ export function setupContextMenu() {
         const parsedData: { id: string; type: string } = JSON.parse(data);
         const { id, type } = parsedData;
 
-        const action = standardActions.find((a) => a.type === type);
+        const action = standardActions.value.find((a) => a.type === type);
         insertAtStart(id, action);
     });
 
@@ -187,8 +191,8 @@ export function setupContextMenu() {
     extendedApi.receive('copyChapter', (data: string) => {
         const { id } = JSON.parse(data);
 
-        graphChapterCopy(id)
-    })
+        graphChapterCopy(id);
+    });
 
     api.receive('contextMenuClosed', () => {
         unselectAllContents();

@@ -64,5 +64,5 @@ const items = computed(() => [...getOptions().map((item: string) => ({ value: it
 </script>
 
 <template>
-    <UiSelect v-model="input" :options="items" />
+    <UiSelect :id="id" v-model="input" :options="items" />
 </template>

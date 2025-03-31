@@ -50,7 +50,7 @@ function onContextMenu(event: MouseEvent) {
     };
 
     const alreadyHasQuestion = currentNode.value.data.elements.some((element: NodeElement) =>
-        questions.some((question) => question.type === element.action.type),
+        questions.value.some((question) => question.type === element.action.type),
     );
     const context = alreadyHasQuestion ? 'pageWithQuestion' : 'page';
     unselectAllNodes();

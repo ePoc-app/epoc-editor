@@ -3,7 +3,7 @@ import { computed, ComputedRef } from 'vue';
 import ConditionElementSelector from './ConditionElementSelector.vue';
 import ConditionValue from './ConditionValue.vue';
 import { getVerbs, getValueType, createPhrase } from '@/src/shared/services';
-import { Condition, ElementType } from '@/src/shared/interfaces';
+import { Condition, ElementType, Verbs } from '@/src/shared/interfaces';
 import { getElementType } from '@/src/shared/services/graph';
 
 const props = defineProps<{
@@ -57,8 +57,8 @@ function handleVerbChange(value: string) {
     updateCondition(value, 'verb');
 }
 
-const verbs = computed(() => {
-    if (!elementType.value) return [];
+const verbs: ComputedRef<Verbs> = computed(() => {
+    if (!elementType.value) return {};
     const res = getVerbs(elementType.value);
     return res.value;
 });

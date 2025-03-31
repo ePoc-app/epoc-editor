@@ -16,7 +16,7 @@ const data = useVModel(props, 'modelValue', emit);
 </script>
 
 <template>
-    <select :id="id" v-model="data" @change="handleChange">
+    <select :id="id" v-model="data">
         <option v-for="option in options" :key="option.value" :value="option.value">
             {{ option.label }}
         </option>

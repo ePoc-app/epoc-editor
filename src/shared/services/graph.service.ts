@@ -183,7 +183,7 @@ function newContent(epoc: EpocV1, pageNode: GraphNode): string {
                 },
             };
             return epoc.addContent(pageNode.data.contentId, content);
-        } else if (questions.some((q) => q.type === contentNode.action.type)) {
+        } else if (questions.value.some((q) => q.type === contentNode.action.type)) {
             const content: SimpleQuestion = {
                 ...baseContent,
                 type: 'simple-question',

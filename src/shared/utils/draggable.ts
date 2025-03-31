@@ -28,16 +28,16 @@ export function moveGuard(event) {
 function canBeMoved(elem: NodeElement | SideAction, to: HTMLElement, list: NodeElement[]): boolean {
     const type = getElemType(elem);
     if (to.classList.contains('page-node')) {
-        const isQuestion = questions.some((q) => q.type === type);
+        const isQuestion = questions.value.some((q) => q.type === type);
         return (
             !isQuestion ||
             (isQuestion &&
                 !list.some((e) => {
-                    return questions.some((q) => q.type === e.action.type);
+                    return questions.value.some((q) => q.type === e.action.type);
                 }))
         );
     } else if (to.classList.contains('activity-node')) {
-        return questions.some((q) => q.type === type);
+        return questions.value.some((q) => q.type === type);
     } else {
         return false;
     }
@@ -46,15 +46,19 @@ function canBeMoved(elem: NodeElement | SideAction, to: HTMLElement, list: NodeE
 function canBeMovedV1(elem: NodeElement | SideAction, to: HTMLElement, list: NodeElement[]): boolean {
     const type = getElemType(elem);
     if (to.classList.contains('page-node')) {
-        const isQuestion = questions.some((q) => q.type === type);
+        const isQuestion = questions.value.some((q) => q.type === type);
         return !isQuestion && list.length < 1;
     } else if (to.classList.contains('activity-node')) {
-        return questions.some((q) => q.type === type);
+        return questions.value.some((q) => q.type === type);
     } else {
         return false;
     }
 }
 
 function getElemType(elem: NodeElement | SideAction) {
-    return 'type' in elem ? elem.type : Array.isArray(elem) ? elem[0].type : elem.action.type;
+    return (
+        'type' in elem ? elem.type
+        : Array.isArray(elem) ? elem[0].type
+        : elem.action.type
+    );
 }

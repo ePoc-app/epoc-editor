@@ -2,8 +2,8 @@
 import { ref, onMounted } from 'vue';
 
 defineProps<{
-    acceptLabel: string;
-    cancelLabel: string;
+    acceptLabel?: string;
+    cancelLabel?: string;
 }>();
 
 const emits = defineEmits<{
