@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { ePocProject, Form, NodeElement, PageModel, SideAction, Condition } from '@/src/shared/interfaces';
 import { GraphNode, useVueFlow } from '@vue-flow/core';
 import { formsModel, questions, standardPages } from '@/src/shared/data';
+import type { ComputedRef } from 'vue';
 
 const { nodes, findNode, getTransform, setTransform } = useVueFlow('main');
 
@@ -51,8 +52,8 @@ interface EditorState {
 
     // Data
     pageModels: PageModel[];
-    questions: SideAction[];
-    standardPages: SideAction[];
+    questions: ComputedRef<SideAction[]>;
+    standardPages: ComputedRef<SideAction[]>;
 
     // Modal
     conditionModal: boolean;
@@ -100,8 +101,9 @@ export const useEditorStore = defineStore('editor', {
 
         // Data
         pageModels: [],
-        questions: questions.value,
-        standardPages: standardPages.value,
+        questions: questions,
+        // standardPages: standardPages.value,
+        standardPages: standardPages,
 
         // Modal
         conditionModal: false,
