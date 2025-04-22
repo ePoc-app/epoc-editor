@@ -350,7 +350,7 @@
             "reorder": "Reorder",
             "swipe": "Swipe",
             "dropdownList": "Dropdown list",
-            "custom": "Custom question"
+            "custom": "Custom activity"
         },
         "score": "Score"
     },
@@ -364,12 +364,12 @@
             "audioTooltip": "Drag/drop to add audio"
         },
         "pages": {
-            "question": "Question",
+            "question": "Activity",
             "conditions": "Conditions",
             "conditionsLegacy": "Conditions (legacy)",
             "model": "Template",
             "badge": "Badge",
-            "questionTooltip": "Click to add a question",
+            "questionTooltip": "Click to add an activity",
             "conditionsTooltip": "Drag/drop to add a condition",
             "modelTooltip": "Click to open template menu",
             "badgeTooltip": "Click to open badge menu"
