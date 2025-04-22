@@ -352,7 +352,7 @@
             "reorder": "Reorder",
             "swipe": "Swipe",
             "dropdownList": "Liste déroulante",
-            "custom": "Question personnalisée"
+            "custom": "Activité personnalisée"
         },
         "score": "Score"
     },
@@ -366,12 +366,12 @@
             "audioTooltip": "Glisser/déposer pour ajouter un audio"
         },
         "pages": {
-            "question": "Question",
+            "question": "Activité",
             "conditions": "Conditions",
             "conditionsLegacy": "Conditions (legacy)",
             "model": "Modèle",
             "badge": "Badge",
-            "questionTooltip": "Cliquer pour ajouter une question",
+            "questionTooltip": "Cliquer pour ajouter une activité",
             "conditionsTooltip": "Glisser/déposer pour ajouter une condition",
             "modelTooltip": "Cliquer pour ouvrir le menu modèle",
             "badgeTooltip": "Cliquer pour ouvrir le menu badge"
