@@ -92,6 +92,7 @@ function createContentJSON(): EpocV1 {
         ePocValues.chapterParameter,
         ePocValues.chapterDuration,
         new Date().toISOString(),
+        ePocValues.lang,
         {
             name: ePocValues.licenceName || '',
             url: ePocValues.licenceUrl || '',

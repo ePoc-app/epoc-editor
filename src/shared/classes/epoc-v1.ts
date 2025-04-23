@@ -6,6 +6,7 @@ import { Badge } from '@epoc/epoc-types/src/v1/badge';
 export class EpocV1 implements Epoc {
     id: string;
     editorVersion: string;
+    lang: string;
     title: string;
     image: string;
     objectives: string[];
@@ -48,6 +49,7 @@ export class EpocV1 implements Epoc {
         chapterParameter: string,
         chapterDuration: number,
         lastModif: string,
+        lang: string,
         license: { name: string; url: string; content: string },
     ) {
         this.version = '1';
@@ -73,6 +75,7 @@ export class EpocV1 implements Epoc {
         this.badges = {};
         this.questions = {};
         this.lastModif = lastModif;
+        this.lang = lang;
         this.license = license;
     }
 
