@@ -11,8 +11,8 @@ const props = defineProps<{
     label: string;
     inputValue: string;
     placeholder: string;
-    options: string[];
-    linkedOptions: string;
+    options: string[] | { label: string; value: string }[];
+    linkedOptions?: string;
 }>();
 
 const emit = defineEmits<{
@@ -21,7 +21,7 @@ const emit = defineEmits<{
 }>();
 
 const currentNode = editorStore.getCurrentGraphNode;
-const currentContent = currentNode.data.elements.find(({ id }) => id === editorStore.openedElementId);
+const currentContent = currentNode.data.elements?.find(({ id }) => id === editorStore.openedElementId);
 
 function getOptions() {
     if (!props.linkedOptions) return props.options;
@@ -60,7 +60,16 @@ watch(input, (newValue) => {
     emit('saveGivenState', state);
 });
 
-const items = computed(() => [...getOptions().map((item: string) => ({ value: item, label: item }))]);
+const items = computed(() => {
+    const options = getOptions();
+    if (options.length === 0) return [];
+
+    if (typeof options[0] === 'string') {
+        return options.map((item: string) => ({ value: item, label: item }));
+    }
+
+    return options;
+});
 </script>
 
 <template>

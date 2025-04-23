@@ -64,7 +64,6 @@
         "addDropdown": "Add dropdown assessment",
         "addCustom": "Add custom assessment"
     },
-
     "global": {
         "open": "Open",
         "cancel": "Cancel",
@@ -292,6 +291,7 @@
             "certificateScoreHint": "Not considered if the number of badges required for certification is greater than 0",
             "chapterLabel": "Chapter label",
             "chapterDuration": "Chapter duration (in minutes)",
+            "languageSelection": "Select a language",
             "plugin": {
                 "title": "Plugin | Plugins",
                 "script": "Script file",

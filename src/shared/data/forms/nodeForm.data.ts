@@ -2,6 +2,7 @@ import { Form } from '@/src/shared/interfaces';
 import { activityButtons, baseButtons, pageButtons } from './formButtons.data';
 import { computed, ComputedRef } from 'vue';
 import { i18n } from '@/i18n/config';
+import { languages } from '../languages.data';
 
 export const conditionForm: ComputedRef<Form> = computed(() => ({
     type: 'condition',
@@ -297,6 +298,19 @@ export const epocForm: ComputedRef<Form> = computed(() => ({
                     type: 'score',
                     label: i18n.global.t('forms.node.chapterDuration'),
                     value: 0,
+                },
+            ],
+        },
+        {
+            name: i18n.global.t('menu.app.lang'),
+            inputs: [
+                {
+                    id: 'lang',
+                    type: 'select',
+                    label: '',
+                    placeholder: '',
+                    value: '',
+                    options: [{ value: '', label: i18n.global.t('forms.node.languageSelection') }, ...languages],
                 },
             ],
         },
