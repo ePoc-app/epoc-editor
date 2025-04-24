@@ -23,7 +23,7 @@ export interface Input {
     icon?: string;
     inputs?: Input[];
     addButton?: boolean;
-    options?: string[];
+    options?: string[] | { value: string; label: string }[];
     linkedOptions?: string;
     targetDirectory?: string;
     hint?: string;

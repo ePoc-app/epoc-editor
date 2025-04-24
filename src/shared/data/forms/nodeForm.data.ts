@@ -119,6 +119,13 @@ export const chapterForm: ComputedRef<Form> = computed(() => ({
                     placeholder: i18n.global.t('forms.type'),
                 },
                 {
+                    id: 'subtitle',
+                    type: 'text',
+                    label: i18n.global.t('forms.node.subtitle'),
+                    value: '',
+                    placeholder: i18n.global.t('forms.type'),
+                },
+                {
                     id: 'duration',
                     type: 'score',
                     label: i18n.global.t('forms.node.duration'),
@@ -285,13 +292,6 @@ export const epocForm: ComputedRef<Form> = computed(() => ({
                     label: i18n.global.t('forms.node.certificateScore'),
                     value: 10,
                     hint: i18n.global.t('forms.node.certificateScoreHint'),
-                },
-                {
-                    id: 'chapterParameter',
-                    type: 'text',
-                    label: i18n.global.t('forms.node.chapterLabel'),
-                    value: '',
-                    placeholder: i18n.global.t('forms.type'),
                 },
                 {
                     id: 'chapterDuration',

@@ -17,14 +17,6 @@ const { findNode, nodes, edges } = useVueFlow('main');
 
 const currentNode = findNode(props.id);
 
-const subtitle = computed(() => {
-    const epocNode = findNode('1');
-    const chapterParameter = epocNode?.data?.formValues?.chapterParameter || t('global.chapter');
-    const label = chapterParameter.length > 8 ? chapterParameter.substring(0, 7) + '...' : chapterParameter;
-
-    return `${label} ${currentNode.data.index}`;
-});
-
 const isSource = computed(() => getConnectedEdges([currentNode], edges.value).some((edge) => edge.source === props.id));
 
 const classList = {
@@ -68,12 +60,6 @@ const connectedBadges = computed(() => getConnectedBadges(currentNode.data.conte
                 <small>{{ connectedBadges.length }}</small>
             </div>
 
-            <p
-                class="node-title"
-                :class="{ active: editorStore.openedElementId ? editorStore.openedElementId === props.id : false }"
-            >
-                {{ currentNode.data.formValues.title }}
-            </p>
             <ContentButton
                 :id="currentNode.data.contentId"
                 :data-testid="`chapter-${currentNode.data.index}`"
@@ -81,7 +67,8 @@ const connectedBadges = computed(() => getConnectedBadges(currentNode.data.conte
                 :is-draggable="false"
                 :class-list="classList"
                 :is-active="editorStore.openedElementId ? editorStore.openedElementId === currentNode.id : false"
-                :subtitle="subtitle"
+                :subtitle="currentNode.data.formValues.title || t('global.chapter')"
+                class="chapter-node"
                 @click="openForm()"
                 @mousedown="mouseDown"
                 @contextmenu="onContextMenu"
@@ -98,3 +85,20 @@ const connectedBadges = computed(() => getConnectedBadges(currentNode.data.conte
         />
     </div>
 </template>
+
+<style lang="scss">
+.chapter-node > .text {
+    overflow: hidden;
+    padding: 0.25rem;
+    width: 100%;
+    box-sizing: border-box;
+
+    & > span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-align: center;
+    }
+}
+</style>

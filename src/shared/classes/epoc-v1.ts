@@ -46,7 +46,6 @@ export class EpocV1 implements Epoc {
         certificateBadgeCount: number,
         authors: Author[],
         plugins: string[],
-        chapterParameter: string,
         chapterDuration: number,
         lastModif: string,
         lang: string,
@@ -66,9 +65,6 @@ export class EpocV1 implements Epoc {
         this.certificateBadgeCount = certificateBadgeCount;
         this.authors = authors;
         this.plugins = plugins;
-        this.parameters = {
-            chapterParameter,
-        };
         this.chapterDuration = chapterDuration;
         this.chapters = {};
         this.contents = {};

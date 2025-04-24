@@ -89,7 +89,6 @@ function createContentJSON(): EpocV1 {
         ePocValues.certificateBadgeCount || 1,
         ePocValues.authors || {},
         plugins,
-        ePocValues.chapterParameter,
         ePocValues.chapterDuration,
         new Date().toISOString(),
         ePocValues.lang,
@@ -105,6 +104,7 @@ function createContentJSON(): EpocV1 {
         const chapterValues = chapter.data.formValues;
         epoc.addChapter(chapter.data.contentId, {
             title: chapterValues.title || '',
+            subtitle: chapterValues.subtitle || '',
             objectives: chapterValues.objectives || [],
             contents: [],
             duration: chapterValues.duration || 0,
