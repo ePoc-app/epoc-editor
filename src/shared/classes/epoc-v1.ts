@@ -15,6 +15,7 @@ export class EpocV1 implements Epoc {
     thumbnail: string;
     version: string;
     edition: string;
+    certificateDisabled?: boolean;
     certificateScore: number;
     download: string;
     lastModif: string;
@@ -42,6 +43,7 @@ export class EpocV1 implements Epoc {
         teaser: string,
         thumbnail: string,
         edition: string,
+        certificateDisabled: boolean,
         certificateScore: number,
         certificateBadgeCount: number,
         authors: Author[],
@@ -61,6 +63,7 @@ export class EpocV1 implements Epoc {
         this.teaser = teaser;
         this.thumbnail = thumbnail;
         this.edition = edition;
+        this.certificateDisabled = certificateDisabled;
         this.certificateScore = certificateScore;
         this.certificateBadgeCount = certificateBadgeCount;
         this.authors = authors;
