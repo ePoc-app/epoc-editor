@@ -28,9 +28,13 @@ export function setEpocNodeData(epoc: EpocV1) {
     epocNode.data.formValues.version = epoc.version;
     epocNode.data.formValues.certificateScore = epoc.certificateScore;
     epocNode.data.formValues.authors = Object.values(epoc.authors);
-    epocNode.data.formValues.chapterParameter = epoc.parameters?.chapterParameter;
     epocNode.data.formValues.plugins = epoc.plugins;
     epocNode.data.formValues.badges = epoc.badges;
+}
+
+export function getEpocNodeData() {
+    const epocNode = findNode('1');
+    return epocNode.data.formValues;
 }
 
 export function addPage(position: { x: number; y: number }, actions: SideAction[], noAlign?: boolean): string {
@@ -41,7 +45,10 @@ export function addPage(position: { x: number; y: number }, actions: SideAction[
     const isQuestion = questionTypes.includes(type);
     const isCondition = type === 'condition';
 
-    const finalType = isQuestion ? 'question' : isCondition ? 'condition' : 'element';
+    const finalType =
+        isQuestion ? 'question'
+        : isCondition ? 'condition'
+        : 'element';
 
     const newPageNode: Node = {
         id,
@@ -297,7 +304,6 @@ export function duplicatePage(pageId?: string): void {
     closeFormPanel();
 }
 
-
 export function transformActivityToPage(): void {
     const pageNode = findNode(editorStore.openedElementId);
     if (pageNode.data.elements.length > 1) return;
@@ -355,11 +361,12 @@ export function confirmDelete(): void {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isFormButtonDisabled(isDisabledFunction: (node: any) => boolean): boolean {
     const isChild = Boolean(editorStore.openedNodeId);
-    const nodeData = isChild
-        ? findNode(editorStore.openedNodeId).data.elements.find(
-            (e: NodeElement) => e.id === editorStore.openedElementId,
-        )
-        : findNode(editorStore.openedElementId).data;
+    const nodeData =
+        isChild ?
+            findNode(editorStore.openedNodeId).data.elements.find(
+                (e: NodeElement) => e.id === editorStore.openedElementId,
+            )
+        :   findNode(editorStore.openedElementId).data;
     return isDisabledFunction(nodeData);
 }
 
@@ -388,8 +395,14 @@ export function swapEdges(node1: Node, node2: Node, edges1: Edge[], edges2: Edge
     }
 
     for (const edge of [...edges1, ...edges2]) {
-        const source = edge.source === node1.id ? node2.id : edge.source === node2.id ? node1.id : edge.source;
-        const target = edge.target === node1.id ? node2.id : edge.target === node2.id ? node1.id : edge.target;
+        const source =
+            edge.source === node1.id ? node2.id
+            : edge.source === node2.id ? node1.id
+            : edge.source;
+        const target =
+            edge.target === node1.id ? node2.id
+            : edge.target === node2.id ? node1.id
+            : edge.target;
         createEdge(source, target);
     }
 }
@@ -423,7 +436,7 @@ export function swapNodeWithPrevious(nodeId: string): void {
     const node = findNode(nodeId);
     const previousNode = graphService.getPreviousNode(node);
 
-    if(!previousNode || previousNode.type === 'chapter') return;
+    if (!previousNode || previousNode.type === 'chapter') return;
 
     const tempPosition = node.position;
     node.position = previousNode.position;

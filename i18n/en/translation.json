@@ -286,6 +286,8 @@
                 },
                 "biography": "Short author biography"
             },
+            "certificateOptions": "Certificate options",
+            "certificateDisabled": "Disable certificate",
             "certificateBadge": "Number of badges required for certification",
             "certificateScore": "Score required for certification",
             "certificateScoreHint": "Not considered if the number of badges required for certification is greater than 0",
