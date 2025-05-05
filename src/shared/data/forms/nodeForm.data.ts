@@ -278,13 +278,14 @@ export const epocForm: ComputedRef<Form> = computed(() => ({
             ],
         },
         {
-            name: i18n.global.t('settings.title'),
+            name: i18n.global.t('forms.node.certificateOptions'),
             inputs: [
                 {
                     id: 'certificateBadgeCount',
                     type: 'score',
                     label: i18n.global.t('forms.node.certificateBadge'),
                     value: 1,
+                    hide: 'certificateDisabled',
                 },
                 {
                     id: 'certificateScore',
@@ -292,7 +293,19 @@ export const epocForm: ComputedRef<Form> = computed(() => ({
                     label: i18n.global.t('forms.node.certificateScore'),
                     value: 10,
                     hint: i18n.global.t('forms.node.certificateScoreHint'),
+                    hide: 'certificateDisabled',
                 },
+                {
+                    id: 'certificateDisabled',
+                    type: 'checkbox',
+                    label: i18n.global.t('forms.node.certificateDisabled'),
+                    value: false,
+                },
+            ],
+        },
+        {
+            name: i18n.global.t('settings.title'),
+            inputs: [
                 {
                     id: 'chapterDuration',
                     type: 'score',

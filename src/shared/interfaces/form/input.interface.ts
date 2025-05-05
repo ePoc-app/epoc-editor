@@ -29,4 +29,5 @@ export interface Input {
     hint?: string;
     collapsible?: boolean;
     collapsibleLabel?: string;
+    hide?: string;
 }

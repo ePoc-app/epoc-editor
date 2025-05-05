@@ -25,6 +25,7 @@ const props = defineProps<{
     fieldIndex?: number;
     collapsible?: boolean;
     collapsibleLabel?: string;
+    hidden?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -63,7 +64,7 @@ function handleCollapse() {
 </script>
 
 <template>
-    <div class="input-group">
+    <div v-if="!hidden" class="input-group">
         <div
             v-if="input.label && showLabel(input.type)"
             class="input-label"

@@ -286,6 +286,8 @@
                 },
                 "biography": "Courte biographie de l'auteur"
             },
+            "certificateOptions": "Options de l'attestation",
+            "certificateDisabled": "Désactiver l'attestation",
             "certificateBadge": "Nombre de badge pour obtenir l'attestation",
             "certificateScore": "Score pour obtenir l'attestation",
             "certificateScoreHint": "N'est pas pris en compte si le nombre de badge pour obtenir l'attestation est supérieur à 0",

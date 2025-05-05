@@ -85,6 +85,7 @@ function createContentJSON(): EpocV1 {
         ePocValues.teaser || '',
         ePocValues.thumbnail || '',
         ePocValues.edition || new Date().getFullYear(),
+        ePocValues.certificateDisabled || false,
         ePocValues.certificateScore || 10,
         ePocValues.certificateBadgeCount || 1,
         ePocValues.authors || {},

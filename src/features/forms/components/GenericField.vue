@@ -11,6 +11,7 @@ import {
     RepeatMoveEvent,
     RepeatRemoveEvent,
 } from '@/src/shared/interfaces/form/repeatInput.interface';
+import { getEpocNodeData } from '@/src/shared/services';
 
 const editorStore = useEditorStore();
 
@@ -25,9 +26,10 @@ const currentNode = editorStore.getCurrentGraphNode;
 
 const getInputValue = (input: Input) => {
     if (editorStore.openedBadgeId) return getBadgeInputValue(input);
-    const formValues = editorStore.openedNodeId
-        ? currentNode.data.elements.find((e: NodeElement) => e.id === editorStore.openedElementId)?.formValues ?? {}
-        : currentNode.data.formValues;
+    const formValues =
+        editorStore.openedNodeId ?
+            (currentNode.data.elements.find((e: NodeElement) => e.id === editorStore.openedElementId)?.formValues ?? {})
+        :   currentNode.data.formValues;
 
     return formValues[input.id] ?? input.value;
 };
@@ -40,9 +42,10 @@ const getBadgeInputValue = (input: Input) => {
 function onInput(value: string, id: string) {
     if (editorStore.openedBadgeId) return onBadgeInput(value, id);
 
-    const element = editorStore.openedNodeId
-        ? currentNode.data.elements.find((e: NodeElement) => e.id === editorStore.openedElementId)
-        : currentNode.data;
+    const element =
+        editorStore.openedNodeId ?
+            currentNode.data.elements.find((e: NodeElement) => e.id === editorStore.openedElementId)
+        :   currentNode.data;
 
     element.formValues[id] = value;
 }
@@ -59,9 +62,10 @@ function onBadgeInput(value: string, id: string) {
 function onRepeatInput(value: RepeatInputEvent, id: string) {
     const state = getCurrentState(true);
 
-    const element = editorStore.openedNodeId
-        ? currentNode.data.elements.find((e: NodeElement) => e.id === editorStore.openedElementId)
-        : null;
+    const element =
+        editorStore.openedNodeId ?
+            currentNode.data.elements.find((e: NodeElement) => e.id === editorStore.openedElementId)
+        :   null;
 
     switch (value.type) {
         case 'add': {
@@ -133,9 +137,10 @@ function handleChangeRepeatInput(element: NodeElement | null, value: RepeatChang
 // Repeat Input end
 
 function onCheck(value: boolean, id: string) {
-    const element = editorStore.openedNodeId
-        ? currentNode.data.elements.find((e: NodeElement) => e.id === editorStore.openedElementId)
-        : currentNode.data;
+    const element =
+        editorStore.openedNodeId ?
+            currentNode.data.elements.find((e: NodeElement) => e.id === editorStore.openedElementId)
+        :   currentNode.data;
 
     element.formValues[id] = value;
 }
@@ -156,6 +161,7 @@ function onSaveGivenState(state: string) {
         :input="input"
         :field-index="fieldIndex"
         :input-value="getInputValue(input)"
+        :hidden="input.hide ? getEpocNodeData()[input.hide] : false"
         @input="onInput($event, input.id)"
         @check="onCheck($event, input.id)"
         @repeat-input="onRepeatInput($event, input.id)"
