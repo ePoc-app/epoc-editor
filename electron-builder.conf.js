@@ -2,7 +2,6 @@ const cp = require('child_process');
 const fs = require('fs');
 const packageJson = require('./package.json');
 require('dotenv').config();
-const { notarize } = require('@electron/notarize');
 
 /**
  * @type {import('electron-builder').Configuration}
@@ -26,8 +25,7 @@ module.exports = {
         hardenedRuntime: true,
         gatekeeperAssess: false,
         entitlements: './entitlements.plist',
-        entitlementsInherit: './entitlements.plist',
-        notarize: false
+        entitlementsInherit: './entitlements.plist'
     },
     nsis: {
         oneClick: false,
@@ -79,29 +77,7 @@ module.exports = {
             isPackage: false,
             rank: 'Default',
         }
-    ],
-    afterSign: async (context) => {
-        const { electronPlatformName, appOutDir } = context;
-        if (electronPlatformName !== 'darwin' || process.env.NO_NOTARIZE) {
-            return;
-        }
-
-        const appName = context.packager.appInfo.productFilename;
-
-        try {
-            return await notarize({
-                tool: 'notarytool',
-                appBundleId: 'fr.inria.epoc-editor',
-                appPath: `${appOutDir}/${appName}.app`,
-                appleId: process.env.APPLE_ID,
-                appleIdPassword: process.env.APPLE_PASSWORD,
-                teamId: process.env.APPLE_TEAM_ID,
-                ascProvider: process.env.APPLE_ASC
-            });
-        } catch (e) {
-            console.log('Could not notarize');
-        }
-    }
+    ]
 };
 
 /**
