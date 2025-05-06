@@ -17,7 +17,7 @@ module.exports = {
     publish: {
         provider: 'github',
         repo: 'epoc-editor',
-        owner: 'inrialearninglab',
+        owner: 'ePoc-app',
         releaseType: 'draft'
     },
     mac: {
@@ -27,6 +27,7 @@ module.exports = {
         gatekeeperAssess: false,
         entitlements: './entitlements.plist',
         entitlementsInherit: './entitlements.plist',
+        notarize: false
     },
     nsis: {
         oneClick: false,

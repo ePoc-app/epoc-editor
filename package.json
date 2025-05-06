@@ -9,7 +9,7 @@
     },
     "icon": "favicon.png",
     "private": true,
-    "version": "0.2",
+    "version": "0.2.0",
     "main": "electron/electron.js",
     "scripts": {
         "electron": "wait-on tcp:8000 && cross-env IS_DEV=true electron .",
