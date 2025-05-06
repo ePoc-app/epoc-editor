@@ -1,6 +1,10 @@
-const translations = require('../../i18n/en/translation.json');
+
 const Store = require('electron-store');
+const path = require('path');
 const electronStore = new Store();
+const isDev = process.env.IS_DEV === 'true';
+const translationsPath = isDev ? path.join(__dirname, '../..') : process.resourcesPath;
+const translations = require(`${translationsPath}/i18n/en/translation.json`);
 
 /**
  * Get translation for a given key
@@ -9,7 +13,7 @@ const electronStore = new Store();
  */
 module.exports.t = function (key) {
     const lang = electronStore.get('settings.locale') || 'en';
-    const translationFile = require(`../../i18n/${lang}/translation.json`);
+    const translationFile = require(`${translationsPath}/i18n/${lang}/translation.json`);
 
     // Split key by dots and traverse the translation object
     const keys = key.split('.');

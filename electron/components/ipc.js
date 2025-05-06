@@ -257,7 +257,8 @@ const setupIpcListener = function (targetWindow, setupMenu) {
     ipcMain.on(
         'setSettings',
         ipcGuard(async (_event, data) => {
-            const { spellcheck, locale } = electronStore.get('settings');
+            const settings = electronStore.get('settings') || {};
+            const { spellcheck, locale } = settings;
             electronStore.set('settings', data);
 
             if (data.spellcheck !== spellcheck) {

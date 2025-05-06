@@ -44,7 +44,8 @@ module.exports = {
         version: tcDefault(() => { cp.execSync('git describe --tags --abbrev=0', { stdio: [] }).toString().trim(); }, packageJson.version)
     },
     extraResources: [
-        {from: 'public/preview.zip', to: 'preview.zip'}
+        {from: 'public/preview.zip', to: 'preview.zip'},
+        {from: 'i18n', to: 'i18n'}
     ],
     beforePack: async (context) => {
         // Write an appInfo file to be used in prod
