@@ -32,7 +32,7 @@ const badges: ComputedRef<Badge[]> = computed(() => {
 </script>
 
 <template>
-    <SideMenu title="Badges" @close="editorStore.badgeMenu = false">
+    <SideMenu title="Badges" @close-menu="editorStore.badgeMenu = false">
         <div class="badges">
             <button class="add-badge" @click="addNewBadge">
                 <i class="icon-plus-circle"></i>

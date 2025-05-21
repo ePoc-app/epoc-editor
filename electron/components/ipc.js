@@ -246,7 +246,6 @@ const setupIpcListener = function (targetWindow, setupMenu) {
         'getSettings',
         ipcGuard(async (event) => {
             let settings = electronStore.get('settings');
-            console.log('pref lang', app.getPreferredSystemLanguages()[0].split('-')[0]);
             if (!settings?.locale) {
                 settings = { ...settings, locale: app.getPreferredSystemLanguages()[0].split('-')[0] };
             }

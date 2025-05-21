@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { SideAction } from '@/src/shared/interfaces';
-import { ref, computed } from 'vue';
-import ContentButton from '@/src/components/ContentButton.vue';
+import { computed } from 'vue';
 import { useEditorStore } from '@/src/shared/stores';
-import { moveGuard } from '@/src/shared/utils/draggable';
 import env from '@/src/shared/utils/env';
+import VueDraggable from 'vuedraggable';
+import SideBarButton from './SideBarButton.vue';
+import FloatingMenu from './FloatingMenu.vue';
+import { useDraggable } from '../composables/useDraggable';
 
 const editorStore = useEditorStore();
+const { dragOptions, handleDragStart, handleDragEnd } = useDraggable();
 
 const standardContent = computed(() =>
     editorStore.standardPages.filter(({ type }) => {
@@ -20,32 +22,6 @@ const questionContent = computed(() => editorStore.standardPages.find(({ type })
 const conditionContent = computed(() => editorStore.standardPages.find(({ type }) => type === 'condition'));
 const modelContent = computed(() => editorStore.standardPages.find(({ type }) => type === 'model'));
 const badgeContent = computed(() => editorStore.standardPages.find(({ type }) => type === 'badge'));
-
-const dragging = ref(false);
-
-const dragOptions = {
-    group: {
-        name: 'node',
-        pull: 'clone',
-        put: false,
-    },
-    disabled: false,
-    sort: false,
-    ghostClass: 'ghost',
-    move: moveGuard,
-};
-
-const classList = (item: SideAction) => ({
-    clickable: item.type === 'question' || item.type === 'model' || item.type === 'badge',
-});
-
-function dragStart(event: DragEvent, sideAction: SideAction) {
-    editorStore.draggedElement = {
-        type: 'sideAction',
-        element: [sideAction],
-    };
-    dragging.value = true;
-}
 
 function showQuestionsMenu() {
     editorStore.toggleSideMenu('question');
@@ -70,133 +46,50 @@ function showBadgeMenu() {
                 item-key="index"
                 class="contents-list"
             >
-                <!--suppress VueUnrecognizedSlot -->
                 <template #item="{ element, index }">
-                    <div>
-                        <!--suppress VueUnrecognizedDirective -->
-                        <ContentButton
-                            :key="index"
-                            v-tippy="{
-                                content: element.tooltip,
-                                placement: 'right',
-                                arrow: true,
-                                arrowType: 'round',
-                                animation: 'fade',
-                            }"
-                            :data-testid="`${element.type}-content`"
-                            :icon="element.icon"
-                            :is-draggable="true"
-                            :class-list="{ 'btn-content-blue': true }"
-                            @dragstart="dragStart($event, element)"
-                        />
-                    </div>
+                    <SideBarButton
+                        :key="index"
+                        :content="element"
+                        :is-draggable="true"
+                        @dragstart="(event) => handleDragStart(event, element)"
+                        @dragend="handleDragEnd"
+                    />
                 </template>
             </VueDraggable>
+
             <div class="question">
-                <!--suppress VueUnrecognizedDirective -->
-                <ContentButton
-                    v-tippy="{
-                        content: questionContent.tooltip,
-                        placement: 'right',
-                        arrow: true,
-                        arrowType: 'round',
-                        animation: 'fade',
-                    }"
-                    data-testid="questions-menu"
-                    :icon="questionContent.icon"
-                    :is-draggable="false"
-                    :class-list="classList(questionContent)"
+                <SideBarButton
+                    :content="questionContent"
                     :is-active="editorStore.questionMenu"
-                    @mouseup.stop
                     @click="showQuestionsMenu"
                 />
-                <div v-if="editorStore.questionMenu" data-testid="floating-menu" class="floating-menu" @click.stop>
-                    <div class="arrow-wrapper">
-                        <div class="arrow"></div>
-                    </div>
-                    <VueDraggable
-                        v-bind="dragOptions"
-                        key="draggable"
-                        :model-value="editorStore.questions"
-                        item-key="id"
-                        class="questions-list"
-                    >
-                        <!--suppress VueUnrecognizedSlot -->
-                        <template #item="{ element, index }">
-                            <div>
-                                <!--suppress VueUnrecognizedDirective -->
-                                <ContentButton
-                                    :key="index"
-                                    v-tippy="{
-                                        content: element.label,
-                                        placement: 'right',
-                                        arrow: true,
-                                        arrowType: 'round',
-                                        animation: 'fade',
-                                    }"
-                                    :data-testid="`${element.type}-content`"
-                                    :icon="element.icon"
-                                    :class-list="{ 'btn-content-blue': true }"
-                                    :is-draggable="true"
-                                    @dragstart="dragStart($event, element)"
-                                />
-                            </div>
-                        </template>
-                    </VueDraggable>
-                </div>
+                <FloatingMenu
+                    :items="editorStore.questions"
+                    :is-visible="editorStore.questionMenu"
+                    @dragstart="handleDragStart"
+                />
             </div>
-            <!--suppress VueUnrecognizedDirective -->
-            <ContentButton
+
+            <SideBarButton
                 v-if="env.isDev"
-                v-tippy="{
-                    content: conditionContent.tooltip,
-                    placement: 'right',
-                    arrow: true,
-                    arrowType: 'round',
-                    animation: 'fade',
-                }"
-                :icon="conditionContent.icon"
-                :class-list="{ 'btn-content-blue': true }"
+                :content="conditionContent"
                 :is-draggable="true"
-                @dragstart="dragStart($event, conditionContent)"
-                @dragend="dragging = false"
+                @dragstart="(event) => handleDragStart(event, conditionContent)"
+                @dragend="handleDragEnd"
             />
+
             <hr />
-            <!--suppress VueUnrecognizedDirective -->
-            <ContentButton
+
+            <SideBarButton
                 v-if="env.isDev"
-                v-tippy="{
-                    content: modelContent.tooltip,
-                    placement: 'right',
-                    arrow: true,
-                    arrowType: 'round',
-                    animation: 'fade',
-                }"
-                class="model-menu"
-                :icon="modelContent.icon"
-                :is-draggable="false"
+                :content="modelContent"
                 :is-active="editorStore.modelMenu"
-                :class-list="classList(modelContent)"
                 @click="showTemplateMenu"
             />
         </div>
+
         <div class="actions-list">
-            <!--suppress VueUnrecognizedDirective -->
-            <ContentButton
-                v-tippy="{
-                    content: badgeContent.tooltip,
-                    placement: 'right',
-                    arrow: true,
-                    arrowType: 'round',
-                    animation: 'fade',
-                }"
-                class="badge-menu"
-                :icon="badgeContent.icon"
-                :is-draggable="false"
-                :is-active="editorStore.badgeMenu"
-                :class-list="classList(badgeContent)"
-                @click="showBadgeMenu"
-            />
+            <SideBarButton :content="badgeContent" :is-active="editorStore.badgeMenu" @click="showBadgeMenu" />
         </div>
     </div>
 </template>
@@ -213,15 +106,6 @@ hr {
     box-shadow: none;
 }
 
-.active {
-    border: 2px solid var(--editor-blue);
-    color: var(--editor-blue);
-
-    box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);
-    transition: all 0.15s ease-in-out;
-}
-
-.questions-list,
 .actions-list,
 .contents-list {
     display: flex;
@@ -238,42 +122,5 @@ hr {
 
 .question {
     position: relative;
-}
-
-.floating-menu {
-    background-color: white;
-    padding: 1rem;
-    position: absolute;
-    left: 5.5rem;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 1;
-    border-radius: 10px;
-    filter: drop-shadow(0 1px 8px var(--shadow-outer));
-
-    .btn {
-        &:hover {
-            box-shadow: 0 2px 8px 0 var(--shadow-outer);
-        }
-    }
-}
-
-// Modal transition
-.v-enter-active,
-.v-leave-active {
-    transition: opacity 0.15s ease-in-out;
-}
-
-.v-enter-from,
-.v-leave-to {
-    opacity: 0;
-}
-
-.container {
-    position: relative;
-}
-
-.model-menu {
-    flex: 1;
 }
 </style>

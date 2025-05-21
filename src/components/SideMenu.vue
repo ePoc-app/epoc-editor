@@ -1,23 +1,29 @@
 <script setup lang="ts">
-defineProps<{
+import { useVModel } from '@vueuse/core';
+
+const props = defineProps<{
     title: string;
+    open?: boolean;
 }>();
 
-const emits = defineEmits<{
-    (e: 'close'): void;
+const emit = defineEmits<{
+    (e: 'update:open', value: boolean);
 }>();
 
-function close() {
-    emits('close');
+const isOpen = useVModel(props, 'open', emit);
+
+function closeMenu() {
+    isOpen.value = false;
 }
-
 </script>
 
 <template>
-    <div class="side-menu">
+    <div v-if="isOpen" class="side-menu">
         <header>
             <h3>{{ title }}</h3>
-            <button class="btn btn-close" @click="close"><i class="icon-x"></i></button>
+            <button class="btn btn-close" @click="closeMenu">
+                <i class="icon-x"></i>
+            </button>
         </header>
 
         <hr class="separator" />
@@ -37,21 +43,28 @@ function close() {
     height: 100vh;
     background-color: white;
     border-right: 1px solid var(--border);
-
     width: fit-content;
 
     header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
         h3 {
             margin-left: 1rem;
         }
     }
 
-    hr {
-        margin-bottom: 1rem;
+    .separator {
+        margin: 0;
+        border: none;
+        border-top: 1px solid var(--border);
     }
 
     &-content {
         padding: 1rem;
+        height: calc(100vh - 60px);
+        overflow-y: auto;
     }
 }
 </style>

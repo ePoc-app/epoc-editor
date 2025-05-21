@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
 import { ePocProject, Form, NodeElement, PageModel, SideAction, Condition } from '@/src/shared/interfaces';
 import { GraphNode, useVueFlow } from '@vue-flow/core';
 import { formsModel, questions, standardPages } from '@/src/shared/data';
@@ -101,9 +102,8 @@ export const useEditorStore = defineStore('editor', {
 
         // Data
         pageModels: [],
-        questions: questions,
-        // standardPages: standardPages.value,
-        standardPages: standardPages,
+        questions,
+        standardPages,
 
         // Modal
         conditionModal: false,
@@ -141,7 +141,7 @@ export const useEditorStore = defineStore('editor', {
     },
 
     actions: {
-        reset(): void {
+        reset() {
             this.draggedElement = {};
             this.openedElementId = null;
             this.openedNodeId = null;
@@ -151,14 +151,14 @@ export const useEditorStore = defineStore('editor', {
             this.modelMenu = false;
         },
 
-        dismissModals(): void {
+        dismissModals() {
             this.questionMenu = false;
             this.modelMenu = false;
             this.badgeMenu = false;
             this.hamburgerMenu = false;
         },
 
-        openBadgeFormPanel(id: string, _type: 'custom' | 'meta', scrollPosY?: number): void {
+        openBadgeFormPanel(id: string, _type: 'custom' | 'meta', scrollPosY?: number) {
             this.openedBadgeId = id;
             this.formPanel.form = null;
             this.openedNodeId = null;
@@ -174,15 +174,14 @@ export const useEditorStore = defineStore('editor', {
         openFormPanel(
             id: string,
             formType: string,
-            options?: { nodeId?: string; scrollPosY?: number; centerNode?: boolean },
-        ): void {
+            options?: { nodeId?: string; scrollPosY?: number; centerNode?: boolean }
+        ) {
             const { nodeId, scrollPosY, centerNode } = options ?? {};
 
             this.openedElementId = id;
             this.openedNodeId = nodeId;
             this.openedBadgeId = null;
 
-            //? To be sure the view is notified of closing / reopening
             this.formPanel.form = null;
             setTimeout(() => {
                 this.formPanel.form = formsModel.value.find((form) => form.type === formType);
@@ -203,7 +202,7 @@ export const useEditorStore = defineStore('editor', {
             setTransform({ x: -x * zoom + 200, y: -y * zoom + 200, zoom });
         },
 
-        scrollFormPanel(posY: number): void {
+        scrollFormPanel(posY: number) {
             const checkIfPanelReady = (): Promise<void> => {
                 return new Promise((resolve) => {
                     const checkInterval = setInterval(() => {
@@ -221,37 +220,37 @@ export const useEditorStore = defineStore('editor', {
             });
         },
 
-        closeValidationModal(): void {
+        closeValidationModal() {
             this.validationModal = false;
         },
 
-        openValidationModal(): void {
+        openValidationModal() {
             this.validationModal = true;
         },
 
-        savePageModel(model: SideAction[]): boolean {
+        savePageModel(model: PageModel): boolean {
             const modelExist = this.pageModels.some(
-                (pageModel: PageModel) => JSON.stringify(pageModel.actions) === JSON.stringify(model),
+                (pageModel) => JSON.stringify(pageModel.actions) === JSON.stringify(model.actions)
             );
             if (modelExist) return false;
-            this.pageModels.push({ actions: model });
+            this.pageModels.push(model);
             return true;
         },
 
-        openPage(): void {
+        openPage() {
             const parentNode = findNode(this.openedNodeId);
             this.openFormPanel(parentNode.id, parentNode.data.formType);
         },
 
-        openEpoc(): void {
+        openEpoc() {
             this.openFormPanel('1', 'epoc');
         },
 
-        enterSelectNodeMode(): void {
+        enterSelectNodeMode() {
             this.selectNodeMode = true;
         },
 
-        exitSelectNodeMode(): void {
+        exitSelectNodeMode() {
             this.selectNodeMode = false;
         },
 
@@ -261,9 +260,9 @@ export const useEditorStore = defineStore('editor', {
         },
 
         toggleSideMenu(type: SideMenu) {
-            for (const key in sideMenus) {
-                this[sideMenus[key]] = key === type ? !this[sideMenus[key]] : false;
-            }
+            this.questionMenu = type === 'question' ? !this.questionMenu : false;
+            this.modelMenu = type === 'model' ? !this.modelMenu : false;
+            this.badgeMenu = type === 'badge' ? !this.badgeMenu : false;
         },
     },
 });

@@ -121,8 +121,8 @@ if (!settingsStore.initialized) {
         <ConditionModal v-if="editorStore.conditionModal && !editorStore.selectNodeMode" />
         <IconModal v-if="editorStore.iconModal" />
 
-        <ModelMenu v-if="editorStore.modelMenu && !editorStore.selectNodeMode" />
-        <BadgeMenu v-if="editorStore.badgeMenu && !editorStore.selectNodeMode" />
+        <ModelMenu v-if="!editorStore.selectNodeMode" v-model:open="editorStore.modelMenu" />
+        <BadgeMenu v-if="!editorStore.selectNodeMode" v-model:open="editorStore.badgeMenu" />
     </div>
 </template>
 
@@ -140,7 +140,6 @@ if (!settingsStore.initialized) {
 .editor-grid {
     display: grid;
     height: 100%;
-    // grid-template-columns: 265px auto;
     grid-template-columns: 100px auto;
     grid-template-rows: 80px auto;
 
