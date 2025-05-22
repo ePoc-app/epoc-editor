@@ -14,10 +14,12 @@ import { setupContextMenu } from '../shared/services/contextMenu.service';
 import { computed } from 'vue';
 import ModelMenu from '@/src/features/sideBar/components/ModelMenu.vue';
 import BadgeMenu from '@/src/features/sideBar/components/BadgeMenu.vue';
-import { onMounted } from 'vue';
 import { useSettingsStore } from '@/src/shared/stores';
+import { useSideBarStore } from '../features/sideBar/stores/sideBarStore';
+import AssetMenu from '../features/sideBar/components/asset/AssetMenu.vue';
 
 const editorStore = useEditorStore();
+const sidebarStore = useSideBarStore();
 
 editorService.setup();
 
@@ -87,7 +89,7 @@ function onRemoveCursor() {
 }
 
 const editorDisplay = computed(() => (editorStore.selectNodeMode ? 'editor-flex' : 'editor-grid'));
-const sideMenuOpen = computed(() => (editorStore.sideMenuOpen ? 'side-menu-open' : ''));
+const sideMenuOpen = computed(() => (sidebarStore.sideMenuOpen ? 'side-menu-open' : ''));
 
 //? For some reason, this code doesn't work in App.vue
 const settingsStore = useSettingsStore();
@@ -121,8 +123,9 @@ if (!settingsStore.initialized) {
         <ConditionModal v-if="editorStore.conditionModal && !editorStore.selectNodeMode" />
         <IconModal v-if="editorStore.iconModal" />
 
-        <ModelMenu v-if="!editorStore.selectNodeMode" v-model:open="editorStore.modelMenu" />
-        <BadgeMenu v-if="!editorStore.selectNodeMode" v-model:open="editorStore.badgeMenu" />
+        <ModelMenu v-if="!editorStore.selectNodeMode" v-model:open="sidebarStore.modelMenu" />
+        <BadgeMenu v-if="!editorStore.selectNodeMode" v-model:open="sidebarStore.badgeMenu" />
+        <AssetMenu v-if="!editorStore.selectNodeMode" v-model:open="sidebarStore.assetMenu" />
     </div>
 </template>
 

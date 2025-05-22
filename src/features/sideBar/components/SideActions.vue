@@ -6,13 +6,15 @@ import VueDraggable from 'vuedraggable';
 import SideBarButton from './SideBarButton.vue';
 import FloatingMenu from './FloatingMenu.vue';
 import { useDraggable } from '../composables/useDraggable';
+import { useSideBarStore } from '../stores/sideBarStore';
 
+const sidebarStore = useSideBarStore();
 const editorStore = useEditorStore();
 const { dragOptions, handleDragStart, handleDragEnd } = useDraggable();
 
 const standardContent = computed(() =>
     editorStore.standardPages.filter(({ type }) => {
-        const filteredPages = ['legacy-condition', 'condition', 'question', 'model', 'badge'];
+        const filteredPages = ['legacy-condition', 'condition', 'question', 'model', 'badge', 'asset'];
         const prodFilteredPages = env.isDev ? [] : [];
         return ![...filteredPages, ...prodFilteredPages].includes(type);
     }),
@@ -22,17 +24,22 @@ const questionContent = computed(() => editorStore.standardPages.find(({ type })
 const conditionContent = computed(() => editorStore.standardPages.find(({ type }) => type === 'condition'));
 const modelContent = computed(() => editorStore.standardPages.find(({ type }) => type === 'model'));
 const badgeContent = computed(() => editorStore.standardPages.find(({ type }) => type === 'badge'));
+const assetContent = computed(() => editorStore.standardPages.find(({ type }) => type === 'asset'));
 
 function showQuestionsMenu() {
-    editorStore.toggleSideMenu('question');
+    sidebarStore.toggleMenu('question');
 }
 
 function showTemplateMenu() {
-    editorStore.toggleSideMenu('model');
+    sidebarStore.toggleMenu('model');
 }
 
 function showBadgeMenu() {
-    editorStore.toggleSideMenu('badge');
+    sidebarStore.toggleMenu('badge');
+}
+
+function showAssetMenu() {
+    sidebarStore.toggleMenu('asset');
 }
 </script>
 
@@ -60,12 +67,12 @@ function showBadgeMenu() {
             <div class="question">
                 <SideBarButton
                     :content="questionContent"
-                    :is-active="editorStore.questionMenu"
+                    :is-active="sidebarStore.questionMenu"
                     @click="showQuestionsMenu"
                 />
                 <FloatingMenu
                     :items="editorStore.questions"
-                    :is-visible="editorStore.questionMenu"
+                    :is-visible="sidebarStore.questionMenu"
                     @dragstart="handleDragStart"
                 />
             </div>
@@ -83,13 +90,14 @@ function showBadgeMenu() {
             <SideBarButton
                 v-if="env.isDev"
                 :content="modelContent"
-                :is-active="editorStore.modelMenu"
+                :is-active="sidebarStore.modelMenu"
                 @click="showTemplateMenu"
             />
         </div>
 
         <div class="actions-list">
-            <SideBarButton :content="badgeContent" :is-active="editorStore.badgeMenu" @click="showBadgeMenu" />
+            <SideBarButton :content="badgeContent" :is-active="sidebarStore.badgeMenu" @click="showBadgeMenu" />
+            <SideBarButton :content="assetContent" :is-active="sidebarStore.assetMenu" @click="showAssetMenu" />
         </div>
     </div>
 </template>

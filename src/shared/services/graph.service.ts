@@ -25,6 +25,7 @@ import { Question } from '@epoc/epoc-types/src/v2';
 import { createRule, getConditions, getValidBadges } from '@/src/shared/services/graph/badge.service';
 import { Badge, NodeElement } from '@/src/shared/interfaces';
 import { CustomQuestion } from '@epoc/epoc-types/dist/v2';
+import { useSideBarStore } from '@/src/features/sideBar/stores/sideBarStore';
 
 declare const api: ApiInterface;
 
@@ -467,9 +468,11 @@ export function exportBadgesToPage(badges: Record<string, Badge>): Record<string
 
 export function closeAllPanels() {
     const editorStore = useEditorStore();
+    const sidebarStore = useSideBarStore();
 
     closeFormPanel();
     editorStore.dismissModals();
+    sidebarStore.dismissModals();
 }
 
 export function closeFormPanel() {
