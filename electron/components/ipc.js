@@ -13,6 +13,8 @@ const {
     writeEpocData,
     readProjectData,
     copyFileToWorkdir,
+    getAllAssets,
+    getAssetType,
 } = require('./file');
 const { Menu } = require('electron');
 const contextMenu = require('./contextMenu');
@@ -269,6 +271,20 @@ const setupIpcListener = function (targetWindow, setupMenu) {
                 setupMenu();
                 targetWindow.webContents.reload();
             }
+        }),
+    );
+
+    ipcMain.on(
+        'getAssets',
+        ipcGuard(async (event) => {
+            const assets = getAllAssets(store.state.projects[targetWindow.id].workdir);
+            const res = assets.map((filename) => {
+                return {
+                    filename,
+                    type: getAssetType(filename),
+                };
+            });
+            sendToFrontend(event.sender, 'assets', { assets: res });
         }),
     );
 };

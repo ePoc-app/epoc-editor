@@ -8,6 +8,7 @@ const { wait } = require('./utils');
 const Store = require('electron-store');
 const electronStore = new Store();
 const store = require('./store');
+const mime = require('mime-types');
 
 const recentFiles = electronStore.get('recentFiles', []).filter((r) => {
     return fs.existsSync(r.filepath);
@@ -379,6 +380,16 @@ const getAllAssets = function (workdir) {
     return assetsName;
 };
 
+/**
+ * @param {string}
+ * @returns {string}
+ */
+const getAssetType = function (filename) {
+    const mimeType = mime.lookup(filename);
+
+    return mimeType.split('/')[0] ?? 'unknown';
+};
+
 const getUsedAssets = function (workdir) {
     // if(!fs.existsSync(path.join(workdir, 'project.json'))) return [];
 
@@ -433,4 +444,5 @@ module.exports = {
     copyFileToWorkdir,
     cleanAllWorkdir,
     getAllAssets,
+    getAssetType,
 };
