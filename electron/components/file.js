@@ -296,9 +296,6 @@ const copyFileToWorkdir = async function (workdir, filepath, targetDirectory) {
     const assetsPath = path.join(workdir, pathEnd);
 
     if (!fs.existsSync(assetsPath)) fs.mkdirSync(assetsPath, { recursive: true });
-    console.log('assets path', assetsPath);
-    console.log('filepath', filepath);
-    console.log('base', path.basename(filepath).replace(/[^a-z0-9.]/gi, '_'));
 
     const copyPath = path.join(assetsPath, path.basename(filepath).replace(/[^a-z0-9.]/gi, '_'));
     if (!fs.existsSync(assetsPath)) fs.mkdirSync(assetsPath);
