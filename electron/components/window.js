@@ -1,18 +1,10 @@
 const { BrowserWindow, ipcMain, shell } = require('electron');
 const path = require('path');
-const { setupIpcListener, sendToFrontend } = require('./ipc');
+const { setupIpcListener, sendToFrontend, updateSavedProject } = require('./ipc');
 const store = require('./store');
 const { Menu, app } = require('electron');
-const {
-    pickEpocProject,
-    pickEpocToImport,
-    getRecentFiles,
-    saveEpocProject,
-    updateSavedProject,
-    saveAsEpocProject,
-    createPreview,
-    createGlobalPreview,
-} = require('./file');
+const { pickEpocProject, pickEpocToImport, getRecentFiles, saveEpocProject, saveAsEpocProject } = require('./file');
+const { createGlobalPreview, createPreview } = require('./preview');
 const { t } = require('./utils');
 
 const Store = require('electron-store');
