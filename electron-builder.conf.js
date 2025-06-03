@@ -1,23 +1,32 @@
-const cp = require('child_process');
-const fs = require('fs');
+import { execSync } from 'child_process';
+import { writeFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+import { config } from 'dotenv';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 const packageJson = require('./package.json');
-require('dotenv').config();
+config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 /**
  * @type {import('electron-builder').Configuration}
  * @see https://www.electron.build/configuration/configuration
  */
-module.exports = {
+export default {
     artifactName: '${name}_v${version}_${os}_${arch}.${ext}',
     appId: 'fr.inria.epoc-editor',
     productName: 'ePoc Editor',
     copyright: 'Copyright © 2022 ${author}',
-    buildNumber: cp.execSync('git rev-parse --short HEAD').toString().trim(),
+    buildNumber: execSync('git rev-parse --short HEAD').toString().trim(),
     publish: {
         provider: 'github',
         repo: 'epoc-editor',
         owner: 'ePoc-app',
-        releaseType: 'draft'
+        releaseType: 'draft',
     },
     mac: {
         category: 'public.app-category.utilities',
@@ -25,27 +34,26 @@ module.exports = {
         hardenedRuntime: true,
         gatekeeperAssess: false,
         entitlements: './entitlements.plist',
-        entitlementsInherit: './entitlements.plist'
+        entitlementsInherit: './entitlements.plist',
     },
     nsis: {
         oneClick: false,
-        allowToChangeInstallationDirectory: true
+        allowToChangeInstallationDirectory: true,
     },
-    files: [
-        'dist/**/*',
-        'electron/**/*'
-    ],
+    files: ['dist/**/*', 'electron/**/*'],
     directories: {
         buildResources: 'assets',
-        output: 'dist_electron'
+        output: 'dist_electron',
     },
     extraMetadata: {
         // Get the most recent git tag otherwise use the version from package.json
-        version: tcDefault(() => { cp.execSync('git describe --tags --abbrev=0', { stdio: [] }).toString().trim(); }, packageJson.version)
+        version: tcDefault(() => {
+            execSync('git describe --tags --abbrev=0', { stdio: [] }).toString().trim();
+        }, packageJson.version),
     },
     extraResources: [
-        {from: 'public/preview.zip', to: 'preview.zip'},
-        {from: 'i18n', to: 'i18n'}
+        { from: 'public/preview.zip', to: 'preview.zip' },
+        { from: 'i18n', to: 'i18n' },
     ],
     beforePack: async (context) => {
         // Write an appInfo file to be used in prod
@@ -54,9 +62,9 @@ module.exports = {
             version: context.packager.appInfo.version,
             buildNumber: context.packager.appInfo.buildNumber,
             buildVersion: context.packager.appInfo.buildVersion,
-            productName: context.packager.appInfo.productName
+            productName: context.packager.appInfo.productName,
         };
-        fs.writeFileSync('dist/appInfo.json', JSON.stringify(appInfo, null, 2));
+        writeFileSync('dist/appInfo.json', JSON.stringify(appInfo, null, 2));
     },
     fileAssociations: [
         {
@@ -67,7 +75,7 @@ module.exports = {
             role: 'Mobile Application',
             isPackage: false,
             rank: 'Default',
-            icon: 'assets/icon-mobile.png'
+            icon: 'assets/icon-mobile.png',
         },
         {
             ext: 'epocproject',
@@ -77,8 +85,12 @@ module.exports = {
             role: 'Editor',
             isPackage: false,
             rank: 'Default',
-        }
-    ]
+        },
+    ],
+    // Add support for ES modules
+    nodeModulesPath: ['../../node_modules', '../node_modules'],
+    asar: true,
+    asarUnpack: ['node_modules/**/*.node'],
 };
 
 /**

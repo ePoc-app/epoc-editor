@@ -1,14 +1,16 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { app, BrowserWindow, ipcMain } = require('electron');
-const { createMainWindow, setupWindow, createNewWindow, setupMenu } = require('./components/window');
-const { createSplashWindow } = require('./components/splash');
-const { setupIpcListener } = require('./components/ipc');
-const { waitEvent, waitAll, wait } = require('./components/utils');
-const { cleanAllWorkdir } = require('./components/file');
-const { cleanPreview } = require('./components/preview');
-const path = require('path');
-const { autoUpdater } = require('electron-updater');
+import { app, BrowserWindow, ipcMain } from 'electron';
+import { createMainWindow, setupWindow, createNewWindow, setupMenu } from './components/window.js';
+import { createSplashWindow } from './components/splash.js';
+import { setupIpcListener } from './components/ipc.js';
+import { waitEvent, waitAll, wait } from './components/utils.js';
+import { cleanAllWorkdir } from './components/file.js';
+import { cleanPreview } from './components/preview.js';
+import path from 'path';
+import electronUpdater from 'electron-updater';
+
+const { autoUpdater } = electronUpdater;
 
 const headless = process.argv.includes('--headless=true');
 
@@ -36,9 +38,9 @@ app.on('will-finish-launching', () => {
 autoUpdater.checkForUpdatesAndNotify();
 
 // This method will be called when Electron has finished initialization and is ready to create browser windows.
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
     mainWindow = createMainWindow();
-    if (!headless) splashWindow = createSplashWindow();
+    if (!headless) splashWindow = await createSplashWindow();
 
     setupIpcListener(mainWindow, setupMenu);
 

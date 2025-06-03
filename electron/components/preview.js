@@ -1,9 +1,13 @@
-const fs = require('fs');
-const path = require('path');
-const express = require('express');
-const serveStatic = require('serve-static');
-const AdmZip = require('adm-zip');
-const { app, BrowserWindow, Menu, dialog } = require('electron');
+import fs from 'fs';
+import path from 'path';
+import express from 'express';
+import serveStatic from 'serve-static';
+import AdmZip from 'adm-zip';
+import { app, BrowserWindow, Menu, dialog } from 'electron';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const isDev = process.env.IS_DEV === 'true';
 const resourcePath = isDev ? path.join(__dirname, '../../public') : process.resourcesPath;
@@ -218,11 +222,4 @@ const setupMenuPreview = () => {
     Menu.setApplicationMenu(previewMenu);
 };
 
-module.exports = {
-    createPreview,
-    createGlobalPreview,
-    // runPreview,
-    cleanPreview,
-    updatePreview,
-    getCommitHash,
-};
+export { createPreview, createGlobalPreview, cleanPreview, updatePreview, getCommitHash };

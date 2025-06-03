@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "moduleResolution": "node",
-        "module": "commonjs",
+        "module": "esnext",
         "types": ["node", "@wdio/globals/types", "expect-webdriverio", "@wdio/mocha-framework", "mocha"],
         "target": "es2022",
         "skipLibCheck": true,
@@ -9,7 +9,8 @@
         "paths": {
             "@/*": ["./*"]
         },
-        "allowJs": true
+        "allowJs": true,
+        "resolveJsonModule": true
     },
     "exclude": ["/Users/nviaud/Developer/Inria/epoc-editor/dist/assets/EditorPage-f305590e.js"] // Add this line
 }

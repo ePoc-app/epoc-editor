@@ -1,8 +1,9 @@
-const path = require('path');
-const store = require('./store');
-const { ipcMain } = require('electron');
-const { updatePreview, createPreview } = require('./preview');
-const {
+import path from 'path';
+import { ipcMain, Menu, app } from 'electron';
+import Store from 'electron-store';
+import store from './store.js';
+import { updatePreview, createPreview } from './preview.js';
+import {
     getRecentFiles,
     pickEpocProject,
     openEpocProject,
@@ -13,13 +14,11 @@ const {
     writeEpocData,
     readProjectData,
     copyFileToWorkdir,
-} = require('./file');
-const { Menu } = require('electron');
-const contextMenu = require('./contextMenu');
-const Store = require('electron-store');
-const electronStore = new Store();
+} from './file.js';
+import { getTemplateFromContext } from './contextMenu.js';
+import { tmpdir } from 'os';
 
-const { app } = require('electron');
+const electronStore = new Store();
 
 const copyData = {
     pages: null,
@@ -164,11 +163,12 @@ const setupIpcListener = function (targetWindow, setupMenu) {
     ipcMain.on(
         'importFile',
         ipcGuard(async (event, data) => {
+            console.log('data', data);
             const { filepath, targetDirectory } = data;
             sendToFrontend(
                 event.sender,
                 'fileImported',
-                await copyFileToWorkdir(store.state.projects[targetWindow.id].workdir, filepath, targetDirectory),
+                copyFileToWorkdir(store.state.projects[targetWindow.id].workdir, filepath, targetDirectory),
             );
         }),
     );
@@ -198,7 +198,7 @@ const setupIpcListener = function (targetWindow, setupMenu) {
                 const assets = detectAssets(copyData.pages);
                 for (const asset of assets) {
                     const assetPath = path.join(store.state.projects[copyData.sourceId].workdir, asset);
-                    await copyFileToWorkdir(store.state.projects[targetWindow.id].workdir, assetPath);
+                    copyFileToWorkdir(store.state.projects[targetWindow.id].workdir, assetPath);
                 }
             }
 
@@ -219,7 +219,7 @@ const setupIpcListener = function (targetWindow, setupMenu) {
     ipcMain.on(
         'contextMenu',
         ipcGuard(async (event, data) => {
-            const popupMenu = Menu.buildFromTemplate(contextMenu.getTemplateFromContext(sendToFrontend, data));
+            const popupMenu = Menu.buildFromTemplate(getTemplateFromContext(sendToFrontend, data));
             popupMenu.popup(targetWindow.webContents);
 
             popupMenu.on('menu-will-close', () => {
@@ -323,8 +323,4 @@ const detectAssets = function (data) {
     return assetPaths;
 };
 
-module.exports = {
-    setupIpcListener,
-    sendToFrontend,
-    updateSavedProject,
-};
+export { setupIpcListener, sendToFrontend, updateSavedProject };

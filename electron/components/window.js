@@ -1,22 +1,17 @@
-const { BrowserWindow, ipcMain, shell } = require('electron');
-const path = require('path');
-const { setupIpcListener, sendToFrontend } = require('./ipc');
-const store = require('./store');
-const { Menu, app } = require('electron');
-const {
-    pickEpocProject,
-    pickEpocToImport,
-    getRecentFiles,
-    saveEpocProject,
-    updateSavedProject,
-    saveAsEpocProject,
-    createPreview,
-    createGlobalPreview,
-} = require('./file');
-const { t } = require('./utils');
-
-const Store = require('electron-store');
+import { BrowserWindow, ipcMain, shell } from 'electron';
+import path from 'path';
+import { setupIpcListener, sendToFrontend, updateSavedProject } from './ipc.js';
+import store from './store.js';
+import { Menu, app } from 'electron';
+import { pickEpocProject, pickEpocToImport, getRecentFiles, saveEpocProject, saveAsEpocProject } from './file.js';
+import { createGlobalPreview, createPreview } from './preview.js';
+import { t } from './utils.js';
+import Store from 'electron-store';
 const electronStore = new Store();
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Create the app main window
@@ -34,7 +29,7 @@ const createMainWindow = function () {
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
-            preload: path.join(__dirname, '../preload.js'),
+            preload: path.join(path.join(__dirname, '../preload.js')),
             partition: `persist:${Math.random()}`,
         },
     });
@@ -326,11 +321,11 @@ const setupMenu = () => {
                                 `Version: ${appVersion}\n---\n\n${t('menu.help.mailBody')}\n\n`,
                             );
                         } else {
-                            const appInfo = require('../../dist/appInfo.json');
+                            const appInfo = await import('../../dist/appInfo.json', { assert: { type: 'json' } });
                             emailBody = encodeURIComponent(
-                                `Version: ${appInfo.version}\nBuild: ${appInfo.buildNumber}\n ---\n\n${t(
-                                    'menu.help.mailBody',
-                                )}\n\n`,
+                                `Version: ${appInfo.default.version}\nBuild: ${
+                                    appInfo.default.buildNumber
+                                }\n ---\n\n${t('menu.help.mailBody')}\n\n`,
                             );
                         }
 
@@ -372,9 +367,4 @@ const setupMenu = () => {
     });
 };
 
-module.exports = {
-    createMainWindow,
-    setupWindow,
-    createNewWindow,
-    setupMenu,
-};
+export { createMainWindow, setupWindow, createNewWindow, setupMenu };

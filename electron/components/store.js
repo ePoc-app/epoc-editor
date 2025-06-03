@@ -1,4 +1,4 @@
-const events = require('events');
+import { EventEmitter } from 'events';
 
 class BackendStore {
     constructor() {
@@ -6,7 +6,7 @@ class BackendStore {
             projects: {},
         };
 
-        this.em = new events.EventEmitter();
+        this.em = new EventEmitter();
     }
 
     updateState(key, value) {
@@ -14,5 +14,6 @@ class BackendStore {
         this.em.emit('stateUpdated');
     }
 }
+
 const store = new BackendStore();
-module.exports = store;
+export default store;

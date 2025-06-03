@@ -1,19 +1,32 @@
+import Store from 'electron-store';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { readFile } from 'fs/promises';
+import { readFileSync } from 'node:original-fs';
 
-const Store = require('electron-store');
-const path = require('path');
 const electronStore = new Store();
 const isDev = process.env.IS_DEV === 'true';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const translationsPath = isDev ? path.join(__dirname, '../..') : process.resourcesPath;
-const translations = require(`${translationsPath}/i18n/en/translation.json`);
+// const translationPath = path.join(translationsPath, 'i18n/en/translation.json');
+// const translationData = await readFile(translationPath, 'utf8');
+// const translations = JSON.parse(translationData);
+
+const translations = {
+    en: JSON.parse(readFileSync(path.join(translationsPath, 'i18n/en/translation.json'), 'utf8')),
+};
 
 /**
  * Get translation for a given key
  * @param {string} key - Translation key (e.g., 'menu.app.label')
  * @returns {string} - Translated string or key if not found
  */
-module.exports.t = function (key) {
+export function t(key) {
     const lang = electronStore.get('settings.locale') || 'en';
-    const translationFile = require(`${translationsPath}/i18n/${lang}/translation.json`);
+    const translationFile = translations[lang] || translations.en;
 
     // Split key by dots and traverse the translation object
     const keys = key.split('.');
@@ -36,25 +49,25 @@ module.exports.t = function (key) {
         }
     }
     return result;
-};
+}
 
 /**
  * Wait for all promise to have resolve
  * @param promises
  * @returns {Promise<Awaited<unknown>[]>}
  */
-module.exports.waitAll = function (promises) {
+export function waitAll(promises) {
     return Promise.all(promises);
-};
+}
 
 /**
  * Wait a certain amount of time (in milliseconds)
  * @param {number} ms
  * @returns {Promise<unknown>}
  */
-module.exports.wait = function (ms) {
+export function wait(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
-};
+}
 
 /**
  * Converts an event listener that fire once to a promise
@@ -62,10 +75,10 @@ module.exports.wait = function (ms) {
  * @param event Event name
  * @returns {Promise<unknown>}
  */
-module.exports.waitEvent = function (target, event) {
+export function waitEvent(target, event) {
     return new Promise((resolve) => {
         target.once(event, () => {
             resolve();
         });
     });
-};
+}

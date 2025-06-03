@@ -1,14 +1,14 @@
-const { dialog, BrowserWindow, shell } = require('electron');
-const path = require('path');
-const fs = require('fs');
-const os = require('os');
-const AdmZip = require('adm-zip');
-const glob = require('glob');
-const { wait } = require('./utils');
-const Store = require('electron-store');
-const electronStore = new Store();
-const store = require('./store');
+import { dialog, BrowserWindow, shell } from 'electron';
+import path from 'path';
+import fs from 'fs';
+import os from 'os';
+import AdmZip from 'adm-zip';
+import glob from 'glob';
+import { wait } from './utils.js';
+import Store from 'electron-store';
+import store from './store.js';
 
+const electronStore = new Store();
 const recentFiles = electronStore.get('recentFiles', []).filter((r) => {
     return fs.existsSync(r.filepath);
 });
@@ -296,6 +296,9 @@ const copyFileToWorkdir = async function (workdir, filepath, targetDirectory) {
     const assetsPath = path.join(workdir, pathEnd);
 
     if (!fs.existsSync(assetsPath)) fs.mkdirSync(assetsPath, { recursive: true });
+    console.log('assets path', assetsPath);
+    console.log('filepath', filepath);
+    console.log('base', path.basename(filepath).replace(/[^a-z0-9.]/gi, '_'));
 
     const copyPath = path.join(assetsPath, path.basename(filepath).replace(/[^a-z0-9.]/gi, '_'));
     if (!fs.existsSync(assetsPath)) fs.mkdirSync(assetsPath);
@@ -417,20 +420,27 @@ const getUnusedAssets = function (workdir) {
     return unusedAssets;
 };
 
-module.exports = {
+export {
     getRecentFiles,
     openFile,
     newEpocProject,
     pickEpocToImport,
+    importEpoc,
     pickEpocProject,
     openEpocProject,
     saveEpocProject,
     saveAsEpocProject,
+    zipFiles,
+    zipEpocProject,
     exportProject,
+    readProjectData,
     writeProjectData,
     writeEpocData,
-    readProjectData,
     copyFileToWorkdir,
+    createWorkDir,
     cleanAllWorkdir,
+    updateRecent,
     getAllAssets,
+    getUsedAssets,
+    getUnusedAssets,
 };

@@ -1,5 +1,5 @@
-const { BrowserWindow } = require('electron');
-const { t } = require('./utils');
+import { BrowserWindow } from 'electron';
+import { t } from './utils.js';
 
 const isDev = process.env.IS_DEV === 'true';
 
@@ -243,6 +243,4 @@ function getContentFromContext(onClick, data, context) {
     }
 }
 
-module.exports = {
-    getTemplateFromContext,
-};
+export { getTemplateFromContext };
