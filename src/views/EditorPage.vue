@@ -11,7 +11,7 @@ import { editorService, exitSelectNodeMode } from '@/src/shared/services';
 import { confirmDelete, graphPaste } from '@/src/shared/services/graph';
 import { saveState, setupUndo } from '../shared/services/undoRedo.service';
 import { setupContextMenu } from '../shared/services/contextMenu.service';
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import ModelMenu from '@/src/features/sideBar/components/ModelMenu.vue';
 import BadgeMenu from '@/src/features/sideBar/components/BadgeMenu.vue';
 import { useSettingsStore } from '@/src/shared/stores';
@@ -96,6 +96,16 @@ const settingsStore = useSettingsStore();
 if (!settingsStore.initialized) {
     settingsStore.init();
 }
+
+watch(
+    () => editorStore.formPanel.form,
+    (form) => {
+        if (form) {
+            sidebarStore.assetMenu = false;
+        }
+    },
+    { deep: true },
+);
 </script>
 
 <template>

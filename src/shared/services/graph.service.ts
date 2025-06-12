@@ -478,14 +478,8 @@ export function closeAllPanels() {
 export function closeFormPanel() {
     const editorStore = useEditorStore();
 
-    if (editorStore.selectNodeMode) return;
-
+    editorStore.closeFormPanel();
     if (editorStore.formPanel.form && editorStore.formPanel.form.type === 'badge') {
         deleteEmptyBadges();
     }
-
-    editorStore.formPanel.form = null;
-    editorStore.openedElementId = null;
-    editorStore.openedNodeId = null;
-    editorStore.openedBadgeId = null;
 }

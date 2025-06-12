@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
 import { ePocProject, Form, NodeElement, PageModel, SideAction, Condition } from '@/src/shared/interfaces';
 import { GraphNode, useVueFlow } from '@vue-flow/core';
 import { formsModel, questions, standardPages } from '@/src/shared/data';
@@ -151,7 +150,7 @@ export const useEditorStore = defineStore('editor', {
         openFormPanel(
             id: string,
             formType: string,
-            options?: { nodeId?: string; scrollPosY?: number; centerNode?: boolean }
+            options?: { nodeId?: string; scrollPosY?: number; centerNode?: boolean },
         ) {
             const { nodeId, scrollPosY, centerNode } = options ?? {};
 
@@ -177,6 +176,15 @@ export const useEditorStore = defineStore('editor', {
             const { x, y } = node.position;
 
             setTransform({ x: -x * zoom + 200, y: -y * zoom + 200, zoom });
+        },
+
+        closeFormPanel() {
+            if (this.selectNodeMode) return;
+
+            this.formPanel.form = null;
+            this.openedElementId = null;
+            this.openedNodeId = null;
+            this.openedBadgeId = null;
         },
 
         scrollFormPanel(posY: number) {
@@ -207,7 +215,7 @@ export const useEditorStore = defineStore('editor', {
 
         savePageModel(model: PageModel): boolean {
             const modelExist = this.pageModels.some(
-                (pageModel) => JSON.stringify(pageModel.actions) === JSON.stringify(model.actions)
+                (pageModel) => JSON.stringify(pageModel.actions) === JSON.stringify(model.actions),
             );
             if (modelExist) return false;
             this.pageModels.push(model);
