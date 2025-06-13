@@ -2,7 +2,7 @@
 import TopBar from '@/src/features/topBar/TopBar.vue';
 import ePocFlow from '@/src/features/ePocFlow/ePocFlow.vue';
 import SideBar from '@/src/features/sideBar/SideBar.vue';
-import ResizablePanel from '@/src/features/forms/ResizablePanel.vue';
+import FormPanelWrapper from '@/src/features/forms/FormPanelWrapper.vue';
 import ValidationModal from '../components/ValidationModal.vue';
 import ConditionModal from '@/src/features/badge/components/ConditionModal.vue';
 import IconModal from '@/src/features/badge/components/IconModal.vue';
@@ -123,7 +123,7 @@ watch(
         </div>
         <ePocFlow class="editor-content" @dragover="onCursorAllowed" />
         <Transition>
-            <ResizablePanel
+            <FormPanelWrapper
                 v-if="editorStore.formPanel.form && !editorStore.selectNodeMode"
                 class="formPanel"
                 @dragover="onCursorNotAllowed"
