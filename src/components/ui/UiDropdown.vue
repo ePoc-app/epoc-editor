@@ -8,14 +8,14 @@ import {
     DropdownMenuSeparator,
 } from 'reka-ui';
 import Button from '@/src/components/ui/UiButton.vue';
-import { ref } from 'vue';
+import { ref, type ComputedRef } from 'vue';
 
 export interface MenuItem {
     label: string;
     icon?: string;
     variant?: 'destructive';
     onClick: () => void;
-    disabled?: boolean;
+    disabled?: ComputedRef<boolean>;
     tooltip?: string;
 }
 
@@ -47,7 +47,7 @@ function getItemClasses(item: MenuItem) {
                         v-for="item of menu"
                         :key="item.label"
                         :class="getItemClasses(item)"
-                        :disabled="item.disabled"
+                        :disabled="item.disabled.value"
                         @click="item.onClick"
                     >
                         <i v-if="item.icon" :class="[item.icon]" style="margin-right: 0.25rem" />

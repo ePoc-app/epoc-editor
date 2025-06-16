@@ -58,7 +58,7 @@ export function getContentIdFromId(id: string): string {
 }
 
 export function getElementByContentId(contentId: string): Node | NodeElement {
-    const node = nodes.value.find((node) => node.data.contentId === contentId);
+    const node = nodes.value.find((node) => node.data.contentId === contentId || node.id === contentId);
 
     if (!node) {
         for (const node of nodes.value) {

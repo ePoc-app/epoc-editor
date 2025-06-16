@@ -2,6 +2,7 @@
 import { default as DropdownMenu, type MenuItem } from '@/src/components/ui/UiDropdown.vue';
 import { goToElement } from '@/src/shared/services';
 import { useI18n } from 'vue-i18n';
+import { computed } from 'vue';
 
 const { t } = useI18n();
 
@@ -20,12 +21,12 @@ const emit = defineEmits<{
 const items: MenuItem[][] = [
     [
         {
-            label: t('global.open'),
+            label: t('assets.goto'),
             icon: 'icon-arrow-up-right',
             onClick: () => {
                 goToElement(props.asset.linkedPages[0]);
             },
-            disabled: Boolean(!props.asset.linkedPages.length),
+            disabled: computed(() => Boolean(!props.asset.linkedPages.length)),
         },
     ],
     [
@@ -36,7 +37,7 @@ const items: MenuItem[][] = [
             onClick: () => {
                 emit('delete');
             },
-            disabled: Boolean(props.asset.linkedPages.length),
+            disabled: computed(() => Boolean(props.asset.linkedPages.length)),
             tooltip: `Cannot delete items that are currently in use (used by ${props.asset.linkedPages.length} elements)`,
         },
     ],
@@ -45,18 +46,15 @@ const items: MenuItem[][] = [
 
 <template>
     <div class="asset-item">
-        <img v-if="asset.type === 'image'" :src="`assets://assets/${asset.filename}`" />
-        <video v-else-if="asset.type === 'application'" :src="`assets://assets/${asset.filename}`" controls />
-        <audio
-            v-else-if="asset.type === 'audio'"
-            :src="`assets://assets/${asset.filename}`"
-            controls
-            class="file-preview audio-preview"
-        />
-        <div v-else-if="asset.type === 'text'" class="file-preview">
-            <i class="icon-fichier"></i>
+        <div class="asset-preview">
+            <img v-if="asset.type === 'image'" :src="`assets://assets/${asset.filename}`" />
+            <video v-else-if="asset.type === 'application'" :src="`assets://assets/${asset.filename}`" controls />
+            <audio v-else-if="asset.type === 'audio'" :src="`assets://assets/${asset.filename}`" controls />
+            <div v-else-if="asset.type === 'text'" class="file-preview">
+                <i class="icon-fichier"></i>
+            </div>
+            <p v-else>{{ asset.type }}</p>
         </div>
-        <p v-else>{{ asset.type }}</p>
         <div class="content">
             <a v-if="asset.linkedPages.length" class="item-link" @click="goToElement(asset.linkedPages[0])">
                 {{ asset.filename }}
@@ -102,17 +100,25 @@ const items: MenuItem[][] = [
         }
     }
 
-    .file-preview {
-        margin: auto;
+    .asset-preview {
+        flex: 1;
+        object-fit: contain;
+        overflow: hidden;
+        display: flex;
+        padding: 0.5rem;
 
+        * {
+            max-width: 100%;
+            margin: auto;
+            border-radius: 8px;
+        }
+    }
+
+    .file-preview {
         .icon-fichier {
             font-size: 5rem;
             margin: auto;
         }
-    }
-
-    .audio-preview {
-        padding: 0.5rem;
     }
 
     a {

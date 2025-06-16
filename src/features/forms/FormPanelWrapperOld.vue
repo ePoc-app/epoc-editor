@@ -16,7 +16,7 @@ function handleKeyDown(event: KeyboardEvent) {
 }
 
 function handleResizeStart() {
-    // Close question menu when resizing
+    // Close the question menu when resizing
     editorStore.questionMenu = false;
 }
 
@@ -33,36 +33,13 @@ function handleClose() {
     <ResizablePanel
         :initial-width="editorStore.formPanel.width"
         :title="editorStore.formPanel.form.name"
-        min-width="20rem"
-        @resize-start="handleResizeStart"
-        @resize-end="handleResizeEnd"
-        @close="handleClose"
+        :on-resize-start="handleResizeStart"
+        :on-resize-end="handleResizeEnd"
+        :on-close="handleClose"
         @keydown="handleKeyDown"
     >
-        <template #title>
-            <div class="title">
-                <div class="form-icon"><i :class="editorStore.formPanel.form.icon"></i></div>
-                <h1>{{ editorStore.formPanel.form.name }}</h1>
-            </div>
-        </template>
-
         <template #default>
             <FormPanel />
         </template>
     </ResizablePanel>
 </template>
-
-<style scoped lang="scss">
-.title {
-    display: flex;
-    flex-direction: row;
-    margin-top: 2.5rem;
-    margin-bottom: 2rem;
-    h1 {
-        margin: 0 0 0 1rem;
-    }
-    .form-icon {
-        transform: translate(0, 0.2rem);
-    }
-}
-</style>

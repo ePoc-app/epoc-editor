@@ -111,6 +111,6 @@ export const standardPages: ComputedRef<SideAction[]> = computed(() => [
         icon: 'icon-ouvrir',
         type: 'asset',
         label: 'Assets',
-        tooltip: 'Assets here',
+        tooltip: i18n.global.t('assets.tooltip'),
     },
 ]);
