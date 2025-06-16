@@ -61,6 +61,10 @@ function onBlur() {
 
 <style scoped lang="scss">
 .input-score {
+    display: inline-flex;
+    align-items: stretch;
+
+    overflow: hidden;
     background-color: var(--item-background);
     border: 1px solid var(--border);
     border-radius: 4px;
@@ -81,6 +85,10 @@ function onBlur() {
         color: var(--editor-grayblue);
         width: 4rem;
         text-align: center;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+
         &::-webkit-outer-spin-button {
             -webkit-appearance: none;
             margin: 0;
@@ -98,7 +106,6 @@ function onBlur() {
         outline: none;
         color: var(--editor-grayblue);
         cursor: pointer;
-        height: 100%;
 
         &:hover {
             transition: all 0.2s ease-in-out;
