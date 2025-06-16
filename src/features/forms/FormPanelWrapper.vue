@@ -3,8 +3,10 @@ import FormPanel from './FormPanel.vue';
 import ResizablePanel from '@/src/components/ResizablePanel.vue';
 import { useEditorStore } from '@/src/shared/stores';
 import { closeFormPanel } from '@/src/shared/services';
+import { useSideBarStore } from '../sideBar/stores/sideBarStore';
 
 const editorStore = useEditorStore();
+const sidebarStore = useSideBarStore();
 
 function handleKeyDown(event: KeyboardEvent) {
     const { key, metaKey, ctrlKey } = event;
@@ -17,7 +19,7 @@ function handleKeyDown(event: KeyboardEvent) {
 
 function handleResizeStart() {
     // Close question menu when resizing
-    editorStore.questionMenu = false;
+    sidebarStore.questionMenu = false;
 }
 
 function handleResizeEnd(width: number) {
