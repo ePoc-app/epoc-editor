@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
 import { ePocProject, Form, NodeElement, PageModel, SideAction, Condition } from '@/src/shared/interfaces';
 import { GraphNode, useVueFlow } from '@vue-flow/core';
 import { formsModel, questions, standardPages } from '@/src/shared/data';
@@ -8,13 +7,6 @@ import type { ComputedRef } from 'vue';
 const { nodes, findNode, getTransform, setTransform } = useVueFlow('main');
 
 type uid = string;
-
-const sideMenus = {
-    question: 'questionMenu',
-    model: 'modelMenu',
-    badge: 'badgeMenu',
-};
-type SideMenu = keyof typeof sideMenus;
 
 interface EditorState {
     // Landing page
@@ -33,7 +25,6 @@ interface EditorState {
     openedNodeId: uid | null;
     draggedElement: {
         type?: 'nodeElement' | 'sideAction';
-        //? SideAction as an array to manage the template the same way
         element?: NodeElement | SideAction[];
         source?: {
             parentId: string;
@@ -43,9 +34,6 @@ interface EditorState {
     openedBadgeId: string | null;
 
     // Panel/ Menu
-    questionMenu: boolean;
-    modelMenu: boolean;
-    badgeMenu: boolean;
     formPanel: {
         form: Form | null;
         width: number;
@@ -92,9 +80,6 @@ export const useEditorStore = defineStore('editor', {
         openedBadgeId: null,
 
         // Panel/ Menu
-        questionMenu: false,
-        modelMenu: false,
-        badgeMenu: false,
         formPanel: {
             form: null,
             width: 0,
@@ -134,10 +119,6 @@ export const useEditorStore = defineStore('editor', {
         openedFormType(): string | null {
             return this.formPanel.form?.type ?? null;
         },
-
-        sideMenuOpen(): boolean {
-            return this.modelMenu || this.badgeMenu;
-        },
     },
 
     actions: {
@@ -147,14 +128,9 @@ export const useEditorStore = defineStore('editor', {
             this.openedNodeId = null;
             this.formPanel.form = null;
             this.validationModal = false;
-            this.questionMenu = false;
-            this.modelMenu = false;
         },
 
         dismissModals() {
-            this.questionMenu = false;
-            this.modelMenu = false;
-            this.badgeMenu = false;
             this.hamburgerMenu = false;
         },
 
@@ -174,7 +150,7 @@ export const useEditorStore = defineStore('editor', {
         openFormPanel(
             id: string,
             formType: string,
-            options?: { nodeId?: string; scrollPosY?: number; centerNode?: boolean }
+            options?: { nodeId?: string; scrollPosY?: number; centerNode?: boolean },
         ) {
             const { nodeId, scrollPosY, centerNode } = options ?? {};
 
@@ -200,6 +176,15 @@ export const useEditorStore = defineStore('editor', {
             const { x, y } = node.position;
 
             setTransform({ x: -x * zoom + 200, y: -y * zoom + 200, zoom });
+        },
+
+        closeFormPanel() {
+            if (this.selectNodeMode) return;
+
+            this.formPanel.form = null;
+            this.openedElementId = null;
+            this.openedNodeId = null;
+            this.openedBadgeId = null;
         },
 
         scrollFormPanel(posY: number) {
@@ -230,7 +215,7 @@ export const useEditorStore = defineStore('editor', {
 
         savePageModel(model: PageModel): boolean {
             const modelExist = this.pageModels.some(
-                (pageModel) => JSON.stringify(pageModel.actions) === JSON.stringify(model.actions)
+                (pageModel) => JSON.stringify(pageModel.actions) === JSON.stringify(model.actions),
             );
             if (modelExist) return false;
             this.pageModels.push(model);
@@ -257,12 +242,6 @@ export const useEditorStore = defineStore('editor', {
         resetTempCondition(index: number) {
             this.tempConditions[index].verb = '';
             this.tempConditions[index].value = '';
-        },
-
-        toggleSideMenu(type: SideMenu) {
-            this.questionMenu = type === 'question' ? !this.questionMenu : false;
-            this.modelMenu = type === 'model' ? !this.modelMenu : false;
-            this.badgeMenu = type === 'badge' ? !this.badgeMenu : false;
         },
     },
 });

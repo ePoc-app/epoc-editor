@@ -8,6 +8,7 @@ const { wait } = require('./utils');
 const Store = require('electron-store');
 const electronStore = new Store();
 const store = require('./store');
+const mime = require('mime-types');
 
 const recentFiles = electronStore.get('recentFiles', []).filter((r) => {
     return fs.existsSync(r.filepath);
@@ -342,6 +343,8 @@ const getAllAssets = function (workdir) {
     const assetsDir = path.join(workdir, 'assets');
     const iconsPath = path.join(assetsDir, 'icons');
 
+    if (!fs.existsSync(assetsDir)) return [];
+
     const assetPaths = [];
 
     try {
@@ -377,6 +380,102 @@ const getAllAssets = function (workdir) {
         assetsName.push(filename);
     }
     return assetsName;
+};
+
+/**
+ * Get all the assets & their linkedPage
+ * @param {string} workdir
+ * @returns {Object[]}
+ */
+const getAssetsWithPages = function (workdir) {
+    const projectJSONPath = path.join(workdir, 'project.json');
+    if (!fs.existsSync(projectJSONPath)) return [];
+
+    const assetsName = getAllAssets(workdir);
+    const projectJSON = fs.readFileSync(projectJSONPath, 'utf8');
+
+    const project = JSON.parse(projectJSON);
+
+    const assets = assetsName.map((filename) => {
+        const linkedPages = [];
+
+        // Search through all nodes
+        project.nodes.forEach((node) => {
+            const nodeId = node.id;
+
+            // Check main node data
+            if (node.data) {
+                // Check formValues in node data
+                if (node.data.formValues) {
+                    searchInObject(node.data.formValues, nodeId, linkedPages, filename);
+                }
+
+                // Check elements array (for pages and activities)
+                if (node.data.elements && Array.isArray(node.data.elements)) {
+                    node.data.elements.forEach((element) => {
+                        if (element.formValues) {
+                            // Use element's contentId if available, otherwise use node id
+                            const elementId = element.contentId || nodeId;
+                            searchInObject(element.formValues, elementId, linkedPages, filename);
+                        }
+                    });
+                }
+            }
+        });
+
+        return {
+            filename,
+            type: getAssetType(filename),
+            linkedPages: [...new Set(linkedPages)], // Remove duplicates
+        };
+    });
+
+    return assets;
+};
+
+/**
+ * Recursively search for filename in an object
+ * @param {Object} obj - Object to search in
+ * @param {string} id - ID to add to linkedPages if found
+ * @param {string[]} linkedPages - Array to add IDs to
+ * @param {string} filename - Filename to search for
+ */
+function searchInObject(obj, id, linkedPages, filename) {
+    if (!obj || typeof obj !== 'object') return;
+
+    Object.entries(obj).forEach(([key, value]) => {
+        if (typeof value === 'string') {
+            if (value.includes(filename)) {
+                if (!linkedPages.includes(id)) {
+                    linkedPages.push(id);
+                }
+            }
+        } else if (Array.isArray(value)) {
+            value.forEach((item) => {
+                if (typeof item === 'string') {
+                    if (item.includes(filename)) {
+                        if (!linkedPages.includes(id)) {
+                            linkedPages.push(id);
+                        }
+                    }
+                } else if (typeof item === 'object' && item !== null) {
+                    searchInObject(item, id, linkedPages, filename);
+                }
+            });
+        } else if (typeof value === 'object' && value !== null) {
+            searchInObject(value, id, linkedPages, filename);
+        }
+    });
+}
+
+/**
+ * @param {string}
+ * @returns {string}
+ */
+const getAssetType = function (filename) {
+    const mimeType = mime.lookup(filename);
+
+    return mimeType.split('/')[0] ?? 'unknown';
 };
 
 const getUsedAssets = function (workdir) {
@@ -417,6 +516,30 @@ const getUnusedAssets = function (workdir) {
     return unusedAssets;
 };
 
+/**
+ * Delete an asset from the workdir
+ * @param {string} workdir - The workking directory
+ * @param {string} assetName - The name of the asset to delete
+ * @returns {boolean} - True if the asset was successfully deleted, false otherwise
+ */
+const removeAsset = function (workdir, assetName) {
+    const assetsDir = path.join(workdir, 'assets');
+    const assetPath = path.join(assetsDir, assetName);
+
+    if (!fs.existsSync(assetPath)) {
+        console.error(`Asset ${assetName} does not exist.`);
+        return false;
+    }
+
+    try {
+        fs.unlinkSync(assetPath);
+        return true;
+    } catch (e) {
+        console.error(`Error deleting asset ${assetName}`, e);
+        return false;
+    }
+};
+
 module.exports = {
     getRecentFiles,
     openFile,
@@ -433,4 +556,7 @@ module.exports = {
     copyFileToWorkdir,
     cleanAllWorkdir,
     getAllAssets,
+    getAssetsWithPages,
+    getAssetType,
+    removeAsset,
 };

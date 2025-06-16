@@ -85,7 +85,8 @@
         "chapter": "Chapitre",
         "objective": "Objectif",
         "name": "Nom",
-        "file": "Fichier"
+        "file": "Fichier",
+        "refresh": "Rafraîchir"
     },
     "validation": {
         "yes": "OUI, SUPPRIMER",
@@ -162,6 +163,11 @@
             },
             "scored": "{verb} {value} à"
         }
+    },
+    "assets": {
+        "tooltip": "Cliquer pour ouvrir le menu assets",
+        "goto": "Aller à l'élément",
+        "empty": "Aucun asset trouvé"
     },
     "inputs": {
         "manageConditions": "Configurer les conditions",

@@ -2,7 +2,7 @@
 import TopBar from '@/src/features/topBar/TopBar.vue';
 import ePocFlow from '@/src/features/ePocFlow/ePocFlow.vue';
 import SideBar from '@/src/features/sideBar/SideBar.vue';
-import ResizablePanel from '@/src/features/forms/ResizablePanel.vue';
+import FormPanelWrapper from '@/src/features/forms/FormPanelWrapper.vue';
 import ValidationModal from '../components/ValidationModal.vue';
 import ConditionModal from '@/src/features/badge/components/ConditionModal.vue';
 import IconModal from '@/src/features/badge/components/IconModal.vue';
@@ -11,13 +11,15 @@ import { editorService, exitSelectNodeMode } from '@/src/shared/services';
 import { confirmDelete, graphPaste } from '@/src/shared/services/graph';
 import { saveState, setupUndo } from '../shared/services/undoRedo.service';
 import { setupContextMenu } from '../shared/services/contextMenu.service';
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import ModelMenu from '@/src/features/sideBar/components/ModelMenu.vue';
 import BadgeMenu from '@/src/features/sideBar/components/BadgeMenu.vue';
-import { onMounted } from 'vue';
 import { useSettingsStore } from '@/src/shared/stores';
+import { useSideBarStore } from '../features/sideBar/stores/sideBarStore';
+import AssetMenu from '../features/sideBar/components/asset/AssetMenu.vue';
 
 const editorStore = useEditorStore();
+const sidebarStore = useSideBarStore();
 
 editorService.setup();
 
@@ -87,13 +89,23 @@ function onRemoveCursor() {
 }
 
 const editorDisplay = computed(() => (editorStore.selectNodeMode ? 'editor-flex' : 'editor-grid'));
-const sideMenuOpen = computed(() => (editorStore.sideMenuOpen ? 'side-menu-open' : ''));
+const sideMenuOpen = computed(() => (sidebarStore.sideMenuOpen ? 'side-menu-open' : ''));
 
 //? For some reason, this code doesn't work in App.vue
 const settingsStore = useSettingsStore();
 if (!settingsStore.initialized) {
     settingsStore.init();
 }
+
+watch(
+    () => editorStore.formPanel.form,
+    (form) => {
+        if (form) {
+            sidebarStore.assetMenu = false;
+        }
+    },
+    { deep: true },
+);
 </script>
 
 <template>
@@ -111,7 +123,7 @@ if (!settingsStore.initialized) {
         </div>
         <ePocFlow class="editor-content" @dragover="onCursorAllowed" />
         <Transition>
-            <ResizablePanel
+            <FormPanelWrapper
                 v-if="editorStore.formPanel.form && !editorStore.selectNodeMode"
                 class="formPanel"
                 @dragover="onCursorNotAllowed"
@@ -121,8 +133,9 @@ if (!settingsStore.initialized) {
         <ConditionModal v-if="editorStore.conditionModal && !editorStore.selectNodeMode" />
         <IconModal v-if="editorStore.iconModal" />
 
-        <ModelMenu v-if="!editorStore.selectNodeMode" v-model:open="editorStore.modelMenu" />
-        <BadgeMenu v-if="!editorStore.selectNodeMode" v-model:open="editorStore.badgeMenu" />
+        <ModelMenu v-if="!editorStore.selectNodeMode" v-model:open="sidebarStore.modelMenu" />
+        <BadgeMenu v-if="!editorStore.selectNodeMode" v-model:open="sidebarStore.badgeMenu" />
+        <AssetMenu v-if="!editorStore.selectNodeMode" v-model:open="sidebarStore.assetMenu" />
     </div>
 </template>
 

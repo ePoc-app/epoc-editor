@@ -2,12 +2,14 @@
 import PageTemplate from './PageTemplate.vue';
 import { useEditorStore } from '@/src/shared/stores';
 import SideMenu from '@/src/components/SideMenu.vue';
+import { useSideBarStore } from '../stores/sideBarStore';
 
 const editorStore = useEditorStore();
+const sidebarStore = useSideBarStore();
 </script>
 
 <template>
-    <SideMenu :title="$t('models.title')" @close-menu="editorStore.modelMenu = false">
+    <SideMenu :title="$t('models.title')" @close-menu="sidebarStore.modelMenu = false">
         <div v-if="editorStore.pageModels.length > 0" class="models">
             <PageTemplate
                 v-for="(model, index) in editorStore.pageModels"

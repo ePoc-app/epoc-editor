@@ -3,13 +3,13 @@ import SideMenu from '@/src/components/SideMenu.vue';
 import { computed, ComputedRef } from 'vue';
 import { Badge } from '@/src/shared/interfaces';
 import { useVueFlow } from '@vue-flow/core';
-import { useEditorStore } from '@/src/shared/stores';
 import BadgeItem from '@/src/features/badge/components/BadgeItem.vue';
 import { addNewBadge, isBadgeValid, openBadge } from '@/src/shared/services';
+import { useSideBarStore } from '../stores/sideBarStore';
 
 const { findNode } = useVueFlow('main');
 
-const editorStore = useEditorStore();
+const sidebarStore = useSideBarStore();
 
 const epocNode = findNode('1');
 const rules = epocNode.data.formValues.badges;
@@ -32,7 +32,7 @@ const badges: ComputedRef<Badge[]> = computed(() => {
 </script>
 
 <template>
-    <SideMenu title="Badges" @close-menu="editorStore.badgeMenu = false">
+    <SideMenu title="Badges" @close-menu="sidebarStore.badgeMenu = false">
         <div class="badges">
             <button class="add-badge" @click="addNewBadge">
                 <i class="icon-plus-circle"></i>

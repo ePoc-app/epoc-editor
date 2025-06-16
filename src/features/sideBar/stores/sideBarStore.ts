@@ -3,7 +3,7 @@ import { SideAction } from '@/src/shared/interfaces';
 import { questions, standardPages } from '@/src/shared/data';
 import type { ComputedRef } from 'vue';
 
-export type MenuType = 'question' | 'model' | 'badge';
+export type MenuType = 'question' | 'model' | 'badge' | 'asset';
 
 interface MenuState {
     isOpen: boolean;
@@ -18,12 +18,20 @@ interface DraggedElement {
 interface SideBarState {
     activeMenu: MenuState;
     draggedElement: DraggedElement | null;
+    questionMenu: boolean;
+    modelMenu: boolean;
+    badgeMenu: boolean;
+    assetMenu: boolean;
 }
 
 export const useSideBarStore = defineStore('sideBar', {
     state: (): SideBarState => ({
         activeMenu: { isOpen: false, type: 'question' },
         draggedElement: null,
+        questionMenu: false,
+        modelMenu: false,
+        badgeMenu: false,
+        assetMenu: false,
     }),
 
     getters: {
@@ -42,6 +50,10 @@ export const useSideBarStore = defineStore('sideBar', {
         standardPages(): ComputedRef<SideAction[]> {
             return standardPages;
         },
+
+        sideMenuOpen(): boolean {
+            return this.modelMenu || this.badgeMenu;
+        },
     },
 
     actions: {
@@ -51,10 +63,12 @@ export const useSideBarStore = defineStore('sideBar', {
             } else {
                 this.activeMenu = { isOpen: true, type };
             }
-        },
 
-        closeMenu() {
-            this.activeMenu.isOpen = false;
+            // Update menu states
+            this.questionMenu = type === 'question' ? !this.questionMenu : false;
+            this.modelMenu = type === 'model' ? !this.modelMenu : false;
+            this.badgeMenu = type === 'badge' ? !this.badgeMenu : false;
+            this.assetMenu = type === 'asset' ? !this.assetMenu : false;
         },
 
         setDraggedElement(element: SideAction[]) {
@@ -63,6 +77,13 @@ export const useSideBarStore = defineStore('sideBar', {
 
         clearDraggedElement() {
             this.draggedElement = null;
+        },
+
+        dismissModals() {
+            this.questionMenu = false;
+            this.modelMenu = false;
+            this.badgeMenu = false;
+            this.assetMenu = false;
         },
     },
 });

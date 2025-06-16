@@ -107,4 +107,10 @@ export const standardPages: ComputedRef<SideAction[]> = computed(() => [
         label: i18n.global.t('sidebar.pages.badge'),
         tooltip: i18n.global.t('sidebar.pages.badgeTooltip'),
     },
+    {
+        icon: 'icon-ouvrir',
+        type: 'asset',
+        label: 'Assets',
+        tooltip: i18n.global.t('assets.tooltip'),
+    },
 ]);

@@ -85,7 +85,8 @@
         "chapter": "Chapter",
         "objective": "Objective",
         "name": "Name",
-        "file": "File"
+        "file": "File",
+        "refresh": "Refresh"
     },
     "validation": {
         "yes": "YES, DELETE",
@@ -162,6 +163,11 @@
             },
             "scored": "{verb} {value} on"
         }
+    },
+    "assets": {
+        "tooltip": "Click to open the assets menu",
+        "goto": "Go to the element",
+        "empty": "No asset found"
     },
     "inputs": {
         "manageConditions": "Configure conditions",
