@@ -199,7 +199,7 @@ const saveAsEpocProject = async function (project) {
 
     updateRecent(project);
 
-    return zipEpocProject(project.workdir, files);
+    return await zipEpocProject(project.workdir, files);
 };
 
 /**

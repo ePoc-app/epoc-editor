@@ -50,6 +50,7 @@ const setup = function () {
     });
 
     api.receive('epocProjectSaving', () => {
+        if (editorStore.saving) return;
         editorStore.saving = true;
         waitingToast('💾 Sauvegarde en cours...');
     });
@@ -61,8 +62,8 @@ const setup = function () {
 
     api.receive('epocProjectSaved', (data: string) => {
         waitingToastDismiss();
-        toaster.success('Projet sauvegardé 💪');
         editorStore.saving = false;
+        toaster.success('💪 Projet sauvegardé ');
         const currentProject = JSON.parse(data) as ePocProject;
         if (!currentProject || !currentProject.filepath) return;
         editorStore.currentProject = currentProject;
@@ -199,6 +200,7 @@ function openEpocProject(project: ePocProject): void {
 
 function saveEpocProject(): void {
     editorStore.saving = true;
+    waitingToast('💾 Sauvegarde en cours...');
     const data = graphService.getProjectJSON();
     api.send('saveEpocProject', data);
 }
@@ -232,7 +234,7 @@ function runPreviewAtPage(): void {
             } else {
                 error = true;
                 waitingToastDismiss();
-                toaster.warning('🚨Contenu orphelin non visualisable', { duration: 3000 });
+                toaster.warning('🚨 Contenu orphelin non visualisable', { duration: 3000 });
             }
         }
     }
