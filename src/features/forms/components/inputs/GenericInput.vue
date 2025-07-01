@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import VideoInput from './VideoInput.vue';
 import TextInput from './TextInput.vue';
 import TextAreaInput from './TextAreaInput.vue';
 import FileInput from './FileInput.vue';
@@ -125,6 +126,17 @@ function handleCollapse() {
             />
             <FileInput
                 v-if="input.type === 'file'"
+                :id="inputId"
+                :label="input.label"
+                :accept="input.accept"
+                :input-value="inputValue as string"
+                :placeholder="input.placeholder"
+                :target-directory="input.targetDirectory"
+                @input="emit('input', $event)"
+                @save-given-state="emit('saveGivenState', $event)"
+            />
+            <VideoInput
+                v-if="input.type === 'video'"
                 :id="inputId"
                 :label="input.label"
                 :accept="input.accept"

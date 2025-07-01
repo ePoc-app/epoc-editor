@@ -36,7 +36,7 @@ export const videoForm: ComputedRef<Form> = computed(() => {
                 inputs: [
                     {
                         id: 'source',
-                        type: 'file',
+                        type: 'video',
                         label: i18n.global.t('forms.content.video.label'),
                         placeholder: i18n.global.t('forms.content.video.placeholder'),
                         value: '',
