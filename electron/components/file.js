@@ -191,15 +191,22 @@ const saveEpocProject = async function (project) {
  * @returns {string}
  */
 const saveAsEpocProject = async function (project) {
-    const files = dialog.showSaveDialogSync(BrowserWindow.getFocusedWindow(), {
+    let filePath = dialog.showSaveDialogSync(BrowserWindow.getFocusedWindow(), {
         filters: [{ name: 'ePoc', extensions: ['epocproject'] }],
+        defaultPath: project.name || 'Untitled.epocproject',
     });
 
-    if (!files) return null;
+    if (!filePath) return null;
 
+    // Ensure the file has the correct extension
+    if (path.extname(filePath).toLowerCase() !== '.epocproject') {
+        filePath += '.epocproject';
+    }
+
+    project.filepath = filePath;
     updateRecent(project);
 
-    return await zipEpocProject(project.workdir, files);
+    return await zipEpocProject(project.workdir, filePath);
 };
 
 /**
