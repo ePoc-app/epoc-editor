@@ -3,6 +3,8 @@ import { createI18n } from 'vue-i18n';
 import fr from './fr/translation.json';
 // @ts-expect-error // json files not resolved
 import en from './en/translation.json';
+// @ts-expect-error // json files not resolved
+import it from './it/translation.json';
 
 export const i18n = createI18n({
     locale: 'en',
@@ -10,5 +12,6 @@ export const i18n = createI18n({
     messages: {
         fr,
         en,
+        it,
     },
 });

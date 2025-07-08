@@ -1,0 +1,398 @@
+{
+  "menu": {
+    "app": {
+      "label": "App",
+      "about": "Informazioni",
+      "quit": "Esci",
+      "lang": "Lingua"
+    },
+    "file": {
+      "label": "File",
+      "new": "Nuovo",
+      "newWindow": "Nuova finestra",
+      "open": "Apri",
+      "openInNewWindow": "Apri in una nuova finestra",
+      "latest": "Progetti recenti",
+      "import": "Importa File .epoc",
+      "save": "Salva",
+      "saveAs": "Salva come..."
+    },
+    "edit": {
+      "label": "Modifica",
+      "undo": "Annulla",
+      "redo": "Rifai",
+      "cut": "Taglia",
+      "copy": "Copia",
+      "paste": "Incolla",
+      "selectAll": "Seleziona tutto"
+    },
+    "preview": {
+      "label": "Anteprima",
+      "start": "Avvia anteprima",
+      "global": "Avvia anteprima globale"
+    },
+    "help": {
+      "label": "Aiuto",
+      "documentation": "Documentazione",
+      "reportIssue": "Segnala un problema",
+      "mailSubject": "Aiuto per l'editor",
+      "mailBody": "Descrivi il tuo problema qui sotto:"
+    },
+    "devTools": "Strumenti per sviluppatori",
+    "reload": "Ricarica"
+  },
+  "context": {
+    "add": "Aggiungi",
+    "pasteHere": "Incolla qui",
+    "insertAfter": "Inserisci dopo",
+    "insertBefore": "Inserisci prima",
+    "delete": "Elimina",
+    "duplicate": "Duplicato",
+    "swapNext": "Scambia con il prossimo",
+    "swapPrevious": "Scambia con precedente",
+    "insertEnd": "Inserisci alla fine",
+    "insertStart": "Inserisci all'inizio",
+    "copyChapter": "Copia capitolo",
+    "addChapter": "Aggiungi nuovo capitolo",
+    "addText": "Aggiungi pagina di testo",
+    "addVideo": "Aggiungi pagina video",
+    "addAudio": "Aggiungi pagina audio",
+    "addChoice": "Aggiungi valutazione a scelta multipla",
+    "addDragAndDrop": "Aggiungi valutazione tramite trascinamento della selezione",
+    "addReorder": "Aggiungi valutazione di riordino",
+    "addSwipe": "Aggiungi valutazione tramite scorrimento",
+    "addDropdown": "Aggiungi valutazione a discesa",
+    "addCustom": "Aggiungi valutazione personalizzata"
+  },
+  "global": {
+    "open": "Apri",
+    "cancel": "Annulla",
+    "accept": "Accetta",
+    "element": "Elemento",
+    "pleaseSelect": "Si prega di selezionare",
+    "and": "e",
+    "condition": "Condizione",
+    "save": "Salva",
+    "true": "Vero",
+    "false": "Falso",
+    "right": "destra",
+    "left": "sinistra",
+    "add": "Aggiungi",
+    "validate": "Conferma",
+    "delete": "Elimina",
+    "conditions": "Condizioni",
+    "label": "Etichette",
+    "chapter": "Capitolo",
+    "objective": "Obbiettivo",
+    "name": "Nome",
+    "file": "File",
+    "refresh": "Rinfrescare"
+  },
+  "validation": {
+    "yes": "SÌ, ELIMINA",
+    "no": "NO, NON ELIMINARE",
+    "confirm": "Sei sicuro di voler eliminare questo elemento??"
+  },
+  "landing": {
+    "published": "Questo ePoc è una versione pubblicata, è necessario importarlo prima di modificarlo qui",
+    "loadingPath": "Caricamento {path}",
+    "loadingEpoc": "Caricamento ePoc",
+    "open": "Apri progetto esistente",
+    "create": "Crea nuovo progetto",
+    "recents": "File recenti"
+  },
+  "editor": {
+    "select": "Fare clic sull'elemento di contenuto interessato dalla condizione per selezionarlo"
+  },
+  "badge": {
+    "supported": "File suportato: SVG",
+    "select": "Seleziona un file",
+    "conditions": "Condizioni per guadagnare il badge",
+    "add": "Aggiungi una condizione",
+    "selectIcon": "Seleziona un'icona",
+    "defaultIcons": "Icone predefinite",
+    "customIcons": "Icone personalizzate",
+    "phrase": {
+      "type": {
+        "video": "il video",
+        "chapter": "il capitolo",
+        "page": "la pagina",
+        "html": "il testo",
+        "audio": "l'audio",
+        "activity": "la valutazione",
+        "question": "la domanda"
+      },
+      "verb": {
+        "started": {
+          "true": "Iniziato",
+          "false": "Non iniziato"
+        },
+        "completed": {
+          "true": "Completato",
+          "false": "Non completato"
+        },
+        "viewed": {
+          "true": "Visualizzato",
+          "false": "Non visualizzato"
+        },
+        "read": {
+          "true": "Letto",
+          "false": "Non letto"
+        },
+        "played": {
+          "true": "Giocato",
+          "false": "Non giocato"
+        },
+        "watched": {
+          "true": "Guardato",
+          "false": "Non guardato"
+        },
+        "listened": {
+          "true": "Ho ascoltato",
+          "false": "Non ho ascoltato"
+        },
+        "attempted": {
+          "true": "Provato",
+          "false": "Non provato"
+        },
+        "passed": {
+          "true": "Passato",
+          "false": "Non passato"
+        },
+        "scored": "Avere segnato almeno"
+      },
+      "scored": "{verb} {value} su"
+    }
+  },
+  "inputs": {
+    "manageConditions": "Configura condizioni",
+    "updateIcon": "Aggiorna icona",
+    "leftChoice": "Scelta sinistra",
+    "rightChoice": "Scelta destra",
+    "accordion": "Espandi/Comprimi",
+    "accordionDescription": "Espandi/Comprimi con titolo e contenuto"
+  },
+  "toast": {
+    "modelSaved": "Modello salvato 👌",
+    "modelExists": "Il modello esiste già🤔"
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "spellcheck": "Abilita il controllo ortografico",
+    "lang": "Lingua"
+  },
+  "models": {
+    "title": "Modelli di pagina",
+    "empty": "Non è stato creato alcun modello di pagina",
+    "dragdrop": "Trascina/rilascia per aggiungere un modello",
+    "model": "Modello"
+  },
+  "header": {
+    "undo": "Annulla",
+    "redo": "Rifai",
+    "preview": "Anteprima",
+    "publish": "Pubblicare",
+    "adjust": "Aggiusta",
+    "never": "mai",
+    "lastSave": "Ultimo salvataggio:",
+    "new": "Nuovo ePoc"
+  },
+  "forms": {
+    "type": "Scrivi qui...",
+    "badge": {
+      "text": "Impostazioni del badge",
+      "updateIcon": "Aggiorna icona",
+      "obtention": "Condizioni per ottenere il badge",
+      "presentation": "Presentazione del badge",
+      "presentationPlaceholder": "Inserisci la presentazione del badge",
+      "icon": "Icona del badge"
+    },
+    "content": {
+      "text": "Contenuto",
+      "summary": "Sommario",
+      "video": {
+        "label": "Video",
+        "placeholder": "Aggiungi un video",
+        "hint": "Formato raccomandato: {format}"
+      },
+      "audio": {
+        "label": "Traccia audio",
+        "placeholder": "Aggiungi una traccia audio",
+        "hint": "Formato raccomandato: MP3"
+      },
+      "subtitle": {
+        "label": "Nome della lingua",
+        "code": "Codice della lingua",
+        "placeholder": "Aggiungi sottotitoli",
+        "hint": "Estensioni accettate: {extensions}"
+      },
+      "transcription": {
+        "label": "Trascrizione",
+        "placeholder": "Aggiungi una trascrizione",
+        "hint": "Estensioni accettate: {extensions} <br>Per gli utenti che non desiderano o non possono guardare il video"
+      },
+      "thumbnail": {
+        "label": "Miniatura",
+        "placeholder": "Aggiungi una miniatura",
+        "hint": "Formato consigliato: uguale al video"
+      }
+    },
+    "buttons": {
+      "addBadge": "Aggiungi badge",
+      "saveModel": "Salva modello",
+      "duplicateEvaluation": "Valutazione duplicata",
+      "duplicatePage": "Pagina duplicata",
+      "duplicateElement": "Elemento duplicato",
+      "backToPage": "Torna alla pagina",
+      "backToEpoc": "Torna a ePoc"
+    },
+    "node": {
+      "conditionPlaceholder": "Inserisci condizione {condition}...",
+      "choice": "Scelta",
+      "course": "Corso {course}",
+      "conditional": "Contenuto condizionale",
+      "title": "Titolo",
+      "subtitle": "Sottotitolo",
+      "duration": "Durata (in minuti)",
+      "objectives": "Obiettivi di apprendimento",
+      "about": "Informazioni su ePoc",
+      "cover": {
+        "title": "Immagine di copertina",
+        "placeholder": "Aggiungi un'immagine di copertina",
+        "hint": "Formato consigliato: quadrato (180x180)<br> Immagine visibile nell'elenco ePoc"
+      },
+      "teaser": {
+        "title": "Video teaser",
+        "placeholder": "Aggiungi un teaser",
+        "hint": "Formato consigliato: 16:9<br> Video visibile sulla pagina di presentazione di ePoc"
+      },
+      "thumbnail": {
+        "title": "Miniatura video",
+        "hint": "Formato consigliato: uguale al video <br> Immagine visibile nella pagina di presentazione di ePoc"
+      },
+      "presentation": "Presentazione",
+      "edition": "Edizione",
+      "author": {
+        "title": "Autore | Autori",
+        "placeholder": "Mario Rossi",
+        "image": {
+          "title": "Immagine dell'autore",
+          "placeholder": "Aggiungi un'immagine",
+          "hint": "Formato consigliato: quadrato (100x100)<br> Immagine visibile nella pagina di presentazione di ePoc"
+        },
+        "position": {
+          "title": "Posizione",
+          "placeholder": "Ricercatore presso Inria",
+          "hint": "Professione, posizione, affiliazione..."
+        },
+        "biography": "Breve biografia dell'autore"
+      },
+      "certificateBadge": "Numero di badge richiesti per la certificazione",
+      "certificateScore": "Punteggio richiesto per la certificazione",
+      "certificateScoreHint": "Non considerato se il numero di badge richiesti per la certificazione è maggiore di 0",
+      "chapterLabel": "Etichetta del capitolo",
+      "chapterDuration": "Durata del capitolo (in minuti)",
+      "plugin": {
+        "title": "Plugin | Plugins",
+        "script": "File script",
+        "scriptPlaceholder": "Aggiungi un file script",
+        "template": "Modello HTML del plugin",
+        "templatePlaceholder": "Aggiungi modello HTML"
+      },
+      "licence": {
+        "title": "Licenza",
+        "hint": "Nome della tua licenza di contenuto ePoc",
+        "url": "URL",
+        "urlPlaceholder": "https://creativecommons.org/licenses/by/4.0/deed",
+        "urlHint": "Testo completo della licenza scelta"
+      },
+      "page": {
+        "title": "Pagina",
+        "hidden": "Nascosto nell'indice",
+        "conditional": "Viene visualizzato solo in determinate condizioni",
+        "conditionalHint": "Opzione usata per la visualizzazione condizionata",
+        "components": "Componenti"
+      },
+      "activity": "Valutazione",
+      "certificateDisabled": "Disabilita certificato",
+      "certificateOptions": "Opzioni di certificato",
+      "languageSelection": "Seleziona una lingua"
+    }
+  },
+  "questions": {
+    "configuration": "Configurazione della valutazione",
+    "question": "Domanda",
+    "askQuestion": "Poni la domanda",
+    "instruction": "Istruzioni",
+    "instructionPlaceholder": "Istruzioni per rispondere alla domanda",
+    "explanation": "Spiegazione",
+    "typeExplanation": "Inserisci una spiegazione",
+    "addExplanation": "Aggiungi una spiegazione",
+    "response": "Risposta",
+    "responses": "Risposte",
+    "typeResponse": "Inserisci una risposta",
+    "correctResponse": "Risposta corretta",
+    "categories": "Categorie di risposta proposte",
+    "category": "Categoria",
+    "typeCategory": "Inserisci un titolo di categoria",
+    "proposedChoices": "Categorie di scelta proposte",
+    "proposedResponses": "Risposte proposte",
+    "cards": "Cards",
+    "card": "Card",
+    "typeProposition": "Inserisci una proposta",
+    "template": {
+      "title": "Modello",
+      "select": "Seleziona un modello",
+      "data": "Dati",
+      "key": "Chiave",
+      "value": "Valore"
+    },
+    "types": {
+      "qcm": "MCQ",
+      "dragDrop": "Trascina & rilascia",
+      "reorder": "Riordina",
+      "swipe": "Scorri",
+      "dropdownList": "Elenco a discesa",
+      "custom": "Domanda personalizzata"
+    },
+    "score": "Punteggio"
+  },
+  "sidebar": {
+    "content": {
+      "text": "Testo",
+      "video": "Video",
+      "audio": "Audio",
+      "textTooltip": "Trascina/rilascia per aggiungere testo",
+      "videoTooltip": "Trascina/rilascia per aggiungere video",
+      "audioTooltip": "Trascina/rilascia per aggiungere l'audio"
+    },
+    "pages": {
+      "question": "Domanda",
+      "conditions": "Condizioni",
+      "conditionsLegacy": "Condizioni (legacy)",
+      "model": "Modello",
+      "badge": "Badge",
+      "questionTooltip": "Fai clic per aggiungere una domanda",
+      "conditionsTooltip": "Trascina/rilascia per aggiungere una condizione",
+      "modelTooltip": "Fare clic per aprire il menu del modello",
+      "badgeTooltip": "Clicca per aprire il menu dei badge"
+    }
+  },
+  "verbs": {
+    "started": "Iniziato",
+    "completed": "Completato",
+    "viewed": "Visualizzato",
+    "read": "Letto",
+    "played": "Giocato",
+    "watched": "Guardato",
+    "listened": "Ascoltato",
+    "attempted": "Tentato",
+    "scored": "Segnato",
+    "passed": "Passato"
+  },
+  "assets": {
+    "empty": "Nessuna risorsa trovata",
+    "goto": "Vai all'elemento",
+    "tooltip": "Fare clic per aprire il menu delle risorse"
+  }
+}

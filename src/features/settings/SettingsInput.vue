@@ -22,12 +22,12 @@ const data = useVModel(props, 'modelValue', emit);
 
 const toggleData = computed({
     get: () => data.value as boolean,
-    set: (value: boolean) => data.value = value
+    set: (value: boolean) => (data.value = value),
 });
 
 const selectData = computed({
     get: () => data.value as string,
-    set: (value: string) => data.value = value
+    set: (value: string) => (data.value = value),
 });
 
 const id = 'id' + Math.random().toString(16).slice(2);
