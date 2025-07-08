@@ -218,7 +218,8 @@
             "video": {
                 "label": "Vidéo",
                 "placeholder": "Ajouter une vidéo",
-                "hint": "Format recommandé : {format}"
+                "hint": "Format recommandé : {format}",
+                "link": "Intégrer depuis un lien"
             },
             "audio": {
                 "label": "Piste audio",

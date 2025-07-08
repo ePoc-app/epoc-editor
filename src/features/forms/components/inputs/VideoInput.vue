@@ -3,6 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { graphService } from '@/src/shared/services';
 import { getCurrentState } from '@/src/shared/services/undoRedo.service';
 import UiCheckbox from '@/src/components/ui/UiCheckbox.vue';
+import TextInput from './TextInput.vue';
 
 const props = defineProps<{
     id: string;
@@ -54,12 +55,17 @@ function openFile() {
     fileInput.value.click();
 }
 
+const embed = ref(false);
 onMounted(() => {
     url.value = props.inputValue;
     if (url.value.includes('\\')) {
         //? Backwards support if files contains backslashes (not possible anymore)
         // TODO: Remove this in the future
         emit('input', url.value.replaceAll('\\', '/'));
+    }
+
+    if (url.value.startsWith('https')) {
+        embed.value = true;
     }
 });
 
@@ -72,13 +78,21 @@ watch(
 
 let savedState = '';
 
-const embed = ref(false);
+function handleTextInput(value: string) {
+    url.value = value;
+    emit('input', value);
+}
 </script>
 
 <template>
-    <UiCheckbox :id="id + 'embed'" v-model="embed" label="As embed" />
-    <div v-show="url" class="show-input">
-        <div class="input-file">
+    <UiCheckbox
+        :id="id + 'embed'"
+        v-model="embed"
+        :label="$t('forms.content.video.link')"
+        @update:model-value="() => (url = '')"
+    />
+    <div v-if="!embed" class="show-input">
+        <div v-show="url" class="input-file">
             <input ref="fileInput" class="file" type="file" :accept="accept" @change="changeImage" />
             <input class="input" type="text" readonly :value="url" @click="openFile" />
             <i class="icon-supprimer" @click="deleteFile"></i>
@@ -88,14 +102,26 @@ const embed = ref(false);
             <video v-if="filetype === 'video'" :src="'assets://' + url" controls></video>
             <audio v-if="filetype === 'audio'" :src="'assets://' + url" controls></audio>
         </div>
+        <div v-else>
+            <button :id="id" class="btn btn-form" @click="openFile">
+                <i class="icon-plus"></i>
+                {{ placeholder }}
+            </button>
+        </div>
     </div>
-    <div v-if="!url && !embed">
-        <button :id="id" class="btn btn-form" @click="openFile">
-            <i class="icon-plus"></i>
-            {{ placeholder }}
-        </button>
+    <div v-else class="show-input">
+        <TextInput
+            :id="id"
+            :input-value="url"
+            placeholder="https://youtube.com/qsd"
+            label="URL"
+            @input="handleTextInput"
+            @save-given-state="emit('saveGivenState', $event)"
+        />
+        <div class="preview">
+            <video v-if="url" :src="url" controls></video>
+        </div>
     </div>
-    <div v-if="embed"></div>
 </template>
 
 <style scoped lang="scss">
