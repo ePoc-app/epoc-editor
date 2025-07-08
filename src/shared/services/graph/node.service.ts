@@ -1,6 +1,6 @@
 import { EpocV1 } from '../../classes/epoc-v1';
 import { useEditorStore } from '../../stores';
-import { useVueFlow, Node, getConnectedEdges, Edge } from '@vue-flow/core';
+import { useVueFlow, Node, getConnectedEdges, Edge, applyChanges } from '@vue-flow/core';
 import { NodeElement, SideAction } from '../../interfaces';
 import { nextTick, toRaw, watch } from 'vue';
 
@@ -10,7 +10,7 @@ import { generateContentId, generateId, graphService } from '../graph.service';
 import { deleteElement, deleteSelection, createEdge } from '.';
 import { updateNextChapters } from '@/src/shared/services/graph/chapter.service';
 
-const { nodes, edges, addNodes, findNode, applyNodeChanges, removeEdges } = useVueFlow('main');
+const { nodes, edges, addNodes, findNode, applyNodeChanges, removeEdges, removeNodes } = useVueFlow('main');
 
 const editorStore = useEditorStore();
 
@@ -270,6 +270,7 @@ export function deleteNode(nodeId: string): void {
 
     if (nodeToDelete.type === 'chapter') updateNextChapters(nodeToDelete.id);
 
+    removeEdges(getConnectedEdges([nodeToDelete], edges.value));
     applyNodeChanges([{ id: nodeToDelete.id, type: 'remove' }]);
 }
 

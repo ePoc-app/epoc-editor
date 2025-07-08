@@ -30,7 +30,7 @@
         "@epoc/epoc-types": "^2.0.0-beta.21",
         "@meforma/vue-toaster": "^1.3.0",
         "@tinymce/tinymce-vue": "^6.1.0",
-        "@vue-flow/core": "^1.41.2",
+        "@vue-flow/core": "^1.45.0",
         "@vueuse/core": "^11.1.0",
         "adm-zip": "^0.5.10",
         "dotenv": "^16.3.1",
