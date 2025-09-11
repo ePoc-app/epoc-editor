@@ -1,54 +1,61 @@
 stages:
   - build
-  - buildAll
-  - sign
+  - release
+  - trigger_signing
 
+# Job 1: Build-only (runs on every commit to main)
 build:
   stage: build
-  script:
-    - pwd && node --version
-    - echo "NO_NOTARIZE=true" >> .env
-    - npm i
-    - npm run updatePreview
-    - npm run build -- -- --publish never
-  artifacts:
-    expire_in: 1 week
-    paths:
-      - dist_electron/*
-  only:
-    - main
   tags:
     - macos
-
-buildAll:
-  stage: build
+  before_script:
+    - chmod +x ./ci/setup_codesign.sh
+    - ./ci/setup_codesign.sh
   script:
-    - pwd && node --version
-    - echo "NO_NOTARIZE=true" >> .env
-    - npm i
+    # Install dependencies
+    - npm install
+    # Update preview and build (without publishing)
     - npm run updatePreview
-    - npm run build -- -- --x64 --mac --win nsis --linux AppImage --publish never
-    - ls -lah dist_electron/
+    - npm run build -- --publish never
+
   artifacts:
-    expire_in: never
     paths:
-      - dist_electron/*.yml
-      - dist_electron/*.AppImage
-      - dist_electron/*.dmg
-      - dist_electron/*.exe
-      - dist_electron/*.blockmap
+      - epoc-editor/dist/
+      - epoc-editor/dist_electron/
+    expire_in: 1 week
+
+# Job 2: Build and publish (runs only on tags)
+release:
+  stage: release
+  tags:
+    - macos
+  before_script:
+    - chmod +x ./ci/setup_codesign.sh
+    - ./ci/setup_codesign.sh
+  script:
+    # Install dependencies
+    - npm install
+
+    # Update preview and release
+    - npm run updatePreview
+    - npm run release
+
+  artifacts:
+    paths:
+      - epoc-editor/dist/
+      - epoc-editor/dist_electron/
+    expire_in: 1 week
   only:
     - tags
-  tags:
-    - macos
 
-sign:
-  stage: sign
+# Job 3: Trigger signing pipeline in another repository
+trigger_signing:
+  stage: trigger_signing
   script:
     - echo "Triggering signing pipeline..."
     - curl -X POST -F token=$SIGN_REPO_TRIGGER_TOKEN -F ref=main $SIGN_REPO_URL
   dependencies:
-    - buildAll
+    - release
   only:
     - tags
   tags:
