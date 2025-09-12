@@ -25,6 +25,8 @@ build:
       - epoc-editor/dist/
       - epoc-editor/dist_electron/
     expire_in: 1 week
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG == null'
 
 # Job 2: Build and publish (runs only on tags)
 release:
@@ -50,6 +52,8 @@ release:
     expire_in: 1 week
   only:
     - tags
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG'
 
 # Job 3: Trigger signing pipeline in another repository
 trigger_signing:
@@ -63,4 +67,6 @@ trigger_signing:
     - tags
   tags:
     - macos
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG'
 
