@@ -18,7 +18,7 @@ build:
     - env | grep -v '^_' > .env
     # Update preview and build (without publishing)
     - npm run updatePreview
-    - npm run build -- --publish never
+    - npm run build -- -- --publish never
   artifacts:
     paths:
       - epoc-editor/dist/
