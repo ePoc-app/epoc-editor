@@ -36,6 +36,8 @@ release:
     # Install dependencies
     - npm install
 
+    # Create env file
+    - env | grep -v '^_' > .env
     # Update preview and release
     - npm run updatePreview
     - npm run release
