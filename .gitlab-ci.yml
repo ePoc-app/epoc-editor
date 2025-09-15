@@ -13,6 +13,9 @@ build:
     - macos
   before_script:
     # Load nvm and unlock keychain
+    - whoami
+    - pwd
+    - echo $HOME
     - \. "$HOME/.nvm/nvm.sh"
     - security default-keychain -s "$KEYCHAIN_NAME"
     - security unlock-keychain -p "ci" "$KEYCHAIN_NAME"
