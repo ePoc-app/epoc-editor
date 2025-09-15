@@ -33,6 +33,8 @@ release:
   tags:
     - macos
   before_script:
+    - id -u && pwd && which node && which npm
+    - \. "$HOME/.nvm/nvm.sh"
     - chmod +x ./ci/setup_codesign.sh
     - ./ci/setup_codesign.sh
   script:
