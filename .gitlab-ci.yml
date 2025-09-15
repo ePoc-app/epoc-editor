@@ -3,6 +3,9 @@ stages:
   - release
   - trigger_signing
 
+variables:
+  KEYCHAIN_NAME: "/Users/ci/Library/Keychains/login.keychain"
+
 # Job 1: Build-only (runs on every commit to main)
 build:
   stage: build
@@ -11,7 +14,10 @@ build:
   before_script:
     # Load nvm and unlock keychain
     - \. "$HOME/.nvm/nvm.sh"
-    - security unlock-keychain -p "ci" "/Users/ci/Library/Keychains/login.keychain"
+    - security default-keychain -s "$KEYCHAIN_NAME"
+    - security unlock-keychain -p "ci" "$KEYCHAIN_NAME"
+    - security list-keychains -s "$KEYCHAIN_NAME"
+    - security list-keychains
   script:
     # Install dependencies
     - npm install
@@ -36,7 +42,10 @@ release:
   before_script:
     # Load nvm and unlock keychain
     - \. "$HOME/.nvm/nvm.sh"
-    - security unlock-keychain -p "ci" "/Users/ci/Library/Keychains/login.keychain"
+    - security default-keychain -s "$KEYCHAIN_NAME"
+    - security unlock-keychain -p "ci" "$KEYCHAIN_NAME"
+    - security list-keychains -s "$KEYCHAIN_NAME"
+    - security list-keychains
   script:
     # Install dependencies
     - npm install
