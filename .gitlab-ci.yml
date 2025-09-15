@@ -9,10 +9,9 @@ build:
   tags:
     - macos
   before_script:
-    - id -u && pwd && which node && which npm
+    # Load nvm and unlock keychain
     - \. "$HOME/.nvm/nvm.sh"
-    - chmod +x ./ci/setup_codesign.sh
-    - ./ci/setup_codesign.sh
+    - security unlock-keychain -p "ci" "login.keychain"
   script:
     # Install dependencies
     - npm install
@@ -35,10 +34,9 @@ release:
   tags:
     - macos
   before_script:
-    - id -u && pwd && which node && which npm
+    # Load nvm and unlock keychain
     - \. "$HOME/.nvm/nvm.sh"
-    - chmod +x ./ci/setup_codesign.sh
-    - ./ci/setup_codesign.sh
+    - security unlock-keychain -p "ci" "login.keychain"
   script:
     # Install dependencies
     - npm install
