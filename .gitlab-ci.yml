@@ -3,9 +3,6 @@ stages:
   - release
   - trigger_signing
 
-variables:
-  KEYCHAIN_NAME: "/Users/ci/Library/Keychains/login.keychain"
-
 # Job 1: Build-only (runs on every commit to main)
 build:
   stage: build
@@ -17,8 +14,8 @@ build:
     - pwd
     - echo $HOME
     - \. "$HOME/.nvm/nvm.sh"
-    - security unlock-keychain -p "ci" "$KEYCHAIN_NAME"
-    - security list-keychains -s "$KEYCHAIN_NAME"
+    - security unlock-keychain -p "ci" "/Users/ci/Library/Keychains/login.keychain"
+    - security list-keychains -s "/Users/ci/Library/Keychains/login.keychain"
     - security list-keychains
     - security find-identity -v
   script:
