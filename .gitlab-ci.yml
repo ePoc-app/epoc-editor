@@ -17,10 +17,10 @@ build:
     - pwd
     - echo $HOME
     - \. "$HOME/.nvm/nvm.sh"
-    - security default-keychain -s "$KEYCHAIN_NAME"
     - security unlock-keychain -p "ci" "$KEYCHAIN_NAME"
     - security list-keychains -s "$KEYCHAIN_NAME"
     - security list-keychains
+    - security find-identity -v
   script:
     # Install dependencies
     - npm install
