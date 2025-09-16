@@ -10,12 +10,9 @@ build:
     - macos
   before_script:
     # Load nvm and unlock keychain
-    - whoami
-    - pwd
-    - echo $HOME
     - \. "$HOME/.nvm/nvm.sh"
-    - security unlock-keychain -p "ci" "/Users/ci/Library/Keychains/login.keychain"
-    - security list-keychains -s "/Users/ci/Library/Keychains/login.keychain"
+    - security unlock-keychain -p "ci" "login.keychain"
+    - security list-keychains -s "login.keychain"
     - security list-keychains
     - security find-identity -v
   script:
