@@ -21,7 +21,6 @@ module.exports = {
     },
     mac: {
         category: 'public.app-category.utilities',
-        identity: process.env.APPLE_SIGNING_ID,
         hardenedRuntime: true,
         gatekeeperAssess: false,
         entitlements: './entitlements.plist',

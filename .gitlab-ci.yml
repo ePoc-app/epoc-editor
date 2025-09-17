@@ -9,12 +9,8 @@ build:
   tags:
     - macos
   before_script:
-    # Load nvm and unlock keychain
+    # Load nvm
     - \. "$HOME/.nvm/nvm.sh"
-    - security unlock-keychain -p "ci" "login.keychain"
-    - security list-keychains -s "login.keychain"
-    - security list-keychains
-    - security find-identity -v
   script:
     # Install dependencies
     - npm install
@@ -37,12 +33,8 @@ release:
   tags:
     - macos
   before_script:
-    # Load nvm and unlock keychain
+    # Load nvm
     - \. "$HOME/.nvm/nvm.sh"
-    - security default-keychain -s "$KEYCHAIN_NAME"
-    - security unlock-keychain -p "ci" "$KEYCHAIN_NAME"
-    - security list-keychains -s "$KEYCHAIN_NAME"
-    - security list-keychains
   script:
     # Install dependencies
     - npm install
