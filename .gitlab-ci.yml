@@ -27,7 +27,7 @@ build:
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG == null'
 
-# Job 2: Build and publish (runs only on tags)
+# Job 2: Build and publish (runs only manually)
 release:
   stage: release
   tags:
@@ -43,11 +43,6 @@ release:
     # Update preview and release
     - npm run updatePreview
     - npm run release
-  artifacts:
-    paths:
-      - dist/
-      - dist_electron/
-    expire_in: 1 week
   when: manual
 
 # Job 3: Trigger signing pipeline in another repository
@@ -56,8 +51,9 @@ trigger_signing:
   script:
     - echo "Triggering signing pipeline..."
     - curl -X POST -F token=$SIGN_REPO_TRIGGER_TOKEN -F ref=main $SIGN_REPO_URL
-  dependencies:
-    - release
   tags:
     - macos
-
+  needs: ["release"]
+  rules:
+    - if: '$CI_JOB_MANUAL == "true" && $CI_JOB_NAME == "release"'  # Only run if release was manually triggered
+      when: on_success
