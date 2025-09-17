@@ -44,6 +44,7 @@ release:
     - npm run updatePreview
     - npm run release
   when: manual
+  needs: []
 
 # Job 3: Trigger signing pipeline in another repository
 trigger_signing:
@@ -54,6 +55,3 @@ trigger_signing:
   tags:
     - macos
   needs: ["release"]
-  rules:
-    - if: '$CI_JOB_MANUAL == "true" && $CI_JOB_NAME == "release"'  # Only run if release was manually triggered
-      when: on_success
