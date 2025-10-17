@@ -1,6 +1,6 @@
 const path = require('path');
 const store = require('./store');
-const { ipcMain } = require('electron');
+const { ipcMain, shell } = require('electron');
 const { updatePreview, createPreview } = require('./preview');
 const {
     getRecentFiles,
@@ -287,6 +287,13 @@ const setupIpcListener = function (targetWindow, setupMenu) {
         ipcGuard(async (event, assetName) => {
             const success = removeAsset(store.state.projects[targetWindow.id].workdir, assetName);
             sendToFrontend(event.sender, 'assetRemoved', { success });
+        }),
+    );
+
+    ipcMain.on(
+        'openWorkingDir',
+        ipcGuard(async () => {
+            shell.openPath(store.state.projects[targetWindow.id].workdir);
         }),
     );
 };

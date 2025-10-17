@@ -2,8 +2,9 @@
 import Modal from '@/src/components/LayoutModal.vue';
 import SettingsInput from './SettingsInput.vue';
 import { ref, watch } from 'vue';
-import { useSettingsStore } from '@/src/shared/stores';
+import { useEditorStore, useSettingsStore } from '@/src/shared/stores';
 import { useI18n } from 'vue-i18n';
+import { editorService } from '@/src/shared/services';
 
 const { locale } = useI18n();
 
@@ -22,11 +23,13 @@ function open() {
     modal.value.open();
 }
 
+const editorStore = useEditorStore();
 watch(
     () => modal.value?.isOpen,
     (isOpen) => {
         // set values here to make sure the settings were fetched from the store
         if (isOpen) {
+            editorStore.closeFormPanel();
             spellcheck.value = settingsStore?.settings?.spellcheck;
             localeTmp.value = locale.value;
         }
@@ -56,6 +59,13 @@ defineExpose({
                     { label: 'Italiano', value: 'it' },
                 ]"
             />
+
+            <div class="settings-input">
+                <label for="working-dir">Open working dir</label>
+                <button id="working-dir" class="btn btn-form" @click="editorService.openWorkingDir">
+                    Open in file explorer
+                </button>
+            </div>
         </div>
 
         <template #footer>
@@ -69,7 +79,11 @@ defineExpose({
 .settings {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 1rem;
+}
+
+.btn-form {
+    margin: 0;
 }
 
 .btn-choice {

@@ -261,6 +261,10 @@ function setSettings(settings: Settings) {
     api.send('setSettings', settings);
 }
 
+function openWorkingDir() {
+    api.send('openWorkingDir');
+}
+
 export const editorService = {
     setup,
     newEpocProject,
@@ -272,4 +276,5 @@ export const editorService = {
     exportProject,
     fetchSettings,
     setSettings,
+    openWorkingDir,
 };

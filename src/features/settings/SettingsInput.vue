@@ -41,10 +41,14 @@ const id = 'id' + Math.random().toString(16).slice(2);
     </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .settings-input {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    label {
+        font-weight: 600;
+    }
 }
 </style>
