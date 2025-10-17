@@ -29,7 +29,16 @@
         "preview": {
             "label": "Preview",
             "start": "Start Preview",
-            "global": "Start Global Preview"
+            "global": "Start Global Preview",
+            "menu": {
+                "action": "Capture preview",
+                "success": "Export successful",
+                "detail": "Preview exported successfully!",
+                "savedTo": "File saved to",
+                "error": "Export failed",
+                "commit": "Commit hash",
+                "reset": "Reset data"
+            }
         },
         "help": {
             "label": "Help",
