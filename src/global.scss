@@ -506,52 +506,6 @@ g.selected {
     }
 }
 
-// TinyMCE Editor
-.tox-tinymce {
-    margin-bottom: 1.5rem;
-    background: var(--item-background);
-    border: 1px solid var(--border) !important;
-
-    &.focus {
-        border: 1px solid var(--editor-blue) !important;
-        box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);
-    }
-
-    iframe {
-        background: var(--item-background) !important;
-    }
-}
-
-.tox-editor-header {
-    border-bottom: none !important;
-    box-shadow: none !important;
-}
-
-.tox-sidebar-wrap {
-}
-
-.tox-statusbar {
-    border: none !important;
-    background: var(--item-background) !important;
-
-    &__branding {
-        display: none;
-    }
-
-    &__path {
-        display: none !important;
-    }
-}
-
-[id^='tiny-vue_'] {
-    height: 340px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    resize: none;
-    margin-bottom: 1.5rem;
-    padding: 4rem 1rem 1rem 1rem;
-}
-
 .badge-notification {
     position: absolute;
     top: 0;

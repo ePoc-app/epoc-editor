@@ -95,7 +95,8 @@
         "objective": "Objective",
         "name": "Name",
         "file": "File",
-        "refresh": "Refresh"
+        "refresh": "Refresh",
+        "type": "Type here..."
     },
     "validation": {
         "yes": "YES, DELETE",

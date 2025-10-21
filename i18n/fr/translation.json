@@ -95,7 +95,8 @@
         "objective": "Objectif",
         "name": "Nom",
         "file": "Fichier",
-        "refresh": "Rafraîchir"
+        "refresh": "Rafraîchir",
+        "type": "Tapez ici..."
     },
     "validation": {
         "yes": "OUI, SUPPRIMER",

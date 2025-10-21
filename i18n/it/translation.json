@@ -95,7 +95,8 @@
         "objective": "Obbiettivo",
         "name": "Nome",
         "file": "File",
-        "refresh": "Rinfrescare"
+        "refresh": "Rinfrescare",
+        "type": "Scrivi qui..."
     },
     "validation": {
         "yes": "SÌ, ELIMINA",

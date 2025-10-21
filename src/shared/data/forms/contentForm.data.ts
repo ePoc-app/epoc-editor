@@ -17,7 +17,7 @@ export const textForm: ComputedRef<Form> = computed(() => {
                         type: 'html',
                         label: '',
                         value: '',
-                        placeholder: i18n.global.t('type'),
+                        placeholder: i18n.global.t('global.type'),
                     },
                 ],
             },
