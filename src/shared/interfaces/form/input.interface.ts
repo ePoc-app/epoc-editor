@@ -30,4 +30,5 @@ export interface Input {
     collapsible?: boolean;
     collapsibleLabel?: string;
     hide?: string;
+    disabled?: boolean;
 }

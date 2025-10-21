@@ -162,6 +162,7 @@ function onSaveGivenState(state: string) {
         :field-index="fieldIndex"
         :input-value="getInputValue(input)"
         :hidden="input.hide ? getEpocNodeData()[input.hide] : false"
+        :disabled="input.disabled"
         @input="onInput($event, input.id)"
         @check="onCheck($event, input.id)"
         @repeat-input="onRepeatInput($event, input.id)"

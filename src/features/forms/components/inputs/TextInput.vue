@@ -7,6 +7,7 @@ const props = defineProps<{
     placeholder?: string;
     inputValue: string;
     insideCard?: boolean;
+    disabled?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -40,6 +41,7 @@ function onBlur() {
         type="text"
         :placeholder="placeholder"
         :value="inputValue"
+        :disabled="disabled"
         @input="emit('input', ($event.target as HTMLInputElement).value)"
         @focus="onFocus"
         @blur="onBlur"

@@ -301,6 +301,11 @@ hr {
         outline: 1px solid var(--editor-blue);
         box-shadow: 0 1px 8px 0 var(--editor-blue-shadow);
     }
+
+    &:disabled {
+        color: var(--text-secondary);
+        cursor: not-allowed;
+    }
 }
 
 .input-label {

@@ -26,6 +26,7 @@ const props = defineProps<{
     collapsible?: boolean;
     collapsibleLabel?: string;
     hidden?: boolean;
+    disabled?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -97,6 +98,7 @@ function handleCollapse() {
                 :placeholder="input.placeholder"
                 :input-value="inputValue as string"
                 :inside-card="insideCard"
+                :disabled="disabled"
                 @input="emit('input', $event)"
                 @save-given-state="emit('saveGivenState', $event)"
             />
