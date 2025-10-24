@@ -15,6 +15,8 @@ import {
     insertAtEnd,
     insertAtStart,
     insertBefore,
+    insertChapterBefore,
+    insertChapterAfter,
     swapChapterWithNext,
     swapChapterWithPrevious,
     swapNodeWithNext,
@@ -134,6 +136,20 @@ export function setupContextMenu() {
 
         const action = standardActions.value.find((a) => a.type === type);
         insertAtStart(id, action);
+    });
+
+    extendedApi.receive('insertChapterBefore', (data: string) => {
+        const parsedData: { id: string } = JSON.parse(data);
+        const { id } = parsedData;
+
+        insertChapterBefore(id);
+    });
+
+    extendedApi.receive('insertChapterAfter', (data: string) => {
+        const parsedData: { id: string } = JSON.parse(data);
+        const { id } = parsedData;
+        
+        insertChapterAfter(id);
     });
 
     extendedApi.receive('deleteSelection', (data: string) => {

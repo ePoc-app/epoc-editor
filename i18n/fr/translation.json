@@ -61,6 +61,8 @@
         "swapPrevious": "Échanger avec le précédent",
         "insertEnd": "Insérer à la fin",
         "insertStart": "Insérer au début",
+        "insertChapterBefore": "Insérer un nouveau chapitre avant",
+        "insertChapterAfter": "Insérer un nouveau chapitre après",
         "copyChapter": "Copier le chapitre",
         "addChapter": "Ajouter un nouveau chapitre",
         "addText": "Ajouter une page texte",

@@ -202,3 +202,53 @@ export function moveChapterContents(chapterId: string, offsetY: number) {
         nextNode = graphService.getNextNode(nextNode);
     }
 }
+
+/**
+ * Insert a new chapter before the chapter with the given id
+ * @param {string} chapterId
+ */
+export function insertChapterBefore(chapterId: string): void {
+    const chapter = findNode(chapterId);
+
+    const offsetY = 200;
+    const newYPos = chapter.position.y;
+    const newIndex = chapter.data.index;
+    
+    const nextChapters = [chapter, ...getNextChapters(chapterId)];
+    for (const nextChapter of nextChapters) {
+        nextChapter.position.y += offsetY;
+        nextChapter.data.index++;
+        moveChapterContents(nextChapter.id, offsetY);
+    }
+    
+    const newChapter = addChapter();
+    newChapter.position.y = newYPos;
+    newChapter.data.index = newIndex;
+    
+    addNodes(newChapter);
+}
+
+/**
+ * Insert a new chapter after the chapter with the given id
+ * @param {string} chapterId
+ */
+export function insertChapterAfter(chapterId: string): void {
+    const chapter = findNode(chapterId);
+    const nextChapters = getNextChapters(chapterId);
+    
+    const offsetY = 200;
+    const newYPos = chapter.position.y + offsetY;
+    const newIndex = chapter.data.index + 1;
+    
+    for (const nextChapter of nextChapters) {
+        nextChapter.position.y += offsetY;
+        nextChapter.data.index++;
+        moveChapterContents(nextChapter.id, offsetY);
+    }
+
+    const newChapter = addChapter();
+    newChapter.position.y = newYPos;
+    newChapter.data.index = newIndex; 
+    
+    addNodes(newChapter);
+}

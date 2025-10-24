@@ -93,6 +93,14 @@ function getTemplateFromContext(callback, data) {
                 submenu: getPagesFromContext(onClick, { id: data.id }, 'insertAtStart', data.context),
             },
             {
+                label: t('context.insertChapterBefore'),
+                click: () => onClick('insertChapterBefore', { id: data.id }),
+            },
+            {
+                label: t('context.insertChapterAfter'),
+                click: () => onClick('insertChapterAfter', { id: data.id }),
+            },
+            {
                 label: t('context.swapPrevious'),
                 click: () => onClick('swapChapterWithPrevious', { id: data.id }),
             },
