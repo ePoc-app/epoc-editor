@@ -226,6 +226,8 @@ export function insertChapterBefore(chapterId: string): void {
     newChapter.data.index = newIndex;
     
     addNodes(newChapter);
+
+    
 }
 
 /**
