@@ -95,8 +95,6 @@ export function getElementType(contentId: string): ElementType {
         return getContentType(contentId);
     }
 
-    console.log('type', node.type);
-
     return node.type as ElementType;
 }
 
@@ -148,7 +146,6 @@ function getNodeTitle(node: Node): string {
         return node.data.formValues?.title || i18n.global.t('forms.node.page.title');
     }
     if (node.type === 'chapter') {
-        console.log(node.data);
         return node.data.formValues?.title || i18n.global.t('global.chapter');
     }
     return node.data.title || '';
