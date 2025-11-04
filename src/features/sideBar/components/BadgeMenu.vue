@@ -6,6 +6,7 @@ import { useVueFlow } from '@vue-flow/core';
 import BadgeItem from '@/src/features/badge/components/BadgeItem.vue';
 import { addNewBadge, isBadgeValid, openBadge } from '@/src/shared/services';
 import { useSideBarStore } from '../stores/sideBarStore';
+import { getBadges } from '@/src/shared/services';
 
 const { findNode } = useVueFlow('main');
 
@@ -15,7 +16,8 @@ const epocNode = findNode('1');
 const rules = epocNode.data.formValues.badges;
 
 const badges: ComputedRef<Badge[]> = computed(() => {
-    const res: Badge[] = [];
+    const res: Badge[] = getBadges();
+
     for (let value in rules) {
         const newBadge: Badge = {
             id: value,
