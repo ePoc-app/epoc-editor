@@ -1,8 +1,9 @@
 import { useVueFlow, Node, MarkerType, Edge, GraphEdge } from '@vue-flow/core';
 import { deleteContent, deleteNode, getContentByContentId } from './';
 import { useEditorStore } from '@/src/shared/stores';
-import { closeFormPanel, exitSelectNodeMode, generateId } from '../graph.service';
+import { closeFormPanel, exitSelectNodeMode, generateId, graphService } from '../graph.service';
 import { ElementType, NodeElement } from '../../interfaces';
+import { i18n } from '@/i18n/config';
 
 const { nodes, findNode, addEdges, edges } = useVueFlow('main');
 const editorStore = useEditorStore();
@@ -121,4 +122,83 @@ export function goToElement(contentId: string) {
         const node = element as Node;
         editorStore.openFormPanel(node.id, node.data.formType, { centerNode: true });
     }
+}
+
+function getParentChapter(nodeId: string): Node | null {
+    const chapters = nodes.value.filter((node) => node.type === 'chapter');
+    
+    for (const chapter of chapters) {
+        let currentNode = graphService.getNextNode(chapter);
+        while (currentNode && currentNode.type !== 'chapter') {
+            if (currentNode.id === nodeId) {
+                return chapter;
+            }
+            currentNode = graphService.getNextNode(currentNode);
+        }
+    }
+    
+    return null;
+}
+
+function getNodeTitle(node: Node): string {
+    if (node.type === 'activity') {
+        return node.data.formValues?.title || i18n.global.t('forms.node.activity');
+    }
+    if (node.type === 'page') {
+        return node.data.formValues?.title || i18n.global.t('forms.node.page.title');
+    }
+    if (node.type === 'chapter') {
+        console.log(node.data);
+        return node.data.formValues?.title || i18n.global.t('global.chapter');
+    }
+    return node.data.title || '';
+}
+
+export function getElementLabel(contentId: string): { fullPath: string[]; shortLabel: string; } {
+    const element = getElementByContentId(contentId);
+    if (!element) return { fullPath: [contentId], shortLabel: contentId };
+
+    const nodePath: string[] = [];
+
+    if (Object.hasOwn(element, 'parentId')) {
+        const nodeElement = element as NodeElement;
+        const parentNode = findNode(nodeElement.parentId);
+        if (!parentNode) return { fullPath: [contentId], shortLabel: contentId };
+
+        const elementType = nodeElement.action.label || nodeElement.action.type;
+        const pageTitle = getNodeTitle(parentNode);
+        
+        const parentChapter = getParentChapter(parentNode.id);
+        if (parentChapter) {
+            nodePath.push(getNodeTitle(parentChapter));
+        }
+        
+        nodePath.push(pageTitle);
+        nodePath.push(elementType);
+
+        const shortLabel = `${pageTitle} - ${elementType}`;
+        return { fullPath: nodePath, shortLabel };
+    }
+    
+    const node = element as Node;
+    
+    if (node.type === 'chapter') {
+        const title = getNodeTitle(node);
+        return { fullPath: [title], shortLabel: title };
+    }
+
+    if (node.type === 'page' || node.type === 'activity') {
+        const nodeTitle = getNodeTitle(node);
+        const parentChapter = getParentChapter(node.id);
+        
+        if (parentChapter) {
+            const fullPath = [getNodeTitle(parentChapter), nodeTitle];
+            return { fullPath, shortLabel: nodeTitle };
+        }
+
+        return { fullPath: [nodeTitle], shortLabel: nodeTitle };
+    }
+
+    const title = node.data.title || contentId;
+    return { fullPath: [title], shortLabel: title };
 }

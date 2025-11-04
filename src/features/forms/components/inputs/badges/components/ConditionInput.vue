@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useEditorStore } from '@/src/shared/stores/editorStore';
 import { getConditions, createPhrase } from '@/src/shared/services';
-import { getElementType, goToElement } from '@/src/shared/services/graph';
+import { getElementType, getElementLabel, goToElement } from '@/src/shared/services/graph';
 import { computed } from 'vue';
 import { Condition } from '@/src/shared/interfaces';
 
@@ -15,10 +15,21 @@ function onClick() {
     editorStore.conditionModal = true;
 }
 
-function getPhrase(condition: Condition): { phrase: string; id: string } {
+function getPhrase(condition: Condition): { phrase: string; label: string; tooltip: string } {
     const elementType = getElementType(condition.element);
+    const labelData = getElementLabel(condition.element);
     const phrase = createPhrase(condition, elementType);
-    return { phrase, id: condition.element };
+    
+    const label = labelData.shortLabel;
+
+    const tooltip = labelData.fullPath
+        .map((part, index) => {
+            if (index === 0) return part;
+            return `<i class="icon-chevron-right"></i> ${part}`;
+        })
+        .join(' ');
+
+    return { phrase, label, tooltip };
 }
 
 let hoveredElement = null;
@@ -38,11 +49,12 @@ function handleMouseLeave() {
         <li v-for="(condition, index) of conditions" :key="index">
             {{ getPhrase(condition).phrase }}
             <a
+                v-tippy="{ content: getPhrase(condition).tooltip, allowHTML: true }"
                 @mouseenter="handleMouseEnter(condition)"
                 @mouseleave="handleMouseLeave"
                 @click="goToElement(condition.element)"
             >
-                {{ condition.element }}
+                {{ getPhrase(condition).label }}
             </a>
         </li>
     </ul>
