@@ -4,7 +4,7 @@ import ConditionElementSelector from './ConditionElementSelector.vue';
 import ConditionValue from './ConditionValue.vue';
 import { getVerbs, getValueType, createPhrase } from '@/src/shared/services';
 import { Condition, ElementType, Verbs } from '@/src/shared/interfaces';
-import { getElementType } from '@/src/shared/services/graph';
+import { getElementLabel, getElementType } from '@/src/shared/services/graph';
 
 const props = defineProps<{
     inputValue: Condition;
@@ -55,6 +55,15 @@ function resetValue(value: boolean, verb?: boolean) {
 function handleVerbChange(value: string) {
     resetValue(true);
     updateCondition(value, 'verb');
+}
+
+function getPhrase(condition: Condition): string {
+    const elementType = getElementType(condition.element);
+    const phrase = createPhrase(condition, elementType);
+    const labelData = getElementLabel(condition.element);
+    const label = labelData.shortLabel;
+
+    return `${phrase} ${label}`;
 }
 
 const verbs: ComputedRef<Verbs> = computed(() => {
@@ -110,7 +119,7 @@ const verbs: ComputedRef<Verbs> = computed(() => {
             />
         </div>
         <p v-if="!valueDisabled && currentCondition.value !== ''">
-            {{ `${createPhrase(currentCondition, elementType)} ${currentCondition.element}` }}
+            {{ getPhrase(currentCondition) }}
         </p>
     </article>
 </template>
