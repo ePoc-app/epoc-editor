@@ -128,23 +128,20 @@ export function createPhrase(condition: Condition, elementType: ElementType) {
     return `${firstPart} ${phraseType.value[elementType]}`;
 }
 
-export function getConnectedBadges(contentId: string): Badge[] {
+export function getBadges(): Badge[] {
     const epocNode = findNode('1');
     const badges = epocNode.data.formValues.badges;
+    return Object.keys(badges).map((key) => ({ ...badges[key], id: key }));
+}
 
-    const res: Badge[] = [];
+export function getConnectedBadges(contentId: string): Badge[] {
+    const badges = getBadges();
 
-    for (const key in badges) {
-        const badge = badges[key];
+    return badges.filter((badge) => {
         const conditions = getConditions(badge);
         const elements = conditions.map((condition) => condition.element);
-
-        if (elements.includes(contentId)) {
-            res.push({ ...badge, id: key });
-        }
-    }
-
-    return res;
+        return elements.includes(contentId);
+    });
 }
 
 export function saveBadge(badge: Badge) {
