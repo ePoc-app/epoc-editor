@@ -204,10 +204,14 @@
         "redo": "Rifai",
         "preview": "Anteprima",
         "publish": "Pubblicare",
-        "adjust": "Aggiusta",
         "never": "mai",
         "lastSave": "Ultimo salvataggio:",
         "new": "Nuovo ePoc"
+    },
+    "zoom": {
+        "zoomIn": "Zoom avanti",
+        "zoomOut": "Zoom indietro",
+        "adjust": "Aggiusta"
     },
     "forms": {
         "type": "Scrivi qui...",
