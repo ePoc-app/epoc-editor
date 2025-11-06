@@ -209,10 +209,14 @@
         "redo": "Redo",
         "preview": "Preview",
         "publish": "Publish",
-        "adjust": "Adjust",
         "never": "never",
         "lastSave": "Last save:",
         "new": "New ePoc"
+    },
+    "zoom": {
+        "zoomIn": "Zoom in",
+        "zoomOut": "Zoom out",
+        "adjust": "Adjust"
     },
     "forms": {
         "type": "Type here...",

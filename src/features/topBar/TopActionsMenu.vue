@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import TopActionButton from '@/src/features/topBar/TopActionButton.vue';
-import TopActionDropdown from '@/src/features/topBar/TopActionDropdown.vue';
 import HamburgerMenu from '@/src/features/topBar/HamburgerMenu.vue';
 import SettingsModal from '../settings/SettingsModal.vue';
 import { useEditorStore } from '@/src/shared/stores';
@@ -14,8 +13,6 @@ defineProps<{
     saving: boolean;
     loadingPreview: boolean;
     exporting: boolean;
-    zoomString: string;
-    zoom: number;
 }>();
 
 const emit = defineEmits<{
@@ -24,7 +21,6 @@ const emit = defineEmits<{
     (e: 'save'): void;
     (e: 'runPreview'): void;
     (e: 'exportProject'): void;
-    (e: 'updateZoom', value: number): void;
 }>();
 
 // detect the platform
@@ -35,16 +31,7 @@ const settingsModal = ref(null);
 
 <template>
     <div class="top-bar-actions">
-        <TopActionDropdown
-            icon="icon-chevron"
-            :text="zoomString"
-            position="left"
-            :input-value="zoom"
-            @change="emit('updateZoom', $event)"
-        />
-
         <div class="menu-md-container top-bar-actions">
-            <hr class="vertical-separator" />
             <TopActionButton
                 v-tippy="{
                     content: `${modifier} + z`,
@@ -120,14 +107,11 @@ const settingsModal = ref(null);
                 :saving="saving"
                 :loading-preview="loadingPreview"
                 :exporting="exporting"
-                :zoom-string="zoomString"
-                :zoom="zoom"
                 @undo="emit('undo')"
                 @redo="emit('redo')"
                 @save="emit('save')"
                 @run-preview="emit('runPreview')"
                 @export-project="emit('exportProject')"
-                @update-zoom="emit('updateZoom', $event)"
             />
         </div>
     </div>

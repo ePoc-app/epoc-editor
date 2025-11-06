@@ -209,10 +209,14 @@
         "redo": "Rétablir",
         "preview": "Aperçu",
         "publish": "Publier",
-        "adjust": "Ajuster",
         "never": "jamais",
         "lastSave": "Dernière sauvegarde :",
         "new": "Nouvel ePoc"
+    },
+    "zoom": {
+        "zoomIn": "Zoom avant",
+        "zoomOut": "Zoom arrière",
+        "adjust": "Ajuster"
     },
     "forms": {
         "type": "Saisissez...",

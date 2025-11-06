@@ -20,6 +20,7 @@ import { useEditorStore, useGraphStore } from '@/src/shared/stores';
 import ChapterNode from './nodes/ChapterNode.vue';
 import ePocNode from './nodes/ePocNode.vue';
 import AddChapterNode from './nodes/AddChapterNode.vue';
+import ZoomControls from '@/src/components/ZoomControls.vue';
 import { NodeElement, SideAction } from '@/src/shared/interfaces';
 import {
     addPage,
@@ -259,5 +260,6 @@ function onPaneReady() {
                 :target-position="targetPosition"
             />
         </template>
+        <ZoomControls />
     </VueFlow>
 </template>

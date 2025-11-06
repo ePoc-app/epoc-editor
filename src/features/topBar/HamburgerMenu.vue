@@ -11,8 +11,6 @@ defineProps<{
     saving: boolean;
     loadingPreview: boolean;
     exporting: boolean;
-    zoomString: string;
-    zoom: number;
 }>();
 
 const emit = defineEmits<{
@@ -21,7 +19,6 @@ const emit = defineEmits<{
     (e: 'save'): void;
     (e: 'runPreview'): void;
     (e: 'exportProject'): void;
-    (e: 'updateZoom', value: number): void;
 }>();
 
 function toggleMenu() {

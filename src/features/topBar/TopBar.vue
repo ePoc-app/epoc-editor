@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { useEditorStore, useUndoRedoStore } from '@/src/shared/stores';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { editorService } from '@/src/shared/services';
-import { useVueFlow } from '@vue-flow/core';
 import TopActionsMenu from '@/src/features/topBar/TopActionsMenu.vue';
 import { useI18n } from 'vue-i18n';
 
@@ -10,26 +9,6 @@ const { t, locale } = useI18n();
 
 const editorStore = useEditorStore();
 const undoRedoStore = useUndoRedoStore();
-
-const { zoomTo, fitView, onViewportChangeEnd } = useVueFlow('main');
-
-const zoom = ref(1);
-const zoomString = computed(() => (zoom.value === 0 ? t('header.adjust') : `${Math.round(zoom.value * 100)}%`));
-
-zoomTo(zoom.value);
-
-onViewportChangeEnd((event) => {
-    zoom.value = event.zoom;
-});
-
-function updateZoom(val: number) {
-    zoom.value = val;
-    if (val === 0) {
-        fitView({ duration: 300 });
-    } else {
-        zoomTo(val, { duration: 300 });
-    }
-}
 
 const savedSince = computed(() => {
     const date = editorStore.currentProject.modified;
@@ -44,16 +23,19 @@ const savedSince = computed(() => {
         return (
             'Il y a ' +
             (days > 1 ? `${days} jours`
-            : hours > 1 ? `${hours} heures`
-            : mins > 1 ? `${mins} mins`
-            : "moins d'une minute")
+                : hours > 1 ? `${hours} heures`
+                    : mins > 1 ? `${mins} mins`
+                        : "moins d'une minute")
         );
     } else {
         return (
-            (days > 1 ? `${days} days`
-            : hours > 1 ? `${hours} hours`
-            : mins > 1 ? `${mins} mins`
-            : 'less than a minute') + ' ago'
+            (days > 1
+                ? `${days} days`
+                : hours > 1
+                    ? `${hours} hours`
+                    : mins > 1
+                        ? `${mins} mins`
+                        : 'less than a minute') + ' ago'
         );
     }
 });
@@ -81,14 +63,11 @@ function separateFilePath(filepath: string) {
                 :saving="editorStore.saving"
                 :loading-preview="editorStore.loadingPreview"
                 :exporting="editorStore.exporting"
-                :zoom-string="zoomString"
-                :zoom="zoom"
                 @undo="undoRedoStore.undo()"
                 @redo="undoRedoStore.redo()"
                 @save="editorService.saveEpocProject"
                 @run-preview="editorService.runPreviewAtPage()"
                 @export-project="editorService.exportProject()"
-                @update-zoom="updateZoom"
             />
         </div>
     </div>
