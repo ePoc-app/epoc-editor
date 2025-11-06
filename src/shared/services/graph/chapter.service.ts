@@ -14,7 +14,7 @@ const { t } = i18n.global;
  * @returns {Node} - The new chapter
  */
 export function addChapter(chapterId?: string, chapter?: Chapter, offsetY?: number): Node {
-    const chapters = nodes.value.filter((node) => node.type === 'chapter');
+    const chapters = nodes.value.filter((node) => node.type === 'chapter').sort((a, b) => a.data.index - b.data.index);
     const data = {
         action: { icon: 'icon-chapitre', type: 'chapter' },
         formType: 'chapter',
