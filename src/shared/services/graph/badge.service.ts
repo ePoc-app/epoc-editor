@@ -131,6 +131,11 @@ export function createPhrase(condition: Condition, elementType: ElementType) {
 export function getBadges(): Badge[] {
     const epocNode = findNode('1');
     const badges = epocNode.data.formValues.badges;
+
+    if (!badges) {
+        return [];
+    }
+
     return Object.keys(badges).map((key) => ({ ...badges[key], id: key }));
 }
 
