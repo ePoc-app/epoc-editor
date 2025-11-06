@@ -30,9 +30,12 @@ export function getValueType(verbKey: string): 'number' | 'boolean' {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function getConditions(currentBadge: any): Condition[] {
-    const rules = currentBadge.rule['and'];
+export function getConditions(currentItem: any): Condition[] {
     const conditions: Condition[] = [];
+
+    if (!currentItem?.rule) return conditions;
+
+    const rules = currentItem.rule['and'];
 
     for (const key1 in rules) {
         // key2 is the operator

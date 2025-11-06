@@ -7,9 +7,12 @@ import { Condition } from '@/src/shared/interfaces';
 
 const editorStore = useEditorStore();
 
-const currentBadge = editorStore.getEpocNode.data.formValues['badges'][editorStore.openedBadgeId];
+const currentItem =
+    editorStore.openedBadgeId ?
+        editorStore.getEpocNode.data.formValues['badges'][editorStore.openedBadgeId]
+    :   editorStore.getCurrentGraphNode.data.formValues;
 
-const conditions = computed(() => getConditions(currentBadge));
+const conditions = computed(() => getConditions(currentItem));
 
 function onClick() {
     editorStore.conditionModal = true;
@@ -19,7 +22,7 @@ function getPhrase(condition: Condition): { phrase: string; label: string; toolt
     const elementType = getElementType(condition.element);
     const labelData = getElementLabel(condition.element);
     const phrase = createPhrase(condition, elementType);
-    
+
     const label = labelData.shortLabel;
 
     const tooltip = labelData.fullPath
