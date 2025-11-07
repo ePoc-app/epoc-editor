@@ -29,7 +29,7 @@ export const customBadgeForm: ComputedRef<Form> = computed(() => {
                 ],
             },
             {
-                name: i18n.global.t('forms.badge.obtention'),
+                name: i18n.global.t('forms.rule.obtention'),
                 inputs: [
                     {
                         id: 'conditions',

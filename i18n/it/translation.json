@@ -119,7 +119,7 @@
     "badge": {
         "supported": "File suportato: SVG",
         "select": "Seleziona un file",
-        "conditions": "Condizioni per guadagnare il badge",
+        "conditions": "Condizioni",
         "add": "Aggiungi una condizione",
         "selectIcon": "Seleziona un'icona",
         "defaultIcons": "Icone predefinite",
@@ -176,6 +176,11 @@
             "scored": "{verb} {value} su"
         }
     },
+    "assets": {
+        "empty": "Nessuna risorsa trovata",
+        "goto": "Vai all'elemento",
+        "tooltip": "Fare clic per aprire il menu delle risorse"
+    },
     "inputs": {
         "manageConditions": "Configura condizioni",
         "updateIcon": "Aggiorna icona",
@@ -218,11 +223,11 @@
         "badge": {
             "text": "Impostazioni del badge",
             "updateIcon": "Aggiorna icona",
-            "obtention": "Condizioni per ottenere il badge",
             "presentation": "Presentazione del badge",
             "presentationPlaceholder": "Inserisci la presentazione del badge",
             "icon": "Icona del badge"
         },
+        "unlock": "Condizioni di sblocco",
         "content": {
             "text": "Contenuto",
             "summary": "Sommario",
@@ -405,10 +410,5 @@
         "attempted": "Tentato",
         "scored": "Segnato",
         "passed": "Passato"
-    },
-    "assets": {
-        "empty": "Nessuna risorsa trovata",
-        "goto": "Vai all'elemento",
-        "tooltip": "Fare clic per aprire il menu delle risorse"
     }
 }

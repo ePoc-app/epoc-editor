@@ -89,16 +89,23 @@ const activityIndex = computed(() => {
             >
                 {{ currentNode.data.formValues?.title || t('forms.node.activity') }}
             </p>
+
             <Handle
                 :data-testid="`target-activity-${activityIndex}`"
                 :class="{ 'not-connected': !isTarget }"
                 type="target"
                 :position="Position.Left"
             />
-            <div v-if="connectedBadges.length > 0" class="badge-notification badge-notification-left">
+
+            <div v-if="connectedBadges.length > 0" class="badge-notification">
                 <img src="/img/badge/notification.svg" alt="notification" />
                 <small>{{ connectedBadges.length }}</small>
             </div>
+
+            <div v-if="currentNode.data.formValues.rule" class="locked">
+                <i class="icon-lock" />
+            </div>
+
             <DraggableNode
                 :id="currentNode.data.contentId"
                 :parent-test-id="`activity-${activityIndex}`"
@@ -109,6 +116,7 @@ const activityIndex = computed(() => {
                 @remove-hover-effect="removeHoverEffect"
             />
         </div>
+
         <Handle
             :data-testid="`source-activity-${activityIndex}`"
             type="source"

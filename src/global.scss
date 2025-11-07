@@ -520,16 +520,8 @@ g.selected {
     width: 20px;
     height: 20px;
     z-index: 10;
-
-    &-left {
-        left: 0;
-        transform: translate(-45%, -20%);
-    }
-
-    &-right {
-        right: 0;
-        transform: translate(45%, -40%);
-    }
+    left: 0;
+    transform: translate(-45%, -20%);
 
     small {
         position: absolute;
@@ -539,6 +531,27 @@ g.selected {
 
     img {
         height: 100%;
+    }
+}
+
+.locked {
+    position: absolute;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+
+    right: 0;
+    transform: translate(30%, -30%);
+
+    & > i {
+        border: 1px solid white;
+        padding: 4px;
+        background: var(--node-ghost);
+        color: var(--text);
+        border-radius: 50%;
+        font-size: 0.85rem !important;
     }
 }
 

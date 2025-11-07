@@ -55,7 +55,7 @@ const connectedBadges = computed(() => getConnectedBadges(currentNode.data.conte
 <template>
     <div>
         <div class="node-chapter">
-            <div v-if="connectedBadges.length > 0" class="badge-notification badge-notification-left">
+            <div v-if="connectedBadges.length > 0" class="badge-notification">
                 <img src="/img/badge/notification.svg" alt="notification" />
                 <small>{{ connectedBadges.length }}</small>
             </div>
