@@ -83,4 +83,8 @@ a {
     font-weight: 600;
     cursor: pointer;
 }
+
+i {
+    font-size: 0.9rem;
+}
 </style>

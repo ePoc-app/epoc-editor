@@ -119,7 +119,7 @@
     "badge": {
         "supported": "Supported file: SVG",
         "select": "Select a file",
-        "conditions": "Badge earning conditions",
+        "conditions": "Conditions",
         "add": "Add a condition",
         "selectIcon": "Select an icon",
         "defaultIcons": "Default icons",
@@ -223,7 +223,6 @@
         "badge": {
             "text": "Badge settings",
             "updateIcon": "Update icon",
-            "obtention": "Badge earning conditions",
             "presentation": "Badge presentation",
             "presentationPlaceholder": "Enter badge presentation",
             "icon": "Badge icon"

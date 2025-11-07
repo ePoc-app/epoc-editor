@@ -119,7 +119,7 @@
     "badge": {
         "supported": "Fichier supporté: SVG",
         "select": "Sélectionner un fichier",
-        "conditions": "Conditions d'obtention du badge",
+        "conditions": "Conditions",
         "add": "Ajouter une condition",
         "selectIcon": "Sélectionner une icône",
         "defaultIcons": "Icônes par défaut",
@@ -223,7 +223,6 @@
         "badge": {
             "text": "Paramètres du badge",
             "updateIcon": "Modifier l'icône",
-            "obtention": "Conditions d'obtention du badge",
             "presentation": "Présentation du badge",
             "presentationPlaceholder": "Saisissez une présentation du badge",
             "icon": "Icône du badge"
