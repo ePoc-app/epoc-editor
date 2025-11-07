@@ -509,12 +509,12 @@ export const activityForm: ComputedRef<Form> = computed(() => ({
             ],
         },
         {
-            name: 'Unlockable',
+            name: i18n.global.t('forms.unlock'),
             inputs: [
                 {
                     id: 'unlock-conditions',
                     type: 'badge-conditions',
-                    label: 'Conditions de déblocage',
+                    label: '',
                     value: [],
                 },
             ],

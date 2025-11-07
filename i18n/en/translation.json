@@ -223,7 +223,7 @@
         "badge": {
             "text": "Badge settings",
             "updateIcon": "Update icon",
-            "presentation": "Badge presentation",
+            "obtention": "Badge earning conditions",
             "presentationPlaceholder": "Enter badge presentation",
             "icon": "Badge icon"
         },

@@ -223,6 +223,7 @@
         "badge": {
             "text": "Impostazioni del badge",
             "updateIcon": "Aggiorna icona",
+            "obtention": "Condizioni per ottenere il badge",
             "presentation": "Presentazione del badge",
             "presentationPlaceholder": "Inserisci la presentazione del badge",
             "icon": "Icona del badge"
