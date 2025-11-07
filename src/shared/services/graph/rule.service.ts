@@ -7,31 +7,39 @@ import { elementVerbs, verbs } from '@/src/shared/data';
 import { i18n } from '@/i18n/config';
 import type { GraphNode } from '@vue-flow/core';
 
+/**
+ * Helper function to normalize item structure
+ */
+function getItemData(item: Badge | GraphNode, badges: Badge[]) {
+    if (badges && badges[item.id]) {
+        return badges[item.id];
+    }
+
+    return (item as GraphNode).data.formValues;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function getConditions(currentItem: any): Condition[] {
+export function getConditions(itemData: any): Condition[] {
     const conditions: Condition[] = [];
+    if (!itemData?.rule) return conditions;
 
-    if (!currentItem?.rule) return conditions;
-
-    const rules = currentItem.rule['and'];
+    const rules = itemData.rule['and'];
+    if (!rules) return conditions;
 
     for (const key1 in rules) {
-        // key2 is the operator
         for (const key2 in rules[key1]) {
             const [verbs, value] = rules[key1][key2];
-
             const [type, element, verb] = verbs['var'].split('.');
 
-            const conditionObj: Condition = {
+            conditions.push({
                 element,
                 verb,
                 value,
                 elementType: type,
-            };
-
-            conditions.push(conditionObj);
+            });
         }
     }
+
     return conditions;
 }
 
@@ -58,11 +66,11 @@ export function getConnectedItems(contentId: string) {
     const chapters = getChapters();
     const pages = getPages();
     const activities = getActivities();
-
     const items = [...badges, ...chapters, ...pages, ...activities];
 
     return items.filter((item) => {
-        const conditions = getConditions(item);
+        const itemData = getItemData(item, getEpocNodeData().badges);
+        const conditions = getConditions(itemData);
         const elements = conditions.map((condition) => condition.element);
 
         return elements.includes(contentId);
@@ -71,17 +79,13 @@ export function getConnectedItems(contentId: string) {
 
 export function deleteConnectedConditions(contentId: string) {
     const connectedItems = getConnectedItems(contentId);
-    const badges = getEpocNodeData().badges;
 
     for (const item of connectedItems) {
-        const conditions = getConditions(item);
+        const itemData = getItemData(item, getEpocNodeData().badges);
+        const conditions = getConditions(itemData);
         const newConditions = conditions.filter((condition) => condition.element !== contentId);
 
-        if (badges[item.id]) {
-            badges[item.id].rule = createRule(newConditions);
-        } else {
-            (item as GraphNode).data.formValues.rule = createRule(newConditions);
-        }
+        itemData.rule = createRule(newConditions);
     }
 }
 

@@ -38,10 +38,14 @@ function getPhrase(condition: Condition): { phrase: string; label: string; toolt
 let hoveredElement = null;
 function handleMouseEnter(condition: Condition) {
     hoveredElement = document.getElementById(condition.element);
+    if (!hoveredElement) return;
+
     hoveredElement.classList.add('highlight');
 }
 
 function handleMouseLeave() {
+    if (!hoveredElement) return;
+
     hoveredElement.classList.remove('highlight');
     hoveredElement = null;
 }

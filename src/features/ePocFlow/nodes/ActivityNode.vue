@@ -102,7 +102,7 @@ const activityIndex = computed(() => {
                 <small>{{ connectedBadges.length }}</small>
             </div>
 
-            <div v-if="currentNode.data.formValues.rule" class="locked">
+            <div v-if="currentNode.data.formValues?.rule?.and?.length" class="locked">
                 <i class="icon-lock" />
             </div>
 
