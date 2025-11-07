@@ -10,7 +10,7 @@ const editorStore = useEditorStore();
 const currentItem =
     editorStore.openedBadgeId ?
         editorStore.getEpocNode.data.formValues['badges'][editorStore.openedBadgeId]
-    :   editorStore.getCurrentGraphNode.data.formValues;
+        :   editorStore.getCurrentGraphNode.data.formValues;
 
 const conditions = computed(() => getConditions(currentItem));
 

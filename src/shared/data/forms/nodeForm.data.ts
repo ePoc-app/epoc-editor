@@ -153,6 +153,17 @@ export const chapterForm: ComputedRef<Form> = computed(() => ({
                 },
             ],
         },
+        {
+            name: i18n.global.t('forms.unlock'),
+            inputs: [
+                {
+                    id: 'unlock-conditions',
+                    type: 'badge-conditions',
+                    label: '',
+                    value: [],
+                },
+            ],
+        },
     ],
 }));
 

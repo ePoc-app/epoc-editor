@@ -60,6 +60,10 @@ const connectedBadges = computed(() => getConnectedBadges(currentNode.data.conte
                 <small>{{ connectedBadges.length }}</small>
             </div>
 
+            <div v-if="currentNode.data.formValues.rule" class="locked">
+                <i class="icon-lock" />
+            </div>
+            
             <ContentButton
                 :id="currentNode.data.contentId"
                 :data-testid="`chapter-${currentNode.data.index}`"

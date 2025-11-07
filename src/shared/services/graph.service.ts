@@ -110,6 +110,7 @@ function createContentJSON(): EpocV1 {
             objectives: chapterValues.objectives || [],
             contents: [],
             duration: chapterValues.duration || 0,
+            rule: chapterValues.rule,
         });
         let pageNode = getNextNode(chapter);
         while (pageNode) {
