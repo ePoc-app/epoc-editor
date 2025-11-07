@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useEditorStore } from '@/src/shared/stores';
-import { getConditions, saveBadge } from '@/src/shared/services';
+import { getConditions, saveRule } from '@/src/shared/services';
 import { computed, onMounted, ref } from 'vue';
 import { saveState } from '@/src/shared/services/undoRedo.service';
 
@@ -8,7 +8,10 @@ import ConditionItem from './ConditionItem.vue';
 
 const editorStore = useEditorStore();
 
-const currentBadge = editorStore.getEpocNode.data.formValues['badges'][editorStore.openedBadgeId];
+const currentItem =
+    editorStore.openedBadgeId ?
+        editorStore.getEpocNode.data.formValues['badges'][editorStore.openedBadgeId]
+    :   editorStore.getCurrentGraphNode.data.formValues;
 
 const allConditionsValid = computed(() => {
     return editorStore.tempConditions.every((condition) => {
@@ -17,7 +20,7 @@ const allConditionsValid = computed(() => {
 });
 
 if (!editorStore.editingConditions) {
-    editorStore.tempConditions = getConditions(currentBadge);
+    editorStore.tempConditions = getConditions(currentItem);
     editorStore.editingConditions = true;
 }
 
@@ -38,7 +41,7 @@ function updateCondition(values: { value: string | number | boolean; key: string
 
 function save() {
     saveState(true);
-    saveBadge(currentBadge);
+    saveRule(currentItem);
     close();
 }
 

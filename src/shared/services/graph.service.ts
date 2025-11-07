@@ -22,7 +22,7 @@ import {
     setNodesSelectability,
 } from '@/src/shared/services/graph';
 import { Question } from '@epoc/epoc-types/src/v2';
-import { createRule, getConditions, getValidBadges } from '@/src/shared/services/graph/badge.service';
+import { createRule, getConditions, getValidBadges } from '@/src/shared/services';
 import { Badge, NodeElement } from '@/src/shared/interfaces';
 import { CustomQuestion } from '@epoc/epoc-types/dist/v2';
 import { useSideBarStore } from '@/src/features/sideBar/stores/sideBarStore';

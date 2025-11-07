@@ -448,3 +448,17 @@ export function swapNodeWithPrevious(nodeId: string): void {
 
     swapEdges(node, previousNode, nodeEdges, previousNodeEdges);
 }
+
+/**
+ * Return all page nodes
+ */
+export function getPages() {
+    return nodes.value.filter((node) => node.type === 'page');
+}
+
+/**
+ * Return all activity nodes
+ */
+export function getActivities() {
+    return nodes.value.filter((node) => node.type === 'activity');
+}

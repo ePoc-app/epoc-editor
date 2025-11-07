@@ -4,3 +4,4 @@ export * from './element.service';
 export * from './copyPaste.service';
 export * from './badge.service';
 export * from './chapter.service';
+export * from './rule.service';
