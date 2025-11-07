@@ -134,6 +134,7 @@ function newContent(epoc: EpocV1, pageNode: GraphNode): string {
         ...(pageNode.data.formValues.hidden && { hidden: pageNode.data.formValues.hidden }),
         ...(pageNode.data.formValues.conditional && { conditional: pageNode.data.formValues.conditional }),
     };
+
     if (pageNode.type === 'page') {
         const contentNode = pageNode.data.elements[0];
         if (contentNode.action.type === 'video') {
@@ -145,6 +146,7 @@ function newContent(epoc: EpocV1, pageNode: GraphNode): string {
                 subtitles: contentNode.formValues.subtitles,
                 summary: contentNode.formValues.summary,
                 transcript: contentNode.formValues.transcript,
+                rule: pageNode.data.formValues.rule,
             };
             return epoc.addContent(pageNode.data.contentId, content);
         } else if (contentNode.action.type === 'audio') {
@@ -154,6 +156,7 @@ function newContent(epoc: EpocV1, pageNode: GraphNode): string {
                 source: contentNode.formValues.source,
                 summary: contentNode.formValues.summary,
                 transcript: contentNode.formValues.transcript,
+                rule: pageNode.data.formValues.rule,
             };
             return epoc.addContent(pageNode.data.contentId, content);
         } else if (contentNode.action.type === 'html' || contentNode.action.type === 'text') {
@@ -161,6 +164,7 @@ function newContent(epoc: EpocV1, pageNode: GraphNode): string {
                 ...baseContent,
                 type: 'html',
                 html: contentNode.formValues.html,
+                rule: pageNode.data.formValues.rule,
             };
             return epoc.addContent(pageNode.data.contentId, content);
         } else if (contentNode.action.type === 'legacy-condition') {
@@ -204,6 +208,7 @@ function newContent(epoc: EpocV1, pageNode: GraphNode): string {
             type: 'assessment',
             ...(pageNode.data.formValues.summary && { summary: pageNode.data.formValues.summary }),
             questions: questions,
+            rule: pageNode.data.formValues.rule,
         };
         return epoc.addContent(pageNode.data.contentId, content);
     }

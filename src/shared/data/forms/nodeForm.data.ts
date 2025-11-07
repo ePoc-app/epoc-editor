@@ -427,6 +427,17 @@ export const pageForm: ComputedRef<Form> = computed(() => ({
             ],
         },
         {
+            name: i18n.global.t('forms.unlock'),
+            inputs: [
+                {
+                    id: 'unlock-conditions',
+                    type: 'badge-conditions',
+                    label: '',
+                    value: [],
+                },
+            ],
+        },
+        {
             name: i18n.global.t('forms.node.page.components'),
             inputs: [
                 {
@@ -483,6 +494,17 @@ export const activityForm: ComputedRef<Form> = computed(() => ({
                     label: i18n.global.t('forms.node.page.conditional'),
                     value: false,
                     hint: i18n.global.t('forms.node.page.conditionalHint'),
+                },
+            ],
+        },
+        {
+            name: 'Unlockable',
+            inputs: [
+                {
+                    id: 'unlock-conditions',
+                    type: 'badge-conditions',
+                    label: 'Conditions de déblocage',
+                    value: [],
                 },
             ],
         },

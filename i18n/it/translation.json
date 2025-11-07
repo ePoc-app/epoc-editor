@@ -176,6 +176,11 @@
             "scored": "{verb} {value} su"
         }
     },
+    "assets": {
+        "empty": "Nessuna risorsa trovata",
+        "goto": "Vai all'elemento",
+        "tooltip": "Fare clic per aprire il menu delle risorse"
+    },
     "inputs": {
         "manageConditions": "Configura condizioni",
         "updateIcon": "Aggiorna icona",
@@ -223,6 +228,7 @@
             "presentationPlaceholder": "Inserisci la presentazione del badge",
             "icon": "Icona del badge"
         },
+        "unlock": "Condizioni di sblocco",
         "content": {
             "text": "Contenuto",
             "summary": "Sommario",
@@ -405,10 +411,5 @@
         "attempted": "Tentato",
         "scored": "Segnato",
         "passed": "Passato"
-    },
-    "assets": {
-        "empty": "Nessuna risorsa trovata",
-        "goto": "Vai all'elemento",
-        "tooltip": "Fare clic per aprire il menu delle risorse"
     }
 }

@@ -228,6 +228,7 @@
             "presentationPlaceholder": "Saisissez une présentation du badge",
             "icon": "Icône du badge"
         },
+        "unlock": "Conditions de déblocage",
         "content": {
             "text": "Contenu",
             "summary": "Résumé",

@@ -92,22 +92,30 @@ const pageIndex = computed(() => {
             @dragover.stop
         >
             <!--suppress JSUnresolvedReference -->
+
             <p
                 class="node-title"
                 :class="{ active: editorStore.openedElementId ? editorStore.openedElementId === props.id : false }"
             >
                 {{ currentNode.data.formValues?.title || 'Page' }}
             </p>
+
             <Handle
                 :data-testid="`target-page-${pageIndex}`"
                 :class="{ 'not-connected': !isTarget }"
                 type="target"
                 :position="Position.Left"
             />
-            <div v-if="connectedBadges.length > 0" class="badge-notification badge-notification-left">
+
+            <div v-if="connectedBadges.length > 0" class="badge-notification">
                 <img src="/img/badge/notification.svg" alt="notification" />
                 <small>{{ connectedBadges.length }}</small>
             </div>
+
+            <div v-if="currentNode.data.formValues.rule" class="locked">
+                <i class="icon-lock" />
+            </div>
+
             <DraggableNode
                 :id="currentNode.data.contentId"
                 :parent-test-id="`page-${pageIndex}`"

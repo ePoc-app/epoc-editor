@@ -228,6 +228,7 @@
             "presentationPlaceholder": "Enter badge presentation",
             "icon": "Badge icon"
         },
+        "unlock": "Unlock conditions",
         "content": {
             "text": "Content",
             "summary": "Summary",
