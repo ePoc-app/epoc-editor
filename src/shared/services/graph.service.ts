@@ -484,8 +484,9 @@ export function closeAllPanels() {
 export function closeFormPanel() {
     const editorStore = useEditorStore();
 
-    editorStore.closeFormPanel();
-    if (editorStore.formPanel.form && editorStore.formPanel.form.type === 'badge') {
+    if (editorStore.formPanel.form && editorStore.formPanel.form.type === 'badge' && !editorStore.selectNodeMode) {
         deleteEmptyBadges();
     }
+    
+    editorStore.closeFormPanel();
 }
