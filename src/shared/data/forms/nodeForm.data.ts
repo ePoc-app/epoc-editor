@@ -1,8 +1,9 @@
-import { Form } from '@/src/shared/interfaces';
+import { Form, Field } from '@/src/shared/interfaces';
 import { activityButtons, baseButtons, pageButtons } from './formButtons.data';
 import { computed, ComputedRef } from 'vue';
 import { i18n } from '@/i18n/config';
 import { languages } from '../languages.data';
+import env from '@/src/shared/utils/env';
 
 export const conditionForm: ComputedRef<Form> = computed(() => ({
     type: 'condition',
@@ -103,12 +104,8 @@ export const legacyConditionForm: ComputedRef<Form> = computed(() => ({
     ],
 }));
 
-export const chapterForm: ComputedRef<Form> = computed(() => ({
-    type: 'chapter',
-    name: i18n.global.t('global.chapter'),
-    icon: 'icon-chapitre',
-    buttons: baseButtons.value,
-    fields: [
+export const chapterForm: ComputedRef<Form> = computed(() => {
+    const fields: Field[] = [
         {
             inputs: [
                 {
@@ -153,7 +150,10 @@ export const chapterForm: ComputedRef<Form> = computed(() => ({
                 },
             ],
         },
-        {
+    ];
+
+    if (env.isDev) {
+        fields.push({
             name: i18n.global.t('forms.unlock'),
             inputs: [
                 {
@@ -163,9 +163,17 @@ export const chapterForm: ComputedRef<Form> = computed(() => ({
                     value: [],
                 },
             ],
-        },
-    ],
-}));
+        });
+    }
+
+    return {
+        type: 'chapter',
+        name: i18n.global.t('global.chapter'),
+        icon: 'icon-chapitre',
+        buttons: baseButtons.value,
+        fields,
+    };
+});
 
 export const epocForm: ComputedRef<Form> = computed(() => ({
     type: 'epoc',
@@ -400,12 +408,8 @@ export const epocForm: ComputedRef<Form> = computed(() => ({
     ],
 }));
 
-export const pageForm: ComputedRef<Form> = computed(() => ({
-    type: 'page',
-    name: i18n.global.t('forms.node.page.title'),
-    icon: 'icon-ecran',
-    buttons: pageButtons.value,
-    fields: [
+export const pageForm: ComputedRef<Form> = computed(() => {
+    const fields: Field[] = [
         {
             inputs: [
                 {
@@ -437,7 +441,10 @@ export const pageForm: ComputedRef<Form> = computed(() => ({
                 },
             ],
         },
-        {
+    ];
+
+    if (env.isDev) {
+        fields.push({
             name: i18n.global.t('forms.unlock'),
             inputs: [
                 {
@@ -447,22 +454,31 @@ export const pageForm: ComputedRef<Form> = computed(() => ({
                     value: [],
                 },
             ],
-        },
-        {
-            name: i18n.global.t('forms.node.page.components'),
-            inputs: [
-                {
-                    id: 'components',
-                    label: i18n.global.t('forms.node.page.components'),
-                    type: 'repeat',
-                    value: [],
-                    addButton: false,
-                    inputs: [],
-                },
-            ],
-        },
-    ],
-}));
+        });
+    }
+
+    fields.push({
+        name: i18n.global.t('forms.node.page.components'),
+        inputs: [
+            {
+                id: 'components',
+                label: i18n.global.t('forms.node.page.components'),
+                type: 'repeat',
+                value: [],
+                addButton: false,
+                inputs: [],
+            },
+        ],
+    });
+
+    return {
+        type: 'page',
+        name: i18n.global.t('forms.node.page.title'),
+        icon: 'icon-ecran',
+        buttons: pageButtons.value,
+        fields,
+    };
+});
 
 export const activityForm: ComputedRef<Form> = computed(() => ({
     type: 'activity',
