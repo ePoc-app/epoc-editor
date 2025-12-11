@@ -35,6 +35,12 @@ export const activityButtons: ComputedRef<FormButton[]> = computed(() => {
                     action: 'duplicate-page',
                 },
                 { label: i18n.global.t('forms.buttons.saveModel'), icon: 'icon-modele', action: 'save-model' },
+                {
+                    label: 'Transformer en question simple',
+                    icon: 'icon-plus',
+                    action: 'simple-question',
+                    disabled: (nodeData: any) => nodeData.elements?.length > 1,
+                },
             ]
         :   [
                 ...baseButtons.value,
