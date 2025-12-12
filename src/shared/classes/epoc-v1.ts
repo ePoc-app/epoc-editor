@@ -2,6 +2,7 @@ import { Chapter, Content, Epoc, html, Parameters, uid } from '@epoc/epoc-types/
 import { Question } from '@epoc/epoc-types/src/v1/question';
 import { Author } from '@epoc/epoc-types/src/v1/author';
 import { Badge } from '@epoc/epoc-types/src/v1/badge';
+import type { Publisher } from '@epoc/epoc-types/src/v1/publisher';
 
 export class EpocV1 implements Epoc {
     id: string;
@@ -32,6 +33,8 @@ export class EpocV1 implements Epoc {
     chapterDuration: number;
     prerequisites: string[];
     license: { name: string; url: string; content: string };
+    publisher: Publisher;
+    tags: string[];
 
     constructor(
         id: string,
@@ -52,6 +55,8 @@ export class EpocV1 implements Epoc {
         lastModif: string,
         lang: string,
         license: { name: string; url: string; content: string },
+        publisher: Publisher,
+        tags: string[],
     ) {
         this.version = '1';
         this.editorVersion = editorVersion;
@@ -76,6 +81,8 @@ export class EpocV1 implements Epoc {
         this.lastModif = lastModif;
         this.lang = lang;
         this.license = license;
+        this.publisher = publisher;
+        this.tags = tags;
     }
 
     addChapter(id: uid, chapter: Chapter) {
