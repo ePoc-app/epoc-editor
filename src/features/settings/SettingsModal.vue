@@ -61,9 +61,9 @@ defineExpose({
             />
 
             <div class="settings-input">
-                <label for="working-dir">Open working dir</label>
+                <label for="working-dir">{{ $t('settings.workdir') }}</label>
                 <button id="working-dir" class="btn btn-form" @click="editorService.openWorkingDir">
-                    Open in file explorer
+                    {{ $t('settings.openFileExplorer') }}
                 </button>
             </div>
         </div>

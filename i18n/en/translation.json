@@ -196,7 +196,9 @@
     "settings": {
         "title": "Settings",
         "spellcheck": "Enable spell checking",
-        "lang": "Language"
+        "lang": "Language",
+        "workdir": "Working directory",
+        "openFileExplorer": "Open in file explorer"
     },
     "models": {
         "title": "Page templates",

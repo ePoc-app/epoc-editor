@@ -196,7 +196,9 @@
     "settings": {
         "title": "Impostazioni",
         "spellcheck": "Abilita il controllo ortografico",
-        "lang": "Lingua"
+        "lang": "Lingua",
+        "workdir": "Directory di lavoro",
+        "openFileExplorer": "Apri nell'esploratore file"
     },
     "models": {
         "title": "Modelli di pagina",
