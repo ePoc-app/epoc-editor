@@ -99,6 +99,8 @@ function createContentJSON(): EpocV1 {
             url: ePocValues.licenceUrl || '',
             content: '',
         },
+        undefined,
+        undefined,
     );
 
     const orderedChapters = chapterNodes.sort((a, b) => a.position.y - b.position.y);
@@ -487,6 +489,6 @@ export function closeFormPanel() {
     if (editorStore.formPanel.form && editorStore.formPanel.form.type === 'badge' && !editorStore.selectNodeMode) {
         deleteEmptyBadges();
     }
-    
+
     editorStore.closeFormPanel();
 }
