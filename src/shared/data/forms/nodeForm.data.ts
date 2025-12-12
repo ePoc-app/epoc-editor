@@ -480,12 +480,8 @@ export const pageForm: ComputedRef<Form> = computed(() => {
     };
 });
 
-export const activityForm: ComputedRef<Form> = computed(() => ({
-    type: 'activity',
-    name: i18n.global.t('forms.node.activity'),
-    icon: 'icon-ecran',
-    buttons: activityButtons.value,
-    fields: [
+export const activityForm: ComputedRef<Form> = computed(() => {
+    const fields: Field[] = [
         {
             inputs: [
                 {
@@ -524,7 +520,10 @@ export const activityForm: ComputedRef<Form> = computed(() => ({
                 },
             ],
         },
-        {
+    ];
+
+    if (env.isDev) {
+        fields.push({
             name: i18n.global.t('forms.unlock'),
             inputs: [
                 {
@@ -534,22 +533,31 @@ export const activityForm: ComputedRef<Form> = computed(() => ({
                     value: [],
                 },
             ],
-        },
-        {
-            name: i18n.global.t('forms.node.page.components'),
-            inputs: [
-                {
-                    id: 'components',
-                    label: i18n.global.t('forms.node.page.components'),
-                    type: 'repeat',
-                    value: [],
-                    addButton: false,
-                    inputs: [],
-                },
-            ],
-        },
-    ],
-}));
+        });
+    }
+
+    fields.push({
+        name: i18n.global.t('forms.node.page.components'),
+        inputs: [
+            {
+                id: 'components',
+                label: i18n.global.t('forms.node.page.components'),
+                type: 'repeat',
+                value: [],
+                addButton: false,
+                inputs: [],
+            },
+        ],
+    });
+
+    return {
+        type: 'activity',
+        name: i18n.global.t('forms.node.activity'),
+        icon: 'icon-ecran',
+        buttons: activityButtons.value,
+        fields,
+    };
+});
 
 export const nodeForms: ComputedRef<Form[]> = computed(() => [
     chapterForm.value,
