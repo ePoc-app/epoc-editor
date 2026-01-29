@@ -99,7 +99,8 @@
         "name": "Name",
         "file": "File",
         "refresh": "Refresh",
-        "type": "Type here..."
+        "type": "Type here...",
+        "description": "Description"
     },
     "validation": {
         "yes": "YES, DELETE",
@@ -310,6 +311,13 @@
                     "hint": "Profession, position, affiliation..."
                 },
                 "biography": "Short author biography"
+            },
+            "publisher": {
+                "label": "Publisher",
+                "email": "Email",
+                "website": "Website",
+                "logo": "Logo",
+                "IDHint": "Unique identifier for the publisher, recommended to use a reverse domain name"
             },
             "certificateOptions": "Certificate options",
             "certificateDisabled": "Disable certificate",

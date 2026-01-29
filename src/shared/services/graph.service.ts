@@ -99,8 +99,15 @@ function createContentJSON(): EpocV1 {
             url: ePocValues.licenceUrl || '',
             content: '',
         },
-        undefined,
-        ePocValues.tags,
+        {
+            id: ePocValues.publisherId || '',
+            name: ePocValues.publisherName || '',
+            description: ePocValues.publisherDescription || '',
+            logo: ePocValues.publisherLogo || '',
+            email: ePocValues.publisherEmail || '',
+            website: ePocValues.publisherWebsite || '',
+        },
+        ePocValues.tags || [],
     );
 
     const orderedChapters = chapterNodes.sort((a, b) => a.position.y - b.position.y);

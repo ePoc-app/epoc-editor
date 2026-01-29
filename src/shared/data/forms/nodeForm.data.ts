@@ -284,6 +284,54 @@ export const epocForm: ComputedRef<Form> = computed(() => ({
             ],
         },
         {
+            name: i18n.global.t('forms.node.publisher.label'),
+            inputs: [
+                {
+                    id: 'publisherId',
+                    label: 'ID',
+                    type: 'text',
+                    value: '',
+                    hint: i18n.global.t('forms.node.publisher.IDHint'),
+                    placeholder: 'fr.inria.learninglab',
+                },
+                {
+                    id: 'publisherName',
+                    label: i18n.global.t('global.name'),
+                    type: 'text',
+                    value: '',
+                    placeholder: 'Inria Learning Lab',
+                },
+                {
+                    id: 'publisherDescription',
+                    label: i18n.global.t('global.description'),
+                    type: 'textarea',
+                    value: '',
+                },
+                {
+                    id: 'publisherLogo',
+                    label: i18n.global.t('forms.node.publisher.logo'),
+                    type: 'file',
+                    accept: '.png,.jpg,.jpeg,.gif,.bmp,.svg,.webp',
+                    value: '',
+                    placeholder: i18n.global.t('forms.node.author.image.placeholder'),
+                },
+                {
+                    id: 'publisherEmail',
+                    label: i18n.global.t('forms.node.publisher.email'),
+                    type: 'text',
+                    value: '',
+                    placeholder: 'ill-contact@inria.fr',
+                },
+                {
+                    id: 'publisherWebsite',
+                    label: i18n.global.t('forms.node.publisher.website'),
+                    type: 'text',
+                    value: '',
+                    placeholder: 'learninglab.inria.fr',
+                },
+            ],
+        },
+        {
             name: i18n.global.t('forms.node.objectives'),
             inputs: [
                 {
@@ -293,7 +341,7 @@ export const epocForm: ComputedRef<Form> = computed(() => ({
                     value: [],
                     inputs: [
                         {
-                            id: '',
+                            id: 'publisher-id',
                             type: 'textarea',
                             label: '',
                             placeholder: i18n.global.t('forms.type'),

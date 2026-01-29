@@ -99,7 +99,8 @@
         "name": "Nome",
         "file": "File",
         "refresh": "Rinfrescare",
-        "type": "Scrivi qui..."
+        "type": "Scrivi qui...",
+        "description": "Descrizione"
     },
     "validation": {
         "yes": "SÌ, ELIMINA",
@@ -343,7 +344,14 @@
             "certificateDisabled": "Disabilita certificato",
             "certificateOptions": "Opzioni di certificato",
             "languageSelection": "Seleziona una lingua",
-            "tags": "Tag"
+            "tags": "Tag",
+            "publisher": {
+                "email": "E-mail",
+                "label": "Editore",
+                "logo": "Logo",
+                "website": "Sito web",
+                "IDHint": "Identificatore univoco per l'editore, si consiglia di utilizzare un nome di dominio inverso"
+            }
         }
     },
     "questions": {

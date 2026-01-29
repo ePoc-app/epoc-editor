@@ -99,7 +99,8 @@
         "name": "Nom",
         "file": "Fichier",
         "refresh": "Rafraîchir",
-        "type": "Tapez ici..."
+        "type": "Tapez ici...",
+        "description": "Description"
     },
     "validation": {
         "yes": "OUI, SUPPRIMER",
@@ -342,7 +343,14 @@
                 "conditionalHint": "Option utilisée pour l'affichage conditionnel",
                 "components": "Composants"
             },
-            "activity": "Évaluation"
+            "activity": "Évaluation",
+            "publisher": {
+                "email": "E-mail",
+                "label": "Éditeur",
+                "logo": "Logo",
+                "website": "Site web",
+                "IDHint": "Identifiant unique de l'éditeur, recommandé d'utiliser un nom de domaine inversé"
+            }
         }
     },
     "questions": {
