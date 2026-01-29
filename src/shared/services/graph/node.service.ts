@@ -30,6 +30,7 @@ export function setEpocNodeData(epoc: EpocV1) {
     epocNode.data.formValues.authors = Object.values(epoc.authors);
     epocNode.data.formValues.plugins = epoc.plugins;
     epocNode.data.formValues.badges = epoc.badges;
+    epocNode.data.formValues.tags = epoc.tags;
 }
 
 export function getEpocNodeData() {

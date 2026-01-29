@@ -354,6 +354,18 @@ export const epocForm: ComputedRef<Form> = computed(() => ({
             ],
         },
         {
+            name: i18n.global.t('forms.node.tags'),
+            inputs: [
+                {
+                    id: 'tags',
+                    type: 'tags',
+                    label: '',
+                    placeholder: '',
+                    value: [],
+                },
+            ],
+        },
+        {
             name: i18n.global.t('forms.node.plugin.title', 2),
             inputs: [
                 {

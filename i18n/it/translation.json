@@ -4,7 +4,8 @@
             "label": "App",
             "about": "Informazioni",
             "quit": "Esci",
-            "lang": "Lingua"
+            "lang": "Lingua",
+            "label:": "App"
         },
         "file": {
             "label": "File",
@@ -213,7 +214,8 @@
         "publish": "Pubblicare",
         "never": "mai",
         "lastSave": "Ultimo salvataggio:",
-        "new": "Nuovo ePoc"
+        "new": "Nuovo ePoc",
+        "adjust": "Regolare"
     },
     "zoom": {
         "zoomIn": "Zoom avanti",
@@ -340,7 +342,8 @@
             "activity": "Valutazione",
             "certificateDisabled": "Disabilita certificato",
             "certificateOptions": "Opzioni di certificato",
-            "languageSelection": "Seleziona una lingua"
+            "languageSelection": "Seleziona una lingua",
+            "tags": "Tag"
         }
     },
     "questions": {

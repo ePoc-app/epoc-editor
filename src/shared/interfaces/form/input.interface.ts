@@ -15,7 +15,8 @@ export interface Input {
         | 'icon-picker'
         | 'badge-conditions'
         | 'radio-group'
-        | 'badge';
+        | 'badge'
+        | 'tags';
     label: string;
     value: string | boolean | number | string[];
     placeholder?: string;

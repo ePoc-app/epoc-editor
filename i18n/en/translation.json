@@ -4,7 +4,8 @@
             "label": "App",
             "about": "About",
             "quit": "Quit",
-            "lang": "Language"
+            "lang": "Language",
+            "label:": "App"
         },
         "file": {
             "label": "File",
@@ -339,7 +340,8 @@
                 "conditionalHint": "Option used for conditional display",
                 "components": "Components"
             },
-            "activity": "Assessment"
+            "activity": "Assessment",
+            "tags": "Tags"
         }
     },
     "questions": {

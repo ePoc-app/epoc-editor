@@ -4,7 +4,8 @@
             "label:": "App",
             "about": "À propos",
             "quit": "Quitter",
-            "lang": "Langage"
+            "lang": "Langage",
+            "label": "Application"
         },
         "file": {
             "label": "Fichier",
@@ -280,6 +281,7 @@
             "duration": "Durée (en minutes)",
             "objectives": "Objectifs pédagogiques",
             "about": "À propos de l'ePoc",
+            "tags": "Tags",
             "cover": {
                 "title": "Image de couverture",
                 "placeholder": "Ajouter une image de couverture",

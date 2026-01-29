@@ -100,7 +100,7 @@ function createContentJSON(): EpocV1 {
             content: '',
         },
         undefined,
-        undefined,
+        ePocValues.tags,
     );
 
     const orderedChapters = chapterNodes.sort((a, b) => a.position.y - b.position.y);

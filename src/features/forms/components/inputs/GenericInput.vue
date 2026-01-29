@@ -8,6 +8,7 @@ import HtmlInput from './HtmlInput.vue';
 import CheckBoxInput from './card/components/CheckBoxInput.vue';
 import RadioInput from './card/components/RadioInput.vue';
 import SelectInput from './card/components/SelectInput.vue';
+import TagsInput from './TagsInput.vue';
 import RepeatInput from './RepeatInput.vue';
 
 import BadgesInput from './badges/BadgesInput.vue';
@@ -30,7 +31,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-    (e: 'input', value: string): void;
+    (e: 'input', value: string | string[]): void;
     (e: 'repeatInput', value: RepeatInputEvent): void;
     (e: 'check', value: boolean): void;
     (e: 'saveGivenState', state: string): void;
@@ -103,7 +104,7 @@ function handleCollapse() {
                 @save-given-state="emit('saveGivenState', $event)"
             />
             <HtmlInput
-                v-if="input.type === 'html' || input.type === 'html-text' || input.type === 'html-inline'"
+                v-else-if="input.type === 'html' || input.type === 'html-text' || input.type === 'html-inline'"
                 :id="inputId"
                 ref="htmlInput"
                 :label="input.label"
@@ -115,7 +116,7 @@ function handleCollapse() {
                 @save-given-state="emit('saveGivenState', $event)"
             />
             <TextAreaInput
-                v-if="input.type === 'textarea'"
+                v-else-if="input.type === 'textarea'"
                 :id="inputId"
                 :label="input.label"
                 :placeholder="input.placeholder"
@@ -126,7 +127,7 @@ function handleCollapse() {
                 @save-given-state="emit('saveGivenState', $event)"
             />
             <FileInput
-                v-if="input.type === 'file'"
+                v-else-if="input.type === 'file'"
                 :id="inputId"
                 :label="input.label"
                 :accept="input.accept"
@@ -137,7 +138,7 @@ function handleCollapse() {
                 @save-given-state="emit('saveGivenState', $event)"
             />
             <ScoreInput
-                v-if="input.type === 'score'"
+                v-else-if="input.type === 'score'"
                 :id="inputId"
                 :label="input.label"
                 :input-value="Number(inputValue)"
@@ -145,7 +146,7 @@ function handleCollapse() {
                 @save-given-state="emit('saveGivenState', $event)"
             />
             <CheckBoxInput
-                v-if="input.type === 'checkbox'"
+                v-else-if="input.type === 'checkbox'"
                 :id="inputId"
                 :label="input.label"
                 :hint="input.hint"
@@ -154,7 +155,7 @@ function handleCollapse() {
                 @save-given-state="emit('saveGivenState', $event)"
             />
             <RadioInput
-                v-if="input.type === 'radio-group'"
+                v-else-if="input.type === 'radio-group'"
                 :id="inputId"
                 :label="input.label"
                 :input-value="inputValue as string"
@@ -163,7 +164,7 @@ function handleCollapse() {
                 @save-given-state="emit('saveGivenState', $event)"
             />
             <SelectInput
-                v-if="input.type === 'select'"
+                v-else-if="input.type === 'select'"
                 :id="inputId"
                 :label="input.label"
                 :placeholder="input.placeholder"
@@ -173,8 +174,17 @@ function handleCollapse() {
                 @change="emit('input', $event)"
                 @save-given-state="emit('saveGivenState', $event)"
             />
+            <TagsInput
+                v-else-if="input.type === 'tags'"
+                :id="inputId"
+                :input-value="inputValue as string[]"
+                :placeholder="input.placeholder"
+                :disabled="disabled"
+                @input="emit('input', $event)"
+                @save-given-state="emit('saveGivenState', $event)"
+            />
             <RepeatInput
-                v-if="input.type === 'repeat'"
+                v-else-if="input.type === 'repeat'"
                 :id="inputId"
                 :label="input.label"
                 :input-values="inputValue as string[]"
@@ -186,14 +196,14 @@ function handleCollapse() {
                 @change="emit('repeatInput', $event)"
                 @save-given-state="emit('saveGivenState', $event)"
             />
-            <BadgesInput v-if="input.type === 'badge'" :input-value="inputValue as string[]" />
+            <BadgesInput v-else-if="input.type === 'badge'" :input-value="inputValue as string[]" />
             <IconPicker
-                v-if="input.type === 'icon-picker'"
+                v-else-if="input.type === 'icon-picker'"
                 :label="input.label"
                 :input-value="inputValue as string"
                 @input="emit('input', $event)"
             />
-            <ConditionInput v-if="input.type === 'badge-conditions'" />
+            <ConditionInput v-else-if="input.type === 'badge-conditions'" />
         </template>
     </div>
 </template>
