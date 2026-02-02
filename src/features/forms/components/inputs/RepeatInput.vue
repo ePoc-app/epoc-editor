@@ -49,7 +49,7 @@ const dragOptions = {
 
 const isLast = (index: number) => props.inputValues.length - 1 === index;
 
-function onInput(value: string, id: string, index: number) {
+function onInput(value: string | string[], id: string, index: number) {
     const changeEvent: RepeatChangeEvent = {
         type: 'change',
         value,

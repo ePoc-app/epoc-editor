@@ -39,7 +39,7 @@ const getBadgeInputValue = (input: Input) => {
     return epocNode.data.formValues['badges']?.[editorStore.openedBadgeId]?.[input.id] ?? input.value;
 };
 
-function onInput(value: string, id: string) {
+function onInput(value: string | string[], id: string) {
     if (editorStore.openedBadgeId) return onBadgeInput(value, id);
 
     const element =
@@ -50,7 +50,7 @@ function onInput(value: string, id: string) {
     element.formValues[id] = value;
 }
 
-function onBadgeInput(value: string, id: string) {
+function onBadgeInput(value: string | string[], id: string) {
     const epocNode = editorStore.getEpocNode;
     const badgeId = editorStore.openedBadgeId;
 

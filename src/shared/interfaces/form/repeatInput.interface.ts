@@ -18,7 +18,7 @@ export interface RepeatMoveEvent extends RepeatInputEvent {
 }
 
 export interface RepeatChangeEvent extends RepeatInputEvent {
-    value: string | boolean | number;
+    value: string | boolean | number | string[];
     id: string;
     index: number;
 }
