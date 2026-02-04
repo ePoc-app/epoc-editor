@@ -152,19 +152,17 @@ export const chapterForm: ComputedRef<Form> = computed(() => {
         },
     ];
 
-    if (env.isDev) {
-        fields.push({
-            name: i18n.global.t('forms.unlock'),
-            inputs: [
-                {
-                    id: 'unlock-conditions',
-                    type: 'badge-conditions',
-                    label: '',
-                    value: [],
-                },
-            ],
-        });
-    }
+    fields.push({
+        name: i18n.global.t('forms.unlock'),
+        inputs: [
+            {
+                id: 'unlock-conditions',
+                type: 'badge-conditions',
+                label: '',
+                value: [],
+            },
+        ],
+    });
 
     return {
         type: 'chapter',
@@ -503,19 +501,17 @@ export const pageForm: ComputedRef<Form> = computed(() => {
         },
     ];
 
-    if (env.isDev) {
-        fields.push({
-            name: i18n.global.t('forms.unlock'),
-            inputs: [
-                {
-                    id: 'unlock-conditions',
-                    type: 'badge-conditions',
-                    label: '',
-                    value: [],
-                },
-            ],
-        });
-    }
+    fields.push({
+        name: i18n.global.t('forms.unlock'),
+        inputs: [
+            {
+                id: 'unlock-conditions',
+                type: 'badge-conditions',
+                label: '',
+                value: [],
+            },
+        ],
+    });
 
     fields.push({
         name: i18n.global.t('forms.node.page.components'),
