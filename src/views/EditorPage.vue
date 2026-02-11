@@ -35,10 +35,11 @@ function addKeyboardEvent(event: KeyboardEvent) {
 
     if (metaKey || ctrlKey) {
         if (key === 'v') {
-            // Permits to paste in the WYSIWYG link editor modal
+            // Permits to paste in text input
             if (
                 (event.target as HTMLElement).className.indexOf('tox-textfield') !== -1 ||
-                (event.target as HTMLElement).className.indexOf('tox-textarea') !== -1
+                (event.target as HTMLElement).className.indexOf('tox-textarea') !== -1 ||
+                (event.target as HTMLElement).className.indexOf('input') !== -1
             )
                 return;
 
