@@ -9,6 +9,7 @@ import { addContentToPage } from './content.service';
 import { generateContentId, generateId, graphService } from '../graph.service';
 import { deleteElement, deleteSelection, createEdge } from '.';
 import { updateNextChapters } from '@/src/shared/services/graph/chapter.service';
+import { Rule } from '@epoc/epoc-types/src/v2';
 
 const { nodes, edges, addNodes, findNode, applyNodeChanges, removeEdges } = useVueFlow('main');
 
@@ -102,6 +103,7 @@ export function createLinkedPage(
     conditional: boolean,
     contentId: string,
     summary?: string,
+    rule?: Rule,
 ): Node {
     const position = {
         x: sourcePage.position.x + 150,
@@ -120,6 +122,7 @@ export function createLinkedPage(
                 title,
                 subtitle,
                 summary,
+                rule,
                 components: contentElements.map((c) => {
                     return { action: c.action };
                 }),

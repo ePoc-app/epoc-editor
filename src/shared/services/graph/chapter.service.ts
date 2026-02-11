@@ -37,6 +37,7 @@ export function addChapter(chapterId?: string, chapter?: Chapter, offsetY = 0): 
         data.formValues = {
             title: chapter.title,
             objectives: chapter.objectives,
+            rule: chapter.rule,
         };
     }
 

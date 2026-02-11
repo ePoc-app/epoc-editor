@@ -7,6 +7,7 @@ import {
     Choice,
     ChoiceCondition,
     Content,
+    Chapter,
     Html,
     SimpleQuestion,
     uid,
@@ -21,9 +22,9 @@ import {
     getElementByContentId,
     setNodesSelectability,
 } from '@/src/shared/services/graph';
-import { Question } from '@epoc/epoc-types/src/v2';
+import { Question, Rule } from '@epoc/epoc-types/src/v2';
 import { createRule, getConditions, getValidBadges } from '@/src/shared/services';
-import { Badge, NodeElement } from '@/src/shared/interfaces';
+import { Badge, NodeElement, Condition } from '@/src/shared/interfaces';
 import { CustomQuestion } from '@epoc/epoc-types/dist/v2';
 import { useSideBarStore } from '@/src/features/sideBar/stores/sideBarStore';
 
@@ -128,6 +129,8 @@ function createContentJSON(): EpocV1 {
             pageNode = getNextNode(pageNode);
         }
     });
+
+    exportContentRuleToPage(epoc);
 
     if (validBadges) {
         epoc.badges = exportBadgesToPage(validBadges);
@@ -479,6 +482,112 @@ export function exportBadgesToPage(badges: Record<string, Badge>): Record<string
     }
 
     return res;
+}
+
+export function exportContentRulesToPage(items: Record<string, (Content & { rule: Rule }) | Chapter>) {
+    Object.entries(items).forEach(([contentId, item]) => {
+        if (!item.rule) return;
+
+        let conditions = getConditions(item);
+        const elements = conditions.map((condition) => condition.element);
+
+        for (const element of elements) {
+            const nodeElement = getElementByContentId(element);
+
+            // @ts-expect-error
+            if (nodeElement?.parentId) {
+                // @ts-expect-error
+                const parentNode = findNode(nodeElement.parentId);
+
+                if (parentNode.type !== 'activity') {
+                    const newElement = getContentIdFromId(parentNode.id);
+                    conditions = updateConditionElement(conditions, element, newElement);
+                }
+            }
+        }
+
+        item.rule = createRule(conditions);
+    });
+}
+function updateConditionElement(conditions: Condition[], targetElement: string, newElement: string): Condition[] {
+    return conditions.map((condition) =>
+        condition.element === targetElement ? { ...condition, element: newElement } : condition,
+    );
+}
+
+export function exportContentRuleToPage(epoc: EpocV1) {
+    for (const contentId of Object.keys(epoc.contents)) {
+        const content = epoc.contents[contentId];
+
+        // @ts-expect-error : rule is not present on all Content type
+        if (content.rule) {
+            let conditions = getConditions(content);
+            const elements = conditions.map((condition) => condition.element);
+
+            for (const element of elements) {
+                const nodeElement = getElementByContentId(element);
+
+                // @ts-expect-error
+                if (nodeElement && nodeElement.parentId) {
+                    // @ts-expect-error
+                    const parentNode = findNode(nodeElement.parentId);
+                    if (parentNode.type !== 'activity') {
+                        const newElement = getContentIdFromId(parentNode.id);
+
+                        conditions = conditions.map((condition) => {
+                            if (condition.element === element) {
+                                return {
+                                    ...condition,
+                                    element: newElement,
+                                };
+                            }
+
+                            return condition;
+                        });
+                    }
+                }
+            }
+
+            // @ts-expect-error : rule is not present on all Content type
+            epoc.contents[contentId].rule = createRule(conditions);
+        }
+    }
+
+    for (const contentId of Object.keys(epoc.chapters)) {
+        const chapter = epoc.chapters[contentId];
+
+        if (chapter.rule) {
+            let conditions = getConditions(chapter);
+            const elements = conditions.map((condition) => condition.element);
+
+            for (const element of elements) {
+                const nodeElement = getElementByContentId(element);
+
+                // @ts-expect-error
+                if (nodeElement && nodeElement.parentId) {
+                    // @ts-expect-error
+                    const parentNode = findNode(nodeElement.parentId);
+
+                    if (parentNode.type !== 'activity') {
+                        const newElement = getContentIdFromId(parentNode.id);
+
+                        conditions = conditions.map((condition) => {
+                            if (condition.element === element) {
+                                return {
+                                    ...condition,
+                                    element: newElement,
+                                };
+                            }
+
+                            return condition;
+                        });
+                    }
+                }
+            }
+
+            epoc.chapters[contentId].rule = createRule(conditions);
+        }
+    }
 }
 
 export function closeAllPanels() {

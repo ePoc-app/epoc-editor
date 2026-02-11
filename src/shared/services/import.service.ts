@@ -8,13 +8,14 @@ import {
 } from '@/src/shared/services/graph';
 import { generateId } from '@/src/shared/services/graph.service';
 import { questions, standardPages } from '@/src/shared/data';
-import { Assessment, ChoiceCondition, SimpleQuestion } from '@epoc/epoc-types/src/v1';
+import { Assessment, ChoiceCondition, SimpleQuestion, Content, Chapter } from '@epoc/epoc-types/src/v1';
 import { createRule, getConditions } from '@/src/shared/services';
 import { Node } from '@vue-flow/core';
 import { Badge } from '@/src/shared/interfaces';
 import { router } from '@/src/router';
 import { saveState } from '@/src/shared/services/undoRedo.service';
 import { useEditorStore, useGraphStore } from '@/src/shared/stores';
+import { Rule } from '@epoc/epoc-types/src/v2';
 
 const mapType = {
     video: standardPages.value.find((s) => s.type === 'video'),
@@ -31,6 +32,7 @@ const mapType = {
 export function createGraphEpocFromData(epoc: EpocV1) {
     setEpocNodeData(epoc);
     let maxContentHeight = 0;
+
     for (const [chapterId, chapter] of Object.entries(epoc.chapters)) {
         let currentNode = addChapter(chapterId, chapter, maxContentHeight);
         maxContentHeight = 0;
@@ -109,6 +111,9 @@ export function createGraphEpocFromData(epoc: EpocV1) {
                 conditional,
                 contentId,
                 summary,
+
+                // @ts-expect-error : rule is not present on all Content type
+                content.rule,
             );
             const contentHeight = (contentElements.length - 1) * 60;
             maxContentHeight = contentHeight > maxContentHeight ? contentHeight : maxContentHeight;
@@ -117,11 +122,15 @@ export function createGraphEpocFromData(epoc: EpocV1) {
 
     setPageContents();
 
+    // setContentsRule(epoc);
+    setRulesToContents(epoc.contents);
+    setRulesToContents(epoc.chapters);
     setBadgesData(epoc.badges);
 }
 
-// to translate v1 badges to v2
 const contentVerbs = ['read', 'played', 'watched', 'listened'];
+
+// to translate v1 badges to v2
 function setBadgesData(badges: Record<string, Badge>) {
     for (const badgeKey in badges) {
         const conditions = getConditions(badges[badgeKey]);
@@ -139,6 +148,28 @@ function setBadgesData(badges: Record<string, Badge>) {
 
         badges[badgeKey].rule = createRule(conditions);
     }
+}
+
+// Set content targeted rules to the content instead of the page
+function setRulesToContents(items: Record<string, (Content & { rule?: Rule }) | Chapter>) {
+    Object.entries(items).forEach(([contentId, item]) => {
+        if (!item.rule) return;
+
+        const conditions = getConditions(item);
+        const updatedConditions = conditions.map((condition) => {
+            if (contentVerbs.includes(condition.verb)) {
+                const node = getElementByContentId(condition.element) as Node;
+                return { ...condition, element: node.data.elements[0].contentId };
+            }
+
+            return condition;
+        });
+
+        item.rule = createRule(updatedConditions);
+
+        const node = getElementByContentId(contentId) as Node;
+        node.data.formValues.rule = item.rule;
+    });
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
