@@ -187,6 +187,7 @@ function handleCollapse() {
                 v-else-if="input.type === 'repeat'"
                 :id="inputId"
                 :label="input.label"
+                :button-label="input.buttonLabel"
                 :input-values="inputValue as string[]"
                 :inputs="input.inputs"
                 :field-index="fieldIndex"

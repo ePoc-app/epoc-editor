@@ -13,6 +13,7 @@ export class EpocV1 implements Epoc {
     objectives: string[];
     summary: html;
     teaser: string;
+    teaserSubtitles: { label: string; lang: string; src: string }[];
     thumbnail: string;
     version: string;
     edition: string;
@@ -44,6 +45,7 @@ export class EpocV1 implements Epoc {
         objectives: string[],
         summary: html,
         teaser: string,
+        teaserSubtitles: { label: string; lang: string; src: string }[],
         thumbnail: string,
         edition: string,
         certificateDisabled: boolean,
@@ -66,6 +68,7 @@ export class EpocV1 implements Epoc {
         this.objectives = objectives;
         this.summary = summary;
         this.teaser = teaser;
+        this.teaserSubtitles = teaserSubtitles;
         this.thumbnail = thumbnail;
         this.edition = edition;
         this.certificateDisabled = certificateDisabled;

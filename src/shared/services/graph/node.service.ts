@@ -25,6 +25,7 @@ export function setEpocNodeData(epoc: EpocV1) {
     epocNode.data.formValues.objectives = epoc.objectives;
     epocNode.data.formValues.summary = epoc.summary;
     epocNode.data.formValues.teaser = epoc.teaser;
+    epocNode.data.formValues.teaserSubtitles = epoc.teaserSubtitles;
     epocNode.data.formValues.thumbnail = epoc.thumbnail;
     epocNode.data.formValues.version = epoc.version;
     epocNode.data.formValues.certificateScore = epoc.certificateScore;

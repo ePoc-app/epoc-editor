@@ -18,6 +18,7 @@ export interface Input {
         | 'badge'
         | 'tags';
     label: string;
+    buttonLabel?: string;
     value: string | boolean | number | string[];
     placeholder?: string;
     accept?: string;

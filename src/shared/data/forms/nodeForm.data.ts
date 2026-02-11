@@ -207,6 +207,38 @@ export const epocForm: ComputedRef<Form> = computed(() => ({
                     hint: i18n.global.t('forms.node.teaser.hint'),
                 },
                 {
+                    id: 'teaserSubtitles',
+                    label: i18n.global.t('forms.node.subtitle'),
+                    buttonLabel: i18n.global.t('forms.content.subtitle.placeholder'),
+                    type: 'repeat',
+                    value: [],
+                    inputs: [
+                        {
+                            id: 'label',
+                            type: 'text',
+                            label: i18n.global.t('forms.content.subtitle.label'),
+                            value: '',
+                            placeholder: 'English',
+                        },
+                        {
+                            id: 'lang',
+                            type: 'text',
+                            label: i18n.global.t('forms.content.subtitle.code'),
+                            value: '',
+                            placeholder: 'en',
+                        },
+                        {
+                            id: 'src',
+                            type: 'file',
+                            label: i18n.global.t('global.file'),
+                            value: '',
+                            placeholder: i18n.global.t('forms.content.subtitle.placeholder'),
+                            accept: '.vtt',
+                            hint: i18n.global.t('forms.content.subtitle.hint', { extensions: '.vtt' }),
+                        },
+                    ],
+                },
+                {
                     id: 'thumbnail',
                     type: 'file',
                     label: i18n.global.t('forms.node.thumbnail.title'),

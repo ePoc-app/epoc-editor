@@ -21,6 +21,7 @@ const props = defineProps<{
     id: string;
     inputs: Input[];
     label: string;
+    buttonLabel?: string;
     inputValues: string[];
     fieldIndex: number;
     addButton?: boolean;
@@ -202,7 +203,7 @@ function getLabelIdentifier(index) {
     <AddCard
         v-if="addButton !== false"
         :data-testid="`${id}-add`"
-        :placeholder="t('global.add')"
+        :placeholder="buttonLabel ?? t('global.add')"
         class="add-card"
         @click="addCard"
     />
