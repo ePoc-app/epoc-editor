@@ -456,13 +456,14 @@ export function exportBadgesToPage(badges: Record<string, Badge>): Record<string
         const elements = conditions.map((condition) => condition.element);
 
         for (const element of elements) {
-            const nodeElement = getElementByContentId(element);
+            const nodeElement = getElementByContentId(element) as NodeElement;
 
             // @ts-ignore
             if (nodeElement && nodeElement.parentId) {
                 //@ts-ignore
                 const parentNode = findNode(nodeElement.parentId);
 
+                //@ts-expect-error
                 if (parentNode.type !== 'activity' && !QUESTION_TYPES.includes(nodeElement.formType)) {
                     const newElement = getContentIdFromId(parentNode.id);
 
