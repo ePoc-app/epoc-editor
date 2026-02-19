@@ -124,7 +124,9 @@ export function setPageContents() {
     for (const page of pages) {
         // in v1 there is only one element per page
         const element: NodeElement = page.data.elements[0];
-        element.contentId = generateContentId();
+        if (!element.contentId) {
+            element.contentId = generateContentId();
+        }
     }
 }
 

@@ -122,7 +122,6 @@ export function createGraphEpocFromData(epoc: EpocV1) {
 
     setPageContents();
 
-    // setContentsRule(epoc);
     setRulesToContents(epoc.contents);
     setRulesToContents(epoc.chapters);
     setBadgesData(epoc.badges);
