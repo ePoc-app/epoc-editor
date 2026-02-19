@@ -24,7 +24,7 @@ import {
 } from '@/src/shared/services/graph';
 import { Question, Rule } from '@epoc/epoc-types/src/v2';
 import { createRule, getConditions, getValidBadges } from '@/src/shared/services';
-import { Badge, NodeElement, Condition } from '@/src/shared/interfaces';
+import { Badge, NodeElement, Condition, QUESTION_TYPES } from '@/src/shared/interfaces';
 import { CustomQuestion } from '@epoc/epoc-types/dist/v2';
 import { useSideBarStore } from '@/src/features/sideBar/stores/sideBarStore';
 
@@ -463,7 +463,7 @@ export function exportBadgesToPage(badges: Record<string, Badge>): Record<string
                 //@ts-ignore
                 const parentNode = findNode(nodeElement.parentId);
 
-                if (parentNode.type !== 'activity') {
+                if (parentNode.type !== 'activity' && !QUESTION_TYPES.includes(nodeElement.formType)) {
                     const newElement = getContentIdFromId(parentNode.id);
 
                     conditions = conditions.map((condition) => {
