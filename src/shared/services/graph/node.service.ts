@@ -37,12 +37,12 @@ export function setEpocNodeData(epoc: EpocV1) {
     epocNode.data.formValues.licenceName = epoc.license.name;
     epocNode.data.formValues.licenceUrl = epoc.license.url;
 
-    epocNode.data.formValues.publisherId = epoc.publisher.id;
-    epocNode.data.formValues.publisherName = epoc.publisher.name;
-    epocNode.data.formValues.publisherDescription = epoc.publisher.description;
-    epocNode.data.formValues.publisherLogo = epoc.publisher.logo;
-    epocNode.data.formValues.publisherEmail = epoc.publisher.email;
-    epocNode.data.formValues.publisherWebsite = epoc.publisher.website;
+    epocNode.data.formValues.publisherId = epoc.publisher?.id;
+    epocNode.data.formValues.publisherName = epoc.publisher?.name;
+    epocNode.data.formValues.publisherDescription = epoc.publisher?.description;
+    epocNode.data.formValues.publisherLogo = epoc.publisher?.logo;
+    epocNode.data.formValues.publisherEmail = epoc.publisher?.email;
+    epocNode.data.formValues.publisherWebsite = epoc.publisher?.website;
 }
 
 export function getEpocNodeData() {
