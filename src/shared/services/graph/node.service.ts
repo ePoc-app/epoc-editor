@@ -28,6 +28,7 @@ export function setEpocNodeData(epoc: EpocV1) {
     epocNode.data.formValues.teaserSubtitles = epoc.teaserSubtitles;
     epocNode.data.formValues.thumbnail = epoc.thumbnail;
     epocNode.data.formValues.version = epoc.version;
+    epocNode.data.formValues.certificateBadgeCount = epoc.certificateBadgeCount;
     epocNode.data.formValues.certificateScore = epoc.certificateScore;
     epocNode.data.formValues.authors = Object.values(epoc.authors);
     epocNode.data.formValues.plugins = epoc.plugins;
