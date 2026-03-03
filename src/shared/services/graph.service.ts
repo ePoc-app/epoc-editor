@@ -56,6 +56,45 @@ function importFile(filepath: string, targetDirectory?: string): Promise<string>
     });
 }
 
+async function importFileWithLock(filepath: string, targetDirectory?: string): Promise<string> {
+    const overlay = createLockOverlay();
+
+    try {
+        const result = await importFile(filepath, targetDirectory);
+
+        return result;
+    } finally {
+        overlay.remove();
+    }
+}
+
+function createLockOverlay(): HTMLElement {
+    const overlay = document.createElement('div');
+
+    overlay.style.cssText = `
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: rgba(0, 0, 0, 0.4);
+        cursor: wait;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    `;
+
+    overlay.innerHTML = `
+        <div style="color: white; font-size: 16px; font-family: sans-serif;">
+            Importing...
+        </div>
+    `;
+
+    overlay.addEventListener('keydown', (e) => e.stopPropagation(), true);
+
+    document.body.appendChild(overlay);
+
+    return overlay;
+}
+
 let timerId = null;
 
 const debounceFunction = function (delay: number, cb: () => void) {
@@ -355,6 +394,7 @@ function openContextMenu(context: string, data: contextDataProps): void {
 
 export const graphService = {
     importFile,
+    importFileWithLock,
     writeProjectData,
     getPreviousNode,
     getNextNode,

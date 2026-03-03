@@ -9,6 +9,8 @@ const Store = require('electron-store');
 const electronStore = new Store();
 const store = require('./store');
 const mime = require('mime-types');
+const ffmpeg = require('ffmpeg-static-electron');
+const { execFile } = require('child_process');
 
 const recentFiles = electronStore.get('recentFiles', []).filter((r) => {
     return fs.existsSync(r.filepath);
@@ -292,6 +294,10 @@ const writeEpocData = async function (workdir, data) {
     fs.writeFileSync(path.join(workdir, 'content.json'), data);
 };
 
+const onProgress = (progress) => {
+    console.log('Progress', progress);
+};
+
 /**
  * Copy the imported file to the workdir
  * @param {string} workdir
@@ -305,10 +311,30 @@ const copyFileToWorkdir = async function (workdir, filepath, targetDirectory) {
 
     if (!fs.existsSync(assetsPath)) fs.mkdirSync(assetsPath, { recursive: true });
 
-    const copyPath = path.join(assetsPath, path.basename(filepath).replace(/[^a-z0-9.]/gi, '_'));
-    if (!fs.existsSync(assetsPath)) fs.mkdirSync(assetsPath);
-    fs.copyFileSync(filepath, copyPath);
-    return path.relative(workdir, copyPath).replaceAll('\\', '/');
+    const filename = path.basename(filepath).replace(/[^a-z0-9.]/gi, '_');
+    const copyPath = path.join(assetsPath, filename);
+    const ext = path.extname(filepath).toLowerCase();
+
+    const videoExtensions = new Set(['.mp4', '.mov', '.avi', '.mkv', '.webm', '.flv', '.wmv']);
+
+    if (videoExtensions.has(ext)) {
+        const optimizedFilename = filename.replace(ext, '-min' + ext);
+        const optimizedPath = path.join(assetsPath, optimizedFilename);
+        try {
+            await compressVideo(filepath, optimizedPath, onProgress);
+
+            return path.relative(workdir, optimizedPath).replaceAll('\\', '/');
+        } catch (error) {
+            console.error('Optimization failed, copying original:', error);
+            fs.copyFileSync(filepath, copyPath);
+
+            return path.relative(workdir, copyPath).replaceAll('\\', '/');
+        }
+    } else {
+        fs.copyFileSync(filepath, copyPath);
+
+        return path.relative(workdir, copyPath).replaceAll('\\', '/');
+    }
 };
 
 /**
@@ -545,6 +571,38 @@ const removeAsset = function (workdir, assetName) {
         console.error(`Error deleting asset ${assetName}`, e);
         return false;
     }
+};
+
+const compressVideo = (input, output, onProgress) => {
+    return new Promise((resolve, reject) => {
+        const args = [
+            '-i',
+            input,
+            '-vf',
+            'scale=-2:480',
+            '-c:v',
+            'libx264',
+            '-crf',
+            '23',
+            '-c:a',
+            'aac',
+            '-strict',
+            '-2',
+            '-progress',
+            'pipe:1',
+            output,
+        ];
+
+        execFile(ffmpeg.path, args, (error, stdout, stderr) => {
+            if (error) {
+                console.error('FFmpeg error:', error);
+                reject(error);
+                return;
+            }
+            console.log('Video optimized', output);
+            resolve(output);
+        });
+    });
 };
 
 module.exports = {
