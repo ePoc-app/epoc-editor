@@ -100,7 +100,8 @@
         "file": "File",
         "refresh": "Rinfrescare",
         "type": "Scrivi qui...",
-        "description": "Descrizione"
+        "description": "Descrizione",
+        "contentId": "Identificatore del contenuto"
     },
     "validation": {
         "yes": "SÌ, ELIMINA",

@@ -112,6 +112,15 @@ export const useEditorStore = defineStore('editor', {
             return nodeId ? findNode(nodeId) : null;
         },
 
+        getCurrentContentId() {
+            const graphNode = this.getCurrentGraphNode;
+            if (!this.openedNodeId) {
+                return graphNode.data.contentId;
+            } else {
+                return graphNode.data.elements.find((e) => e.id === this.openedElementId).contentId;
+            }
+        },
+
         getEpocNode(): GraphNode {
             return findNode('1');
         },

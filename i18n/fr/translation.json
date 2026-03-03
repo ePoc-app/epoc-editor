@@ -100,7 +100,8 @@
         "file": "Fichier",
         "refresh": "Rafraîchir",
         "type": "Tapez ici...",
-        "description": "Description"
+        "description": "Description",
+        "contentId": "Identifiant du contenu"
     },
     "validation": {
         "yes": "OUI, SUPPRIMER",
@@ -215,7 +216,8 @@
         "publish": "Publier",
         "never": "jamais",
         "lastSave": "Dernière sauvegarde :",
-        "new": "Nouvel ePoc"
+        "new": "Nouvel ePoc",
+        "adjust": "Ajuster"
     },
     "zoom": {
         "zoomIn": "Zoom avant",

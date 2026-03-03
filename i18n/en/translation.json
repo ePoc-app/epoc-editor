@@ -100,7 +100,8 @@
         "file": "File",
         "refresh": "Refresh",
         "type": "Type here...",
-        "description": "Description"
+        "description": "Description",
+        "contentId": "Content identifier"
     },
     "validation": {
         "yes": "YES, DELETE",
@@ -215,7 +216,8 @@
         "publish": "Publish",
         "never": "never",
         "lastSave": "Last save:",
-        "new": "New ePoc"
+        "new": "New ePoc",
+        "adjust": "Adjust"
     },
     "zoom": {
         "zoomIn": "Zoom in",
@@ -229,7 +231,8 @@
             "updateIcon": "Update icon",
             "obtention": "Badge earning conditions",
             "presentationPlaceholder": "Enter badge presentation",
-            "icon": "Badge icon"
+            "icon": "Badge icon",
+            "presentation": "Badge presentation"
         },
         "unlock": "Unlock conditions",
         "content": {

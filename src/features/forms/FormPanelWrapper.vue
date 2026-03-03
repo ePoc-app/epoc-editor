@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import FormPanel from './FormPanel.vue';
 import ResizablePanel from '@/src/components/ResizablePanel.vue';
 import { useEditorStore } from '@/src/shared/stores';
@@ -29,6 +30,8 @@ function handleResizeEnd(width: number) {
 function handleClose() {
     closeFormPanel();
 }
+
+const contentId = computed(() => editorStore.getCurrentContentId);
 </script>
 
 <template>
@@ -42,9 +45,26 @@ function handleClose() {
         @keydown="handleKeyDown"
     >
         <template #title>
-            <div class="title">
-                <div class="form-icon"><i :class="editorStore.formPanel.form.icon"></i></div>
-                <h1>{{ editorStore.formPanel.form.name }}</h1>
+            <div class="header">
+                <div class="title">
+                    <div class="form-icon"><i :class="editorStore.formPanel.form.icon"></i></div>
+                    <h1>{{ editorStore.formPanel.form.name }}</h1>
+                </div>
+
+                <p v-if="contentId" class="description">
+                    {{ contentId }}
+                    <i
+                        v-tippy="{
+                            content: $t('global.contentId'),
+                            placement: 'top',
+                            allowHTML: true,
+                            arrow: true,
+                            arrowType: 'round',
+                            animation: 'fade',
+                        }"
+                        class="icon-help-circle"
+                    />
+                </p>
             </div>
         </template>
 
@@ -55,16 +75,34 @@ function handleClose() {
 </template>
 
 <style scoped lang="scss">
-.title {
-    display: flex;
-    flex-direction: row;
+.header {
     margin-top: 2.5rem;
-    margin-bottom: 2rem;
-    h1 {
-        margin: 0 0 0 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    .title {
+        display: flex;
+        align-items: center;
+        flex: 1;
+
+        h1 {
+            margin: 0 0 0 1rem;
+        }
+        .form-icon {
+            transform: translate(0, 0.2rem);
+        }
     }
-    .form-icon {
-        transform: translate(0, 0.2rem);
+
+    .description {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        color: var(--text-secondary);
     }
 }
 </style>
