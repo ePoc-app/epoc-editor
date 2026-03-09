@@ -371,7 +371,7 @@ export const epocForm: ComputedRef<Form> = computed(() => ({
                     value: [],
                     inputs: [
                         {
-                            id: 'publisher-id',
+                            id: '',
                             type: 'textarea',
                             label: '',
                             placeholder: i18n.global.t('forms.type'),
