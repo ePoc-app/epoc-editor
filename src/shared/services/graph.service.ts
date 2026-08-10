@@ -27,6 +27,8 @@ import { createRule, getConditions, getValidBadges } from '@/src/shared/services
 import { Badge, NodeElement, Condition, QUESTION_TYPES } from '@/src/shared/interfaces';
 import { CustomQuestion } from '@epoc/epoc-types/dist/v2';
 import { useSideBarStore } from '@/src/features/sideBar/stores/sideBarStore';
+import ImportModal from '@/src/features/forms/components/ImportModal.vue';
+import { createApp, reactive, h } from 'vue';
 
 declare const api: ApiInterface;
 
@@ -46,14 +48,70 @@ function getProjectJSON(): { data: string; content: string } {
     return { data, content };
 }
 
-function importFile(filepath: string, targetDirectory?: string): Promise<string> {
+function importFile(
+    filepath: string,
+    targetDirectory?: string,
+    onProgress?: (current: number, max: number) => void,
+): Promise<string> {
     api.send('importFile', { filepath, targetDirectory });
 
     return new Promise((resolve) => {
+        const handleProgress = (data: string) => {
+            const progressData = JSON.parse(data);
+            onProgress?.(progressData.current, progressData.max);
+        };
+
+        if (onProgress) {
+            api.receive('importFileProgress', handleProgress);
+        }
+
         api.receiveOnce('fileImported', (data) => {
             resolve(data);
         });
     });
+}
+
+async function importFileWithLock(filepath: string, targetDirectory?: string): Promise<string> {
+    const overlay = createImportOverlay();
+
+    try {
+        const result = await importFile(filepath, targetDirectory, (current, max) => {
+            overlay.update(current, max);
+        });
+
+        return result;
+    } finally {
+        overlay.remove();
+    }
+}
+
+interface ImportHandle {
+    update: (current: number, max: number) => void;
+    remove: () => void;
+}
+
+function createImportOverlay(): ImportHandle {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const state = reactive({ current: 0, max: 100 });
+
+    const app = createApp({
+        render: () => h(ImportModal, { current: state.current, max: state.max }),
+    });
+
+    app.mount(container);
+
+    return {
+        update: (current, max) => {
+            state.current = current;
+            state.max = max;
+        },
+        remove: () => {
+            app.unmount();
+            container.remove();
+        },
+    };
 }
 
 let timerId = null;
@@ -355,6 +413,7 @@ function openContextMenu(context: string, data: contextDataProps): void {
 
 export const graphService = {
     importFile,
+    importFileWithLock,
     writeProjectData,
     getPreviousNode,
     getNextNode,

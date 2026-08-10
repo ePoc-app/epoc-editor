@@ -9,6 +9,8 @@ const Store = require('electron-store');
 const electronStore = new Store();
 const store = require('./store');
 const mime = require('mime-types');
+const ffmpeg = require('ffmpeg-static-electron');
+const { spawn } = require('child_process');
 
 const recentFiles = electronStore.get('recentFiles', []).filter((r) => {
     return fs.existsSync(r.filepath);
@@ -297,18 +299,39 @@ const writeEpocData = async function (workdir, data) {
  * @param {string} workdir
  * @param {string} filepath
  * @param {string} targetDirectory the path where to copy the file
+ * @param {(current: number, max: number) => void} [onProgress]
  * @return {string} the path of the copied file
  */
-const copyFileToWorkdir = async function (workdir, filepath, targetDirectory) {
+const copyFileToWorkdir = async function (workdir, filepath, targetDirectory, onProgress) {
     const pathEnd = targetDirectory ? path.join(...targetDirectory.split('/')) : 'assets';
     const assetsPath = path.join(workdir, pathEnd);
 
     if (!fs.existsSync(assetsPath)) fs.mkdirSync(assetsPath, { recursive: true });
 
-    const copyPath = path.join(assetsPath, path.basename(filepath).replace(/[^a-z0-9.]/gi, '_'));
-    if (!fs.existsSync(assetsPath)) fs.mkdirSync(assetsPath);
-    fs.copyFileSync(filepath, copyPath);
-    return path.relative(workdir, copyPath).replaceAll('\\', '/');
+    const filename = path.basename(filepath).replace(/[^a-z0-9.]/gi, '_');
+    const copyPath = path.join(assetsPath, filename);
+    const ext = path.extname(filepath).toLowerCase();
+
+    const videoExtensions = new Set(['.mp4', '.mov', '.avi', '.mkv', '.webm', '.flv', '.wmv']);
+
+    if (videoExtensions.has(ext)) {
+        const optimizedFilename = filename.replace(ext, '-min' + ext);
+        const optimizedPath = path.join(assetsPath, optimizedFilename);
+        try {
+            await compressVideo(filepath, optimizedPath, onProgress);
+
+            return path.relative(workdir, optimizedPath).replaceAll('\\', '/');
+        } catch (error) {
+            console.error('Optimization failed, copying original:', error);
+            fs.copyFileSync(filepath, copyPath);
+
+            return path.relative(workdir, copyPath).replaceAll('\\', '/');
+        }
+    } else {
+        fs.copyFileSync(filepath, copyPath);
+
+        return path.relative(workdir, copyPath).replaceAll('\\', '/');
+    }
 };
 
 /**
@@ -545,6 +568,85 @@ const removeAsset = function (workdir, assetName) {
         console.error(`Error deleting asset ${assetName}`, e);
         return false;
     }
+};
+
+// Compress video & send the current progress
+const compressVideo = (input, output, onProgress) => {
+    return new Promise((resolve, reject) => {
+        if (fs.existsSync(output)) return resolve(output);
+
+        const args = [
+            '-i',
+            input,
+            '-vf',
+            'scale=-2:480',
+            '-c:v',
+            'libx264',
+            '-crf',
+            '23',
+            '-c:a',
+            'aac',
+            '-strict',
+            '-2',
+            '-progress',
+            'pipe:1',
+            output,
+        ];
+
+        const proc = spawn(ffmpeg.path, args);
+
+        let durationSeconds = null;
+        let stderrBuffer = '';
+        let stdoutBuffer = '';
+        let stderrOutput = '';
+
+        proc.stderr.on('data', (chunk) => {
+            const text = chunk.toString();
+            stderrOutput += text;
+
+            if (durationSeconds === null) {
+                stderrBuffer += text;
+                const match = stderrBuffer.match(/Duration:\s*(\d{2}):(\d{2}):(\d{2}(?:\.\d+)?)/);
+                if (match) {
+                    const [, hours, minutes, seconds] = match;
+                    durationSeconds = +hours * 3600 + +minutes * 60 + parseFloat(seconds);
+                }
+            }
+        });
+
+        proc.stdout.on('data', (chunk) => {
+            stdoutBuffer += chunk.toString();
+
+            const lines = stdoutBuffer.split('\n');
+            stdoutBuffer = lines.pop();
+
+            for (const line of lines) {
+                const [key, value] = line.split('=');
+                if (key === 'out_time_ms' && durationSeconds && onProgress) {
+                    const outSeconds = parseInt(value, 10) / 1_000_000;
+                    const percent = Math.min(100, Math.round((outSeconds / durationSeconds) * 100));
+                    onProgress(percent, 100);
+                } else if (key === 'progress' && value.trim() === 'end' && onProgress) {
+                    onProgress(100, 100);
+                }
+            }
+        });
+
+        proc.on('error', (error) => {
+            console.error('FFmpeg spawn error:', error);
+            reject(error);
+        });
+
+        proc.on('close', (code) => {
+            if (code !== 0) {
+                const error = new Error(`FFmpeg exited with code ${code}`);
+                console.error('FFmpeg error:', stderrOutput);
+                reject(error);
+                return;
+            }
+            resolve(output);
+        });
+    });
 };
 
 module.exports = {

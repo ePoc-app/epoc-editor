@@ -34,7 +34,7 @@ async function changeImage(e: Event) {
     const file = target.files[0];
     if (!file) return;
     fileInput.value.value = '';
-    url.value = await graphService.importFile(file.path, props.targetDirectory);
+    url.value = await graphService.importFileWithLock(file.path, props.targetDirectory);
 
     emit('input', url.value);
     emit('saveGivenState', savedState);

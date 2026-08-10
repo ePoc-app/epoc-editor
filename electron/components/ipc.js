@@ -167,10 +167,17 @@ const setupIpcListener = function (targetWindow, setupMenu) {
         'importFile',
         ipcGuard(async (event, data) => {
             const { filepath, targetDirectory } = data;
+            console.log('importFile');
+
             sendToFrontend(
                 event.sender,
                 'fileImported',
-                await copyFileToWorkdir(store.state.projects[targetWindow.id].workdir, filepath, targetDirectory),
+                await copyFileToWorkdir(
+                    store.state.projects[targetWindow.id].workdir,
+                    filepath,
+                    targetDirectory,
+                    (current, max) => sendToFrontend(event.sender, 'importFileProgress', { current, max }),
+                ),
             );
         }),
     );
