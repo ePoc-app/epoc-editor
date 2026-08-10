@@ -27,6 +27,8 @@ import { createRule, getConditions, getValidBadges } from '@/src/shared/services
 import { Badge, NodeElement, Condition, QUESTION_TYPES } from '@/src/shared/interfaces';
 import { CustomQuestion } from '@epoc/epoc-types/dist/v2';
 import { useSideBarStore } from '@/src/features/sideBar/stores/sideBarStore';
+import ImportModal from '@/src/features/forms/components/ImportModal.vue';
+import { createApp, reactive, h } from 'vue';
 
 declare const api: ApiInterface;
 
@@ -46,10 +48,23 @@ function getProjectJSON(): { data: string; content: string } {
     return { data, content };
 }
 
-function importFile(filepath: string, targetDirectory?: string): Promise<string> {
+function importFile(
+    filepath: string,
+    targetDirectory?: string,
+    onProgress?: (current: number, max: number) => void,
+): Promise<string> {
     api.send('importFile', { filepath, targetDirectory });
 
     return new Promise((resolve) => {
+        const handleProgress = (data: string) => {
+            const progressData = JSON.parse(data);
+            onProgress?.(progressData.current, progressData.max);
+        };
+
+        if (onProgress) {
+            api.receive('importFileProgress', handleProgress);
+        }
+
         api.receiveOnce('fileImported', (data) => {
             resolve(data);
         });
@@ -57,10 +72,12 @@ function importFile(filepath: string, targetDirectory?: string): Promise<string>
 }
 
 async function importFileWithLock(filepath: string, targetDirectory?: string): Promise<string> {
-    const overlay = createLockOverlay();
+    const overlay = createImportOverlay();
 
     try {
-        const result = await importFile(filepath, targetDirectory);
+        const result = await importFile(filepath, targetDirectory, (current, max) => {
+            overlay.update(current, max);
+        });
 
         return result;
     } finally {
@@ -68,31 +85,33 @@ async function importFileWithLock(filepath: string, targetDirectory?: string): P
     }
 }
 
-function createLockOverlay(): HTMLElement {
-    const overlay = document.createElement('div');
+interface ImportHandle {
+    update: (current: number, max: number) => void;
+    remove: () => void;
+}
 
-    overlay.style.cssText = `
-        position: fixed;
-        inset: 0;
-        z-index: 9999;
-        background: rgba(0, 0, 0, 0.4);
-        cursor: wait;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    `;
+function createImportOverlay(): ImportHandle {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
 
-    overlay.innerHTML = `
-        <div style="color: white; font-size: 16px; font-family: sans-serif;">
-            Importing...
-        </div>
-    `;
+    const state = reactive({ current: 0, max: 100 });
 
-    overlay.addEventListener('keydown', (e) => e.stopPropagation(), true);
+    const app = createApp({
+        render: () => h(ImportModal, { current: state.current, max: state.max }),
+    });
 
-    document.body.appendChild(overlay);
+    app.mount(container);
 
-    return overlay;
+    return {
+        update: (current, max) => {
+            state.current = current;
+            state.max = max;
+        },
+        remove: () => {
+            app.unmount();
+            container.remove();
+        },
+    };
 }
 
 let timerId = null;

@@ -17,6 +17,7 @@ import BadgeMenu from '@/src/features/sideBar/components/BadgeMenu.vue';
 import { useSettingsStore } from '@/src/shared/stores';
 import { useSideBarStore } from '../features/sideBar/stores/sideBarStore';
 import AssetMenu from '../features/sideBar/components/asset/AssetMenu.vue';
+import ImportModal from '@/src/features/forms/components/ImportModal.vue';
 
 const editorStore = useEditorStore();
 const sidebarStore = useSideBarStore();
@@ -137,6 +138,8 @@ watch(
         <ModelMenu v-if="!editorStore.selectNodeMode" v-model:open="sidebarStore.modelMenu" />
         <BadgeMenu v-if="!editorStore.selectNodeMode" v-model:open="sidebarStore.badgeMenu" />
         <AssetMenu v-if="!editorStore.selectNodeMode" v-model:open="sidebarStore.assetMenu" />
+
+        <!-- <ImportModal :max="100" :current="50" /> -->
     </div>
 </template>
 

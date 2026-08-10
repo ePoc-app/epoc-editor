@@ -101,7 +101,8 @@
         "refresh": "Rinfrescare",
         "type": "Scrivi qui...",
         "description": "Descrizione",
-        "contentId": "Identificatore del contenuto"
+        "contentId": "Identificatore del contenuto",
+        "importing": "Importazione in corso..."
     },
     "validation": {
         "yes": "SÌ, ELIMINA",

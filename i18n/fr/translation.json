@@ -101,7 +101,8 @@
         "refresh": "Rafraîchir",
         "type": "Tapez ici...",
         "description": "Description",
-        "contentId": "Identifiant du contenu"
+        "contentId": "Identifiant du contenu",
+        "importing": "Import en cours..."
     },
     "validation": {
         "yes": "OUI, SUPPRIMER",

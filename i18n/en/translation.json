@@ -101,7 +101,8 @@
         "refresh": "Refresh",
         "type": "Type here...",
         "description": "Description",
-        "contentId": "Content identifier"
+        "contentId": "Content identifier",
+        "importing": "Import in progress..."
     },
     "validation": {
         "yes": "YES, DELETE",
