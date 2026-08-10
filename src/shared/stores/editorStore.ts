@@ -114,6 +114,8 @@ export const useEditorStore = defineStore('editor', {
 
         getCurrentContentId() {
             const graphNode = this.getCurrentGraphNode;
+            if (!graphNode) return undefined;
+
             if (!this.openedNodeId) {
                 return graphNode.data.contentId;
             } else {
