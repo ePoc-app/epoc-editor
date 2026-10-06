@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ProgressIndicator, ProgressRoot } from 'reka-ui';
+import { i18n } from '@/i18n/config';
+
 defineProps<{
     max: number;
     modelValue: number;
@@ -8,7 +10,7 @@ defineProps<{
 
 <template>
     <div>
-        <p class="status">{{ modelValue }}%</p>
+        <p class="status">{{ i18n.global.t('global.compression') }} : {{ modelValue }}%</p>
         <ProgressRoot :model-value="modelValue" class="progress-root" style="transform: translateZ(0)">
             <ProgressIndicator class="progress-indicator" :style="`transform: translateX(-${100 - modelValue}%)`" />
         </ProgressRoot>
