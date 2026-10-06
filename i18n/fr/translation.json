@@ -303,10 +303,10 @@
             "presentation": "Présentation",
             "edition": "Édition",
             "author": {
-                "title": "Auteur | Auteurs",
+                "title": "Crédit | Crédits",
                 "placeholder": "Jeanne Dupont",
                 "image": {
-                    "title": "Image de l'auteur",
+                    "title": "Image",
                     "placeholder": "Ajouter une image",
                     "hint": "Format recommandé : carré (100x100)<br> Image visible dans la page de présentation de l'ePoc"
                 },
@@ -315,7 +315,7 @@
                     "placeholder": "Chercheur à l'Inria",
                     "hint": "Profession, fonction, affiliation…"
                 },
-                "biography": "Courte biographie de l'auteur"
+                "biography": "Courte description"
             },
             "certificateOptions": "Options de l'attestation",
             "certificateDisabled": "Désactiver l'attestation",

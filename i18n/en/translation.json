@@ -302,10 +302,10 @@
             "presentation": "Presentation",
             "edition": "Edition",
             "author": {
-                "title": "Author | Authors",
+                "title": "Credit | Crédits",
                 "placeholder": "Jane Doe",
                 "image": {
-                    "title": "Author image",
+                    "title": "Image",
                     "placeholder": "Add an image",
                     "hint": "Recommended format: square (100x100)<br> Image visible on the ePoc presentation page"
                 },
@@ -314,7 +314,7 @@
                     "placeholder": "Researcher at Inria",
                     "hint": "Profession, position, affiliation..."
                 },
-                "biography": "Short author biography"
+                "biography": "Short description"
             },
             "publisher": {
                 "label": "Publisher",
