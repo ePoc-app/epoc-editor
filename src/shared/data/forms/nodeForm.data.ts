@@ -182,6 +182,13 @@ export const epocForm: ComputedRef<Form> = computed(() => ({
         {
             inputs: [
                 {
+                    id: 'id',
+                    type: 'text',
+                    label: 'ID',
+                    value: '',
+                    disabled: true,
+                },
+                {
                     id: 'title',
                     type: 'text',
                     label: i18n.global.t('forms.node.title'),
@@ -259,13 +266,6 @@ export const epocForm: ComputedRef<Form> = computed(() => ({
                     type: 'text',
                     label: i18n.global.t('forms.node.edition'),
                     value: String(new Date().getFullYear()),
-                },
-                {
-                    id: 'id',
-                    type: 'text',
-                    label: 'ID',
-                    value: '',
-                    disabled: true,
                 },
             ],
         },
