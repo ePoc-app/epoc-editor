@@ -12,10 +12,11 @@ const modal = ref(null);
 const settingsStore = useSettingsStore();
 const spellcheck = ref(false);
 const localeTmp = ref();
+const compress = ref(true);
 
 function save() {
     locale.value = localeTmp.value;
-    settingsStore.setSettings(spellcheck.value);
+    settingsStore.setSettings({ spellcheck: spellcheck.value, compress: compress.value });
     modal.value.close();
 }
 
@@ -31,6 +32,7 @@ watch(
         if (isOpen) {
             editorStore.closeFormPanel();
             spellcheck.value = settingsStore?.settings?.spellcheck;
+            compress.value = settingsStore?.settings?.compress;
             localeTmp.value = locale.value;
         }
     },
@@ -49,6 +51,9 @@ defineExpose({
 
         <div class="settings">
             <SettingsInput v-model="spellcheck" type="toggle" :label="$t('settings.spellcheck')" />
+
+            <SettingsInput v-model="compress" type="toggle" :label="$t('settings.compress')" />
+
             <SettingsInput
                 v-model="localeTmp"
                 type="select"

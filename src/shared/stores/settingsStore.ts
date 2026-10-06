@@ -31,8 +31,9 @@ export const useSettingsStore = defineStore('settings', {
             editorService.setSettings(JSON.parse(JSON.stringify(this.settings)));
         },
 
-        setSettings(spellcheck: boolean) {
-            this.settings.spellcheck = spellcheck;
+        setSettings(settings: { spellcheck?: boolean; compress?: boolean }) {
+            this.settings.spellcheck = settings.spellcheck;
+            this.settings.compress = settings.compress;
             this.settings.locale = i18n.global.locale;
 
             this.sendSettings();

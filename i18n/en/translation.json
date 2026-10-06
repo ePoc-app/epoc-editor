@@ -200,6 +200,7 @@
     "settings": {
         "title": "Settings",
         "spellcheck": "Enable spell checking",
+        "compress": "Enable auto compression for videos",
         "lang": "Language",
         "workdir": "Working directory",
         "openFileExplorer": "Open in file explorer"

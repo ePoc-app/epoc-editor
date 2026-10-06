@@ -258,6 +258,11 @@ const setupIpcListener = function (targetWindow, setupMenu) {
             if (!settings?.locale) {
                 settings = { ...settings, locale: app.getPreferredSystemLanguages()[0].split('-')[0] };
             }
+
+            if (settings?.compress === undefined) {
+                settings = { ...settings, compress: true };
+            }
+
             sendToFrontend(event.sender, 'settings', { settings });
         }),
     );

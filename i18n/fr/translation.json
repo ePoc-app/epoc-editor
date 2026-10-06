@@ -200,6 +200,7 @@
     "settings": {
         "title": "Paramètres",
         "spellcheck": "Activer la vérification orthographique",
+        "compress": "Activer la compression automatique pour les vidéos",
         "lang": "Langue",
         "workdir": "Répertoire de travail",
         "openFileExplorer": "Ouvrir dans l'explorateur de fichiers"

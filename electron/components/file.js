@@ -313,8 +313,9 @@ const copyFileToWorkdir = async function (workdir, filepath, targetDirectory, on
     const ext = path.extname(filepath).toLowerCase();
 
     const videoExtensions = new Set(['.mp4', '.mov', '.avi', '.mkv', '.webm', '.flv', '.wmv']);
+    const settings = electronStore.get('settings');
 
-    if (videoExtensions.has(ext)) {
+    if (videoExtensions.has(ext) && settings.compress) {
         const optimizedFilename = filename.replace(ext, '-min' + ext);
         const optimizedPath = path.join(assetsPath, optimizedFilename);
         try {
