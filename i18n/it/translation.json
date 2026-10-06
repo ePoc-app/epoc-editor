@@ -304,10 +304,10 @@
             "presentation": "Presentazione",
             "edition": "Edizione",
             "author": {
-                "title": "Autore | Autori",
+                "title": "Credito | Crediti",
                 "placeholder": "Mario Rossi",
                 "image": {
-                    "title": "Immagine dell'autore",
+                    "title": "Immagine",
                     "placeholder": "Aggiungi un'immagine",
                     "hint": "Formato consigliato: quadrato (100x100)<br> Immagine visibile nella pagina di presentazione di ePoc"
                 },
@@ -316,7 +316,7 @@
                     "placeholder": "Ricercatore presso Inria",
                     "hint": "Professione, posizione, affiliazione..."
                 },
-                "biography": "Breve biografia dell'autore"
+                "biography": "Breve descrizione"
             },
             "certificateBadge": "Numero di badge richiesti per la certificazione",
             "certificateScore": "Punteggio richiesto per la certificazione",
