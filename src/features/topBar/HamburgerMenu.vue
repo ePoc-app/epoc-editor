@@ -19,6 +19,7 @@ const emit = defineEmits<{
     (e: 'save'): void;
     (e: 'runPreview'): void;
     (e: 'exportProject'): void;
+    (e: 'exportSite', type: 'html' | 'scorm'): void;
 }>();
 
 function toggleMenu() {
@@ -94,6 +95,14 @@ const settingsModal = ref(null);
         <button class="menu-item" :disabled="exporting" @click="emit('exportProject')">
             <i class="icon-export"></i>
             <span>{{ $t('header.publish') }}</span>
+        </button>
+        <button class="menu-item" :disabled="exporting" @click="emit('exportSite', 'html')">
+            <i class="icon-code"></i>
+            <span>{{ $t('header.exportHtml') }}</span>
+        </button>
+        <button class="menu-item" :disabled="exporting" @click="emit('exportSite', 'scorm')">
+            <i class="icon-export"></i>
+            <span>{{ $t('header.exportScorm') }}</span>
         </button>
 
         <SettingsModal ref="settingsModal">

@@ -68,6 +68,7 @@ function separateFilePath(filepath: string) {
                 @save="editorService.saveEpocProject"
                 @run-preview="editorService.runPreviewAtPage()"
                 @export-project="editorService.exportProject()"
+                @export-site="editorService.exportSite($event)"
             />
         </div>
     </div>
@@ -86,7 +87,6 @@ function separateFilePath(filepath: string) {
         display: flex;
         justify-content: space-between;
         height: 100%;
-        overflow: hidden;
     }
     &-title {
         display: flex;

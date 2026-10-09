@@ -95,8 +95,12 @@ function createPreviewServer() {
 
         server.use(serveStatic(previewPath, { index: ['index.html', 'index.htm'] }));
 
+        // The preview build is now relative (<base href="./">) so we need to replace it by <base href="/">
         server.all('*', (req, res) => {
-            res.status(200).sendFile(path.join(previewPath, 'index.html'));
+            const html = fs
+                .readFileSync(path.join(previewPath, 'index.html'), 'utf8')
+                .replace(/<base\s+href="\.\/?"\s*\/?>/, '<base href="/" />');
+            res.status(200).type('html').send(html);
         });
 
         serverListener = server.listen(0, function () {

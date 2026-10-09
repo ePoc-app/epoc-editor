@@ -217,6 +217,8 @@
         "redo": "Rétablir",
         "preview": "Aperçu",
         "publish": "Publier",
+        "exportHtml": "Export HTML",
+        "exportScorm": "Export SCORM",
         "never": "jamais",
         "lastSave": "Dernière sauvegarde :",
         "new": "Nouvel ePoc",

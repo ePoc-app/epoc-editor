@@ -2,6 +2,7 @@ const path = require('path');
 const store = require('./store');
 const { ipcMain, shell } = require('electron');
 const { updatePreview, createPreview } = require('./preview');
+const { exportHtml, exportScorm } = require('./export');
 const {
     getRecentFiles,
     pickEpocProject,
@@ -146,6 +147,33 @@ const setupIpcListener = function (targetWindow, setupMenu) {
                 sendToFrontend(event.sender, 'exportError');
             }
         }),
+    );
+
+    async function standaloneExport(event, data, channel, exporter) {
+        try {
+            const { data: projectData, content } = data;
+            const workdir = store.state.projects[targetWindow.id].workdir;
+            await writeProjectData(workdir, projectData);
+            await writeEpocData(workdir, content);
+
+            const exportPath = await exporter(workdir, (step) =>
+                sendToFrontend(event.sender, 'exportProgress', { channel, step }),
+            );
+            sendToFrontend(event.sender, 'siteExported', { channel, path: exportPath });
+        } catch (e) {
+            console.error(e);
+            sendToFrontend(event.sender, 'exportError');
+        }
+    }
+
+    ipcMain.on(
+        'exportHtml',
+        ipcGuard((event, data) => standaloneExport(event, data, 'exportHtml', exportHtml)),
+    );
+
+    ipcMain.on(
+        'exportScorm',
+        ipcGuard((event, data) => standaloneExport(event, data, 'exportScorm', exportScorm)),
     );
 
     ipcMain.on(

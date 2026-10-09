@@ -137,6 +137,15 @@ const setup = function () {
         editorStore.exporting = false;
     });
 
+    api.receive('exportProgress', () => {
+        // Do nothing
+    });
+
+    api.receive('siteExported', () => {
+        waitingToastDismiss();
+        editorStore.exporting = false;
+    });
+
     api.receive('exportError', () => {
         waitingToastDismiss();
         toaster.error("😵 Une erreur s'est produite");
@@ -253,6 +262,13 @@ function exportProject(): void {
     api.send('exportProject', data);
 }
 
+function exportSite(type: 'html' | 'scorm'): void {
+    waitingToast('⚙️ Export en cours...');
+    editorStore.exporting = true;
+    const data = graphService.getProjectJSON();
+    api.send(type === 'html' ? 'exportHtml' : 'exportScorm', data);
+}
+
 function fetchSettings() {
     api.send('getSettings');
 }
@@ -274,6 +290,7 @@ export const editorService = {
     runPreview,
     runPreviewAtPage,
     exportProject,
+    exportSite,
     fetchSettings,
     setSettings,
     openWorkingDir,

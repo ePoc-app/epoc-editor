@@ -668,5 +668,6 @@ module.exports = {
     getAllAssets,
     getAssetsWithPages,
     getAssetType,
+    getUnusedAssets,
     removeAsset,
 };
