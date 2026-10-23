@@ -35,11 +35,17 @@ run run wdio
 npm run lint
 ```
 
-### Setup code signing
-
-Add to `.env` (or download from the snippets) containing the Apple developer account infos : `APPLE_ID`, `APPLE_PASSWORD`, `APPLE_TEAM_ID`, `APPLE_SIGNING_ID`, `APPLE_ASC=Z2P73A9B8S`
-
 ### Release
 
-Code-signing and publication on [GitHub](https://github.com/inrialearninglab/epoc-editor/releases) is automated but you 
-need to manually sign the windows executable : Ask the Inria DSI SOC team to sign it, then reupload it to the Github release
+Releases are built by the GitLab CI and published as a **draft** on [GitHub](https://github.com/ePoc-app/epoc-editor/releases):
+
+1. Run the manual `release` job: it builds the app for macOS, Windows and Linux and publishes the draft release.
+   The macOS and Windows executables are **not signed** at this point.
+2. The `trigger_signing` job then starts the pipeline of the
+   [epoc-sign-code](https://gitlab-int.inria.fr/learninglab/epoc-sign-code) project (Inria internal GitLab).
+   It downloads the executables from the draft release, signs them (and notarizes the macOS app) with the Inria code
+   signing service, and replaces them in the draft release along with the auto-update metadata (`latest.yml`, `latest-mac.yml`).
+3. Once that pipeline succeeds, check the draft release and publish it.
+
+No signing certificate or Apple account is needed locally or in this project's CI: local builds produce unsigned apps.
+See the epoc-sign-code README for details and troubleshooting.

@@ -21,10 +21,11 @@ module.exports = {
     },
     mac: {
         category: 'public.app-category.utilities',
-        hardenedRuntime: true,
-        gatekeeperAssess: false,
-        entitlements: './entitlements.plist',
-        entitlementsInherit: './entitlements.plist'
+        target: ['dmg', 'zip'],
+        // Signing and notarization are done afterwards by the Inria code signing service
+        // (gitlab-int epoc-sign-code), which replaces the dmg/zip of the draft release
+        identity: null,
+        notarize: false
     },
     nsis: {
         oneClick: false,
