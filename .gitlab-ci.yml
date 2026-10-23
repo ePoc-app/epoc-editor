@@ -27,7 +27,7 @@ build:
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG == null'
 
-# Job 2: Build and publish (runs only manually)
+# Job 2: Build and publish (runs only manually, on tags)
 release:
   stage: release
   tags:
@@ -38,12 +38,15 @@ release:
   script:
     # Install dependencies
     - npm install
-    # Create env file
-    - env | grep -v '^_' > .env
+    # CI variables are already in the environment, the scripts only need the .env file to exist
+    - touch .env
     # Update preview and release
     - npm run updatePreview
     - npm run release
-  when: manual
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: manual
+      allow_failure: false
   needs: []
 
 # Job 3: Trigger signing pipeline in another repository
@@ -51,7 +54,9 @@ trigger_signing:
   stage: trigger_signing
   script:
     - echo "Triggering signing pipeline..."
-    - curl -X POST -F token=$SIGN_REPO_TRIGGER_TOKEN -F ref=main $SIGN_REPO_URL
+    - curl --fail -X POST -F token=$SIGN_REPO_TRIGGER_TOKEN -F ref=main $SIGN_REPO_URL
   tags:
     - macos
+  rules:
+    - if: $CI_COMMIT_TAG
   needs: ["release"]
